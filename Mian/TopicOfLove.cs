@@ -8,17 +8,26 @@ using NeoModLoader.General;
 
 /*
 
-- lovers in wild shouldnt attack each other (done)
-- lovers should create kingdoms together if in wild (even from different subspecies) (done)
 
 - custom find lover decision (combination of romantic tasks that infleunce romantic opinion, lovers may randomly fall in love even when fighting)
 - cupid who can force lovers together
-- kings from two different kingdoms who are lovers will have good opinions on each other (done, also did homo/hetero sexuality)
-
 - other specices no reproduce :(((
+- CanStopBeingLover may not be working properly?
+- error with initDecisionsCHildren at line 2150
+
+- new BehFindAPartner task which will look for lover and non-lovers. Can be used for cheating and will be a common task for initating romantic/sex tasks
+(combination of BehGetLoverForRomanceAction and BehFindMatchingPreference etc. This will be the ultimate final task)
+
+- refactor how preferences work. Should be based on specifically which sex/gender a person is attracted to
+- ^^ not necessarily same/different sex
+
+- combination of kiss, date and picnic will be for custom find lover task. All in one task. If they go successful, the two become lovers.
+Another way ppl can become lovers is by being from enemy kingdoms while being in close proximity. Very low chance and is rare
+- Make far-distance relationships possible somehow
+
+- new visual bar for sexual happiness (done)
 
 - queer traits arent 100% being added
-
 - sprites are offseted upwards for our speech bubbles idk why :(
 
 */

@@ -1,4 +1,5 @@
-﻿using ai.behaviours;
+﻿using System;
+using ai.behaviours;
 using Topic_of_Love.Mian.CustomAssets.Traits;
 
 namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.romance;
@@ -30,7 +31,9 @@ public class BehCheckIfDateFinish : BehaviourActionActor
         {
             if (happiness <= 15f || Randy.randomChance(1f - happiness / 100))
             {
-                pActor.makeWait(3f);
+                var wait = Randy.randomFloat(3f, 6f);
+                pActor.makeWait(wait);
+                target.makeWait(wait);
                 EffectsLibrary.spawnAt("fx_hearts", pActor.current_position, pActor.current_scale.y);
                 EffectsLibrary.spawnAt("fx_hearts", pActor.beh_actor_target.current_position, pActor.beh_actor_target.current_scale.y);
                 return BehResult.RestartTask;
@@ -42,8 +45,8 @@ public class BehCheckIfDateFinish : BehaviourActionActor
         pActor.addStatusEffect("went_on_date");
         target.addStatusEffect("went_on_date");
         
-        Util.ChangeRelationshipHappinessBy(pActor, happiness);
-        Util.ChangeRelationshipHappinessBy(target, happiness);
+        Util.ChangeIntimacyHappinessBy(pActor, happiness);
+        Util.ChangeIntimacyHappinessBy(target, happiness);
         
         pActor.data.removeFloat("date_happiness");
         

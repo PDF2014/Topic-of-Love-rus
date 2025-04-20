@@ -36,6 +36,6 @@ public class TabsAndButtons
         _nextY = _nextY == 18f ? -18f : 18f;
 
         if (_timesAddedButton % 2 == 0)
-            _nextX += 40f;
+            _nextX += 36f;
     }
 }

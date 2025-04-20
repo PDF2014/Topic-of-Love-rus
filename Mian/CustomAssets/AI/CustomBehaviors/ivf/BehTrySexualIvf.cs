@@ -11,18 +11,6 @@ public class BehTrySexualIvf : BehaviourActionActor
             return BehResult.Stop;
         var home = pActor.getHomeBuilding();
             
-        if(pActor.distanceToObjectTarget(home) >= 75f)
-            return BehResult.Stop;
-            
-        if (pActor.hasLover() && Util.CanReproduce(pActor, pActor.lover) 
-                              && pActor.isSameIslandAs(pActor.lover)
-                              && pActor.lover.distanceToObjectTarget(home) < 75f && !pActor.lover.hasStatus("pregnant"))
-            pActor.beh_actor_target = pActor.lover;
-        else if(pActor.hasBestFriend() && Util.CanReproduce(pActor, pActor.getBestFriend()) 
-                                       && pActor.isSameIslandAs(pActor.getBestFriend())
-                                       && pActor.getBestFriend().distanceToObjectTarget(home) < 75f && !pActor.getBestFriend().hasStatus("pregnant"))
-            pActor.beh_actor_target = pActor.getBestFriend();
-            
         if (pActor.beh_actor_target == null)
             return BehResult.Stop;
         var target = pActor.beh_actor_target.a;

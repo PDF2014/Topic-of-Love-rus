@@ -60,7 +60,7 @@
   "happiness_dialog_breakup_2": "I loved them so much.",
   "happiness_dialog_breakup_3": "I'm sorry that we ended up this way.",
   
-  "happiness_true_self": "Identity feels different",
+  "happiness_true_self": "Orientation feels different",
   "happiness_dialog_true_self_0": "It feels so good to realize myself.",
   "happiness_dialog_true_self_1": "My orientation is the biggest part of what makes me, me.",
   "happiness_dialog_true_self_2": "I'm going to own myself and I won't hide it!",
@@ -80,7 +80,7 @@
   
   "task_insult_orientation": "Insult Orientations",
   "task_invite_for_sex": "Invite for Coupling",
-  "task_kiss_lover": "Going to Kiss",
+  "task_try_kiss": "Try Kissing",
   "task_have_sex_go": "Go Coupling",
   "task_reproduce_preservation": "Reproduce Preservation",
   "task_try_sexual_ivf": "Try Sexual IVF",
@@ -91,13 +91,15 @@
   "task_try_date": "Try Date",
   "task_action_date": "Going on Date",
   "task_follow_action_date": "Following Date",
+  "task_find_partner": "Looking for Partner",
 
   "not_same_island": "They are not on the same island!",
   "unit_selected": "Choose two units to love",
   "unit_selected_first": "Now select another unit",
   "lover_selected": "Choose a unit that has a lover",
   "no_lover": "This unit does not have a lover!",
-  
+  "unit_too_far": "Power cancelled! The two units must be close enough and be on the same island!",
+
   "love_cancelled": "Force lover cancelled!",
   "love_successful": "Force lover successful! They will not break up on their own unless you intervene.",
   "ForceLover": "Force Lover",
@@ -114,7 +116,6 @@
 
   "kiss_cancelled": "Force kiss cancelled!",
   "kiss_successful": "Force kiss successful! They will attempt to kiss as soon as possible. Outer forces may interrupt the kiss.",
-  "kiss_too_far": "Force kiss cancelled! The two units have to be on the same island!",
   "ForceKiss": "Force Kiss",
   "ForceKiss Description": "Force a unit to kiss someone",
 
@@ -224,6 +225,8 @@
   "opinion_homosexual": "Opinions on Homosexuality",
   "opinion_heterosexual": "Opinions on Heterosexuality",
   "opinion_king_lovers": "Kings Are Lovers",
+  
+  "stats_icon_intimacy_happiness": "Intimacy Happiness",
   
   "tab_title_tol": "Topic of Love",
   "tab_desc_tol": "For all your romantic and sexual needs!",

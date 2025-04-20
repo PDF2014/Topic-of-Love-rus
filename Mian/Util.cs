@@ -41,16 +41,16 @@ namespace Topic_of_Love
             return pActor.subspecies.isPartnerSuitableForReproduction(pActor, pTarget);
         }
 
-        public static bool IsRelationshipHappinessEnough(Actor actor, float happiness)
+        public static bool IsIntimacyHappinessEnough(Actor actor, float happiness)
         {
-            actor.data.get("relationship_happiness", out float compare);
+            actor.data.get("intimacy_happiness", out float compare);
             return compare >= happiness;
         }
         
-        public static void ChangeRelationshipHappinessBy(Actor actor, float happiness)
+        public static void ChangeIntimacyHappinessBy(Actor actor, float happiness)
         {
-            actor.data.get("relationship_happiness", out float init);
-            actor.data.set("relationship_happiness", Math.Max(-100, Math.Min(happiness + init, 100)));
+            actor.data.get("intimacy_happiness", out float init);
+            actor.data.set("intimacy_happiness", Math.Max(-100, Math.Min(happiness + init, 100)));
         }
 
         private static void OpinionOnSex(Actor actor1, Actor actor2)
@@ -67,7 +67,7 @@ namespace Topic_of_Love
                     if (actor1.lover == actor2)
                         normal += 0.5f;
 
-                    actor1.a.data.get("relationship_happiness", out float happiness);
+                    actor1.a.data.get("intimacy_happiness", out float happiness);
                     if (happiness < 0)
                     {
                         normal += Math.Abs((happiness / 100) / 2);
@@ -89,74 +89,73 @@ namespace Topic_of_Love
             return pActor.hasCultureTrait("committed") || pActor.hasTrait("faithful");
         }
 
-        public static bool WillDoSex(Actor pActor, string sexReason, bool withLover=true, bool isInit=false)
+        public static bool WillDoIntimacy(Actor pActor, string sexReason=null, bool withLover=true, bool isInit=false)
         {
-            // if (QueerTraits.GetPreferenceFromActor(pActor, true) == Preference.Neither)
-            //     return false;
-            
-            pActor.data.get("relationship_happiness", out float d);
+            pActor.data.get("intimacy_happiness", out float d);
             if (isInit)
-            {
-                Debug(pActor.getName() + " is requesting to do sex: "+sexReason + ". Sexual happiness: "+d + ". With lover: "+withLover);
-            }
+                Debug(pActor.getName() + " is requesting to do intimacy. Sexual happiness: "+d + ". With lover: "+withLover);
             else
-            {
-                Debug(pActor.getName() + " is being requested to do sex: "+sexReason + ". Sexual happiness: "+d + ". With lover: "+withLover);
-            }
+                Debug(pActor.getName() + " is being requested to do intimacy. Sexual happiness: "+d + ". With lover: "+withLover);
+            if(sexReason != null)
+                Debug("\n"+sexReason);
 
+            if (sexReason == null && !pActor.isAdult())
+                return false;
+            
             if (!isInit)
             {
                 if(pActor.hasTask() && !(pActor.ai.task.cancellable_by_reproduction ||
                                          pActor.ai.task.cancellable_by_socialize))
                 {
-                    Debug("Unable to do sex from this actor due to an uncancellable task");
+                    Debug("Unable to do intimacy from this actor due to an uncancellable task");
                     return false;
                 }
             }
             
-            var allowedToHaveSex = withLover || CanHaveSexWithoutRepercussionsWithSomeoneElse(pActor, sexReason);
+            var allowedToHaveIntimacy = withLover || (sexReason != null ? CanHaveSexWithoutRepercussionsWithSomeoneElse(pActor, sexReason) : CanHaveRomanceWithoutRepercussionsWithSomeoneElse(pActor));
             var reduceChances = 0f;
-            pActor.data.get("relationship_happiness", out float relationshipHappiness);
+            pActor.data.get("intimacy_happiness", out float intimacyHappiness);
             
-            if (relationshipHappiness < 0)
+            if (intimacyHappiness < 0)
             {
-                var toReduce = relationshipHappiness / 100;
+                var toReduce = intimacyHappiness / 100;
                 reduceChances += toReduce;
             }
 
-            if (pActor.hasTrait("sex_indifferent"))
+            if (pActor.hasTrait("sex_indifferent") && sexReason != null)
                 reduceChances = 0f;
             
             reduceChances = Math.Max(-0.2f, reduceChances);
 
-            if(!allowedToHaveSex
-               && Randy.randomChance(Math.Max(0, (pActor.hasTrait("unfaithful") && !pActor.hasTrait("sex_indifferent") ? 0.6f : 0.95f) + reduceChances)))
+            if(!allowedToHaveIntimacy
+               && Randy.randomChance(Math.Max(0, (pActor.hasTrait("unfaithful") ? 0.6f : 0.95f) + reduceChances)))
             {
-                Util.Debug("Not allowed to do sex because of lover and not low enough happiness");
+                Debug("Not allowed to do intimacy because of lover and not low enough happiness");
                 return false;
             }
 
-            if (!allowedToHaveSex && IsFaithful(pActor))
+            if (!allowedToHaveIntimacy && IsFaithful(pActor))
             {
-                Util.Debug("Not allowed to do sex because of lover and is faithful");
+                Debug("Not allowed to do intimacy because of lover and is faithful");
                 return false;
             }
             
             reduceChances = 0.1f;
-            if (relationshipHappiness > 0)
+            if (intimacyHappiness > 0)
             {
-                reduceChances += relationshipHappiness / 100f;
+                reduceChances += intimacyHappiness / 100f;
             }
-
-            var doSex = Randy.randomChance(Math.Max(0, 1f - reduceChances));
-            if (!doSex && !sexReason.Equals("reproduction"))
+            
+            // person may choose to do sex even if really happy
+            var doIntimacy = Randy.randomChance(Math.Max(0.05f, 1f - reduceChances));
+            if (!doIntimacy && (sexReason == null || !sexReason.Equals("reproduction")))
             {
-                Util.Debug("Will not do sex because they are not sexually unhappy enough");
+                Debug("Will not do intimacy since they are deemed to be happy enough");
                 return false;
-            }
+            }   
 
-            if(!allowedToHaveSex)
-                Util.Debug(pActor.getName() + " is cheating!");
+            if(!allowedToHaveIntimacy)
+                Debug(pActor.getName() + " is cheating!");
             return true;
         }
 
@@ -202,12 +201,12 @@ namespace Topic_of_Love
 
             if (actor1.hasLover() && actor1.lover != actor2)
             {
-                ChangeRelationshipHappinessBy(actor1.lover, -25f);
+                ChangeIntimacyHappinessBy(actor1.lover, -25f);
             }
 
             if (actor2.hasLover() && actor2.lover != actor1)
             {
-                ChangeRelationshipHappinessBy(actor2.lover, -25f);
+                ChangeIntimacyHappinessBy(actor2.lover, -25f);
             }
         }
 
@@ -215,7 +214,7 @@ namespace Topic_of_Love
         {
             return !actor.hasLover()
                    || (actor.hasLover() && ((!QueerTraits.PreferenceMatches(actor, actor.lover, true)
-                                                              && actor.hasCultureTrait("sexual_expectations") && actor.lover.hasCultureTrait("sexual_expectations"))
+                                                              && actor.lover.hasCultureTrait("sexual_expectations"))
                                                               || (actor.hasSubspeciesTrait("preservation") && IsDyingOut(actor) 
                                                                   && sexReason.Equals("reproduction")
                                                                   && (!CanMakeBabies(actor.lover) || !CanReproduce(actor, actor.lover)))));
@@ -225,7 +224,7 @@ namespace Topic_of_Love
         {
             return !actor.hasLover()
                    || (actor.hasLover() && !QueerTraits.BothPreferencesMatch(actor, actor.lover)
-                                             && actor.hasCultureTrait("sexual_expectations") && actor.lover.hasCultureTrait("sexual_expectations"));
+                                             && actor.lover.hasCultureTrait("sexual_expectations"));
         }
 
 

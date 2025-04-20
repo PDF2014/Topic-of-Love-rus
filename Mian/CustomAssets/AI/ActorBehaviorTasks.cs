@@ -30,40 +30,36 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
 
         private static void InitRomance()
         {
-            
-            var forceKiss = new BehaviourTaskActor
+            var findToKiss = new BehaviourTaskActor
             {
-                id = "force_kiss",
-                locale_key = "task_kiss_lover",
-                path_icon = "ui/Icons/status/went_on_date"
+                id = "find_kiss",
+                locale_key = "task_find_partner",
+                path_icon = "ui/Icons/status/just_kissed"
             };
-            forceKiss.addBeh(new BehMakeTargetWait(30f));
-            forceKiss.addBeh(new BehGoToActorTarget(pCalibrateTargetPosition:true));
-            forceKiss.addBeh(new BehKissTarget());
-            Add(forceKiss);
+            findToKiss.addBeh(new BehFindAPartner(false, true));
+            findToKiss.addBeh(new BehSetNextTask("try_kiss", pClean: false, pForce: true));
+            Add(findToKiss);
 
-            var doKissWithLover = new BehaviourTaskActor
+            var doKissWithTarget = new BehaviourTaskActor
             {
-                id = "kiss_lover",
-                locale_key = "task_kiss_lover",
+                id = "try_kiss",
+                locale_key = "task_try_kiss",
+                path_icon = "ui/Icons/status/just_kissed"
+            };
+            doKissWithTarget.addBeh(new BehGoToActorTarget(pCalibrateTargetPosition:true));
+            doKissWithTarget.addBeh(new BehKissTarget());
+            
+            Add(doKissWithTarget);
+
+            var findDate = new BehaviourTaskActor
+            {
+                id = "find_date",
+                locale_key = "task_find_partner",
                 path_icon = "ui/Icons/status/went_on_date"
             };
-            doKissWithLover.addBeh(new BehGetLoverForRomanceAction(20f));
-            doKissWithLover.addBeh(new BehGoToActorTarget(pCalibrateTargetPosition:true));
-            doKissWithLover.addBeh(new BehKissTarget());
-            
-            Add(doKissWithLover);
-            
-            var forceDate = new BehaviourTaskActor
-            {
-                id = "force_date",
-                locale_key = "task_try_date",
-                path_icon = "ui/Icons/status/went_on_date"
-            };
-            forceDate.addBeh(new BehMakeTargetWait(30f));
-            forceDate.addBeh(new BehGoToActorTarget(GoToActorTargetType.NearbyTileClosest, pCalibrateTargetPosition:true));
-            forceDate.addBeh(new BehCheckForDate());
-            Add(forceDate);
+            findDate.addBeh(new BehFindAPartner());
+            findDate.addBeh(new BehSetNextTask("try_date", pClean: false, pForce: true));
+            Add(findDate);
 
             var tryDate = new BehaviourTaskActor
             {
@@ -71,7 +67,6 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
                 locale_key = "task_try_date",
                 path_icon = "ui/Icons/status/went_on_date"
             };
-            tryDate.addBeh(new BehGetLoverForRomanceAction(20f));
             tryDate.addBeh(new BehGoToActorTarget(GoToActorTargetType.NearbyTileClosest, pCalibrateTargetPosition:true));
             tryDate.addBeh(new BehCheckForDate());
             Add(tryDate);
@@ -84,7 +79,7 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
             };
             actionDate.addBeh(new BehRandomizeDateTile());
             actionDate.addBeh(new BehGoToTileTarget());
-            actionDate.addBeh(new BehWait(4f));
+            actionDate.addBeh(new BehWait(0.2f));
             actionDate.addBeh(new BehCheckIfDateHere());
             actionDate.addBeh(new BehCheckIfDateFinish());
             Add(actionDate);
@@ -95,7 +90,7 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
                 locale_key = "task_follow_action_date",
                 path_icon = "ui/Icons/status/went_on_date"
             };
-            followActionDate.addBeh(new BehWait());
+            followActionDate.addBeh(new BehWait(0.2f));
             followActionDate.addBeh(new BehFollowDate());
 
             Add(followActionDate);
@@ -109,7 +104,7 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
                 locale_key = "task_reproduce_preservation",
                 path_icon = "ui/Icons/status/disliked_sex",
             };
-            reproduceForPreservation.addBeh(new BehFindReproduceableSex());
+            reproduceForPreservation.addBeh(new BehFindAPartner(false, false, false, true, "reproduction"));
             reproduceForPreservation.addBeh(new BehGetPossibleTileForSex());
             Add(reproduceForPreservation);
             
@@ -119,7 +114,7 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
                 locale_key = "task_invite_for_sex",
                 path_icon = "ui/Icons/status/enjoyed_sex",
             };
-            inviteForSex.addBeh(new BehFindMatchingPreference());
+            inviteForSex.addBeh(new BehFindAPartner(false, false, true, false, "casual"));
             inviteForSex.addBeh(new BehGetPossibleTileForSex());
             Add(inviteForSex);
 
@@ -141,6 +136,18 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
 
         private static void InitSexualIvf()
         {
+            var findSexualIvf = new BehaviourTaskActor
+            {
+                id = "find_sexual_ivf",
+                locale_key = "task_find_partner",
+                path_icon = "ui/Icons/status/adopted_baby",
+            };
+            findSexualIvf.addBeh(new BehFindAPartner(false, true, false, true, 
+                customCheck: pActor => pActor.hasHouse() && !pActor.hasStatus("pregnant") && pActor.distanceToObjectTarget(pActor.getHomeBuilding()) < 75f,
+                customValidity: (pActor, target) => target.distanceToObjectTarget(pActor.getHomeBuilding()) < 75f && !target.hasStatus("pregnant")));
+            findSexualIvf.addBeh(new BehSetNextTask("try_sexual_ivf", false, true));
+            Add(findSexualIvf);
+            
             var trySexualIvf = new BehaviourTaskActor
             {
                 id = "try_sexual_ivf",

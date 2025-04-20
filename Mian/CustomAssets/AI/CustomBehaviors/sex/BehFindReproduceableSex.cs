@@ -14,7 +14,7 @@ public class BehFindReproduceableSex : BehaviourActionActor
             if (lover != null)
             {
                 if (lover.isSameIslandAs(pActor)
-                    && Util.WillDoSex(lover, "reproduction") 
+                    && Util.WillDoIntimacy(lover, "reproduction") 
                     && Util.CanReproduce(pActor, lover)
                     && Util.CanMakeBabies(lover))
                 {
@@ -26,7 +26,7 @@ public class BehFindReproduceableSex : BehaviourActionActor
                     return BehResult.Stop;
             }
 
-            if (!Util.WillDoSex(pActor, "reproduction", withLover, isInit: true))
+            if (!Util.WillDoIntimacy(pActor, "reproduction", withLover, isInit: true))
             {
                 Util.Debug("They decided that they will not do it.");
                 return BehResult.Stop;
@@ -61,7 +61,7 @@ public class BehFindReproduceableSex : BehaviourActionActor
                         && pActor.isSameIslandAs(pTarget) 
                         && Util.CanReproduce(pActor, pTarget) 
                         && pTarget.isAdult()
-                        && Util.WillDoSex(pTarget, "reproduction", pTarget.lover == pActor)
+                        && Util.WillDoIntimacy(pTarget, "reproduction", pTarget.lover == pActor)
                         && (pActor.isSameSubspecies(pTarget.subspecies) 
                             || (pTarget.isSapient() && pActor.isSapient() 
                                                       && QueerTraits.PreferenceMatches(pTarget, pActor, true))))

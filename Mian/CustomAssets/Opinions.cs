@@ -19,9 +19,15 @@ public class Opinions
                     QueerTraits.IncludesHomoPreference(QueerTraits.GetPreferenceFromActor(unit, false)) ||
                     QueerTraits.IncludesHomoPreference(QueerTraits.GetPreferenceFromActor(unit, true)));
                 
-                if (pMain.hasCulture() && pMain.culture.hasTrait("homophobic") && homoUnits > requirement)
+                if (pMain.hasCulture() && pMain.culture.hasTrait("homophobic"))
                 {
-                    return -50;
+                    if (pTarget.hasCulture() && pTarget.culture.hasTrait("homophobic"))
+                        return 20;
+                    
+                    if (homoUnits > requirement)
+                    {
+                        return -50;
+                    }
                 }
 
                 if (!pTarget.hasCulture() || (pTarget.hasCulture() && !pTarget.culture.hasTrait("homophobic")))
@@ -61,9 +67,15 @@ public class Opinions
                     QueerTraits.GetPreferenceFromActor(unit, false).Equals(Preference.DifferentSex) ||
                     QueerTraits.GetPreferenceFromActor(unit, true).Equals(Preference.DifferentSex));
                 
-                if (pMain.hasCulture() && pMain.culture.hasTrait("heterophobic") && heteroUnits > requirement)
+                if (pMain.hasCulture() && pMain.culture.hasTrait("heterophobic"))
                 {
-                    return -50;
+                    if (pTarget.hasCulture() && pTarget.culture.hasTrait("heterophobic"))
+                        return 20;
+                    
+                    if (heteroUnits > requirement)
+                    {
+                        return -50;
+                    }
                 }
 
                 if (!pTarget.hasCulture() || (pTarget.hasCulture() && !pTarget.culture.hasTrait("heterophobic")))

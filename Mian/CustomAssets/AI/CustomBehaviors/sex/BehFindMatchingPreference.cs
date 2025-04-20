@@ -18,14 +18,14 @@ namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.sex;
                 if (lover.isSameIslandAs(pActor)
                     && ((QueerTraits.PreferenceMatches(pActor, lover, true) && QueerTraits.PreferenceMatches(lover, pActor, true)) 
                         || Randy.randomChance(0.5f))
-                    && Util.WillDoSex(lover, "casual"))
+                    && Util.WillDoIntimacy(lover, "casual"))
                 {
                     closestActor = lover;
                     withLover = true;
                 }
             }
             
-            if (!Util.WillDoSex(pActor, "casual", withLover, isInit: true))
+            if (!Util.WillDoIntimacy(pActor, "casual", withLover, isInit: true))
             {
                 Util.Debug("They decided that they will not do it.");
                 return BehResult.Stop;
@@ -59,7 +59,7 @@ namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.sex;
             {
                 if (bestFriendIsValid && QueerTraits.PreferenceMatches(pActor, pActor.getBestFriend(), true) &&
                     QueerTraits.PreferenceMatches(pActor.getBestFriend(), pActor, true)
-                    && Util.WillDoSex(pActor.getBestFriend(), "casual", pActor.lover == pActor.getBestFriend()))
+                    && Util.WillDoIntimacy(pActor.getBestFriend(), "casual", pActor.lover == pActor.getBestFriend()))
                     return pActor.getBestFriend();
                 
                 var pRandom = Randy.randomBool();
@@ -71,7 +71,7 @@ namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.sex;
                         && pActor.isSameIslandAs(pTarget) 
                         && QueerTraits.PreferenceMatches(pActor, pTarget, true) 
                         && QueerTraits.PreferenceMatches(pTarget, pActor, true)
-                        && Util.WillDoSex(pTarget, "casual", pTarget.lover == pActor)
+                        && Util.WillDoIntimacy(pTarget, "casual", pTarget.lover == pActor)
                         && pTarget.last_decision_id != "sexual_reproduction_try")
                     {
                         pCollection.Add(pTarget);

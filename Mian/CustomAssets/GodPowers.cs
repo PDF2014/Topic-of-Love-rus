@@ -201,7 +201,7 @@ namespace Topic_of_Love.Mian.CustomAssets
                     
                     if (!_selectedActorB.isOnSameIsland(_selectedActorA))
                     {
-                        ActionLibrary.showWhisperTip("kiss_too_far");
+                        ActionLibrary.showWhisperTip("unit_too_far");
                         _selectedActorA = null;
                         _selectedActorB = null;
                         return false;
@@ -214,7 +214,7 @@ namespace Topic_of_Love.Mian.CustomAssets
                     _selectedActorB.stopMovement();
                     
                     _selectedActorA.beh_actor_target = _selectedActorB;
-                    _selectedActorA.setTask("force_kiss", pClean:false, pCleanJob:true, pForceAction:true);
+                    _selectedActorA.setTask("try_kiss", pClean:false, pCleanJob:true, pForceAction:true);
                     _selectedActorA = null;
                     _selectedActorB = null;
                 
@@ -243,53 +243,55 @@ namespace Topic_of_Love.Mian.CustomAssets
                     if (pActor == null)
                         return false;
                     
-                    if (!pActor.hasLover())
-                    {
-                        ActionLibrary.showWhisperTip("no_lover");
-                        return false;
-                    }
-                    
-                    if (!pActor.hasLover() && !pActor.hasBestFriend())
-                    {
-                        ActionLibrary.showWhisperTip("sexualivf_invalid_unit");
-                        return false;
-                    }
+                    // if (!pActor.hasLover())
+                    // {
+                    //     ActionLibrary.showWhisperTip("no_lover");
+                    //     return false;
+                    // }
+                    //
+                    // if (!pActor.hasLover() && !pActor.hasBestFriend())
+                    // {
+                    //     ActionLibrary.showWhisperTip("sexualivf_invalid_unit");
+                    //     return false;
+                    // }
 
                     if (!pActor.hasHouse() || pActor.hasStatus("pregnant"))
                     {
                         ActionLibrary.showWhisperTip("sexualivf_invalid_unit_2");
                         return false;
                     }
-                    
-                    var home = pActor.getHomeBuilding();
-
-                    if (pActor.hasLover() && (pActor.lover.hasStatus("pregnant") || !pActor.isSameIslandAs(pActor.lover) || !Util.CanReproduce(pActor, pActor.lover))
-                        && pActor.hasBestFriend() && (pActor.getBestFriend().hasStatus("pregnant") || !pActor.isOnSameIsland(pActor.getBestFriend()) || !Util.CanReproduce(pActor, pActor.getBestFriend())))
-                    {
-                        ActionLibrary.showWhisperTip("sexualivf_unavailable");
-                        return false;
-                    }
-                    
-                    if (pActor.hasLover() && Util.CanReproduce(pActor, pActor.lover) 
-                                          && pActor.isSameIslandAs(pActor.lover)
-                                          && !pActor.lover.hasStatus("pregnant"))
-                        pActor.beh_actor_target = pActor.lover;
-                    else
-                        pActor.beh_actor_target = pActor.getBestFriend();
+                    //
+                    // var home = pActor.getHomeBuilding();
+                    //
+                    // if (pActor.hasLover() && (pActor.lover.hasStatus("pregnant") || !pActor.isSameIslandAs(pActor.lover) || !Util.CanReproduce(pActor, pActor.lover))
+                    //     && pActor.hasBestFriend() && (pActor.getBestFriend().hasStatus("pregnant") || !pActor.isOnSameIsland(pActor.getBestFriend()) || !Util.CanReproduce(pActor, pActor.getBestFriend())))
+                    // {
+                    //     ActionLibrary.showWhisperTip("sexualivf_unavailable");
+                    //     return false;
+                    // }
+                    //
+                    // if (pActor.hasLover() && Util.CanReproduce(pActor, pActor.lover) 
+                    //                       && pActor.isSameIslandAs(pActor.lover)
+                    //                       && !pActor.lover.hasStatus("pregnant"))
+                    //     pActor.beh_actor_target = pActor.lover;
+                    // else
+                    //     pActor.beh_actor_target = pActor.getBestFriend();
                     var target = pActor.beh_actor_target.a;
                     
                     pActor.cancelAllBeh();
-                    pActor.stopMovement();
+                    // pActor.stopMovement();
                     target.cancelAllBeh();
-                    target.stopMovement();
+                    // target.stopMovement();
                     
-                    pActor.beh_building_target = home;
-                    target.beh_actor_target = pActor;
-                    target.beh_building_target = home;
+                    pActor.setTask("try_sexual_ivf", pCleanJob: true, pClean: false, pForceAction: true);
                     
-                    pActor.beh_actor_target.a.setTask("go_and_wait_sexual_ivf", pCleanJob: true, pClean:false, pForceAction:true);
-                    pActor.beh_actor_target.a.timer_action = 0.0f;
-                    pActor.setTask("go_sexual_ivf", pClean: false, pForceAction:true);
+                    // pActor.beh_building_target = home;
+                    // target.beh_actor_target = pActor;
+                    // target.beh_building_target = home;
+                    //
+                    // pActor.beh_actor_target.a.setTask("go_and_wait_sexual_ivf", pCleanJob: true, pClean:false, pForceAction:true);
+                    // pActor.beh_actor_target.a.timer_action = 0.0f;
+                    // pActor.setTask("go_sexual_ivf", pClean: false, pForceAction:true);
                     
                     Util.ShowWhisperTipWithTime("sexualivf_successful", 24f);
                     return true;
@@ -336,7 +338,8 @@ namespace Topic_of_Love.Mian.CustomAssets
                     pActor.lover.cancelAllBeh();
                     pActor.lover.stopMovement();
                     pActor.beh_actor_target = pActor.lover;
-                    pActor.setTask("force_date", pClean: false, pForceAction:true);
+                    pActor.lover.makeWait();
+                    pActor.setTask("try_date", pClean: false, pForceAction:true);
                     
                     return true;
                 },

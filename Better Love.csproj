@@ -26,6 +26,7 @@
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\ivf\BehTrySexualIvf.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\orientation\BehFindMismatchedOrientation.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\orientation\BehInsultOrientation.cs" />
+        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\other\BehFindAPartner.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\other\BehMakeTargetWait.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\romance\BehCheckIfDateFinish.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\romance\BehCheckIfDateHere.cs" />
@@ -65,6 +66,7 @@
         <Compile Include="Mian\Patches\MapBoxPatch.cs" />
         <Compile Include="Mian\Patches\SavedMapPatch.cs" />
         <Compile Include="Mian\Patches\SubspeciesPatch.cs" />
+        <Compile Include="Mian\Patches\UnitWindowPatch.cs" />
         <Compile Include="Mian\TopicOfLove.cs" />
         <Compile Include="Mian\Util.cs" />
     </ItemGroup>

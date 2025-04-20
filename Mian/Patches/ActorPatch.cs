@@ -8,38 +8,35 @@ using HarmonyLib;
 
 namespace Topic_of_Love.Mian.Patches;
 
+[HarmonyPatch(typeof(Actor))]
 public class ActorPatch
 {
-    [HarmonyPatch(typeof(Actor), nameof(Actor.buildCityAndStartCivilization))]
-    class NewCivilizationPatch
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(Actor.buildCityAndStartCivilization))]
+    static void Postfix(Actor __instance)
     {
-        static void Postfix(Actor __instance)
+        if (__instance.hasLover() && (!__instance.lover.hasKingdom() || __instance.lover.kingdom.wild))
         {
-            if (__instance.hasLover() && (!__instance.lover.hasKingdom() || __instance.lover.kingdom.wild))
-            {
-                __instance.lover.setForcedKingdom(__instance.kingdom);
-                __instance.lover.setCity(__instance.city);
-                __instance.lover.setCulture(__instance.culture);
-                __instance.kingdom.data.original_actor_asset = __instance.getActorAsset().id;
-            }
+            __instance.lover.setForcedKingdom(__instance.kingdom);
+            __instance.lover.setCity(__instance.city);
+            __instance.lover.setCulture(__instance.culture);
+            __instance.kingdom.data.original_actor_asset = __instance.getActorAsset().id;
         }
     }
     
-    [HarmonyPatch(typeof(Actor), nameof(Actor.getHit))]
-    class GetHitPatch
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(Actor.getHit))]
+    static void Postfix1(Actor __instance)
     {
-        static void Postfix(Actor __instance)
+        if (__instance.hasLover())
         {
-            if (__instance.hasLover())
+            var lover = __instance.lover;
+            if ((!lover.has_attack_target || (lover.has_attack_target && lover.attackedBy != lover.attack_target)) 
+                && __instance.attackedBy != null && !lover.isLying()  && !lover.shouldIgnoreTarget(__instance.attackedBy)
+                && lover.distanceToObjectTarget(__instance.attackedBy) < 40)
             {
-                var lover = __instance.lover;
-                if ((!lover.has_attack_target || (lover.has_attack_target && lover.attackedBy != lover.attack_target)) 
-                    && __instance.attackedBy != null && !lover.isLying()  && !lover.shouldIgnoreTarget(__instance.attackedBy)
-                    && lover.distanceToObjectTarget(__instance.attackedBy) < 40)
-                {
-                    Util.Debug(lover.getName() + "'s lover was attacked! They are going to defend them.");
-                    lover.startFightingWith(__instance.attackedBy);
-                }
+                Util.Debug(lover.getName() + "'s lover was attacked! They are going to defend them.");
+                lover.startFightingWith(__instance.attackedBy);
             }
         }
     }
@@ -50,7 +47,7 @@ public class ActorPatch
         static void Postfix(Actor __instance)
         {
             __instance.asset.addDecision("find_lover");
-            __instance.data.set("relationship_happiness", 10f);
+            __instance.data.set("intimacy_happiness", 10f);
         }
     }
 
@@ -86,9 +83,9 @@ public class ActorPatch
                         __instance.changeHappiness("true_self");
                 }
                 if(QueerTraits.GetPreferenceFromActor(__instance, true) != Preference.Neither && Util.IsOrientationSystemEnabledFor(__instance))
-                    Util.ChangeRelationshipHappinessBy(__instance.a, -Randy.randomFloat(5, 10f));
+                    Util.ChangeIntimacyHappinessBy(__instance.a, -Randy.randomFloat(5, 10f));
                 else
-                    __instance.data.set("relationship_happiness", 100f);
+                    __instance.data.set("intimacy_happiness", 100f);
             } else if (!__instance.isAdult() && Randy.randomChance(0.1f)) // random chance younger kid finds their orientations
             {
                 QueerTraits.GiveQueerTraits(__instance, false, true);

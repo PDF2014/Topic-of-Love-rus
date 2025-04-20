@@ -26,41 +26,41 @@ public class Decisions
 
         Add(new DecisionAsset
         {
-            id = "kiss_lover",
+            id = "find_kiss",
             priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/status/just_kissed",
             cooldown = 15,
             action_check_launch = actor => actor.isSapient()
                                            && actor.hasLover()
                                            && QueerTraits.GetQueerTraits(actor).Count >= 2 
-                                           && !Util.IsRelationshipHappinessEnough(actor, 100f)
+                                           && !Util.IsIntimacyHappinessEnough(actor, 100f)
                                            && Util.IsOrientationSystemEnabledFor(actor)
                                            && !actor.hasStatus("just_kissed")
                                            && (QueerTraits.BothPreferencesMatch(actor, actor.lover) || Randy.randomChance(0.5f)),
             list_civ = true,
-            weight_calculate_custom = actor => Util.IsRelationshipHappinessEnough(actor, 75f) ? 0.5f: 
-                Util.IsRelationshipHappinessEnough(actor, 50f) ? 0.6f : Util.IsRelationshipHappinessEnough(actor, 0) ? .8f : 
-                Util.IsRelationshipHappinessEnough(actor, -50) ? 1f : Util.IsRelationshipHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
+            weight_calculate_custom = actor => Util.IsIntimacyHappinessEnough(actor, 75f) ? 0.5f: 
+                Util.IsIntimacyHappinessEnough(actor, 50f) ? 0.6f : Util.IsIntimacyHappinessEnough(actor, 0) ? .8f : 
+                Util.IsIntimacyHappinessEnough(actor, -50) ? 1f : Util.IsIntimacyHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
             only_safe = true,
             cooldown_on_launch_failure = true
         });
         
         Add(new DecisionAsset
         {
-            id = "try_date",
+            id = "find_date",
             priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/status/went_on_date",
             cooldown = 30,
             action_check_launch = actor => actor.isSapient()
                                            && actor.hasLover()
-                                           && !Util.IsRelationshipHappinessEnough(actor, 100f)
+                                           && !Util.IsIntimacyHappinessEnough(actor, 100f)
                                            && Util.IsOrientationSystemEnabledFor(actor)
                                            && (QueerTraits.BothActorsPreferencesMatch(actor, actor.lover, false) || Randy.randomChance(0.5f))
                                            && !actor.hasStatus("went_on_date"),
             list_civ = true,
-            weight_calculate_custom = actor => Util.IsRelationshipHappinessEnough(actor, 75f) ? 0.5f: 
-                Util.IsRelationshipHappinessEnough(actor, 50f) ? 0.6f : Util.IsRelationshipHappinessEnough(actor, 0) ? .8f : 
-                Util.IsRelationshipHappinessEnough(actor, -50) ? 1f : Util.IsRelationshipHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
+            weight_calculate_custom = actor => Util.IsIntimacyHappinessEnough(actor, 75f) ? 0.5f: 
+                Util.IsIntimacyHappinessEnough(actor, 50f) ? 0.6f : Util.IsIntimacyHappinessEnough(actor, 0) ? .8f : 
+                Util.IsIntimacyHappinessEnough(actor, -50) ? 1f : Util.IsIntimacyHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
             only_safe = true,
             cooldown_on_launch_failure = true
         });
@@ -100,12 +100,12 @@ public class Decisions
             action_check_launch = actor => actor.isSapient()
                                            && QueerTraits.GetQueerTraits(actor).Count >= 2 
                                            && !QueerTraits.GetPreferenceFromActor(actor, true).Equals(Preference.Neither)
-                                           && !Util.IsRelationshipHappinessEnough(actor, 100f)
+                                           && !Util.IsIntimacyHappinessEnough(actor, 100f)
                                            && Util.IsOrientationSystemEnabledFor(actor),
             list_civ = true,
-            weight_calculate_custom = actor => Util.IsRelationshipHappinessEnough(actor, 75f) ? 0.25f: 
-                Util.IsRelationshipHappinessEnough(actor, 50f) ? 0.5f : Util.IsRelationshipHappinessEnough(actor, 0) ? .75f : 
-                Util.IsRelationshipHappinessEnough(actor, -50) ? 1f : Util.IsRelationshipHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
+            weight_calculate_custom = actor => Util.IsIntimacyHappinessEnough(actor, 75f) ? 0.25f: 
+                Util.IsIntimacyHappinessEnough(actor, 50f) ? 0.5f : Util.IsIntimacyHappinessEnough(actor, 0) ? .75f : 
+                Util.IsIntimacyHappinessEnough(actor, -50) ? 1f : Util.IsIntimacyHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
             only_adult = true,
             only_safe = true,
             cooldown_on_launch_failure = true
@@ -113,7 +113,7 @@ public class Decisions
 
         Add(new DecisionAsset
         {
-            id = "try_sexual_ivf",
+            id = "find_sexual_ivf",
             priority = NeuroLayer.Layer_2_Moderate, // temporary
             path_icon = "ui/Icons/status/adopted_baby",
             cooldown = 15,
@@ -137,7 +137,7 @@ public class Decisions
                         return false;
                 }
                     
-                return bestFriend != null && Util.CanReproduce(actor, bestFriend) && !bestFriend.hasStatus("pregnant");
+                return bestFriend != null && Util.CanReproduce(actor, bestFriend) && !bestFriend.hasStatus("pregnant") && actor.hasHouse();
             },
             list_civ = true,
             weight = 0.5f,
