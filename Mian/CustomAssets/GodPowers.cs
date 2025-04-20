@@ -254,12 +254,46 @@ namespace Topic_of_Love.Mian.CustomAssets
                     //     ActionLibrary.showWhisperTip("sexualivf_invalid_unit");
                     //     return false;
                     // }
-
-                    if (!pActor.hasHouse() || pActor.hasStatus("pregnant"))
+                    
+                    if (_selectedActorA == null)
                     {
-                        ActionLibrary.showWhisperTip("sexualivf_invalid_unit_2");
+                        if (!pActor.hasHouse() || pActor.hasStatus("pregnant"))
+                        {
+                            ActionLibrary.showWhisperTip("sexualivf_invalid_unit");
+                            return false;
+                        }
+                        
+                        _selectedActorA = pActor;
+                        ActionLibrary.showWhisperTip("unit_selected_first");
+                        return false;
+                    } 
+                    
+                    if (_selectedActorB == null && pActor == _selectedActorA)
+                    {
+                        ActionLibrary.showWhisperTip("sexualivf_cancelled");
+                        _selectedActorA = null;
+                        _selectedActorB = null;
                         return false;
                     }
+                    
+                    _selectedActorB = pActor;
+                    
+                    if (!_selectedActorB.isOnSameIsland(_selectedActorA))
+                    {
+                        ActionLibrary.showWhisperTip("unit_too_far");
+                        _selectedActorA = null;
+                        _selectedActorB = null;
+                        return false;
+                    }
+                    
+                    if (_selectedActorB.hasStatus("pregnant"))
+                    {
+                        ActionLibrary.showWhisperTip("sexualivf_invalid_unit");
+                        _selectedActorA = null;
+                        _selectedActorB = null;
+                        return false;
+                    }
+                    
                     //
                     // var home = pActor.getHomeBuilding();
                     //
@@ -276,14 +310,13 @@ namespace Topic_of_Love.Mian.CustomAssets
                     //     pActor.beh_actor_target = pActor.lover;
                     // else
                     //     pActor.beh_actor_target = pActor.getBestFriend();
-                    var target = pActor.beh_actor_target.a;
+                    _selectedActorA.cancelAllBeh();
+                    _selectedActorA.stopMovement();
+                    _selectedActorB.cancelAllBeh();
+                    _selectedActorB.stopMovement();
                     
-                    pActor.cancelAllBeh();
-                    // pActor.stopMovement();
-                    target.cancelAllBeh();
-                    // target.stopMovement();
-                    
-                    pActor.setTask("try_sexual_ivf", pCleanJob: true, pClean: false, pForceAction: true);
+                    _selectedActorA.beh_actor_target = _selectedActorB;
+                    _selectedActorA.setTask("try_sexual_ivf", pCleanJob: true, pClean: false, pForceAction: true);
                     
                     // pActor.beh_building_target = home;
                     // target.beh_actor_target = pActor;
@@ -294,6 +327,8 @@ namespace Topic_of_Love.Mian.CustomAssets
                     // pActor.setTask("go_sexual_ivf", pClean: false, pForceAction:true);
                     
                     Util.ShowWhisperTipWithTime("sexualivf_successful", 24f);
+                    _selectedActorA = null;
+                    _selectedActorB = null;
                     return true;
                 },
             });
@@ -319,28 +354,42 @@ namespace Topic_of_Love.Mian.CustomAssets
                     if (pActor == null)
                         return false;
                     
-                    if (!pActor.hasLover())
+                    if (_selectedActorA == null)
                     {
-                        ActionLibrary.showWhisperTip("no_lover");
+                        _selectedActorA = pActor;
+                        ActionLibrary.showWhisperTip("unit_selected_first");
+                        return false;
+                    } 
+                    
+                    if (_selectedActorB == null && pActor == _selectedActorA)
+                    {
+                        ActionLibrary.showWhisperTip("date_cancelled");
+                        _selectedActorA = null;
+                        _selectedActorB = null;
                         return false;
                     }
-
-                    if (!pActor.lover.isOnSameIsland(pActor))
+                    
+                    _selectedActorB = pActor;
+                    
+                    if (!_selectedActorB.isOnSameIsland(_selectedActorA))
                     {
                         ActionLibrary.showWhisperTip("not_same_island");
+                        _selectedActorA = null;
+                        _selectedActorB = null;
                         return false;
                     }
           
                     Util.ShowWhisperTipWithTime("date_successful", 24f);
 
-                    pActor.cancelAllBeh();
-                    pActor.stopMovement();
-                    pActor.lover.cancelAllBeh();
-                    pActor.lover.stopMovement();
-                    pActor.beh_actor_target = pActor.lover;
-                    pActor.lover.makeWait();
-                    pActor.setTask("try_date", pClean: false, pForceAction:true);
-                    
+                    _selectedActorA.cancelAllBeh();
+                    _selectedActorA.stopMovement();
+                    _selectedActorB.cancelAllBeh();
+                    _selectedActorB.stopMovement();
+                    _selectedActorA.beh_actor_target = _selectedActorB;
+                    _selectedActorB.makeWait();
+                    _selectedActorA.setTask("try_date", pClean: false, pForceAction:true);
+                    _selectedActorA = null;
+                    _selectedActorB = null;
                     return true;
                 },
             });

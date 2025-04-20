@@ -303,6 +303,9 @@ namespace Topic_of_Love
                     
                     foreach (var unit in family.getUnits())
                     {
+                        if (unit == actor || unit == lover)
+                            continue;
+                        
                         var sameAsActor1 = unit.isSameSubspecies(actor.subspecies);
                         var sameAsActor2 = unit.isSameSubspecies(lover.subspecies);
                         if ((sameAsActor1 && sameAsActor2) || (!sameAsActor1 && !sameAsActor2))

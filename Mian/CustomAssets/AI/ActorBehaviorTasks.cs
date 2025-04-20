@@ -143,8 +143,8 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
                 path_icon = "ui/Icons/status/adopted_baby",
             };
             findSexualIvf.addBeh(new BehFindAPartner(false, true, false, true, 
-                customCheck: pActor => pActor.hasHouse() && !pActor.hasStatus("pregnant") && pActor.distanceToObjectTarget(pActor.getHomeBuilding()) < 75f,
-                customValidity: (pActor, target) => target.distanceToObjectTarget(pActor.getHomeBuilding()) < 75f && !target.hasStatus("pregnant")));
+                customCheck: pActor => pActor.hasHouse() && !pActor.hasStatus("pregnant") && pActor.distanceToObjectTarget(pActor.getHomeBuilding()) < 150f,
+                customValidity: (pActor, target) => target.distanceToObjectTarget(pActor.getHomeBuilding()) < 150f && !target.hasStatus("pregnant")));
             findSexualIvf.addBeh(new BehSetNextTask("try_sexual_ivf", false, true));
             Add(findSexualIvf);
             

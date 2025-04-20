@@ -33,11 +33,8 @@
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\romance\BehRandomizeDateTile.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\romance\BehCheckForDate.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\romance\BehFollowDate.cs" />
-        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\romance\BehGetLoverForRomanceAction.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\romance\BehKissTarget.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\sex\BehCheckForSexTarget.cs" />
-        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\sex\BehFindMatchingPreference.cs" />
-        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\sex\BehFindReproduceableSex.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\sex\BehGetPossibleTileForSex.cs" />
         <Compile Include="Mian\CustomAssets\AI\Decisions.cs" />
         <Compile Include="Mian\CustomAssets\CommunicationTopics.cs" />

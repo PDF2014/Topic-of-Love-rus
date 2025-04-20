@@ -114,7 +114,7 @@ public class Decisions
         Add(new DecisionAsset
         {
             id = "find_sexual_ivf",
-            priority = NeuroLayer.Layer_2_Moderate, // temporary
+            priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/status/adopted_baby",
             cooldown = 15,
             action_check_launch = actor =>

@@ -93,7 +93,7 @@
   "task_follow_action_date": "Following Date",
   "task_find_partner": "Looking for Partner",
 
-  "not_same_island": "They are not on the same island!",
+  "not_same_island": "They are not on the same island! Operation cancelled!",
   "unit_selected": "Choose two units to love",
   "unit_selected_first": "Now select another unit",
   "lover_selected": "Choose a unit that has a lover",
@@ -120,12 +120,12 @@
   "ForceKiss Description": "Force a unit to kiss someone",
 
   "sexualivf_successful": "Sexual IVF successful! They will attempt to make a baby via sexual IVF as soon as possible. Outer forces may interrupt this task.",
-  "sexualivf_invalid_unit": "This unit has no lover or best friend.",
-  "sexualivf_invalid_unit_2": "This unit is currently pregnant or has no house!",
-  "sexualivf_unavailable": "This unit's lover and/or best friend is currently unavailable to do sexual IVF! Double check that they are in the same house, can reproduce, and are not pregnant.",
+  "sexualivf_invalid_unit": "This unit is currently pregnant or has no house! Cancelled operation.",
+  "sexualivf_cancelled": "Force sexual IVF cancelled!",
   "ForceSexualIVF": "Force Sexual IVF",
   "ForceSexualIVF Description": "Force a lover to make a baby via sexual IVF",
 
+  "date_cancelled": "Force dating cancelled!",
   "date_successful": "Date successful! They will attempt to start the date as soon as they can. Outer forces may interrupt this task.",
   "ForceDate": "Force Date",
   "ForceDate Description": "Force a lover to go on a date with their lover",
