@@ -236,7 +236,7 @@ namespace Topic_of_Love
                 if (cheatedActor.isLying() || !cheatedActor.isOnSameIsland(actor))
                     return;
                 
-                HandleFamilyRemoval(actor);
+                // HandleFamilyRemoval(actor);
 
                 cheatedActor.addStatusEffect("cheated_on");
             }
@@ -254,7 +254,7 @@ namespace Topic_of_Love
             
             Debug(actor.getName() + " broke up with "+ actor.lover.getName());
             
-            HandleFamilyRemoval(actor);
+            // HandleFamilyRemoval(actor);
             
             // DateableManager.Manager.AddOrRemoveUndateable(actor, actor.lover);
             // DateableManager.Manager.AddOrRemoveUndateable(actor.lover, actor);
@@ -274,11 +274,19 @@ namespace Topic_of_Love
             return !isForced;
         }
 
+        public static bool CanFallInLove(Actor actor)
+        {
+            actor.data.get("just_lost_lover", out bool justLostLover);
+            return !justLostLover;
+        }
+
         public static void RemoveLovers(Actor actor)
         {
             var lover = actor.lover;
             lover.setLover(null);
             actor.setLover(null);
+            actor.data.set("just_lost_lover", true);
+            lover.data.set("just_lost_lover", true);
             lover.data.set("force_lover", false);
             actor.data.set("force_lover", false);
         }

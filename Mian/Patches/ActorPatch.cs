@@ -13,7 +13,7 @@ public class ActorPatch
 {
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Actor.buildCityAndStartCivilization))]
-    static void Postfix(Actor __instance)
+    static void BuildCityAndStartCivPatch(Actor __instance)
     {
         if (__instance.hasLover() && (!__instance.lover.hasKingdom() || __instance.lover.kingdom.wild))
         {
@@ -26,7 +26,7 @@ public class ActorPatch
     
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Actor.getHit))]
-    static void Postfix1(Actor __instance)
+    static void OnHitPatch(Actor __instance)
     {
         if (__instance.hasLover())
         {
@@ -118,7 +118,12 @@ public class ActorPatch
                         Util.AddOrRemoveUndateableActor(__instance, actor); 
                     }   
                 }
-            }   
+            }
+            
+            if (Randy.randomChance(0.05f))
+            {
+                __instance.data.set("just_lost_lover", false);
+            } 
 
             // Randomize breaking up (1% if preferences match. 25% if preferences do not match.) 
             
@@ -182,6 +187,9 @@ public class ActorPatch
                                                        && !((__instance.hasXenophiles() || !mustBeXenophile)
                                                              && (__instance.isSapient() && pTarget.isSapient() || !mustBeSmart)
                                                              && !pTarget.hasXenophobic() || !allowCrossSpeciesLove)) // subspecies stuff!
+                
+                || !Util.CanFallInLove(pTarget)
+                || !Util.CanFallInLove(__instance)
                 
                 // if queer but culture trait says they do not matter
                 || ((!Util.IsOrientationSystemEnabledFor(__instance) || !Util.IsOrientationSystemEnabledFor(pTarget))

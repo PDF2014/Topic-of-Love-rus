@@ -96,7 +96,7 @@ public class Decisions
             id = "invite_for_sex",
             priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/status/enjoyed_sex",
-            cooldown = 30,
+            cooldown = 15,
             action_check_launch = actor => actor.isSapient()
                                            && QueerTraits.GetQueerTraits(actor).Count >= 2 
                                            && !QueerTraits.GetPreferenceFromActor(actor, true).Equals(Preference.Neither)

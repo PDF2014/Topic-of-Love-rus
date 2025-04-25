@@ -21,7 +21,7 @@ public class DecisionAssetPatch
                     (!QueerTraits.PreferenceMatches(pParentA, pParentB, true)
                      || !QueerTraits.PreferenceMatches(pParentB, pParentA, true) 
                      || !Util.CanReproduce(pParentA, pParentB)
-                    || !Util.WantsBaby(pParentA) || !Util.WantsBaby(pParentB)))
+                    || !Util.CanMakeBabies(pParentA) || !Util.CanMakeBabies(pParentB)))
                 {
                     __result = false;
                     return false;
