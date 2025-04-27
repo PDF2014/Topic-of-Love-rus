@@ -21,7 +21,7 @@ public class BehFindAPartner : BehaviourActionActor
         bool mustMatchPreference=false, 
         bool mustBeReproduceable=false, 
         string sexReason=null, 
-        float distance=20f,
+        float distance=100f,
         Func<Actor, bool> customCheck=null,
         Func<Actor, Actor, bool> customValidity=null)
     {

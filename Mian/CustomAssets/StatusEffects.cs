@@ -17,7 +17,7 @@ public class StatusEffects
             duration = 25f,
             action_on_receive = (actor, _) =>
             {
-                actor.a.data.get("last_had_interaction_with", out long partnerID);
+                actor.a.data.get("last_had_intimate_interaction_with", out long partnerID);
                 
                 var partner = MapBox.instance.units.get(partnerID);
                 if (partner != null)
@@ -51,7 +51,7 @@ public class StatusEffects
             action_on_receive = (actor, _) =>
             {
                 actor.a.data.get("intimacy_happiness", out float happiness);
-                actor.a.data.get("last_had_interaction_with", out long partnerID);
+                actor.a.data.get("last_had_intimate_interaction_with", out long partnerID);
                 var changeBy = 20f;
                 
                 var sexPartner = MapBox.instance.units.get(partnerID);
@@ -98,7 +98,7 @@ public class StatusEffects
             duration = 35f,
             action_on_receive = (actor, _) =>
             {
-                actor.a.data.get("last_had_interaction_with", out long partnerID);
+                actor.a.data.get("last_had_intimate_interaction_with", out long partnerID);
                 var changeBy = 10f;
                 
                 var sexPartner = MapBox.instance.units.get(partnerID);
@@ -139,7 +139,7 @@ public class StatusEffects
                 } else
                 {
                     cheatedActor.a.addAggro(lover);
-                    lover.data.get("last_had_interaction_with", out long id);
+                    lover.data.get("last_had_intimate_interaction_with", out long id);
                     var otherActorInvolved = MapBox.instance.units.get(id);
                     if (otherActorInvolved != null)
                     {

@@ -159,10 +159,10 @@ namespace Topic_of_Love
             return true;
         }
 
-        public static void ActorsInteracted(Actor actor1, Actor actor2)
+        public static void ActorsInteractedIntimately(Actor actor1, Actor actor2)
         {
-            actor1.data.set("last_had_interaction_with", actor2.getID());
-            actor2.data.set("last_had_interaction_with", actor1.getID());
+            actor1.data.set("last_had_intimate_interaction_with", actor2.getID());
+            actor2.data.set("last_had_intimate_interaction_with", actor1.getID());
         }
         
         // handles the actors' happiness and mood towards their sex depending on their preferences
@@ -170,7 +170,7 @@ namespace Topic_of_Love
         public static void JustHadSex(Actor actor1, Actor actor2)
         {
             Util.Debug(actor1.getName() + " had sex with "+actor2.getName()+". They are lovers: "+(actor1.lover==actor2));
-            ActorsInteracted(actor1, actor2);
+            ActorsInteractedIntimately(actor1, actor2);
             
             actor1.addAfterglowStatus();
             actor2.addAfterglowStatus();   

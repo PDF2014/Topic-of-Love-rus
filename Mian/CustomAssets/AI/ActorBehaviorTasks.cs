@@ -36,7 +36,7 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
                 locale_key = "task_find_partner",
                 path_icon = "ui/Icons/status/just_kissed"
             };
-            findToKiss.addBeh(new BehFindAPartner(false, true));
+            findToKiss.addBeh(new BehFindAPartner(false, true, distance: 40f));
             findToKiss.addBeh(new BehSetNextTask("try_kiss", pClean: false, pForce: true));
             Add(findToKiss);
 
@@ -57,7 +57,7 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
                 locale_key = "task_find_partner",
                 path_icon = "ui/Icons/status/went_on_date"
             };
-            findDate.addBeh(new BehFindAPartner());
+            findDate.addBeh(new BehFindAPartner(distance: 40f));
             findDate.addBeh(new BehSetNextTask("try_date", pClean: false, pForce: true));
             Add(findDate);
 
