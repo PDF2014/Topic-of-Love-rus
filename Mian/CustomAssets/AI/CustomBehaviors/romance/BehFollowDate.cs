@@ -7,10 +7,10 @@ public class BehFollowDate : BehaviourActionActor
 {
     public override BehResult execute(Actor pActor)
     {
-        Util.Debug("Checking to see if we can follow date: "+ pActor.getName());
+        TOLUtil.Debug("Checking to see if we can follow date: "+ pActor.getName());
         if (pActor.beh_actor_target == null)
         {
-            Util.Debug(pActor.getName()+": Cancelled from following date because actor was null");
+            TOLUtil.Debug(pActor.getName()+": Cancelled from following date because actor was null");
             return BehResult.Stop;
         }
 
@@ -18,26 +18,26 @@ public class BehFollowDate : BehaviourActionActor
 
         if (!toFollow.isTask("action_date") || toFollow.beh_tile_target == null)
         {
-            Util.Debug(pActor.getName()+"'s date has ended!");
+            TOLUtil.Debug(pActor.getName()+"'s date has ended!");
             return BehResult.Stop;
         }
         
         if (pActor.beh_tile_target != toFollow.beh_tile_target)
         {
             pActor.beh_tile_target = toFollow.beh_tile_target;
-            Util.Debug(pActor.getName()+"'s date has moved! Attempting to follow!");
+            TOLUtil.Debug(pActor.getName()+"'s date has moved! Attempting to follow!");
             
             var closestTile = pActor.beh_tile_target.getTileAroundThisOnSameIsland(pActor.current_tile, true);
             if (pActor.goTo(closestTile, false, true) == ExecuteEvent.False)
             {
-                Util.Debug("Can't follow!");
+                TOLUtil.Debug("Can't follow!");
                 return BehResult.Stop;
             }
-            Util.Debug("Following!");
+            TOLUtil.Debug("Following!");
             return BehResult.StepBack;
         }
 
-        Util.Debug(pActor.getName()+"'s date hasn't moved yet, moving back a step!");
+        TOLUtil.Debug(pActor.getName()+"'s date hasn't moved yet, moving back a step!");
         return BehResult.StepBack;
     }
 }

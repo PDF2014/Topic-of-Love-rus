@@ -15,7 +15,7 @@ public class SubspeciesPatch
                 return false;
             }
 
-            if (Util.CanDoAnySexType(pActor))
+            if (TOLUtil.CanDoAnySexType(pActor))
             {
                 __result = true;
                 return false;
@@ -23,14 +23,14 @@ public class SubspeciesPatch
             
             if (__instance.needOppositeSexTypeForReproduction())
             {
-                if ((pActor.data.sex != pTarget.data.sex && pTarget.subspecies.isReproductionSexual()) || Util.CanDoAnySexType(pTarget))
+                if ((pActor.data.sex != pTarget.data.sex && pTarget.subspecies.isReproductionSexual()) || TOLUtil.CanDoAnySexType(pTarget))
                 {
                     __result = true;
                     return false;
                 }
-            } else if (Util.NeedSameSexTypeForReproduction(pActor))
+            } else if (TOLUtil.NeedSameSexTypeForReproduction(pActor))
             {
-                if ((pActor.data.sex == pTarget.data.sex && Util.NeedSameSexTypeForReproduction(pTarget)) || Util.CanDoAnySexType(pTarget))
+                if ((pActor.data.sex == pTarget.data.sex && TOLUtil.NeedSameSexTypeForReproduction(pTarget)) || TOLUtil.CanDoAnySexType(pTarget))
                 {
                     __result = true;
                     return false;

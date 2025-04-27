@@ -11,7 +11,7 @@ public class CultureManagerPatch
         static void Postfix(Actor pFounder, ref Culture __result)
         {
             // scar_of_incest prevents us from modifying the incest trait
-            if (Util.IsDyingOut(pFounder) && !__result.hasTrait("scar_of_incest"))
+            if (TOLUtil.IsDyingOut(pFounder) && !__result.hasTrait("scar_of_incest"))
             {
                 __result.addTrait("incest");
             }

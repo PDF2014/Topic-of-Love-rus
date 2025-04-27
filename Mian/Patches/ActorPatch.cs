@@ -5,12 +5,38 @@ using Topic_of_Love.Mian.CustomAssets;
 using Topic_of_Love.Mian.CustomAssets.Traits;
 using Topic_of_Love.Mian.CustomManagers.Dateable;
 using HarmonyLib;
+using UnityEngine.Rendering;
 
 namespace Topic_of_Love.Mian.Patches;
 
 [HarmonyPatch(typeof(Actor))]
 public class ActorPatch
 {
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(Actor.addTrait), typeof(ActorTrait), typeof(bool))]
+    static void AddTraitPatch(Actor __instance)
+    {
+        // removes preference traits if they are all added for some reason 
+        foreach (var type in PreferenceTraits.PreferenceTypes.Keys)
+        {
+            // Romantic
+            
+            var list = PreferenceTraits.GetActorPreferencesFromType(__instance, type);
+            var toCompare = PreferenceTraits.GetPreferencesFromType(type);
+
+            if (list.Count == toCompare.Count)
+                __instance.removeTraits(list);
+            
+            // Sexual
+            
+            list = PreferenceTraits.GetActorPreferencesFromType(__instance, type, true);
+            toCompare = PreferenceTraits.GetPreferencesFromType(type, true);
+
+            if (list.Count == toCompare.Count)
+                __instance.removeTraits(list);
+        }
+    }
+    
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Actor.buildCityAndStartCivilization))]
     static void BuildCityAndStartCivPatch(Actor __instance)
@@ -35,7 +61,7 @@ public class ActorPatch
                 && __instance.attackedBy != null && !lover.isLying()  && !lover.shouldIgnoreTarget(__instance.attackedBy)
                 && lover.distanceToObjectTarget(__instance.attackedBy) < 40)
             {
-                Util.Debug(lover.getName() + "'s lover was attacked! They are going to defend them.");
+                TOLUtil.Debug(lover.getName() + "'s lover was attacked! They are going to defend them.");
                 lover.startFightingWith(__instance.attackedBy);
             }
         }
@@ -58,37 +84,37 @@ public class ActorPatch
         {
             if (__instance.isAdult()) // fluid sexuality
             {
-                if (!QueerTraits.HasQueerTraits(__instance)){
-                    QueerTraits.GiveQueerTraits(__instance, false, true);
+                if (!Orientations.HasQueerTraits(__instance)){
+                    Orientations.GiveQueerTraits(__instance, false, true);
                     __instance.changeHappiness("true_self");
                 }
                 else
                 {
                     bool changed = false;
-                    var list = QueerTraits.GetQueerTraits(__instance);
-                    list = QueerTraits.RandomizeQueerTraits(__instance, true, list);
+                    var list = Orientations.GetQueerTraits(__instance);
+                    list = Orientations.RandomizeQueerTraits(__instance, true, list);
                     if (__instance.hasTrait("abroromantic") && Randy.randomChance(0.1f))
                     {
-                        QueerTraits.CleanQueerTraits(__instance, false);
+                        Orientations.CleanQueerTraits(__instance, false);
                         __instance.addTrait(list[1]);
                         changed = true;
                     }
                     if (__instance.hasTrait("abrosexual") && Randy.randomChance(0.1f))
                     {
-                        QueerTraits.CleanQueerTraits(__instance, true);
+                        Orientations.CleanQueerTraits(__instance, true);
                         __instance.addTrait(list[0]);
                         changed = true;
                     }
                     if(changed)
                         __instance.changeHappiness("true_self");
                 }
-                if(QueerTraits.GetPreferenceFromActor(__instance, true) != Preference.Neither && Util.IsOrientationSystemEnabledFor(__instance))
-                    Util.ChangeIntimacyHappinessBy(__instance.a, -Randy.randomFloat(5, 10f));
+                if(Orientations.GetPreferenceFromActor(__instance, true) != Preference.Neither && TOLUtil.IsOrientationSystemEnabledFor(__instance))
+                    TOLUtil.ChangeIntimacyHappinessBy(__instance.a, -Randy.randomFloat(5, 10f));
                 else
                     __instance.data.set("intimacy_happiness", 100f);
             } else if (!__instance.isAdult() && Randy.randomChance(0.1f)) // random chance younger kid finds their orientations
             {
-                QueerTraits.GiveQueerTraits(__instance, false, true);
+                Orientations.GiveQueerTraits(__instance, false, true);
                 __instance.changeHappiness("true_self");
             }
             
@@ -114,8 +140,8 @@ public class ActorPatch
                 {
                     if (Randy.randomChance(0.05f))
                     {
-                        Util.Debug(__instance.getName() + " has forgived " + actor.getName());
-                        Util.AddOrRemoveUndateableActor(__instance, actor); 
+                        TOLUtil.Debug(__instance.getName() + " has forgived " + actor.getName());
+                        TOLUtil.AddOrRemoveUndateableActor(__instance, actor); 
                     }   
                 }
             }
@@ -128,14 +154,14 @@ public class ActorPatch
             // Randomize breaking up (1% if preferences match. 25% if preferences do not match.) 
             
             // break up is too common rn, let's implement a system in the future to get lovers back together
-            if (__instance.hasLover() && Util.CanStopBeingLovers(__instance) &&
-                ((Util.IsOrientationSystemEnabledFor(__instance) 
-                  && Randy.randomChance(!QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.25f : 0.01f)) 
-                 || (!Util.IsOrientationSystemEnabledFor(__instance) && !Util.CanReproduce(__instance, __instance.lover))))
+            if (__instance.hasLover() && TOLUtil.CanStopBeingLovers(__instance) &&
+                ((TOLUtil.IsOrientationSystemEnabledFor(__instance) 
+                  && Randy.randomChance(!Orientations.PreferenceMatches(__instance, __instance.lover, false) ? 0.25f : 0.01f)) 
+                 || (!TOLUtil.IsOrientationSystemEnabledFor(__instance) && !TOLUtil.CanReproduce(__instance, __instance.lover))))
             {
                 if (!__instance.hasCultureTrait("committed") || !__instance.lover.hasCultureTrait("committed"))
                 {
-                    Util.BreakUp(__instance);   
+                    TOLUtil.BreakUp(__instance);   
                 }
             }
         } 
@@ -171,10 +197,10 @@ public class ActorPatch
             
             if (
                 // DateableManager.Manager.IsActorUndateable(pTarget, __instance)
-                Util.CannotDate(pTarget, __instance)
+                TOLUtil.CannotDate(pTarget, __instance)
                 ||
-                 (!QueerTraits.PreferenceMatches(__instance, pTarget, false) && Util.IsOrientationSystemEnabledFor(__instance))
-                 || (!QueerTraits.PreferenceMatches(pTarget, __instance, false) && Util.IsOrientationSystemEnabledFor(pTarget))
+                 (!Orientations.PreferenceMatches(__instance, pTarget, false) && TOLUtil.IsOrientationSystemEnabledFor(__instance))
+                 || (!Orientations.PreferenceMatches(pTarget, __instance, false) && TOLUtil.IsOrientationSystemEnabledFor(pTarget))
                 
                 || __instance.hasLover()
                 || pTarget.hasLover()
@@ -188,12 +214,12 @@ public class ActorPatch
                                                              && (__instance.isSapient() && pTarget.isSapient() || !mustBeSmart)
                                                              && !pTarget.hasXenophobic() || !allowCrossSpeciesLove)) // subspecies stuff!
                 
-                || !Util.CanFallInLove(pTarget)
-                || !Util.CanFallInLove(__instance)
+                || !TOLUtil.CanFallInLove(pTarget)
+                || !TOLUtil.CanFallInLove(__instance)
                 
                 // if queer but culture trait says they do not matter
-                || ((!Util.IsOrientationSystemEnabledFor(__instance) || !Util.IsOrientationSystemEnabledFor(pTarget))
-                    && !Util.CanReproduce(__instance, pTarget)))
+                || ((!TOLUtil.IsOrientationSystemEnabledFor(__instance) || !TOLUtil.IsOrientationSystemEnabledFor(pTarget))
+                    && !TOLUtil.CanReproduce(__instance, pTarget)))
             {
                 __result = false;
                 return false;

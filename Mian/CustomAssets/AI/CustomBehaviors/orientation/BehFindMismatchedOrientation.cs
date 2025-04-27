@@ -30,7 +30,7 @@ public class BehFindMismatchedOrientation : BehaviourActionActor
                     unfitPreferences.Add(Preference.DifferentSex);
                 }
                 
-                var pActorTraits = QueerTraits.GetQueerTraits(pActor, true);
+                var pActorTraits = Orientations.GetQueerTraits(pActor, true);
                 if (pActorTraits.Count < 2) return null;
 
                 if (unfitPreferences.Contains(pActorTraits[0].preference) ||
@@ -44,7 +44,7 @@ public class BehFindMismatchedOrientation : BehaviourActionActor
                 {
                     if (pTarget != pActor && pActor.isSameIslandAs(pTarget))
                     {
-                        var queerTraits = QueerTraits.GetQueerTraits(pTarget, true);
+                        var queerTraits = Orientations.GetQueerTraits(pTarget, true);
                         if (queerTraits.Count < 2) continue;
                         var romanticPreference = queerTraits[1].preference;
                         var sexualPreference = queerTraits[0].preference;

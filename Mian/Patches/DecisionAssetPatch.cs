@@ -18,10 +18,10 @@ public class DecisionAssetPatch
                 var pParentA = pActor;
                 var pParentB = pActor.lover;
                 if (pActor.hasLover() && 
-                    (!QueerTraits.PreferenceMatches(pParentA, pParentB, true)
-                     || !QueerTraits.PreferenceMatches(pParentB, pParentA, true) 
-                     || !Util.CanReproduce(pParentA, pParentB)
-                    || !Util.CanMakeBabies(pParentA) || !Util.CanMakeBabies(pParentB)))
+                    (!Orientations.PreferenceMatches(pParentA, pParentB, true)
+                     || !Orientations.PreferenceMatches(pParentB, pParentA, true) 
+                     || !TOLUtil.CanReproduce(pParentA, pParentB)
+                    || !TOLUtil.CanMakeBabies(pParentA) || !TOLUtil.CanMakeBabies(pParentB)))
                 {
                     __result = false;
                     return false;

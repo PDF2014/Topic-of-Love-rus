@@ -17,7 +17,7 @@ public class Decisions
             priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/culture_traits/orientationless",
             cooldown = 30,
-            action_check_launch = actor => (actor.hasCultureTrait("homophobic") || actor.hasCultureTrait("heterophobic")) && Util.IsOrientationSystemEnabledFor(actor),
+            action_check_launch = actor => (actor.hasCultureTrait("homophobic") || actor.hasCultureTrait("heterophobic")) && TOLUtil.IsOrientationSystemEnabledFor(actor),
             weight = 0.5f,
             list_civ = true,
             only_safe = true
@@ -32,15 +32,15 @@ public class Decisions
             cooldown = 15,
             action_check_launch = actor => actor.isSapient()
                                            && actor.hasLover()
-                                           && QueerTraits.GetQueerTraits(actor).Count >= 2 
-                                           && !Util.IsIntimacyHappinessEnough(actor, 100f)
-                                           && Util.IsOrientationSystemEnabledFor(actor)
+                                           && Orientations.GetQueerTraits(actor).Count >= 2 
+                                           && !TOLUtil.IsIntimacyHappinessEnough(actor, 100f)
+                                           && TOLUtil.IsOrientationSystemEnabledFor(actor)
                                            && !actor.hasStatus("just_kissed")
-                                           && (QueerTraits.BothPreferencesMatch(actor, actor.lover) || Randy.randomChance(0.5f)),
+                                           && (Orientations.BothPreferencesMatch(actor, actor.lover) || Randy.randomChance(0.5f)),
             list_civ = true,
-            weight_calculate_custom = actor => Util.IsIntimacyHappinessEnough(actor, 75f) ? 0.5f: 
-                Util.IsIntimacyHappinessEnough(actor, 50f) ? 0.6f : Util.IsIntimacyHappinessEnough(actor, 0) ? .8f : 
-                Util.IsIntimacyHappinessEnough(actor, -50) ? 1f : Util.IsIntimacyHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
+            weight_calculate_custom = actor => TOLUtil.IsIntimacyHappinessEnough(actor, 75f) ? 0.5f: 
+                TOLUtil.IsIntimacyHappinessEnough(actor, 50f) ? 0.6f : TOLUtil.IsIntimacyHappinessEnough(actor, 0) ? .8f : 
+                TOLUtil.IsIntimacyHappinessEnough(actor, -50) ? 1f : TOLUtil.IsIntimacyHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
             only_safe = true,
             cooldown_on_launch_failure = true
         });
@@ -53,14 +53,14 @@ public class Decisions
             cooldown = 30,
             action_check_launch = actor => actor.isSapient()
                                            && actor.hasLover()
-                                           && !Util.IsIntimacyHappinessEnough(actor, 100f)
-                                           && Util.IsOrientationSystemEnabledFor(actor)
-                                           && (QueerTraits.BothActorsPreferencesMatch(actor, actor.lover, false) || Randy.randomChance(0.5f))
+                                           && !TOLUtil.IsIntimacyHappinessEnough(actor, 100f)
+                                           && TOLUtil.IsOrientationSystemEnabledFor(actor)
+                                           && (Orientations.BothActorsPreferencesMatch(actor, actor.lover, false) || Randy.randomChance(0.5f))
                                            && !actor.hasStatus("went_on_date"),
             list_civ = true,
-            weight_calculate_custom = actor => Util.IsIntimacyHappinessEnough(actor, 75f) ? 0.5f: 
-                Util.IsIntimacyHappinessEnough(actor, 50f) ? 0.6f : Util.IsIntimacyHappinessEnough(actor, 0) ? .8f : 
-                Util.IsIntimacyHappinessEnough(actor, -50) ? 1f : Util.IsIntimacyHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
+            weight_calculate_custom = actor => TOLUtil.IsIntimacyHappinessEnough(actor, 75f) ? 0.5f: 
+                TOLUtil.IsIntimacyHappinessEnough(actor, 50f) ? 0.6f : TOLUtil.IsIntimacyHappinessEnough(actor, 0) ? .8f : 
+                TOLUtil.IsIntimacyHappinessEnough(actor, -50) ? 1f : TOLUtil.IsIntimacyHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
             only_safe = true,
             cooldown_on_launch_failure = true
         });
@@ -74,13 +74,13 @@ public class Decisions
             action_check_launch = actor =>
             {
                 actor.subspecies.countReproductionNeuron();
-                return Util.IsDyingOut(actor)
-                       && QueerTraits.GetQueerTraits(actor).Count >= 2
-                       && Util.CanMakeBabies(actor)
+                return TOLUtil.IsDyingOut(actor)
+                       && Orientations.GetQueerTraits(actor).Count >= 2
+                       && TOLUtil.CanMakeBabies(actor)
                        && actor.hasSubspeciesTrait("preservation")
-                       && Util.IsOrientationSystemEnabledFor(actor);
+                       && TOLUtil.IsOrientationSystemEnabledFor(actor);
             },
-            weight_calculate_custom = actor => Util.CanMakeBabies(actor) ? 2f : 0.1f,
+            weight_calculate_custom = actor => TOLUtil.CanMakeBabies(actor) ? 2f : 0.1f,
             only_adult = true,
             only_safe = true,
             cooldown_on_launch_failure = true
@@ -98,14 +98,14 @@ public class Decisions
             path_icon = "ui/Icons/status/enjoyed_sex",
             cooldown = 15,
             action_check_launch = actor => actor.isSapient()
-                                           && QueerTraits.GetQueerTraits(actor).Count >= 2 
-                                           && !QueerTraits.GetPreferenceFromActor(actor, true).Equals(Preference.Neither)
-                                           && !Util.IsIntimacyHappinessEnough(actor, 100f)
-                                           && Util.IsOrientationSystemEnabledFor(actor),
+                                           && Orientations.GetQueerTraits(actor).Count >= 2 
+                                           && !Orientations.GetPreferenceFromActor(actor, true).Equals(Preference.Neither)
+                                           && !TOLUtil.IsIntimacyHappinessEnough(actor, 100f)
+                                           && TOLUtil.IsOrientationSystemEnabledFor(actor),
             list_civ = true,
-            weight_calculate_custom = actor => Util.IsIntimacyHappinessEnough(actor, 75f) ? 0.25f: 
-                Util.IsIntimacyHappinessEnough(actor, 50f) ? 0.5f : Util.IsIntimacyHappinessEnough(actor, 0) ? .75f : 
-                Util.IsIntimacyHappinessEnough(actor, -50) ? 1f : Util.IsIntimacyHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
+            weight_calculate_custom = actor => TOLUtil.IsIntimacyHappinessEnough(actor, 75f) ? 0.25f: 
+                TOLUtil.IsIntimacyHappinessEnough(actor, 50f) ? 0.5f : TOLUtil.IsIntimacyHappinessEnough(actor, 0) ? .75f : 
+                TOLUtil.IsIntimacyHappinessEnough(actor, -50) ? 1f : TOLUtil.IsIntimacyHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
             only_adult = true,
             only_safe = true,
             cooldown_on_launch_failure = true
@@ -119,25 +119,25 @@ public class Decisions
             cooldown = 15,
             action_check_launch = actor =>
             {
-                if (!actor.isSapient() || !Util.WantsBaby(actor, false))
+                if (!actor.isSapient() || !TOLUtil.WantsBaby(actor, false))
                     return false;
                     
                 var bestFriend = actor.getBestFriend();
 
                 if (actor.hasLover())
                 {
-                    if (!Util.WantsBaby(actor.lover, false))
+                    if (!TOLUtil.WantsBaby(actor.lover, false))
                         return false;
                         
-                    if (Util.CanReproduce(actor, actor.lover) && !QueerTraits.BothActorsPreferencesMatch(actor, actor.lover, true))
+                    if (TOLUtil.CanReproduce(actor, actor.lover) && !Orientations.BothActorsPreferencesMatch(actor, actor.lover, true))
                         return true;
 
-                    if (Util.CanReproduce(actor, actor.lover) &&
-                        QueerTraits.BothActorsPreferencesMatch(actor, actor.lover, true))
+                    if (TOLUtil.CanReproduce(actor, actor.lover) &&
+                        Orientations.BothActorsPreferencesMatch(actor, actor.lover, true))
                         return false;
                 }
                     
-                return bestFriend != null && Util.CanReproduce(actor, bestFriend) && !bestFriend.hasStatus("pregnant") && actor.hasHouse();
+                return bestFriend != null && TOLUtil.CanReproduce(actor, bestFriend) && !bestFriend.hasStatus("pregnant") && actor.hasHouse();
             },
             list_civ = true,
             weight = 0.5f,

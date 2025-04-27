@@ -13,8 +13,8 @@ public class ActorManagerPatch
         {
             if (pActor.isAdult())
             {
-                if (!QueerTraits.HasQueerTraits(pActor)){
-                    QueerTraits.GiveQueerTraits(pActor, false, true);
+                if (!Orientations.HasQueerTraits(pActor)){
+                    Orientations.GiveQueerTraits(pActor, false, true);
                     pActor.changeHappiness("true_self");
                 }
             }

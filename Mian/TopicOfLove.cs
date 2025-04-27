@@ -37,14 +37,8 @@ namespace Topic_of_Love.Mian
     public class TopicOfLove : BasicMod<TopicOfLove>
     {
         public static BasicMod<TopicOfLove> Mod;
-        
-        protected override void OnModLoad()
+        public void Reload()
         {
-            Mod = this;
-            // Initialize your mod.
-            // Methods are called in the order: OnLoad -> Awake -> OnEnable -> Start -> Update
-            Util.LogWithId("Making people more loveable!");
-            
             var localeDir = GetLocaleFilesDirectory(GetDeclaration());
             foreach (var file in Directory.GetFiles(localeDir))
             {
@@ -59,8 +53,16 @@ namespace Topic_of_Love.Mian
             }
 
             LM.ApplyLocale();
+        }
+        protected override void OnModLoad()
+        {
+            Mod = this;
+            // Initialize your mod.
+            // Methods are called in the order: OnLoad -> Awake -> OnEnable -> Start -> Update
+            TOLUtil.LogWithId("Making people more loveable!");
             
-            QueerTraits.Init();
+            PreferenceTraits.Init();
+            Orientations.Init();
             new ActorTraits().Init();
             new CultureTraits().Init();
             new SubspeciesTraits().Init();

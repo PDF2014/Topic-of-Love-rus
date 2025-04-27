@@ -15,7 +15,7 @@ public class BehGetPossibleTileForSex : BehaviourActionActor
         {
             if (pActor.beh_actor_target == null)
             {
-                Util.Debug(pActor.getName()+": Cancelled because actor was null");
+                TOLUtil.Debug(pActor.getName()+": Cancelled because actor was null");
 
                 return BehResult.Stop;
             }
@@ -25,7 +25,7 @@ public class BehGetPossibleTileForSex : BehaviourActionActor
             pActor.beh_tile_target = homeBuilding != null ? homeBuilding.current_tile : pActor.beh_actor_target.current_tile;
             if (!isPlacePrivateForBreeding(pActor, pActor.beh_tile_target))
             {
-                Util.Debug("Cancelled because of lack of privacy");
+                TOLUtil.Debug("Cancelled because of lack of privacy");
                 return BehResult.Stop;
             }
             

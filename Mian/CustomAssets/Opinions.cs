@@ -16,8 +16,8 @@ public class Opinions
             {
                 var requirement = pTarget.getUnits().Count() / 2;
                 var homoUnits = pTarget.getUnits().Count(unit => 
-                    QueerTraits.IncludesHomoPreference(QueerTraits.GetPreferenceFromActor(unit, false)) ||
-                    QueerTraits.IncludesHomoPreference(QueerTraits.GetPreferenceFromActor(unit, true)));
+                    Orientations.IncludesHomoPreference(Orientations.GetPreferenceFromActor(unit, false)) ||
+                    Orientations.IncludesHomoPreference(Orientations.GetPreferenceFromActor(unit, true)));
                 
                 if (pMain.hasCulture() && pMain.culture.hasTrait("homophobic"))
                 {
@@ -37,8 +37,8 @@ public class Opinions
                         
                         requirement = pMain.getUnits().Count() / 2;
                         homoUnits = pMain.getUnits().Count(unit => 
-                            QueerTraits.IncludesHomoPreference(QueerTraits.GetPreferenceFromActor(unit, false)) ||
-                            QueerTraits.IncludesHomoPreference(QueerTraits.GetPreferenceFromActor(unit, true)));
+                            Orientations.IncludesHomoPreference(Orientations.GetPreferenceFromActor(unit, false)) ||
+                            Orientations.IncludesHomoPreference(Orientations.GetPreferenceFromActor(unit, true)));
                         if (homoUnits > requirement)
                             return 20;
                     }   
@@ -46,8 +46,8 @@ public class Opinions
                 {
                     requirement = pMain.getUnits().Count() / 2;
                     homoUnits = pMain.getUnits().Count(unit => 
-                        QueerTraits.IncludesHomoPreference(QueerTraits.GetPreferenceFromActor(unit, false)) ||
-                        QueerTraits.IncludesHomoPreference(QueerTraits.GetPreferenceFromActor(unit, true)));
+                        Orientations.IncludesHomoPreference(Orientations.GetPreferenceFromActor(unit, false)) ||
+                        Orientations.IncludesHomoPreference(Orientations.GetPreferenceFromActor(unit, true)));
                     if (homoUnits > requirement)
                         return -50;
                 }
@@ -64,8 +64,8 @@ public class Opinions
             {
                 var requirement = pTarget.getUnits().Count() / 2;
                 var heteroUnits = pTarget.getUnits().Count(unit => 
-                    QueerTraits.GetPreferenceFromActor(unit, false).Equals(Preference.DifferentSex) ||
-                    QueerTraits.GetPreferenceFromActor(unit, true).Equals(Preference.DifferentSex));
+                    Orientations.GetPreferenceFromActor(unit, false).Equals(Preference.DifferentSex) ||
+                    Orientations.GetPreferenceFromActor(unit, true).Equals(Preference.DifferentSex));
                 
                 if (pMain.hasCulture() && pMain.culture.hasTrait("heterophobic"))
                 {
@@ -84,8 +84,8 @@ public class Opinions
                     {
                         requirement = pMain.getUnits().Count() / 2;
                         heteroUnits = pMain.getUnits().Count(unit => 
-                            QueerTraits.GetPreferenceFromActor(unit, false).Equals(Preference.DifferentSex) ||
-                            QueerTraits.GetPreferenceFromActor(unit, true).Equals(Preference.DifferentSex));
+                            Orientations.GetPreferenceFromActor(unit, false).Equals(Preference.DifferentSex) ||
+                            Orientations.GetPreferenceFromActor(unit, true).Equals(Preference.DifferentSex));
                         if (heteroUnits > requirement)
                             return 20;
                     }
@@ -93,8 +93,8 @@ public class Opinions
                 {
                     requirement = pMain.getUnits().Count() / 2;
                     heteroUnits = pMain.getUnits().Count(unit => 
-                        QueerTraits.GetPreferenceFromActor(unit, false).Equals(Preference.DifferentSex) ||
-                        QueerTraits.GetPreferenceFromActor(unit, true).Equals(Preference.DifferentSex));
+                        Orientations.GetPreferenceFromActor(unit, false).Equals(Preference.DifferentSex) ||
+                        Orientations.GetPreferenceFromActor(unit, true).Equals(Preference.DifferentSex));
                     if (heteroUnits > requirement)
                         return -50;
                 }

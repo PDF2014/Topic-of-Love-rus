@@ -55,13 +55,13 @@ namespace Topic_of_Love.Mian.CustomAssets
                         return false;
                     }
           
-                    Util.ShowWhisperTipWithTime("love_successful", 18f);
+                    TOLUtil.ShowWhisperTipWithTime("love_successful", 18f);
                     
                     _selectedActorB = pActor;
                     _selectedActorB.data.set("force_lover", true);
                     _selectedActorA.data.set("force_lover", true);
-                    Util.BreakUp(_selectedActorA);
-                    Util.BreakUp(_selectedActorB);
+                    TOLUtil.BreakUp(_selectedActorA);
+                    TOLUtil.BreakUp(_selectedActorB);
                     _selectedActorA.becomeLoversWith(_selectedActorB);
                     _selectedActorA = null;
                     _selectedActorB = null;
@@ -98,7 +98,7 @@ namespace Topic_of_Love.Mian.CustomAssets
                     }
           
                     ActionLibrary.showWhisperTip("breakup_successful");
-                    Util.BreakUp(pActor);
+                    TOLUtil.BreakUp(pActor);
                     return true;
                 },
             });
@@ -141,7 +141,7 @@ namespace Topic_of_Love.Mian.CustomAssets
                         return false;
                     }
           
-                    Util.ShowWhisperTipWithTime("sex_successful", 24f);
+                    TOLUtil.ShowWhisperTipWithTime("sex_successful", 24f);
                     
                     _selectedActorB = pActor;
                     _selectedActorA.cancelAllBeh();
@@ -207,7 +207,7 @@ namespace Topic_of_Love.Mian.CustomAssets
                         return false;
                     }
                     
-                    Util.ShowWhisperTipWithTime("kiss_successful", 24f);
+                    TOLUtil.ShowWhisperTipWithTime("kiss_successful", 24f);
                     _selectedActorA.cancelAllBeh();
                     _selectedActorA.stopMovement();
                     _selectedActorB.cancelAllBeh();
@@ -326,7 +326,7 @@ namespace Topic_of_Love.Mian.CustomAssets
                     // pActor.beh_actor_target.a.timer_action = 0.0f;
                     // pActor.setTask("go_sexual_ivf", pClean: false, pForceAction:true);
                     
-                    Util.ShowWhisperTipWithTime("sexualivf_successful", 24f);
+                    TOLUtil.ShowWhisperTipWithTime("sexualivf_successful", 24f);
                     _selectedActorA = null;
                     _selectedActorB = null;
                     return true;
@@ -379,7 +379,7 @@ namespace Topic_of_Love.Mian.CustomAssets
                         return false;
                     }
           
-                    Util.ShowWhisperTipWithTime("date_successful", 24f);
+                    TOLUtil.ShowWhisperTipWithTime("date_successful", 24f);
 
                     _selectedActorA.cancelAllBeh();
                     _selectedActorA.stopMovement();

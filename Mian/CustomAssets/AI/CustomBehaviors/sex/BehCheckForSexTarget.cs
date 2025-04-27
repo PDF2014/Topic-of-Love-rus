@@ -7,16 +7,16 @@ public class BehCheckForSexTarget : BehaviourActionActor
     {
         if (pActor.beh_actor_target == null)
         {
-            Util.Debug(pActor.getName()+": Cancelled from checking for sex target because actor was null");
+            TOLUtil.Debug(pActor.getName()+": Cancelled from checking for sex target because actor was null");
             return BehResult.Stop;
         }
-        Util.Debug(pActor.getName() + " is checking for sex target!");
+        TOLUtil.Debug(pActor.getName() + " is checking for sex target!");
 
         var sexActor = pActor.beh_actor_target.a;
             
         if (sexActor.isTask("have_sex_go") && sexActor.ai.action_index > 3 && (sexActor.beh_building_target == null || pActor.beh_building_target == null))
         {
-            Util.Debug(pActor.getName() + " is initating outside sex!");
+            TOLUtil.Debug(pActor.getName() + " is initating outside sex!");
             var result = forceTask(pActor, "sexual_reproduction_outside", false, true);
             sexActor.cancelAllBeh();
             sexActor.makeWait(6f);
@@ -25,7 +25,7 @@ public class BehCheckForSexTarget : BehaviourActionActor
             
         if (sexActor.isTask("have_sex_go") && sexActor.beh_building_target == pActor.beh_building_target && sexActor.ai.action_index > 3)
         {
-            Util.Debug(pActor.getName() + " is initiating inside sex!");
+            TOLUtil.Debug(pActor.getName() + " is initiating inside sex!");
             pActor.stayInBuilding(pActor.beh_building_target);
             sexActor.stayInBuilding(sexActor.beh_building_target);
             sexActor.setTask("sexual_reproduction_civ_wait", false, pForceAction: true);

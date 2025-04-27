@@ -8,16 +8,16 @@ public class BehCheckIfDateFinish : BehaviourActionActor
 {
     public override BehResult execute(Actor pActor)
     {
-        Util.Debug("Checking for date before finalizing: "+ pActor.getName());
+        TOLUtil.Debug("Checking for date before finalizing: "+ pActor.getName());
         if (pActor.beh_actor_target == null)
         {
-            Util.Debug(pActor.getName()+": Cancelled from finalizing because actor was null");
+            TOLUtil.Debug(pActor.getName()+": Cancelled from finalizing because actor was null");
             return BehResult.Stop;
         }
         var target = pActor.beh_actor_target.a;
 
         pActor.data.get("date_happiness", out var happiness, 0f);
-        if (QueerTraits.BothActorsPreferencesMatch(pActor, target, false))
+        if (Orientations.BothActorsPreferencesMatch(pActor, target, false))
         {
             happiness += Randy.randomFloat(5, 10f);
         }
@@ -45,12 +45,12 @@ public class BehCheckIfDateFinish : BehaviourActionActor
         pActor.addStatusEffect("went_on_date");
         target.addStatusEffect("went_on_date");
         
-        Util.ChangeIntimacyHappinessBy(pActor, happiness);
-        Util.ChangeIntimacyHappinessBy(target, happiness);
+        TOLUtil.ChangeIntimacyHappinessBy(pActor, happiness);
+        TOLUtil.ChangeIntimacyHappinessBy(target, happiness);
         
         pActor.data.removeFloat("date_happiness");
         
-        Util.Debug("The date for "+pActor.getName()+" and "+target.getName() + " has finalized! Total happiness: "+happiness);
+        TOLUtil.Debug("The date for "+pActor.getName()+" and "+target.getName() + " has finalized! Total happiness: "+happiness);
         return BehResult.Continue;
     }
 }

@@ -24,23 +24,23 @@ public class StatusEffects
                 {
                     var changeBy = 0f;
 
-                    if (QueerTraits.PreferenceMatches(actor.a, partner, false))
+                    if (Orientations.PreferenceMatches(actor.a, partner, false))
                         changeBy += 10f;
                     
-                    if (QueerTraits.PreferenceMatches(actor.a, partner, true))
+                    if (Orientations.PreferenceMatches(actor.a, partner, true))
                         changeBy += 5f;
                 
                     if (partner == actor.a.lover)
                         changeBy += 10f;
                 
-                    Util.ChangeIntimacyHappinessBy(actor.a, changeBy);
+                    TOLUtil.ChangeIntimacyHappinessBy(actor.a, changeBy);
                     
-                    if(!Util.CanHaveRomanceWithoutRepercussionsWithSomeoneElse(actor.a))
-                        Util.PotentiallyCheatedWith(actor.a, partner);
+                    if(!TOLUtil.CanHaveRomanceWithoutRepercussionsWithSomeoneElse(actor.a))
+                        TOLUtil.PotentiallyCheatedWith(actor.a, partner);
                 }
 
                 actor.a.changeHappiness("just_kissed");
-                Util.Debug(actor.a.getName() + " just kissed!");
+                TOLUtil.Debug(actor.a.getName() + " just kissed!");
                 return true;
             }
         });
@@ -63,7 +63,7 @@ public class StatusEffects
                     changeBy += Math.Abs(happiness / 3);
                 }
                 
-                Util.ChangeIntimacyHappinessBy(actor.a, changeBy);
+                TOLUtil.ChangeIntimacyHappinessBy(actor.a, changeBy);
                 
                 actor.a.changeHappiness("enjoyed_sex");
                 actor.a.finishStatusEffect("disliked_sex");
@@ -85,7 +85,7 @@ public class StatusEffects
                     changeBy += happiness / 3; // become more deprived if the sex was bad
                 }
 
-                Util.ChangeIntimacyHappinessBy(actor.a, changeBy);
+                TOLUtil.ChangeIntimacyHappinessBy(actor.a, changeBy);
                 actor.a.changeHappiness("disliked_sex");
                 actor.a.finishStatusEffect("enjoyed_sex");
                 actor.a.finishStatusEffect("okay_sex");
@@ -105,7 +105,7 @@ public class StatusEffects
                 if (sexPartner != null && sexPartner == actor.a.lover)
                     changeBy += 5f; // okay sex but add extra if with lover at least
                 
-                Util.ChangeIntimacyHappinessBy(actor.a, changeBy);
+                TOLUtil.ChangeIntimacyHappinessBy(actor.a, changeBy);
                 actor.a.changeHappiness("okay_sex");
                 actor.a.finishStatusEffect("enjoyed_sex");
                 actor.a.finishStatusEffect("disliked_sex");
@@ -128,11 +128,11 @@ public class StatusEffects
             duration = 60f,
             action_on_receive = (cheatedActor, _) =>
             {
-                if (!Util.CanStopBeingLovers(cheatedActor.a))
+                if (!TOLUtil.CanStopBeingLovers(cheatedActor.a))
                     return false;
                 
                 var lover = cheatedActor.a.lover;
-                Util.RemoveLovers(cheatedActor.a);
+                TOLUtil.RemoveLovers(cheatedActor.a);
                 if (Randy.randomChance(0.5f))
                 {
                     cheatedActor.a.addStatusEffect("crying");
@@ -157,9 +157,9 @@ public class StatusEffects
                 cheatedActor.a.data.set("cheated_" +lover.getID(),true);
                 
                 // DateableManager.Manager.AddOrRemoveUndateable(cheatedActor.a, lover);
-                Util.AddOrRemoveUndateableActor(cheatedActor.a, lover);
+                TOLUtil.AddOrRemoveUndateableActor(cheatedActor.a, lover);
 
-                Util.Debug(lover.getName() + " just cheated on "+cheatedActor.a.getName());
+                TOLUtil.Debug(lover.getName() + " just cheated on "+cheatedActor.a.getName());
                 return true;
             }
         });

@@ -54,7 +54,7 @@ public class BabyMakerPatch
             if (pCity != null)
                 --pCity.status.housing_free;
 
-            Actor dominantParent = Util.EnsurePopulationFromParent(parents);
+            Actor dominantParent = TOLUtil.EnsurePopulationFromParent(parents);
             if (dominantParent == null) 
                 // there seems to be a bug in the game that allows reproduction strategies that aren't sexual to PRODUCE beyond the harmony traits cap. probably because they dont check for populations there lol
                 dominantParent = pParent1;

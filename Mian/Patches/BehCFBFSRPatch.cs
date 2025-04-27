@@ -16,7 +16,7 @@ public class BehCFBFSRPatch
             var target = pActor.beh_actor_target != null ? pActor.beh_actor_target.a : pActor.lover;
             if (target == null)
             { 
-                Util.Debug(pActor.getName()+": Cant do sex because target is null");
+                TOLUtil.Debug(pActor.getName()+": Cant do sex because target is null");
                 __result = BehResult.Stop;
                 return false;
             }
@@ -25,7 +25,7 @@ public class BehCFBFSRPatch
             if(target.subspecies != pActor.subspecies)
                 target.subspecies.counter_reproduction_acts?.registerEvent();
             __instance.checkForBabies(pActor, target);
-            Util.JustHadSex(pActor, target);
+            TOLUtil.JustHadSex(pActor, target);
             __result = BehResult.Continue;
             return false;
         }
@@ -38,9 +38,9 @@ public class BehCFBFSRPatch
     {
         static bool Prefix(Actor pParentA, Actor pParentB)
         {
-            Util.Debug($"\nAble to make a baby?\n{pParentA.getName()}: "+(Util.CanMakeBabies(pParentA)+$"\n${pParentB.getName()}: "+(Util.CanMakeBabies(pParentB))));
+            TOLUtil.Debug($"\nAble to make a baby?\n{pParentA.getName()}: "+(TOLUtil.CanMakeBabies(pParentA)+$"\n${pParentB.getName()}: "+(TOLUtil.CanMakeBabies(pParentB))));
 
-            if (!Util.CanMakeBabies(pParentA) || !Util.CanMakeBabies(pParentB))
+            if (!TOLUtil.CanMakeBabies(pParentA) || !TOLUtil.CanMakeBabies(pParentB))
                 return false;
 
             // ensures that both subspecies HAVE not reached population limit
@@ -50,7 +50,7 @@ public class BehCFBFSRPatch
             Actor pregnantActor = null;
             Actor nonPregnantActor;
             
-            if (Util.NeedDifferentSexTypeForReproduction(pParentA) && Util.NeedDifferentSexTypeForReproduction(pParentB))
+            if (TOLUtil.NeedDifferentSexTypeForReproduction(pParentA) && TOLUtil.NeedDifferentSexTypeForReproduction(pParentB))
             {
                 if (pParentA.data.sex == pParentB.data.sex) return false;
                 
@@ -59,15 +59,15 @@ public class BehCFBFSRPatch
                 else if (pParentB.isSexFemale())
                     pregnantActor = pParentB;
             }
-            else if(Util.NeedSameSexTypeForReproduction(pParentA) && Util.NeedSameSexTypeForReproduction(pParentB))
+            else if(TOLUtil.NeedSameSexTypeForReproduction(pParentA) && TOLUtil.NeedSameSexTypeForReproduction(pParentB))
             {
                 if (pParentA.data.sex != pParentB.data.sex) return false;
                 pregnantActor = !Randy.randomBool() ? pParentB : pParentA;
-            } else if (Util.CanDoAnySexType(pParentA) || Util.CanDoAnySexType(pParentB))
+            } else if (TOLUtil.CanDoAnySexType(pParentA) || TOLUtil.CanDoAnySexType(pParentB))
             {
-                if(Util.CanDoAnySexType(pParentA) && Util.CanDoAnySexType(pParentB))
+                if(TOLUtil.CanDoAnySexType(pParentA) && TOLUtil.CanDoAnySexType(pParentB))
                     pregnantActor = !Randy.randomBool() ? pParentB : pParentA;
-                else if (Util.CanDoAnySexType(pParentA))
+                else if (TOLUtil.CanDoAnySexType(pParentA))
                 {
                     pregnantActor = pParentA;
                 }
@@ -87,8 +87,8 @@ public class BehCFBFSRPatch
             pParentA.data.get("sex_reason", out var sexReason, "");
             pParentB.data.get("sex_reason", out var sexReason1, "");
 
-            var aWantsBaby = Util.WantsBaby(pParentA);
-            var bWantsBaby = Util.WantsBaby(pParentB);
+            var aWantsBaby = TOLUtil.WantsBaby(pParentA);
+            var bWantsBaby = TOLUtil.WantsBaby(pParentB);
             bool success = sexReason1.Equals("casual") || sexReason.Equals("casual") ? 
                 aWantsBaby && bWantsBaby : true;
             

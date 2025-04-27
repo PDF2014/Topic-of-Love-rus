@@ -11,13 +11,13 @@ namespace Topic_of_Love.Mian.CustomAssets
             {
                 id = "orientation",
                 rate = 0.5f,
-                check = pActor => QueerTraits.GetPreferenceFromActor(pActor, false) != Preference.Inapplicable 
-                                  && QueerTraits.GetPreferenceFromActor(pActor, true) != Preference.Inapplicable
-                                  && QueerTraits.GetQueerTraits(pActor, true).Count >= 2
+                check = pActor => Orientations.GetPreferenceFromActor(pActor, false) != Preference.Inapplicable 
+                                  && Orientations.GetPreferenceFromActor(pActor, true) != Preference.Inapplicable
+                                  && Orientations.GetQueerTraits(pActor, true).Count >= 2
                                   && !pActor.hasCultureTrait("orientationless"),
                 pot_fill = (actor, sprites) =>
                 {
-                    if (QueerTraits.GetQueerTraits(actor, true).Count < 2) return;
+                    if (Orientations.GetQueerTraits(actor, true).Count < 2) return;
                     var unfitPreferences = new List<Preference>();
                     if (actor.hasCultureTrait("homophobic"))
                     {
@@ -30,7 +30,7 @@ namespace Topic_of_Love.Mian.CustomAssets
                         unfitPreferences.Add(Preference.DifferentSex);
                     }
 
-                    var queerTraits = QueerTraits.GetQueerTraits(actor, true);
+                    var queerTraits = Orientations.GetQueerTraits(actor, true);
                     var sexualPreference = queerTraits[0].preference;
                     var sexualSprite = queerTraits[0].getSprite();
                     var romanticPreference = queerTraits[1].preference;
