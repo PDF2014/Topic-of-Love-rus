@@ -140,15 +140,6 @@ public class ActorPatch
             }
         } 
     }
-
-    [HarmonyPatch(typeof(Actor), nameof(Actor.becomeLoversWith))]
-    class BecomeLoversWithPatch
-    {
-        static void Postfix(Actor pTarget, Actor __instance)
-        {
-            BehaviourActionBase<Actor>.world.families.newFamily(__instance, __instance.current_tile, pTarget);
-        }
-    }
     
     // This is where we handle the beef of our code for having cross species and non-same reproduction method ppl fall in love
     [HarmonyPatch(typeof(Actor), nameof(Actor.canFallInLoveWith))]
