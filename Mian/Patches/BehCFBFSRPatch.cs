@@ -4,39 +4,54 @@ using NeoModLoader.services;
 
 namespace Topic_of_Love.Mian.Patches;
 
+[HarmonyPatch(typeof(BehCheckForBabiesFromSexualReproduction))]
 public class BehCFBFSRPatch
 {
-    [HarmonyPatch(typeof(BehCheckForBabiesFromSexualReproduction),
-        nameof(BehCheckForBabiesFromSexualReproduction.execute))]
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(BehCheckForBabiesFromSexualReproduction.execute))]
     // code is running twice??
-    class SexPatch
+    static bool SexPatch(Actor pActor, ref BehResult __result, BehCheckForBabiesFromSexualReproduction __instance)
     {
-        static bool Prefix(Actor pActor, ref BehResult __result, BehCheckForBabiesFromSexualReproduction __instance)
-        {
-            var target = pActor.beh_actor_target != null ? pActor.beh_actor_target.a : pActor.lover;
-            if (target == null)
-            { 
-                Util.Debug(pActor.getName()+": Cant do sex because target is null");
-                __result = BehResult.Stop;
-                return false;
-            }
-            
-            pActor.subspecies.counter_reproduction_acts?.registerEvent();
-            if(target.subspecies != pActor.subspecies)
-                target.subspecies.counter_reproduction_acts?.registerEvent();
-            __instance.checkForBabies(pActor, target);
-            Util.JustHadSex(pActor, target);
-            __result = BehResult.Continue;
+        var target = pActor.beh_actor_target != null ? pActor.beh_actor_target.a : pActor.lover;
+        if (target == null)
+        { 
+            Util.Debug(pActor.getName()+": Cant do sex because target is null");
+            __result = BehResult.Stop;
             return false;
         }
+            
+        pActor.subspecies.counter_reproduction_acts?.registerEvent();
+        if(target.subspecies != pActor.subspecies)
+            target.subspecies.counter_reproduction_acts?.registerEvent();
+        __instance.checkForBabies(pActor, target);
+        Util.JustHadSex(pActor, target);
+        __result = BehResult.Continue;
+        return false;
+    }
+
+    // simple patch fix that actually utilizes pLover in all parts of checkFamily
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(BehCheckForBabiesFromSexualReproduction.checkFamily))]
+    static bool CheckFamilyFix(Actor pActor, Actor pLover)
+    {
+        bool flag = false;
+        if (pActor.hasFamily())
+        {
+            if (pActor.family != pLover.family)
+                flag = true;
+        }
+        else
+            flag = true;
+        if (!flag)
+            return false;
+        BehaviourActionBase<Actor>.world.families.newFamily(pActor, pActor.current_tile, pLover);
+        return false;
     }
     
     // this patch handles who the mother is when it comes to sexual reproduction
-    [HarmonyPatch(typeof(BehCheckForBabiesFromSexualReproduction),
-        nameof(BehCheckForBabiesFromSexualReproduction.checkForBabies))]
-    class CheckForBabiesPatch
-    {
-        static bool Prefix(Actor pParentA, Actor pParentB)
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(BehCheckForBabiesFromSexualReproduction.checkForBabies))]
+        static bool CheckForBabiesPatch(Actor pParentA, Actor pParentB, BehCheckForBabiesFromSexualReproduction __instance)
         {
             Util.Debug($"\nAble to make a baby?\n{pParentA.getName()}: "+(Util.CanMakeBabies(pParentA)+$"\n${pParentB.getName()}: "+(Util.CanMakeBabies(pParentB))));
 
@@ -112,6 +127,8 @@ public class BehCFBFSRPatch
             // Util.Debug($"\nDo parents want a baby?\n{pParentA.getName()}: {Util.WantsBaby(pParentA)}\n{pParentB.getName()}: {Util.WantsBaby(pParentB)}\nSex Reason: ${sexReason}, ${sexReason1}");
             if (success)
             {
+                if(pParentA.lover == pParentB || (!pParentB.hasLover() && !pParentA.hasLover()))
+                    __instance.checkFamily(pParentA, pParentB);
                 ReproductiveStrategy reproductionStrategy = pregnantActor.subspecies.getReproductionStrategy();
                 switch (reproductionStrategy)
                 {
@@ -134,5 +151,4 @@ public class BehCFBFSRPatch
             }
             return false;
         }
-    }
 }

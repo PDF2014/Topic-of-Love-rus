@@ -96,20 +96,31 @@ public class BabyMakerPatch
                     familyParentA.changeHappiness("adopted_baby");
                 }
                 else
-                    actorFromData.setParent1(dominantParent);
+                {
+                    familyParentA = dominantParent;
+                    actorFromData.setParent1(familyParentA);
+                }
 
                 if (familyParentB != null){
                     actorFromData.setParent2(familyParentB);
                     familyParentB.changeHappiness("adopted_baby");
-                }else if(nonDominantParent != null)
+                }else if (nonDominantParent != null)
+                {
+                    familyParentB = nonDominantParent;
                     actorFromData.setParent2(nonDominantParent);
+                }
 
-                if (pAddToFamily && familyParentA != null)
+                if (pAddToFamily)
                 {
                     // if (familyParentA != null)
                     // {
                         if (!familyParentA.hasFamily())
-                            World.world.families.newFamily(familyParentA, familyParentA.current_tile, familyParentB);
+                            World.world.families.newFamily(familyParentA, familyParentA.current_tile, 
+                                familyParentB != null & !familyParentB.hasFamily() ? familyParentB : null);
+                        else if (familyParentB != null && !familyParentB.hasFamily())
+                        {
+                            World.world.families.newFamily(familyParentB, familyParentA.current_tile, null);
+                        }
                         // actorFromData.setFamily(familyParentA.family);
                     // }
                     // else
@@ -120,7 +131,7 @@ public class BabyMakerPatch
                     //         actorFromData.setFamily(randomParentToGoTo.family);
                     // }
                 }
-                BabyHelper.applyParentsMeta(familyParentA != null ? familyParentA : dominantParent, familyParentB != null ? familyParentB : nonDominantParent, actorFromData);
+                BabyHelper.applyParentsMeta(familyParentA, familyParentB, actorFromData);
                 // the game seems to have some sort of code that chooses a baby's subspecies based on generation? not really sure how it works tbh
                 actorFromData.setSubspecies(dominantParent.subspecies);
 
