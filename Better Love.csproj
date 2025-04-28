@@ -71,6 +71,7 @@
     </ItemGroup>
     <ItemGroup>
       <Content Include="default_config.json" />
+      <Folder Include="GameResources\ui\Icons\preference_traits\" />
       <Folder Include="Locales\" />
       <Content Include="mod.json" />
       <Folder Include="Properties\" />

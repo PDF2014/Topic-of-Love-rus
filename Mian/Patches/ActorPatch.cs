@@ -91,7 +91,6 @@ public class ActorPatch
         {
             __instance.asset.addDecision("find_lover");
             __instance.data.set("intimacy_happiness", 10f);
-            PreferenceTraits.CreateOrientations(__instance);
         }
     }
 
@@ -103,28 +102,28 @@ public class ActorPatch
             if (__instance.isAdult()) // fluid sexuality
             {
                 if (!Orientations.HasQueerTraits(__instance)){
-                    Orientations.GiveQueerTraits(__instance, false, true);
-                    __instance.changeHappiness("true_self");
+                    // Orientations.GiveQueerTraits(__instance, false, true);
+                    // __instance.changeHappiness("true_self");
                 }
                 else
                 {
-                    bool changed = false;
-                    var list = Orientations.GetQueerTraits(__instance);
-                    list = Orientations.RandomizeQueerTraits(__instance, true, list);
-                    if (__instance.hasTrait("abroromantic") && Randy.randomChance(0.1f))
-                    {
-                        Orientations.CleanQueerTraits(__instance, false);
-                        __instance.addTrait(list[1]);
-                        changed = true;
-                    }
-                    if (__instance.hasTrait("abrosexual") && Randy.randomChance(0.1f))
-                    {
-                        Orientations.CleanQueerTraits(__instance, true);
-                        __instance.addTrait(list[0]);
-                        changed = true;
-                    }
-                    if(changed)
-                        __instance.changeHappiness("true_self");
+                    // bool changed = false;
+                    // var list = Orientations.GetQueerTraits(__instance);
+                    // list = Orientations.RandomizeQueerTraits(__instance, true, list);
+                    // if (__instance.hasTrait("abroromantic") && Randy.randomChance(0.1f))
+                    // {
+                    //     Orientations.CleanQueerTraits(__instance, false);
+                    //     __instance.addTrait(list[1]);
+                    //     changed = true;
+                    // }
+                    // if (__instance.hasTrait("abrosexual") && Randy.randomChance(0.1f))
+                    // {
+                    //     Orientations.CleanQueerTraits(__instance, true);
+                    //     __instance.addTrait(list[0]);
+                    //     changed = true;
+                    // }
+                    // if(changed)
+                    //     __instance.changeHappiness("true_self");
                 }
                 if(Orientations.GetPreferenceFromActor(__instance, true) != Preference.Neither && TOLUtil.IsOrientationSystemEnabledFor(__instance))
                     TOLUtil.ChangeIntimacyHappinessBy(__instance.a, -Randy.randomFloat(5, 10f));
@@ -132,8 +131,8 @@ public class ActorPatch
                     __instance.data.set("intimacy_happiness", 100f);
             } else if (!__instance.isAdult() && Randy.randomChance(0.1f)) // random chance younger kid finds their orientations
             {
-                Orientations.GiveQueerTraits(__instance, false, true);
-                __instance.changeHappiness("true_self");
+                // Orientations.GiveQueerTraits(__instance, false, true);
+                // __instance.changeHappiness("true_self");
             }
             
             // List<Actor> undateables = DateableManager.Manager.GetUndateablesFor(__instance);

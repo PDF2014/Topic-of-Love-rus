@@ -6,17 +6,19 @@ namespace Topic_of_Love.Mian.Patches;
 
 public class ActorManagerPatch
 {
-    [HarmonyPatch(typeof(ActorManager), nameof(ActorManager.finalizeActor))]
+    [HarmonyPatch(typeof(ActorManager), nameof(ActorManager.createNewUnit))]
     class ActorFinalizePatch
     {
-        static void Postfix(string pStats, Actor pActor)
+        static void Postfix(Actor __result)
         {
-            if (pActor.isAdult())
+            if (__result != null)
             {
-                if (!Orientations.HasQueerTraits(pActor)){
-                    Orientations.GiveQueerTraits(pActor, false, true);
-                    pActor.changeHappiness("true_self");
+                var preferences =  PreferenceTraits.GetRandomPreferences(__result);
+                foreach (var trait in preferences)
+                {
+                    __result.addTrait(trait);
                 }
+                PreferenceTraits.CreateOrientations(__result);   
             }
         }
     }

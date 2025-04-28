@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
+using EpPathFinding.cs;
+using NCMS.Extensions;
 using NeoModLoader.General;
 using NeoModLoader.services;
 using UnityEngine;
@@ -78,15 +80,12 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
         // private static List<ActorTrait> _romanticTraits = new List<ActorTrait>();
         private static List<PreferenceTrait> _allTraits = new();
         private static Dictionary<string, List<PreferenceTrait>> _preferenceTypes = new();
+        private static Dictionary<string, List<string>> _matchingSets = new();
 
         public static Dictionary<string, List<PreferenceTrait>> PreferenceTypes => _preferenceTypes;
         
         public static void Init()
         {
-            
-            if(TOLUtil.IsTOIInstalled())
-                AddPreferenceType("expression", "#C900FF", List.Of("femininity", "masculinity"));
-            
             var identities = List.Of("female", "male");
 
             if (TOLUtil.IsTOIInstalled()) 
@@ -95,9 +94,13 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             AddPreferenceType("identity", "#B57EDC", identities);
             
             if(TOLUtil.IsTOIInstalled())
-                AddPreferenceType("sex_organ", "#B77E7E", List.Of("penis", "vagina"), false);
+                AddPreferenceType("expression", "#C900FF", List.Of("femininity", "masculinity"));
+            
+            if(TOLUtil.IsTOIInstalled())
+                AddPreferenceType("genital", "#B77E7E", List.Of("penis", "vagina"), false);
 
             AddOrientations();
+            AddMatchingSets();
             
             Finish();
         }
@@ -191,7 +194,6 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             
             _preferenceTypes.Add(type, preferenceTraits);
         }
-
         private static void AddOrientations()
         {
             OrientationType.Create("lesbian", "lesbiromantic", true, false, "#FF9A56", (actor, isSexual) =>
@@ -199,7 +201,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 if (Dislikes(actor, isSexual))
                     return false;
                 
-                if ((IsFemale(actor) || IsEnby(actor)) && actor.isSapient())
+                if ((IdentifiesAsFemale(actor) || IsEnby(actor)) && actor.isSapient())
                 {
                     var preferredIdentities = GetActorPreferencesFromType(actor, "identity", isSexual);
                     
@@ -218,7 +220,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 if (Dislikes(actor, isSexual))
                     return false;
                 
-                if ((IsMale(actor) || IsEnby(actor)) && actor.isSapient())
+                if ((IdentifiesAsMale(actor) || IsEnby(actor)) && actor.isSapient())
                 {
                     var preferredIdentities = GetActorPreferencesFromType(actor, "identity", isSexual);
                     
@@ -263,7 +265,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 }
                 return false;
             });
-            OrientationType.Create("homosexual", "homoromantic", true, false, "#732982", (actor, isSexual) =>
+            OrientationType.Create("homosexual", "homoromantic", true, false, "#BB07DF", (actor, isSexual) =>
             {
                 if (Dislikes(actor, isSexual))
                     return false;
@@ -322,6 +324,11 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             // OrientationType.Create("");
             // OrientationType.Create("homoromantic");
         }
+        private static void AddMatchingSets()
+        {
+            _matchingSets.Add("female", List.Of("femininity", "vagina"));
+            _matchingSets.Add("male", List.Of("masculinity", "penis"));
+        }
         private static void Finish()
         {
             AssetManager.trait_groups.add(new ActorTraitGroupAsset
@@ -333,14 +340,14 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             var dislikeSex = CreateBaseTrait();
             dislikeSex.id = "dislike_sex";
             dislikeSex.group_id = "dislikes";
-            dislikeSex.path_icon = "ui/Icons/preference_traits/dislike_sex";
+            dislikeSex.path_icon = "ui/Icons/orientations/asexual";
             dislikeSex.IsSexual = true;
             dislikeSex.opposite_traits = new HashSet<ActorTrait>();
             
             var dislikeRomance = CreateBaseTrait();
             dislikeRomance.id = "dislike_romance";
             dislikeRomance.group_id = "dislikes";
-            dislikeRomance.path_icon = "ui/Icons/preference_traits/dislike_romance";
+            dislikeRomance.path_icon = "ui/Icons/orientations/aromantic";
             dislikeRomance.opposite_traits = new HashSet<ActorTrait>();
 
             _allTraits.Add(dislikeRomance);
@@ -368,6 +375,95 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             LM.ApplyLocale("en");
         }
 
+        public static List<PreferenceTrait> GetRandomPreferences(Actor actor)
+        {
+            var bio = GetBiologicalSex(actor);
+            var givenSets = new Dictionary<string, List<string>>();
+            
+            if (TOLUtil.NeedDifferentSexTypeForReproduction(actor))
+            {
+                var oppositeSex = bio.Equals("female") ? "male" : "female";
+                givenSets.Add(oppositeSex, _matchingSets[oppositeSex]);
+            } else if (TOLUtil.NeedSameSexTypeForReproduction(actor))
+            {
+                givenSets.Add(bio, _matchingSets[bio]);
+            }
+
+            var preferences = new List<PreferenceTrait>();
+
+            if (givenSets.Count <= 0)
+            {
+                if (Randy.randomChance(0.95f))
+                    return new List<PreferenceTrait>();
+                givenSets.AddRange(_matchingSets);
+            }
+
+            if (givenSets.Count > 0)
+            {
+                var keys = givenSets.Keys.ToList();
+                string randomKey;
+
+                if (Randy.randomChance(0.7f))
+                {
+                    randomKey = keys.GetRandom();
+                
+                    var preferredIdentitySexual = Randy.randomChance(0.95f) ? 
+                        GetPreferenceTraitFromID(randomKey, true) : RandomPreferenceFromType("identity", true);
+                    var preferredIdentityRomantic = Randy.randomChance(0.95f) ?
+                        GetOtherVariant(preferredIdentitySexual) : RandomPreferenceFromType("identity");
+
+                    preferences.Add(preferredIdentitySexual);
+                    preferences.Add(preferredIdentityRomantic);
+                    
+                    if (Randy.randomChance(0.5f))
+                    {
+                        LogService.LogInfo("BI ROLLED");
+                        var randomSexual = RandomPreferenceFromType("identity", true);
+                        while(preferences.Contains(randomSexual))
+                            randomSexual = RandomPreferenceFromType("identity", true);
+                        preferences.Add(randomSexual);
+
+                        var randomRomantic = Randy.randomChance(0.95f)
+                            ? GetOtherVariant(randomSexual)
+                            : RandomPreferenceFromType("identity");
+                        while(preferences.Contains(randomRomantic))
+                            randomRomantic = RandomPreferenceFromType("identity");
+                        preferences.Add(randomRomantic);
+                    }
+                }
+                
+                if (TOLUtil.IsTOIInstalled())
+                {
+                    randomKey = keys.GetRandom();
+                    if (Randy.randomChance(0.2f))
+                    {
+                        var preferredExpressionSexual = Randy.randomChance(0.5f) ? 
+                            GetPreferenceTraitFromID(givenSets[randomKey][0], true) : RandomPreferenceFromType("expression", true);
+                        var preferredExpressionRomantic = Randy.randomChance(0.5f) ?
+                            GetOtherVariant(preferredExpressionSexual) : RandomPreferenceFromType("expression");   
+                        preferences.Add(preferredExpressionSexual);
+                        preferences.Add(preferredExpressionRomantic);
+                    }
+
+                    if (Randy.randomChance(0.2f))
+                    {
+                        randomKey = keys.GetRandom();
+                        var preferredGenitalSexual = Randy.randomChance(0.8f) ? 
+                            GetPreferenceTraitFromID(givenSets[randomKey][1], true) : RandomPreferenceFromType("genital", true);
+                    
+                        preferences.Add(preferredGenitalSexual);   
+                    }
+                }   
+            }
+            
+            if (Randy.randomChance(0.05f))
+                return List.Of(
+                    _allTraits.Find(trait => trait.id.Equals("dislike_sex")), 
+                    _allTraits.Find(trait => trait.id.Equals("dislike_romance")));
+            
+            return preferences;
+        }
+        
         // may return null if the variant does not exist
         public static PreferenceTrait GetOtherVariant(PreferenceTrait trait)
         {
@@ -375,7 +471,6 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             var id = trait.WithoutOrientationID;
             return preferenceGroup.Find(match => match.WithoutOrientationID.Equals(id) && !match.id.Equals(trait.id));
         }
-
         public static bool HasPreference(Actor actor, string preference, bool sexual = false)
         {
             foreach (var list in _preferenceTypes.Values)
@@ -386,19 +481,28 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             }
             return false;
         }
-
         public static List<ActorTrait> GetActorPreferencesFromType(Actor actor, string type, bool sexual = false)
         {
             return actor.traits.Where(
                 trait => trait is PreferenceTrait preferenceTrait && preferenceTrait.group_id.Equals(type) && preferenceTrait.IsSexual == sexual
             ).ToList();
         }
-        
         public static List<PreferenceTrait> GetPreferencesFromType(string type, bool sexual = false)
         {
             return _preferenceTypes[type].Where(
                 trait => trait.IsSexual == sexual
             ).ToList();
+        }
+        public static PreferenceTrait RandomPreferenceFromType(string type, bool sexual = false)
+        {
+            return _preferenceTypes[type].Where(
+                trait => trait.IsSexual == sexual
+            ).ToList().GetRandom();
+        }
+        
+        public static PreferenceTrait GetPreferenceTraitFromID(string id, bool sexual = false)
+        {
+            return _allTraits.Find(trait => trait.IsSexual == sexual && trait.WithoutOrientationID.Equals(id));
         }
 
         // randomizes if multiple orientations fit the criteria
@@ -409,7 +513,6 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             
             return orientations.GetRandom(); // at the very least should be pansexual
         }
-
         public static void CreateOrientations(Actor actor)
         {
             var sexualOrientation = GetOrientationFromActor(actor, true);
@@ -417,7 +520,6 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             actor.data.set("romantic_orientation", romanticOrientation.Orientation);
             actor.data.set("sexual_orientation", sexualOrientation.Orientation);
         }
-        
         public static void CreateOrientationBasedOnPrefChange(Actor actor, PreferenceTrait newTrait)
         {
             var orientation = GetOrientationFromActor(actor, newTrait.IsSexual);
@@ -431,8 +533,6 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             //     : LM.Get(orientation.RomanticPathLocale);
             // LogService.LogInfo("New orientation label based on new preferences: " + text);
         }
-
-
         public static string GetIdentity(Actor actor)
         {
             if (TOLUtil.IsTOIInstalled())
@@ -442,17 +542,20 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
 
             return actor.isSexFemale() ? "female" : "male";
         }
+
+        public static string GetBiologicalSex(Actor actor)
+        {
+            return actor.isSexFemale() ? "female" : "male";
+        }
         public static bool IsEnby(Actor actor)
         {
             return GetIdentity(actor).Equals("xenogender");
         }
-        
-        public static bool IsFemale(Actor actor)
+        public static bool IdentifiesAsFemale(Actor actor)
         {
             return GetIdentity(actor).Equals("female");
         }
-
-        public static bool IsMale(Actor actor)
+        public static bool IdentifiesAsMale(Actor actor)
         {
             return GetIdentity(actor).Equals("male");
         }
