@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EpPathFinding.cs;
 using NeoModLoader;
 using Topic_of_Love.Mian;
 using Topic_of_Love.Mian.CustomAssets;
@@ -40,10 +41,24 @@ namespace Topic_of_Love.Mian
 
             return canMake.GetRandom();
         }
-
         public static bool CanReproduce(Actor pActor, Actor pTarget)
         {
             return pActor.subspecies.isPartnerSuitableForReproduction(pActor, pTarget);
+        }
+
+        // this method may be a bit confusing but it's to determine if actors can get pregnant based on their genitalia and if they have eggs
+        public static bool IsAbleToBecomePregnant(Actor pActor)
+        {
+            if (IsTOIInstalled())
+            {
+                // TOI compatibility
+            }
+            
+            if (NeedSameSexTypeForReproduction(pActor) || CanDoAnySexType(pActor))
+                return true;
+            if (NeedDifferentSexTypeForReproduction(pActor))
+                return Preferences.HasVulva(pActor);
+            return false;
         }
 
         public static bool IsIntimacyHappinessEnough(Actor actor, float happiness)
@@ -65,7 +80,7 @@ namespace Topic_of_Love.Mian
                 actor1.data.get("sex_reason", out var sexReason, "");
                 
                 // bug spotted? some actors were lovers but one of them disliked the sex for some reason
-                if ((Orientations.PreferenceMatches(actor1, actor2, true) || (actor1.lover == actor2 && Randy.randomChance(0.5f)))
+                if ((Preferences.PreferenceMatches(actor1, actor2, true) || (actor1.lover == actor2 && Randy.randomChance(0.5f)))
                     && (Randy.randomChance(sexReason.Equals("reproduction") ? 0.5f : 1f) || actor1.lover == actor2))
                 {
                     var normal = 0.3f;
@@ -78,7 +93,7 @@ namespace Topic_of_Love.Mian
                         normal += Math.Abs((happiness / 100) / 2);
                     }
 
-                    if (!Orientations.PreferenceMatches(actor1, actor2, true))
+                    if (!Preferences.PreferenceMatches(actor1, actor2, true))
                         normal -= 0.2f;
                     
                     var type = Randy.randomChance(Math.Min(1, normal)) ? "enjoyed_sex" : "okay_sex"; 
@@ -180,7 +195,7 @@ namespace Topic_of_Love.Mian
             actor1.addAfterglowStatus();
             actor2.addAfterglowStatus();   
             
-            if (Randy.randomChance(actor1.lover == actor2 ? 1f : Orientations.BothActorsPreferencesMatch(actor1, actor2, true) ? 0.25f : 0f))
+            if (Randy.randomChance(actor1.lover == actor2 ? 1f : Preferences.BothActorsPreferencesMatch(actor1, actor2, true) ? 0.25f : 0f))
             {
                 actor1.addStatusEffect("just_kissed");
                 actor2.addStatusEffect("just_kissed");
@@ -214,21 +229,36 @@ namespace Topic_of_Love.Mian
                 ChangeIntimacyHappinessBy(actor2.lover, -25f);
             }
         }
-
+        public static void GivePreferences(Actor actor)
+        {
+            if (actor != null)
+            {
+                var oldPreferences = Preferences.GetActorPreferences(actor);
+                oldPreferences.AddRange(Preferences.GetActorPreferences(actor, true));
+                actor.removeTraits(oldPreferences);
+                
+                var preferences =  Preferences.GetRandomPreferences(actor);
+                foreach (var trait in preferences)
+                {
+                    actor.addTrait(trait);
+                }
+                Preferences.CreateOrientations(actor);   
+            }
+        }
         public static bool CanHaveSexWithoutRepercussionsWithSomeoneElse(Actor actor, string sexReason)
         {
             return !actor.hasLover()
-                   || (actor.hasLover() && ((!Orientations.PreferenceMatches(actor, actor.lover, true)
+                   || (actor.hasLover() && ((!Preferences.PreferenceMatches(actor, actor.lover, true)
                                                               && actor.lover.hasCultureTrait("sexual_expectations"))
                                                               || (actor.hasSubspeciesTrait("preservation") && IsDyingOut(actor) 
                                                                   && sexReason.Equals("reproduction")
-                                                                  && (!CanMakeBabies(actor.lover) || !CanReproduce(actor, actor.lover)))));
+                                                                  && (!BabyHelper.canMakeBabies(actor.lover) || !CanReproduce(actor, actor.lover)))));
         }
         
         public static bool CanHaveRomanceWithoutRepercussionsWithSomeoneElse(Actor actor)
         {
             return !actor.hasLover()
-                   || (actor.hasLover() && !Orientations.BothPreferencesMatch(actor, actor.lover)
+                   || (actor.hasLover() && !Preferences.BothPreferencesMatch(actor, actor.lover)
                                              && actor.lover.hasCultureTrait("sexual_expectations"));
         }
 
@@ -282,7 +312,7 @@ namespace Topic_of_Love.Mian
         public static bool CanFallInLove(Actor actor)
         {
             actor.data.get("just_lost_lover", out bool justLostLover);
-            return !justLostLover;
+            return !justLostLover && (!actor.isSapient() || actor.age > 10);
         }
 
         public static void RemoveLovers(Actor actor)
@@ -357,15 +387,16 @@ namespace Topic_of_Love.Mian
             return !pActor.hasCultureTrait("orientationless");
         }
 
-        public static bool CanMakeBabies(Actor pActor)
-        {
-            return pActor.canBreed() &&
-                   pActor.isAdult() && !pActor.hasReachedOffspringLimit() &&
-                   !pActor.subspecies.hasReachedPopulationLimit() && (!pActor.hasCity() || !pActor.city.hasReachedWorldLawLimit()
-            && ((pActor.subspecies.isReproductionSexual() || pActor.subspecies.hasTraitReproductionSexualHermaphroditic() 
-                                                          || pActor.hasSubspeciesTrait("reproduction_same_sex"))
-            && pActor.current_children_count == 0 || pActor.city.hasFreeHouseSlots()));
-        }
+        // public static bool CanMakeBabies(Actor pActor)
+        // {
+        //     
+        //     return pActor.canBreed() &&
+        //            pActor.isAdult() && !pActor.hasReachedOffspringLimit() &&
+        //            !pActor.subspecies.hasReachedPopulationLimit() && (!pActor.hasCity() || !pActor.city.hasReachedWorldLawLimit()
+        //     && ((pActor.subspecies.isReproductionSexual() || pActor.subspecies.hasTraitReproductionSexualHermaphroditic() 
+        //                                                   || pActor.hasSubspeciesTrait("reproduction_same_sex"))
+        //     && pActor.current_children_count == 0 || pActor.city.hasFreeHouseSlots()));
+        // }
 
         public static bool IsDyingOut(Actor pActor)
         {
@@ -377,7 +408,7 @@ namespace Topic_of_Love.Mian
         
         public static bool WantsBaby(Actor pActor, bool reproductionPurposesIncluded=true)
         {
-            if (!CanMakeBabies(pActor))
+            if (!BabyHelper.canMakeBabies(pActor))
                 return false;
             
             if (reproductionPurposesIncluded)

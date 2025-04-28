@@ -36,10 +36,9 @@ public class StatPatch
     private static Stat<Dictionary<string, string>>[] _stats = {
         new ("sexual_orientation", actor =>
         {
-            actor.data.get("sexual_orientation", out string sexualOrientation);
-            if (sexualOrientation != null)
+            var orientationType = Orientation.GetOrientation(actor, true);
+            if (orientationType != null)
             {
-                var orientationType = OrientationType.GetOrientation(sexualOrientation);
 
                 Dictionary<string, string> dict = new();
                 dict.Add("value", LM.Get(orientationType.SexualPathLocale));
@@ -52,11 +51,9 @@ public class StatPatch
         }),
         new ("romantic_orientation", actor =>
         {
-            actor.data.get("romantic_orientation", out string romanticOrientation);
-            if (romanticOrientation != null)
+            var orientationType = Orientation.GetOrientation(actor, false);
+            if (orientationType != null)
             {
-                var orientationType = OrientationType.GetOrientation(romanticOrientation);
-                
                 Dictionary<string, string> dict = new();
                 dict.Add("value", LM.Get(orientationType.RomanticPathLocale));
                 dict.Add("hex_code", orientationType.HexCode);

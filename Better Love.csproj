@@ -42,12 +42,12 @@
         <Compile Include="Mian\CustomAssets\GodPowers.cs" />
         <Compile Include="Mian\CustomAssets\Happiness.cs" />
         <Compile Include="Mian\CustomAssets\Opinions.cs" />
+        <Compile Include="Mian\CustomAssets\Preferences.cs" />
         <Compile Include="Mian\CustomAssets\StatusEffects.cs" />
         <Compile Include="Mian\CustomAssets\TabsAndButtons.cs" />
         <Compile Include="Mian\CustomAssets\Traits\ActorTraits.cs" />
         <Compile Include="Mian\CustomAssets\Traits\BaseTraits.cs" />
         <Compile Include="Mian\CustomAssets\Traits\CultureTraits.cs" />
-        <Compile Include="Mian\CustomAssets\Traits\Orientations.cs" />
         <Compile Include="Mian\CustomAssets\Traits\SubspeciesTraits.cs" />
         <Compile Include="Mian\CustomManagers\CustomSavedData.cs" />
         <Compile Include="Mian\CustomManagers\Dateable\Dateable.cs" />
@@ -55,6 +55,7 @@
         <Compile Include="Mian\CustomManagers\Dateable\DateableManager.cs" />
         <Compile Include="Mian\Patches\ActorManagerPatch.cs" />
         <Compile Include="Mian\Patches\ActorPatch.cs" />
+        <Compile Include="Mian\Patches\BabyHelperPatch.cs" />
         <Compile Include="Mian\Patches\BabyMakerPatch.cs" />
         <Compile Include="Mian\Patches\BehCFBFSRPatch.cs" />
         <Compile Include="Mian\Patches\BehSHFBPatch.cs" />
@@ -71,7 +72,7 @@
     </ItemGroup>
     <ItemGroup>
       <Content Include="default_config.json" />
-      <Folder Include="GameResources\ui\Icons\preference_traits\" />
+      <Folder Include="GameResources\ui\Icons\preference_traits\romantic\" />
       <Folder Include="Locales\" />
       <Content Include="mod.json" />
       <Folder Include="Properties\" />

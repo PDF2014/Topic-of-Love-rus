@@ -1,25 +1,25 @@
 ﻿using Topic_of_Love.Mian.CustomAssets;
 using Topic_of_Love.Mian.CustomAssets.Traits;
 using HarmonyLib;
+using NeoModLoader.services;
 
 namespace Topic_of_Love.Mian.Patches;
 
+[HarmonyPatch(typeof(ActorManager))]
 public class ActorManagerPatch
 {
-    [HarmonyPatch(typeof(ActorManager), nameof(ActorManager.createNewUnit))]
-    class ActorFinalizePatch
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(ActorManager.createNewUnit))]
+    static void CreateNewUnit(Actor __result)
     {
-        static void Postfix(Actor __result)
-        {
-            if (__result != null)
-            {
-                var preferences =  PreferenceTraits.GetRandomPreferences(__result);
-                foreach (var trait in preferences)
-                {
-                    __result.addTrait(trait);
-                }
-                PreferenceTraits.CreateOrientations(__result);   
-            }
-        }
+        TOLUtil.GivePreferences(__result);
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(ActorManager.createActorFromData))]
+    static void CreateActorFromData(Actor __result)
+    {
+        TOLUtil.GivePreferences(__result);
     }
 }

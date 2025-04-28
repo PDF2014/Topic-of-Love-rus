@@ -99,7 +99,7 @@ public class BehFindAPartner : BehaviourActionActor
         
         if (!pActor.isOnSameIsland(target) || target.isLying() || pActor.distanceToActorTile(target) > _distance)
             return false;
-        if (_mustBeReproduceable && (!TOLUtil.CanMakeBabies(target) || !TOLUtil.CanReproduce(pActor, target)))
+        if (_mustBeReproduceable && (!BabyHelper.canMakeBabies(target) || !TOLUtil.CanReproduce(pActor, target)))
             return false;
         var isSexual = _sexReason != null;
         if (isSexual)
@@ -109,15 +109,15 @@ public class BehFindAPartner : BehaviourActionActor
             if(IsForReproduction())
                 return (pActor.isSameSubspecies(target.subspecies) 
                        || (target.isSapient() && pActor.isSapient() 
-                                               && Orientations.PreferenceMatches(target, pActor, true)))
+                                               && Preferences.PreferenceMatches(target, pActor, true)))
                        && TOLUtil.WillDoIntimacy(target, _sexReason, target.lover == pActor);
 
             return TOLUtil.WillDoIntimacy(target, _sexReason, target.lover == pActor) &&
-                   ((_mustMatchPreference && Orientations.PreferenceMatches(pActor, target, true)) ||
+                   ((_mustMatchPreference && Preferences.PreferenceMatches(pActor, target, true)) ||
                     !_mustMatchPreference);
         }
         
-        if (_mustMatchPreference && !Orientations.PreferenceMatches(pActor, target, false))
+        if (_mustMatchPreference && !Preferences.PreferenceMatches(pActor, target, false))
         {
             return false;
         }

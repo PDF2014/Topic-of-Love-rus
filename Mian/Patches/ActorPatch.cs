@@ -20,7 +20,7 @@ public class ActorPatch
     {
         if (pTrait is PreferenceTrait preferenceTrait)
         {
-            PreferenceTraits.CreateOrientationBasedOnPrefChange(__instance, preferenceTrait);
+            Preferences.CreateOrientationBasedOnPrefChange(__instance, preferenceTrait);
         }
     }
     
@@ -29,20 +29,20 @@ public class ActorPatch
     static void AddTraitPatch(ActorTrait pTrait, Actor __instance)
     {
         // removes preference traits if they are all added for some reason 
-        foreach (var type in PreferenceTraits.PreferenceTypes.Keys)
+        foreach (var type in Preferences.PreferenceTypes.Keys)
         {
             // Romantic
             
-            var list = PreferenceTraits.GetActorPreferencesFromType(__instance, type);
-            var toCompare = PreferenceTraits.GetPreferencesFromType(type);
+            var list = Preferences.GetActorPreferencesFromType(__instance, type);
+            var toCompare = Preferences.GetPreferencesFromType(type);
 
             if (list.Count == toCompare.Count)
                 __instance.removeTraits(list);
             
             // Sexual
             
-            list = PreferenceTraits.GetActorPreferencesFromType(__instance, type, true);
-            toCompare = PreferenceTraits.GetPreferencesFromType(type, true);
+            list = Preferences.GetActorPreferencesFromType(__instance, type, true);
+            toCompare = Preferences.GetPreferencesFromType(type, true);
 
             if (list.Count == toCompare.Count)
                 __instance.removeTraits(list);
@@ -50,7 +50,7 @@ public class ActorPatch
 
         if (pTrait is PreferenceTrait preferenceTrait)
         {
-            PreferenceTraits.CreateOrientationBasedOnPrefChange(__instance, preferenceTrait);
+            Preferences.CreateOrientationBasedOnPrefChange(__instance, preferenceTrait);
         }
     }
     
@@ -99,14 +99,16 @@ public class ActorPatch
     {
         static void Postfix(Actor __instance)
         {
+            // maybe we can reintroduce fluid preferences in the future?
+            
             if (__instance.isAdult()) // fluid sexuality
             {
-                if (!Orientations.HasQueerTraits(__instance)){
+                // if (!Preferences.HasQueerTraits(__instance)){
                     // Orientations.GiveQueerTraits(__instance, false, true);
                     // __instance.changeHappiness("true_self");
-                }
-                else
-                {
+                // }
+                // else
+                // {
                     // bool changed = false;
                     // var list = Orientations.GetQueerTraits(__instance);
                     // list = Orientations.RandomizeQueerTraits(__instance, true, list);
@@ -124,15 +126,17 @@ public class ActorPatch
                     // }
                     // if(changed)
                     //     __instance.changeHappiness("true_self");
-                }
-                if(Orientations.GetPreferenceFromActor(__instance, true) != Preference.Neither && TOLUtil.IsOrientationSystemEnabledFor(__instance))
+                // }
+                
+                // maybe rework so that aromantic/asexual ppl still experience intimacy happiness in some way?
+                if(!Preferences.Dislikes(__instance, true) && TOLUtil.IsOrientationSystemEnabledFor(__instance))
                     TOLUtil.ChangeIntimacyHappinessBy(__instance.a, -Randy.randomFloat(5, 10f));
                 else
                     __instance.data.set("intimacy_happiness", 100f);
             } else if (!__instance.isAdult() && Randy.randomChance(0.1f)) // random chance younger kid finds their orientations
             {
-                // Orientations.GiveQueerTraits(__instance, false, true);
-                // __instance.changeHappiness("true_self");
+                TOLUtil.GivePreferences(__instance);
+                __instance.changeHappiness("true_self");
             }
             
             // List<Actor> undateables = DateableManager.Manager.GetUndateablesFor(__instance);
@@ -173,7 +177,7 @@ public class ActorPatch
             // break up is too common rn, let's implement a system in the future to get lovers back together
             if (__instance.hasLover() && TOLUtil.CanStopBeingLovers(__instance) &&
                 ((TOLUtil.IsOrientationSystemEnabledFor(__instance) 
-                  && Randy.randomChance(!Orientations.PreferenceMatches(__instance, __instance.lover, false) ? 0.25f : 0.01f)) 
+                  && Randy.randomChance(!Preferences.PreferenceMatches(__instance, __instance.lover, false) ? 0.25f : 0.01f)) 
                  || (!TOLUtil.IsOrientationSystemEnabledFor(__instance) && !TOLUtil.CanReproduce(__instance, __instance.lover))))
             {
                 if (!__instance.hasCultureTrait("committed") || !__instance.lover.hasCultureTrait("committed"))
@@ -216,8 +220,8 @@ public class ActorPatch
                 // DateableManager.Manager.IsActorUndateable(pTarget, __instance)
                 TOLUtil.CannotDate(pTarget, __instance)
                 ||
-                 (!Orientations.PreferenceMatches(__instance, pTarget, false) && TOLUtil.IsOrientationSystemEnabledFor(__instance))
-                 || (!Orientations.PreferenceMatches(pTarget, __instance, false) && TOLUtil.IsOrientationSystemEnabledFor(pTarget))
+                 (!Preferences.PreferenceMatches(__instance, pTarget, false) && TOLUtil.IsOrientationSystemEnabledFor(__instance))
+                 || (!Preferences.PreferenceMatches(pTarget, __instance, false) && TOLUtil.IsOrientationSystemEnabledFor(pTarget))
                 
                 || __instance.hasLover()
                 || pTarget.hasLover()

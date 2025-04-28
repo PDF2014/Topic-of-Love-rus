@@ -24,10 +24,10 @@ public class StatusEffects
                 {
                     var changeBy = 0f;
 
-                    if (Orientations.PreferenceMatches(actor.a, partner, false))
+                    if (Preferences.PreferenceMatches(actor.a, partner, false))
                         changeBy += 10f;
                     
-                    if (Orientations.PreferenceMatches(actor.a, partner, true))
+                    if (Preferences.PreferenceMatches(actor.a, partner, true))
                         changeBy += 5f;
                 
                     if (partner == actor.a.lover)

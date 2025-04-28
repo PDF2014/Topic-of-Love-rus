@@ -17,7 +17,7 @@ public class BehCheckIfDateFinish : BehaviourActionActor
         var target = pActor.beh_actor_target.a;
 
         pActor.data.get("date_happiness", out var happiness, 0f);
-        if (Orientations.BothActorsPreferencesMatch(pActor, target, false))
+        if (Preferences.BothActorsPreferencesMatch(pActor, target, false))
         {
             happiness += Randy.randomFloat(5, 10f);
         }

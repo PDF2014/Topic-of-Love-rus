@@ -32,11 +32,10 @@ public class Decisions
             cooldown = 15,
             action_check_launch = actor => actor.isSapient()
                                            && actor.hasLover()
-                                           && Orientations.GetQueerTraits(actor).Count >= 2 
                                            && !TOLUtil.IsIntimacyHappinessEnough(actor, 100f)
                                            && TOLUtil.IsOrientationSystemEnabledFor(actor)
                                            && !actor.hasStatus("just_kissed")
-                                           && (Orientations.BothPreferencesMatch(actor, actor.lover) || Randy.randomChance(0.5f)),
+                                           && (Preferences.BothPreferencesMatch(actor, actor.lover) || Randy.randomChance(0.5f)),
             list_civ = true,
             weight_calculate_custom = actor => TOLUtil.IsIntimacyHappinessEnough(actor, 75f) ? 0.5f: 
                 TOLUtil.IsIntimacyHappinessEnough(actor, 50f) ? 0.6f : TOLUtil.IsIntimacyHappinessEnough(actor, 0) ? .8f : 
@@ -55,7 +54,7 @@ public class Decisions
                                            && actor.hasLover()
                                            && !TOLUtil.IsIntimacyHappinessEnough(actor, 100f)
                                            && TOLUtil.IsOrientationSystemEnabledFor(actor)
-                                           && (Orientations.BothActorsPreferencesMatch(actor, actor.lover, false) || Randy.randomChance(0.5f))
+                                           && (Preferences.BothActorsPreferencesMatch(actor, actor.lover, false) || Randy.randomChance(0.5f))
                                            && !actor.hasStatus("went_on_date"),
             list_civ = true,
             weight_calculate_custom = actor => TOLUtil.IsIntimacyHappinessEnough(actor, 75f) ? 0.5f: 
@@ -75,12 +74,11 @@ public class Decisions
             {
                 actor.subspecies.countReproductionNeuron();
                 return TOLUtil.IsDyingOut(actor)
-                       && Orientations.GetQueerTraits(actor).Count >= 2
-                       && TOLUtil.CanMakeBabies(actor)
+                       && BabyHelper.canMakeBabies(actor)
                        && actor.hasSubspeciesTrait("preservation")
                        && TOLUtil.IsOrientationSystemEnabledFor(actor);
             },
-            weight_calculate_custom = actor => TOLUtil.CanMakeBabies(actor) ? 2f : 0.1f,
+            weight_calculate_custom = actor => BabyHelper.canMakeBabies(actor) ? 2f : 0.1f,
             only_adult = true,
             only_safe = true,
             cooldown_on_launch_failure = true
@@ -98,8 +96,7 @@ public class Decisions
             path_icon = "ui/Icons/status/enjoyed_sex",
             cooldown = 15,
             action_check_launch = actor => actor.isSapient()
-                                           && Orientations.GetQueerTraits(actor).Count >= 2 
-                                           && !Orientations.GetPreferenceFromActor(actor, true).Equals(Preference.Neither)
+                                           && !Preferences.Dislikes(actor, true)
                                            && !TOLUtil.IsIntimacyHappinessEnough(actor, 100f)
                                            && TOLUtil.IsOrientationSystemEnabledFor(actor),
             list_civ = true,
@@ -129,11 +126,11 @@ public class Decisions
                     if (!TOLUtil.WantsBaby(actor.lover, false))
                         return false;
                         
-                    if (TOLUtil.CanReproduce(actor, actor.lover) && !Orientations.BothActorsPreferencesMatch(actor, actor.lover, true))
+                    if (TOLUtil.CanReproduce(actor, actor.lover) && !Preferences.BothActorsPreferencesMatch(actor, actor.lover, true))
                         return true;
 
                     if (TOLUtil.CanReproduce(actor, actor.lover) &&
-                        Orientations.BothActorsPreferencesMatch(actor, actor.lover, true))
+                        Preferences.BothActorsPreferencesMatch(actor, actor.lover, true))
                         return false;
                 }
                     

@@ -1,6 +1,8 @@
 ﻿using ai.behaviours;
+using EpPathFinding.cs;
 using HarmonyLib;
 using NeoModLoader.services;
+using Topic_of_Love.Mian.CustomAssets.Traits;
 
 namespace Topic_of_Love.Mian.Patches;
 
@@ -32,54 +34,34 @@ public class BehCFBFSRPatch
     }
     
     // this patch handles who the mother is when it comes to sexual reproduction
+    [HarmonyPrefix]
     [HarmonyPatch(typeof(BehCheckForBabiesFromSexualReproduction),
         nameof(BehCheckForBabiesFromSexualReproduction.checkForBabies))]
-    class CheckForBabiesPatch
-    {
-        static bool Prefix(Actor pParentA, Actor pParentB)
+    [HarmonyAfter("netdot.mian.topicofidentity")]
+    // runs after TOI because we need to check for genitalia there
+        static bool CheckForBabiesPrefix(Actor pParentA, Actor pParentB)
         {
-            TOLUtil.Debug($"\nAble to make a baby?\n{pParentA.getName()}: "+(TOLUtil.CanMakeBabies(pParentA)+$"\n${pParentB.getName()}: "+(TOLUtil.CanMakeBabies(pParentB))));
+            TOLUtil.Debug($"\nAble to make a baby?\n{pParentA.getName()}: "+(BabyHelper.canMakeBabies(pParentA)+$"\n${pParentB.getName()}: "+(BabyHelper.canMakeBabies(pParentB))));
 
-            if (!TOLUtil.CanMakeBabies(pParentA) || !TOLUtil.CanMakeBabies(pParentB))
+            if (!BabyHelper.canMakeBabies(pParentA) || !BabyHelper.canMakeBabies(pParentB) || !TOLUtil.CanReproduce(pParentA, pParentB))
                 return false;
 
             // ensures that both subspecies HAVE not reached population limit
             if (pParentA.subspecies.hasReachedPopulationLimit() || pParentB.subspecies.hasReachedPopulationLimit())
                 return false;
 
-            Actor pregnantActor = null;
-            Actor nonPregnantActor;
+            var aCanBePregnant = TOLUtil.IsAbleToBecomePregnant(pParentA);
+            var bCanBePregnant = TOLUtil.IsAbleToBecomePregnant(pParentB);
+            Actor pregnantActor;
+            if (aCanBePregnant && bCanBePregnant)
+                pregnantActor = Randy.randomBool() ? pParentA : pParentB;
+            else
+                pregnantActor = aCanBePregnant ? pParentA : bCanBePregnant ? pParentB : null; 
             
-            if (TOLUtil.NeedDifferentSexTypeForReproduction(pParentA) && TOLUtil.NeedDifferentSexTypeForReproduction(pParentB))
-            {
-                if (pParentA.data.sex == pParentB.data.sex) return false;
-                
-                if (pParentA.isSexFemale())
-                    pregnantActor = pParentA;
-                else if (pParentB.isSexFemale())
-                    pregnantActor = pParentB;
-            }
-            else if(TOLUtil.NeedSameSexTypeForReproduction(pParentA) && TOLUtil.NeedSameSexTypeForReproduction(pParentB))
-            {
-                if (pParentA.data.sex != pParentB.data.sex) return false;
-                pregnantActor = !Randy.randomBool() ? pParentB : pParentA;
-            } else if (TOLUtil.CanDoAnySexType(pParentA) || TOLUtil.CanDoAnySexType(pParentB))
-            {
-                if(TOLUtil.CanDoAnySexType(pParentA) && TOLUtil.CanDoAnySexType(pParentB))
-                    pregnantActor = !Randy.randomBool() ? pParentB : pParentA;
-                else if (TOLUtil.CanDoAnySexType(pParentA))
-                {
-                    pregnantActor = pParentA;
-                }
-                else
-                {
-                    pregnantActor = pParentB;
-                }
-            }
-
             if (pregnantActor == null)
                 return false;
-
+            
+            Actor nonPregnantActor;
             nonPregnantActor = pregnantActor == pParentA ? pParentB : pParentA;
             
             var maturationTimeSeconds = pregnantActor.getMaturationTimeSeconds();
@@ -134,5 +116,4 @@ public class BehCFBFSRPatch
             }
             return false;
         }
-    }
 }

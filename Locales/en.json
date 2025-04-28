@@ -181,14 +181,14 @@
   "trait_abrosexual": "Abrosexual",
   "trait_abrosexual_info": "Their sexual orientation may change over time",
   "trait_abrosexual_info_2": "Brains are complex.",
-  
-  "trait_dislike_sex": "Dislikes Coupling",
-  "trait_dislike_sex_info": "Prefers to not couple when possible",
-  "trait_dislike_sex_info_2": "It's just not something they are into.",
 
-  "trait_dislike_romance": "Dislikes Romance",
-  "trait_dislike_romance_info": "Dislikes the idea of romance",
-  "trait_dislike_romance_info_2": "It ain't something they like",
+  "trait_dislike_sex": "Asexual",
+  "trait_dislike_sex_info": "They do not desire coupling unlike most",
+  "trait_dislike_sex_info_2": "Coupling is so weird. It's soggy and time consuming.",
+
+  "trait_dislike_romance": "Aromantic",
+  "trait_dislike_romance_info": "They do not desire love unlike most",
+  "trait_dislike_romance_info_2": "It's not because they have not found the right person, they just feel this way",
   
   "trait_group_dislikes": "Orientation Dislikes",
 
