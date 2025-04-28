@@ -5,6 +5,8 @@ using Topic_of_Love.Mian.CustomAssets;
 using Topic_of_Love.Mian.CustomAssets.Traits;
 using Topic_of_Love.Mian.CustomManagers.Dateable;
 using HarmonyLib;
+using NeoModLoader.General;
+using NeoModLoader.services;
 using UnityEngine.Rendering;
 
 namespace Topic_of_Love.Mian.Patches;
@@ -13,8 +15,18 @@ namespace Topic_of_Love.Mian.Patches;
 public class ActorPatch
 {
     [HarmonyPostfix]
+    [HarmonyPatch(nameof(Actor.removeTrait), typeof(ActorTrait))]
+    static void ClearTraitPatch(ActorTrait pTrait, Actor __instance)
+    {
+        if (pTrait is PreferenceTrait preferenceTrait)
+        {
+            PreferenceTraits.CreateOrientationBasedOnPrefChange(__instance, preferenceTrait);
+        }
+    }
+    
+    [HarmonyPostfix]
     [HarmonyPatch(nameof(Actor.addTrait), typeof(ActorTrait), typeof(bool))]
-    static void AddTraitPatch(Actor __instance)
+    static void AddTraitPatch(ActorTrait pTrait, Actor __instance)
     {
         // removes preference traits if they are all added for some reason 
         foreach (var type in PreferenceTraits.PreferenceTypes.Keys)
@@ -34,6 +46,11 @@ public class ActorPatch
 
             if (list.Count == toCompare.Count)
                 __instance.removeTraits(list);
+        }
+
+        if (pTrait is PreferenceTrait preferenceTrait)
+        {
+            PreferenceTraits.CreateOrientationBasedOnPrefChange(__instance, preferenceTrait);
         }
     }
     
@@ -74,6 +91,7 @@ public class ActorPatch
         {
             __instance.asset.addDecision("find_lover");
             __instance.data.set("intimacy_happiness", 10f);
+            PreferenceTraits.CreateOrientations(__instance);
         }
     }
 

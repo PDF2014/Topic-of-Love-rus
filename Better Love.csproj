@@ -65,7 +65,7 @@
         <Compile Include="Mian\Patches\SavedMapPatch.cs" />
         <Compile Include="Mian\Patches\SpriteTextureLoaderPatch.cs" />
         <Compile Include="Mian\Patches\SubspeciesPatch.cs" />
-        <Compile Include="Mian\Patches\UnitWindowPatch.cs" />
+        <Compile Include="Mian\Patches\StatPatch.cs" />
         <Compile Include="Mian\TopicOfLove.cs" />
         <Compile Include="Mian\TOLUtil.cs" />
     </ItemGroup>
