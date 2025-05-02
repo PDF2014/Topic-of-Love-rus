@@ -11,10 +11,10 @@ public class BehStartSexualIvf : BehaviourActionActor
         }
         public override BehResult execute(Actor pActor)
         {
-            TOLUtil.Debug("Actually starting sexual ivf for "+pActor.getName());
+            TolUtil.Debug("Actually starting sexual ivf for "+pActor.getName());
             if (pActor.beh_actor_target == null || pActor.beh_building_target == null)
             {
-                TOLUtil.Debug(pActor.getName()+": Cancelled from starting sexual ivf target because actor was null");
+                TolUtil.Debug(pActor.getName()+": Cancelled from starting sexual ivf target because actor was null");
                 return BehResult.Stop;
             }
 
@@ -22,7 +22,7 @@ public class BehStartSexualIvf : BehaviourActionActor
 
             Actor pregnantActor = null;
             
-            if (TOLUtil.NeedDifferentSexTypeForReproduction(pActor) && TOLUtil.NeedDifferentSexTypeForReproduction(_target))
+            if (TolUtil.NeedDifferentSexTypeForReproduction(pActor) && TolUtil.NeedDifferentSexTypeForReproduction(_target))
             {
                 if (pActor.data.sex == _target.data.sex) return Cancel();
                 
@@ -31,15 +31,15 @@ public class BehStartSexualIvf : BehaviourActionActor
                 else if (_target.isSexFemale())
                     pregnantActor = _target;
             }
-            else if(TOLUtil.NeedSameSexTypeForReproduction(pActor) && TOLUtil.NeedSameSexTypeForReproduction(_target))
+            else if(TolUtil.NeedSameSexTypeForReproduction(pActor) && TolUtil.NeedSameSexTypeForReproduction(_target))
             {
                 if (pActor.data.sex != _target.data.sex) return Cancel();
                 pregnantActor = !Randy.randomBool() ? _target : pActor;
-            } else if (TOLUtil.CanDoAnySexType(pActor) || TOLUtil.CanDoAnySexType(_target))
+            } else if (TolUtil.CanDoAnySexType(pActor) || TolUtil.CanDoAnySexType(_target))
             {
-                if(TOLUtil.CanDoAnySexType(pActor) && TOLUtil.CanDoAnySexType(_target))
+                if(TolUtil.CanDoAnySexType(pActor) && TolUtil.CanDoAnySexType(_target))
                     pregnantActor = !Randy.randomBool() ? _target : pActor;
-                else if (TOLUtil.CanDoAnySexType(pActor))
+                else if (TolUtil.CanDoAnySexType(pActor))
                 {
                     pregnantActor = pActor;
                 }
@@ -77,7 +77,7 @@ public class BehStartSexualIvf : BehaviourActionActor
                     pregnantActor.subspecies.counterReproduction();
                     break;
             }   
-            TOLUtil.Debug("Sexual ivf successful for "+pActor.getName());
+            TolUtil.Debug("Sexual ivf successful for "+pActor.getName());
 
             return BehResult.Continue;
         }

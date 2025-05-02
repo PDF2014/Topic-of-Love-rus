@@ -1,6 +1,7 @@
 ﻿using Topic_of_Love.Mian.CustomAssets;
 using Topic_of_Love.Mian.CustomAssets.Traits;
 using HarmonyLib;
+using Topic_of_Love.Mian.CustomAssets.Custom;
 
 namespace Topic_of_Love.Mian.Patches;
 
@@ -20,7 +21,7 @@ public class DecisionAssetPatch
                 if (pActor.hasLover() && 
                     (!Preferences.PreferenceMatches(pParentA, pParentB, true)
                      || !Preferences.PreferenceMatches(pParentB, pParentA, true) 
-                     || !TOLUtil.CanReproduce(pParentA, pParentB)
+                     || !TolUtil.CanReproduce(pParentA, pParentB)
                     || !BabyHelper.canMakeBabies(pParentA) || !BabyHelper.canMakeBabies(pParentB)))
                 {
                     __result = false;

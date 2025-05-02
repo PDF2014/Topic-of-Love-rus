@@ -22,7 +22,7 @@ public class BabyHelperPatch
     {
         __result = !pActor.subspecies.hasReachedPopulationLimit() && (!pActor.hasCity() || !pActor.city.hasReachedWorldLawLimit() 
             && (pActor.subspecies.isReproductionSexual() || pActor.subspecies.hasTraitReproductionSexualHermaphroditic() 
-                                                         || TOLUtil.NeedSameSexTypeForReproduction(pActor)
+                                                         || TolUtil.NeedSameSexTypeForReproduction(pActor)
                                                          && pActor.current_children_count == 0 || pActor.city.hasFreeHouseSlots()));
         return false;
     }

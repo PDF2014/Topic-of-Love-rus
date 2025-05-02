@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using EpPathFinding.cs;
-using NeoModLoader;
-using Topic_of_Love.Mian;
-using Topic_of_Love.Mian.CustomAssets;
-using Topic_of_Love.Mian.CustomAssets.Traits;
-using Topic_of_Love.Mian.CustomManagers.Dateable;
 using NeoModLoader.services;
+using Topic_of_Love.Mian.CustomAssets.Custom;
 
 #if TOPICOFIDENTITY
 using Topic_of_Identity;
@@ -14,7 +9,7 @@ using Topic_of_Identity;
 
 namespace Topic_of_Love.Mian
 {
-    public class TOLUtil
+    public class TolUtil
     {
         public static void ShowWhisperTipWithTime(string pText, float time=6f)
         {
@@ -189,13 +184,13 @@ namespace Topic_of_Love.Mian
         // handle cheating here too
         public static void JustHadSex(Actor actor1, Actor actor2)
         {
-            TOLUtil.Debug(actor1.getName() + " had sex with "+actor2.getName()+". They are lovers: "+(actor1.lover==actor2));
+            TolUtil.Debug(actor1.getName() + " had sex with "+actor2.getName()+". They are lovers: "+(actor1.lover==actor2));
             ActorsInteracted(actor1, actor2);
             
             actor1.addAfterglowStatus();
             actor2.addAfterglowStatus();   
             
-            if (Randy.randomChance(actor1.lover == actor2 ? 1f : Preferences.BothActorsPreferencesMatch(actor1, actor2, true) ? 0.25f : 0f))
+            if (Randy.randomChance(actor1.lover == actor2 ? 1f : Preferences.BothPreferencesMatch(actor1, actor2, true) ? 0.25f : 0f))
             {
                 actor1.addStatusEffect("just_kissed");
                 actor2.addStatusEffect("just_kissed");
@@ -207,7 +202,7 @@ namespace Topic_of_Love.Mian
             if (actor1.lover != actor2)
             {
                 actor1.data.get("sex_reason", out var sexReason, "reproduction");
-                TOLUtil.Debug("Sex Reason: "+sexReason);
+                TolUtil.Debug("Sex Reason: "+sexReason);
                 if (!CanHaveSexWithoutRepercussionsWithSomeoneElse(actor1, sexReason))
                 {
                     PotentiallyCheatedWith(actor1, actor2);
@@ -229,7 +224,7 @@ namespace Topic_of_Love.Mian
                 ChangeIntimacyHappinessBy(actor2.lover, -25f);
             }
         }
-        public static void GivePreferences(Actor actor)
+        public static void NewPreferences(Actor actor)
         {
             if (actor != null)
             {
@@ -242,7 +237,7 @@ namespace Topic_of_Love.Mian
                 {
                     actor.addTrait(trait);
                 }
-                Preferences.CreateOrientations(actor);   
+                Orientations.LabelOrientations(actor);   
             }
         }
         public static bool CanHaveSexWithoutRepercussionsWithSomeoneElse(Actor actor, string sexReason)
@@ -258,7 +253,7 @@ namespace Topic_of_Love.Mian
         public static bool CanHaveRomanceWithoutRepercussionsWithSomeoneElse(Actor actor)
         {
             return !actor.hasLover()
-                   || (actor.hasLover() && !Preferences.BothPreferencesMatch(actor, actor.lover)
+                   || (actor.hasLover() && !Preferences.SAndRPreferencesMatch(actor, actor.lover)
                                              && actor.lover.hasCultureTrait("sexual_expectations"));
         }
 

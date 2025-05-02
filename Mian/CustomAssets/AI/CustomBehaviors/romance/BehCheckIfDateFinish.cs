@@ -1,5 +1,6 @@
 ﻿using System;
 using ai.behaviours;
+using Topic_of_Love.Mian.CustomAssets.Custom;
 using Topic_of_Love.Mian.CustomAssets.Traits;
 
 namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.romance;
@@ -8,16 +9,16 @@ public class BehCheckIfDateFinish : BehaviourActionActor
 {
     public override BehResult execute(Actor pActor)
     {
-        TOLUtil.Debug("Checking for date before finalizing: "+ pActor.getName());
+        TolUtil.Debug("Checking for date before finalizing: "+ pActor.getName());
         if (pActor.beh_actor_target == null)
         {
-            TOLUtil.Debug(pActor.getName()+": Cancelled from finalizing because actor was null");
+            TolUtil.Debug(pActor.getName()+": Cancelled from finalizing because actor was null");
             return BehResult.Stop;
         }
         var target = pActor.beh_actor_target.a;
 
         pActor.data.get("date_happiness", out var happiness, 0f);
-        if (Preferences.BothActorsPreferencesMatch(pActor, target, false))
+        if (Preferences.BothPreferencesMatch(pActor, target, false))
         {
             happiness += Randy.randomFloat(5, 10f);
         }
@@ -45,12 +46,12 @@ public class BehCheckIfDateFinish : BehaviourActionActor
         pActor.addStatusEffect("went_on_date");
         target.addStatusEffect("went_on_date");
         
-        TOLUtil.ChangeIntimacyHappinessBy(pActor, happiness);
-        TOLUtil.ChangeIntimacyHappinessBy(target, happiness);
+        TolUtil.ChangeIntimacyHappinessBy(pActor, happiness);
+        TolUtil.ChangeIntimacyHappinessBy(target, happiness);
         
         pActor.data.removeFloat("date_happiness");
         
-        TOLUtil.Debug("The date for "+pActor.getName()+" and "+target.getName() + " has finalized! Total happiness: "+happiness);
+        TolUtil.Debug("The date for "+pActor.getName()+" and "+target.getName() + " has finalized! Total happiness: "+happiness);
         return BehResult.Continue;
     }
 }

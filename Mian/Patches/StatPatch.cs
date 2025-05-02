@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using HarmonyLib;
 using NeoModLoader.General;
 using NeoModLoader.services;
+using Topic_of_Love.Mian.CustomAssets;
+using Topic_of_Love.Mian.CustomAssets.Custom;
 using Topic_of_Love.Mian.CustomAssets.Traits;
 using UnityEngine;
 using UnityEngine.UI;

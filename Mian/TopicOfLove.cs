@@ -5,6 +5,7 @@ using Topic_of_Love.Mian.CustomAssets.Traits;
 using NeoModLoader.api;
 using HarmonyLib;
 using NeoModLoader.General;
+using Topic_of_Love.Mian.CustomAssets.Custom;
 
 /*
 
@@ -59,8 +60,9 @@ namespace Topic_of_Love.Mian
             Mod = this;
             // Initialize your mod.
             // Methods are called in the order: OnLoad -> Awake -> OnEnable -> Start -> Update
-            TOLUtil.LogWithId("Making people more loveable!");
-            
+            TolUtil.LogWithId("Making people more loveable!");
+
+            Orientations.Init();
             Preferences.Init();
             new ActorTraits().Init();
             new CultureTraits().Init();

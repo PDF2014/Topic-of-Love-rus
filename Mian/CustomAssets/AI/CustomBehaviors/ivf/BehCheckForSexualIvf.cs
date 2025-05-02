@@ -5,11 +5,11 @@ public class BehCheckForSexualIvf : BehaviourActionActor
 {
     public override BehResult execute(Actor pActor)
     {
-        TOLUtil.Debug("Checking sexual ivf for "+pActor.getName());
+        TolUtil.Debug("Checking sexual ivf for "+pActor.getName());
 
         if (pActor.beh_actor_target == null || pActor.beh_building_target == null)
         {
-            TOLUtil.Debug(pActor.getName()+": Cancelled from checking for sexual ivf target because actor was null");
+            TolUtil.Debug(pActor.getName()+": Cancelled from checking for sexual ivf target because actor was null");
             return BehResult.Stop;
         }
 

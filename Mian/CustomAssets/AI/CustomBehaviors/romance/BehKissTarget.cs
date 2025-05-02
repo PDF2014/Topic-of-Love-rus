@@ -17,12 +17,12 @@ public class BehKissTarget : BehaviourActionActor
             pActor.beh_actor_target.a.clearWait();
             return BehResult.Stop;
         }
-        TOLUtil.Debug(pActor.getName() + " is kissing "+pActor.beh_actor_target.a.getName());
+        TolUtil.Debug(pActor.getName() + " is kissing "+pActor.beh_actor_target.a.getName());
 
         pActor.makeWait(1.5f);
         pActor.beh_actor_target.a.makeWait(1.5f);
 
-        TOLUtil.ActorsInteracted(pActor, pActor.beh_actor_target.a);
+        TolUtil.ActorsInteracted(pActor, pActor.beh_actor_target.a);
         pActor.addStatusEffect("just_kissed");
         pActor.beh_actor_target.addStatusEffect("just_kissed");
             

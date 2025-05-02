@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Topic_of_Love.Mian.CustomAssets.Traits;
 using HarmonyLib;
+using Topic_of_Love.Mian.CustomAssets.Custom;
 
 namespace Topic_of_Love.Mian.CustomAssets.AI;
 
@@ -17,7 +18,7 @@ public class Decisions
             priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/culture_traits/orientationless",
             cooldown = 30,
-            action_check_launch = actor => (actor.hasCultureTrait("homophobic") || actor.hasCultureTrait("heterophobic")) && TOLUtil.IsOrientationSystemEnabledFor(actor),
+            action_check_launch = actor => (actor.hasCultureTrait("homophobic") || actor.hasCultureTrait("heterophobic")) && TolUtil.IsOrientationSystemEnabledFor(actor),
             weight = 0.5f,
             list_civ = true,
             only_safe = true
@@ -32,14 +33,14 @@ public class Decisions
             cooldown = 15,
             action_check_launch = actor => actor.isSapient()
                                            && actor.hasLover()
-                                           && !TOLUtil.IsIntimacyHappinessEnough(actor, 100f)
-                                           && TOLUtil.IsOrientationSystemEnabledFor(actor)
+                                           && !TolUtil.IsIntimacyHappinessEnough(actor, 100f)
+                                           && TolUtil.IsOrientationSystemEnabledFor(actor)
                                            && !actor.hasStatus("just_kissed")
-                                           && (Preferences.BothPreferencesMatch(actor, actor.lover) || Randy.randomChance(0.5f)),
+                                           && (Preferences.SAndRPreferencesMatch(actor, actor.lover) || Randy.randomChance(0.5f)),
             list_civ = true,
-            weight_calculate_custom = actor => TOLUtil.IsIntimacyHappinessEnough(actor, 75f) ? 0.5f: 
-                TOLUtil.IsIntimacyHappinessEnough(actor, 50f) ? 0.6f : TOLUtil.IsIntimacyHappinessEnough(actor, 0) ? .8f : 
-                TOLUtil.IsIntimacyHappinessEnough(actor, -50) ? 1f : TOLUtil.IsIntimacyHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
+            weight_calculate_custom = actor => TolUtil.IsIntimacyHappinessEnough(actor, 75f) ? 0.5f: 
+                TolUtil.IsIntimacyHappinessEnough(actor, 50f) ? 0.6f : TolUtil.IsIntimacyHappinessEnough(actor, 0) ? .8f : 
+                TolUtil.IsIntimacyHappinessEnough(actor, -50) ? 1f : TolUtil.IsIntimacyHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
             only_safe = true,
             cooldown_on_launch_failure = true
         });
@@ -52,14 +53,14 @@ public class Decisions
             cooldown = 30,
             action_check_launch = actor => actor.isSapient()
                                            && actor.hasLover()
-                                           && !TOLUtil.IsIntimacyHappinessEnough(actor, 100f)
-                                           && TOLUtil.IsOrientationSystemEnabledFor(actor)
-                                           && (Preferences.BothActorsPreferencesMatch(actor, actor.lover, false) || Randy.randomChance(0.5f))
+                                           && !TolUtil.IsIntimacyHappinessEnough(actor, 100f)
+                                           && TolUtil.IsOrientationSystemEnabledFor(actor)
+                                           && (Preferences.BothPreferencesMatch(actor, actor.lover, false) || Randy.randomChance(0.5f))
                                            && !actor.hasStatus("went_on_date"),
             list_civ = true,
-            weight_calculate_custom = actor => TOLUtil.IsIntimacyHappinessEnough(actor, 75f) ? 0.5f: 
-                TOLUtil.IsIntimacyHappinessEnough(actor, 50f) ? 0.6f : TOLUtil.IsIntimacyHappinessEnough(actor, 0) ? .8f : 
-                TOLUtil.IsIntimacyHappinessEnough(actor, -50) ? 1f : TOLUtil.IsIntimacyHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
+            weight_calculate_custom = actor => TolUtil.IsIntimacyHappinessEnough(actor, 75f) ? 0.5f: 
+                TolUtil.IsIntimacyHappinessEnough(actor, 50f) ? 0.6f : TolUtil.IsIntimacyHappinessEnough(actor, 0) ? .8f : 
+                TolUtil.IsIntimacyHappinessEnough(actor, -50) ? 1f : TolUtil.IsIntimacyHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
             only_safe = true,
             cooldown_on_launch_failure = true
         });
@@ -73,10 +74,10 @@ public class Decisions
             action_check_launch = actor =>
             {
                 actor.subspecies.countReproductionNeuron();
-                return TOLUtil.IsDyingOut(actor)
+                return TolUtil.IsDyingOut(actor)
                        && BabyHelper.canMakeBabies(actor)
                        && actor.hasSubspeciesTrait("preservation")
-                       && TOLUtil.IsOrientationSystemEnabledFor(actor);
+                       && TolUtil.IsOrientationSystemEnabledFor(actor);
             },
             weight_calculate_custom = actor => BabyHelper.canMakeBabies(actor) ? 2f : 0.1f,
             only_adult = true,
@@ -97,12 +98,12 @@ public class Decisions
             cooldown = 15,
             action_check_launch = actor => actor.isSapient()
                                            && !Preferences.Dislikes(actor, true)
-                                           && !TOLUtil.IsIntimacyHappinessEnough(actor, 100f)
-                                           && TOLUtil.IsOrientationSystemEnabledFor(actor),
+                                           && !TolUtil.IsIntimacyHappinessEnough(actor, 100f)
+                                           && TolUtil.IsOrientationSystemEnabledFor(actor),
             list_civ = true,
-            weight_calculate_custom = actor => TOLUtil.IsIntimacyHappinessEnough(actor, 75f) ? 0.25f: 
-                TOLUtil.IsIntimacyHappinessEnough(actor, 50f) ? 0.5f : TOLUtil.IsIntimacyHappinessEnough(actor, 0) ? .75f : 
-                TOLUtil.IsIntimacyHappinessEnough(actor, -50) ? 1f : TOLUtil.IsIntimacyHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
+            weight_calculate_custom = actor => TolUtil.IsIntimacyHappinessEnough(actor, 75f) ? 0.25f: 
+                TolUtil.IsIntimacyHappinessEnough(actor, 50f) ? 0.5f : TolUtil.IsIntimacyHappinessEnough(actor, 0) ? .75f : 
+                TolUtil.IsIntimacyHappinessEnough(actor, -50) ? 1f : TolUtil.IsIntimacyHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
             only_adult = true,
             only_safe = true,
             cooldown_on_launch_failure = true
@@ -116,25 +117,25 @@ public class Decisions
             cooldown = 15,
             action_check_launch = actor =>
             {
-                if (!actor.isSapient() || !TOLUtil.WantsBaby(actor, false))
+                if (!actor.isSapient() || !TolUtil.WantsBaby(actor, false))
                     return false;
                     
                 var bestFriend = actor.getBestFriend();
 
                 if (actor.hasLover())
                 {
-                    if (!TOLUtil.WantsBaby(actor.lover, false))
+                    if (!TolUtil.WantsBaby(actor.lover, false))
                         return false;
                         
-                    if (TOLUtil.CanReproduce(actor, actor.lover) && !Preferences.BothActorsPreferencesMatch(actor, actor.lover, true))
+                    if (TolUtil.CanReproduce(actor, actor.lover) && !Preferences.BothPreferencesMatch(actor, actor.lover, true))
                         return true;
 
-                    if (TOLUtil.CanReproduce(actor, actor.lover) &&
-                        Preferences.BothActorsPreferencesMatch(actor, actor.lover, true))
+                    if (TolUtil.CanReproduce(actor, actor.lover) &&
+                        Preferences.BothPreferencesMatch(actor, actor.lover, true))
                         return false;
                 }
                     
-                return bestFriend != null && TOLUtil.CanReproduce(actor, bestFriend) && !bestFriend.hasStatus("pregnant") && actor.hasHouse();
+                return bestFriend != null && TolUtil.CanReproduce(actor, bestFriend) && !bestFriend.hasStatus("pregnant") && actor.hasHouse();
             },
             list_civ = true,
             weight = 0.5f,

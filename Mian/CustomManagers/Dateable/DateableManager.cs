@@ -76,7 +76,7 @@ public class DateableManager : MetaSystemManager<Dateable, DateableData>
 
     public static void Init()
     {
-        TOLUtil.LogWithId("Adding Dateable Manager");
+        TolUtil.LogWithId("Adding Dateable Manager");
 
         MapBox.instance._list_meta_main_managers.Add(Manager = new DateableManager());
     }

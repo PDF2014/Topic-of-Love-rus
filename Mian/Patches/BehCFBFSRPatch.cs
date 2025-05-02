@@ -18,7 +18,7 @@ public class BehCFBFSRPatch
             var target = pActor.beh_actor_target != null ? pActor.beh_actor_target.a : pActor.lover;
             if (target == null)
             { 
-                TOLUtil.Debug(pActor.getName()+": Cant do sex because target is null");
+                TolUtil.Debug(pActor.getName()+": Cant do sex because target is null");
                 __result = BehResult.Stop;
                 return false;
             }
@@ -27,7 +27,7 @@ public class BehCFBFSRPatch
             if(target.subspecies != pActor.subspecies)
                 target.subspecies.counter_reproduction_acts?.registerEvent();
             __instance.checkForBabies(pActor, target);
-            TOLUtil.JustHadSex(pActor, target);
+            TolUtil.JustHadSex(pActor, target);
             __result = BehResult.Continue;
             return false;
         }
@@ -41,17 +41,17 @@ public class BehCFBFSRPatch
     // runs after TOI because we need to check for genitalia there
         static bool CheckForBabiesPrefix(Actor pParentA, Actor pParentB)
         {
-            TOLUtil.Debug($"\nAble to make a baby?\n{pParentA.getName()}: "+(BabyHelper.canMakeBabies(pParentA)+$"\n${pParentB.getName()}: "+(BabyHelper.canMakeBabies(pParentB))));
+            TolUtil.Debug($"\nAble to make a baby?\n{pParentA.getName()}: "+(BabyHelper.canMakeBabies(pParentA)+$"\n${pParentB.getName()}: "+(BabyHelper.canMakeBabies(pParentB))));
 
-            if (!BabyHelper.canMakeBabies(pParentA) || !BabyHelper.canMakeBabies(pParentB) || !TOLUtil.CanReproduce(pParentA, pParentB))
+            if (!BabyHelper.canMakeBabies(pParentA) || !BabyHelper.canMakeBabies(pParentB) || !TolUtil.CanReproduce(pParentA, pParentB))
                 return false;
 
             // ensures that both subspecies HAVE not reached population limit
             if (pParentA.subspecies.hasReachedPopulationLimit() || pParentB.subspecies.hasReachedPopulationLimit())
                 return false;
 
-            var aCanBePregnant = TOLUtil.IsAbleToBecomePregnant(pParentA);
-            var bCanBePregnant = TOLUtil.IsAbleToBecomePregnant(pParentB);
+            var aCanBePregnant = TolUtil.IsAbleToBecomePregnant(pParentA);
+            var bCanBePregnant = TolUtil.IsAbleToBecomePregnant(pParentB);
             Actor pregnantActor;
             if (aCanBePregnant && bCanBePregnant)
                 pregnantActor = Randy.randomBool() ? pParentA : pParentB;
@@ -69,8 +69,8 @@ public class BehCFBFSRPatch
             pParentA.data.get("sex_reason", out var sexReason, "");
             pParentB.data.get("sex_reason", out var sexReason1, "");
 
-            var aWantsBaby = TOLUtil.WantsBaby(pParentA);
-            var bWantsBaby = TOLUtil.WantsBaby(pParentB);
+            var aWantsBaby = TolUtil.WantsBaby(pParentA);
+            var bWantsBaby = TolUtil.WantsBaby(pParentB);
             bool success = sexReason1.Equals("casual") || sexReason.Equals("casual") ? 
                 aWantsBaby && bWantsBaby : true;
             

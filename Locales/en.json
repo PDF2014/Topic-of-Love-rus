@@ -133,38 +133,6 @@
   "trait_sex_indifferent": "Sex-Indifferent",
   "trait_sex_indifferent_info": "Coupling is not a requirement for them to be in a relationship.",
   "trait_sex_indifferent_info_2": "They'd rather love than do the deed!",
-  
-  "trait_aromantic": "Aromantic",
-  "trait_aromantic_info": "They do not desire love unlike most",
-  "trait_aromantic_info_2": "It's not because they have not found the right person, they just feel this way",
-
-  "trait_homoromantic": "Homoromantic",
-  "trait_homoromantic_info": "They would like to only romantically be involved with the same sex",
-  "trait_homoromantic_info_2": "I love people who are like me!",
-
-  "trait_heteroromantic": "Heteroromantic",
-  "trait_heteroromantic_info": "They would like to only romantically be involved with the different sex",
-  "trait_heteroromantic_info_2": "Only 50% less boring!",
-
-  "trait_biromantic": "Biromantic",
-  "trait_biromantic_info": "They romantically love both sexes",
-  "trait_biromantic_info_2": "Pulls sexes without needing to fuck any of them. What's your excuse?",
-
-  "trait_asexual": "Asexual",
-  "trait_asexual_info": "They do not desire coupling unlike most",
-  "trait_asexual_info_2": "Coupling is so weird. It's soggy and time consuming.",
-  
-  "trait_heterosexual": "Heterosexual",
-  "trait_heterosexual_info": "They prefer coupling with the opposite sex",
-  "trait_heterosexual_info_2": "Aka, factory settings.",
-
-  "trait_homosexual": "Homosexual",
-  "trait_homosexual_info": "They prefer coupling with the same sex",
-  "trait_homosexual_info_2": "It ain't a choice, that much can be told.",
-
-  "trait_bisexual": "Bisexual",
-  "trait_bisexual_info": "They love coupling with both sexes",
-  "trait_bisexual_info_2": "Gotta swing both ways!",
 
   "trait_faithful": "Faithful",
   "trait_faithful_info": "They will never cheat on someone even if their romantic preference no longer matches their partner's sex",
@@ -189,7 +157,25 @@
   "trait_dislike_romance": "Aromantic",
   "trait_dislike_romance_info": "They do not desire love unlike most",
   "trait_dislike_romance_info_2": "It's not because they have not found the right person, they just feel this way",
-  
+
+  "trait_phallus_sexual_info_2": "Stick it in already!",
+  "trait_vulva_sexual_info_2": "When there's a hole, there's a goal.",
+
+  "trait_female_romantic_info_2": "What are some things a girl likes?",
+  "trait_female_sexual_info_2": "That body's 70% water and they are thirsty for it.",
+
+  "trait_male_romantic_info_2": "Marry me please!",
+  "trait_male_sexual_info_2": "Ten men please.",
+
+  "trait_xenogender_romantic_info_2": "Loveable two digits.",
+  "trait_xenogender_sexual_info_2": "I wouldn't have it any other way.",
+
+  "trait_feminine_romantic_info_2": "Sweet, compassionate, and kind.",
+  "trait_feminine_sexual_info_2": "Slim, cute and pretty.",
+
+  "trait_masculine_romantic_info_2": "Confident, bold, and powerful.",
+  "trait_masculine_sexual_info_2": "Big, dominant and strong.",
+
   "trait_group_dislikes": "Orientation Dislikes",
 
   "culture_trait_homophobic": "Homophobic",

@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
-using Topic_of_Love.Mian.CustomAssets.Traits;
+using Topic_of_Love.Mian.CustomAssets;
+using Topic_of_Love.Mian.CustomAssets.Custom;
 
 namespace Topic_of_Love.Mian.Patches;
 
@@ -16,7 +17,7 @@ public class SubspeciesPatch
                 return false;
             }
 
-            if (TOLUtil.CanDoAnySexType(pActor))
+            if (TolUtil.CanDoAnySexType(pActor))
             {
                 __result = true;
                 return false;
@@ -27,14 +28,14 @@ public class SubspeciesPatch
             
             if (__instance.needOppositeSexTypeForReproduction())
             {
-                if ((!actorGenitalia.Equals(targetGenitalia) && pTarget.subspecies.isReproductionSexual()) || TOLUtil.CanDoAnySexType(pTarget))
+                if ((!actorGenitalia.Equals(targetGenitalia) && pTarget.subspecies.isReproductionSexual()) || TolUtil.CanDoAnySexType(pTarget))
                 {
                     __result = true;
                     return false;
                 }
-            } else if (TOLUtil.NeedSameSexTypeForReproduction(pActor))
+            } else if (TolUtil.NeedSameSexTypeForReproduction(pActor))
             {
-                if ((actorGenitalia.Equals(targetGenitalia) && TOLUtil.NeedSameSexTypeForReproduction(pTarget)) || TOLUtil.CanDoAnySexType(pTarget))
+                if ((actorGenitalia.Equals(targetGenitalia) && TolUtil.NeedSameSexTypeForReproduction(pTarget)) || TolUtil.CanDoAnySexType(pTarget))
                 {
                     __result = true;
                     return false;

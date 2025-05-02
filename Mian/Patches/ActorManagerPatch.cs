@@ -13,13 +13,13 @@ public class ActorManagerPatch
     [HarmonyPatch(nameof(ActorManager.createNewUnit))]
     static void CreateNewUnit(Actor __result)
     {
-        TOLUtil.GivePreferences(__result);
+        TolUtil.NewPreferences(__result);
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(ActorManager.createActorFromData))]
     static void CreateActorFromData(Actor __result)
     {
-        TOLUtil.GivePreferences(__result);
+        TolUtil.NewPreferences(__result);
     }
 }
