@@ -107,7 +107,7 @@ public class ActorPatch
                 if (!__instance.hasTrait("unfluid"))
                 {
                     // preference for gender
-                    if (Randy.randomChance(0.01f))
+                    if (Randy.randomChance(0.005f))
                     {
                         if (Randy.randomBool())
                         {
@@ -126,7 +126,7 @@ public class ActorPatch
                     if (TolUtil.IsTOIInstalled())
                     {
                         // preference for masculinity/femininity
-                        if (Randy.randomChance(0.05f))
+                        if (Randy.randomChance(0.01f))
                         {
                             if (Randy.randomBool())
                             {
@@ -143,15 +143,15 @@ public class ActorPatch
                         }
                 
                         // preference for genitals
-                        if (Randy.randomChance(0.01f))
+                        if (Randy.randomChance(0.005f))
                         {
                             if (Randy.randomBool())
                             {
-                                __instance.addTrait(Preferences.RandomPreferenceFromType("genitalia", Randy.randomBool()));
+                                __instance.addTrait(Preferences.RandomPreferenceFromType("genital", true));
                             }
                             else
                             {
-                                var preferences = Preferences.GetActorPreferencesFromType(__instance, "genitalia", Randy.randomBool());
+                                var preferences = Preferences.GetActorPreferencesFromType(__instance, "genital", true);
                                 if (preferences.Count > 0)
                                 {
                                     __instance.removeTrait(preferences.GetRandom());

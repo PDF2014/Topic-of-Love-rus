@@ -5,13 +5,13 @@
   "status_title_just_kissed": "Just Kissed",
   "status_description_just_kissed": "So lovey dovey",
   
-  "status_title_disliked_sex": "Disliked Coupling",
+  "status_title_disliked_sex": "Disliked Couplating",
   "status_description_disliked_sex": "Sexual preferences were not met",
 
-  "status_title_enjoyed_sex": "Enjoyed Coupling",
+  "status_title_enjoyed_sex": "Enjoyed Couplating",
   "status_description_enjoyed_sex": "Sexual preferences were met",
 
-  "status_title_okay_sex": "Mildly Enjoyed Coupling",
+  "status_title_okay_sex": "Mildly Enjoyed Couplating",
   "status_description_okay_sex": "Sexual preferences were met but it wasn't the best",
 
   "status_title_cheated_on": "Cheated On",
@@ -36,15 +36,15 @@
   "happiness_dialog_did_not_want_baby_2": "Are you kidding??",
   "happiness_dialog_did_not_want_baby_3": "A baby?! Tell me you're joking.",
 
-  "happiness_okay_sex": "Mildly enjoyed coupling",
+  "happiness_okay_sex": "Mildly enjoyed couplating",
   "happiness_dialog_okay_sex_0": "That was alright, they weren't the best at it.",
   "happiness_dialog_okay_sex_1": "Meh, at least it was okay",
   
-  "happiness_enjoyed_sex": "Enjoyed coupling",
+  "happiness_enjoyed_sex": "Enjoyed couplating",
   "happiness_dialog_enjoyed_sex_0": "I loved that! I would be down to do them again.",
   "happiness_dialog_enjoyed_sex_1": "Perfect, just how I like doing it.",
 
-  "happiness_disliked_sex": "Disliked coupling",
+  "happiness_disliked_sex": "Disliked couplating",
   "happiness_dialog_disliked_sex_0": "I did not like any single bit of that.",
   "happiness_dialog_disliked_sex_1": "Ugh that was terrible, I regret doing that.",
   
@@ -75,13 +75,13 @@
   "happiness_dialog_orientation_does_not_fit_1": "Why am I hated for who I am?",
 
   "happiness_insulted_for_orientation": "Insulted for their orientation",
-  "happiness_dialog_insulted_for_orientation_0": "Why should they care who I couple with or date?!",
+  "happiness_dialog_insulted_for_orientation_0": "Why should they care who I couplate with or date?!",
   "happiness_dialog_insulted_for_orientation_1": "What the hell is wrong with them!",
   
   "task_insult_orientation": "Insult Orientations",
-  "task_invite_for_sex": "Invite for Coupling",
+  "task_invite_for_sex": "Invite for Couplating",
   "task_try_kiss": "Try Kissing",
-  "task_have_sex_go": "Go Coupling",
+  "task_have_sex_go": "Go Couplating",
   "task_reproduce_preservation": "Reproduce Preservation",
   "task_try_sexual_ivf": "Try Sexual IVF",
   "task_go_sexual_ivf": "Go Sexual IVF",
@@ -105,10 +105,10 @@
   "ForceLover": "Force Lover",
   "ForceLover Description": "Force a unit to become lovers with another unit",
 
-  "sex_cancelled": "Force coupling cancelled!",
-  "sex_successful": "Force coupling successful! They will attempt to couple as soon as possible. Outer forces may interrupt the deed.",
-  "ForceSex": "Force Coupling",
-  "ForceSex Description": "Force a unit to commence coupling with another unit",
+  "sex_cancelled": "Force couplating cancelled!",
+  "sex_successful": "Force couplating successful! They will attempt to couplate as soon as possible. Outer forces may interrupt the deed.",
+  "ForceSex": "Force Couplating",
+  "ForceSex Description": "Force a unit to commence couplating with another unit",
   
   "breakup_successful": "Break up successful!",
   "ForceBreakup": "Force Break Up",
@@ -131,7 +131,7 @@
   "ForceDate Description": "Force a lover to go on a date with their lover",
 
   "trait_sex_indifferent": "Sex-Indifferent",
-  "trait_sex_indifferent_info": "Coupling is not a requirement for them to be in a relationship.",
+  "trait_sex_indifferent_info": "Couplating is not a requirement for them to be in a relationship.",
   "trait_sex_indifferent_info_2": "They'd rather love than do the deed!",
 
   "trait_faithful": "Faithful",
@@ -151,8 +151,8 @@
   "trait_abrosexual_info_2": "Brains are complex.",
 
   "trait_dislike_sex": "Asexual",
-  "trait_dislike_sex_info": "They do not desire coupling unlike most",
-  "trait_dislike_sex_info_2": "Coupling is so weird. It's soggy and time consuming.",
+  "trait_dislike_sex_info": "They do not desire couplating unlike most",
+  "trait_dislike_sex_info_2": "Couplating is so weird. It's soggy and time consuming.",
 
   "trait_dislike_romance": "Aromantic",
   "trait_dislike_romance_info": "They do not desire love unlike most",
@@ -175,6 +175,10 @@
 
   "trait_masculine_romantic_info_2": "Confident, bold, and powerful.",
   "trait_masculine_sexual_info_2": "Big, dominant and strong.",
+  
+  "trait_unfluid": "Unfluid",
+  "trait_unfluid_info": "Their romantic and sexual preferences will never change",
+  "trait_unfluid_info_2": "Sometimes preferences aren't fluid.",
 
   "trait_group_dislikes": "Orientation Dislikes",
 
@@ -187,7 +191,7 @@
   "culture_trait_heterophobic_info_2": "It's strange to think of two different sex people getting together.",
 
   "culture_trait_incest": "Incest",
-  "culture_trait_incest_info": "Biologically related members may fall in love and couple",
+  "culture_trait_incest_info": "Biologically related members may fall in love and couplate",
   "culture_trait_incest_info_2": "Awkward!",
 
   "culture_trait_orientationless": "Orientationless",

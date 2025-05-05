@@ -15,7 +15,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         public string WithoutOrientationID;
         public bool IsSexual;
     }
-    public partial class Preferences
+    public class Preferences
     {
         private static readonly List<PreferenceTrait> AllTraits = new();
         public static readonly Dictionary<string, List<PreferenceTrait>> PreferenceTypes = new();
@@ -160,7 +160,6 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             foreach (var trait in AllTraits)
             {
                 AssetManager.traits.add(trait);
-                trait.unlock(true); // for testing, remove later
 
                 if (trait != dislikeSex && trait != dislikeRomance)
                 {
@@ -196,7 +195,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         {
             return PreferenceMatches(pActor, pTarget, "identity", sexual) 
                    && PreferenceMatches(pActor, pTarget, "expression", sexual)
-                   && (!sexual || PreferenceMatches(pActor, pTarget, "genitalia", true));
+                   && (!sexual || PreferenceMatches(pActor, pTarget, "genital", true));
         }
 
         public static bool SAndRPreferencesMatch(Actor actor1, Actor actor2)
@@ -386,7 +385,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 return GetIdentity(actor);
             if (type.Equals("expression"))
                 return GetExpression(actor);
-            if (type.Equals("genitalia"))
+            if (type.Equals("genital"))
                 return GetGenitalia(actor);
             return null;
         }
