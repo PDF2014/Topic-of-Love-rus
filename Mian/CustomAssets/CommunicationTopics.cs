@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Topic_of_Love.Mian.CustomAssets.Custom;
 using Topic_of_Love.Mian.CustomAssets.Traits;
 
 namespace Topic_of_Love.Mian.CustomAssets
@@ -11,35 +13,23 @@ namespace Topic_of_Love.Mian.CustomAssets
             {
                 id = "orientation",
                 rate = 0.5f,
-                check = pActor => QueerTraits.GetPreferenceFromActor(pActor, false) != Preference.Inapplicable 
-                                  && QueerTraits.GetPreferenceFromActor(pActor, true) != Preference.Inapplicable
-                                  && QueerTraits.GetQueerTraits(pActor, true).Count >= 2
-                                  && !pActor.hasCultureTrait("orientationless"),
+                check = pActor => !pActor.hasCultureTrait("orientationless") && (pActor.hasCultureTrait("homophobic") || pActor.hasCultureTrait("heterophobic")),
                 pot_fill = (actor, sprites) =>
                 {
-                    if (QueerTraits.GetQueerTraits(actor, true).Count < 2) return;
-                    var unfitPreferences = new List<Preference>();
-                    if (actor.hasCultureTrait("homophobic"))
+                    var unfitPreferences = Orientation.Orientations.Where(orientation =>
                     {
-                        unfitPreferences.Add(Preference.All);
-                        unfitPreferences.Add(Preference.SameSex);
-                        unfitPreferences.Add(Preference.SameOrDifferentSex);
-                    }
-                    if (actor.hasCultureTrait("heterophobic"))
-                    {
-                        unfitPreferences.Add(Preference.DifferentSex);
-                    }
+                        if (actor.hasCultureTrait("homophobic"))
+                            return orientation.IsHomo;
+                        if (actor.hasCultureTrait("heterophobic"))
+                            return orientation.IsHetero;
+                        return false;
+                    });
 
-                    var queerTraits = QueerTraits.GetQueerTraits(actor, true);
-                    var sexualPreference = queerTraits[0].preference;
-                    var sexualSprite = queerTraits[0].getSprite();
-                    var romanticPreference = queerTraits[1].preference;
-                    var romanticSprite = queerTraits[1].getSprite();
+                    var sexualPreference = Orientation.GetOrientation(actor, true);
+                    var romanticPreference = Orientation.GetOrientation(actor, false);
 
-                    if (sexualSprite == null || romanticSprite == null)
-                        return;
-                    sprites.Add(sexualSprite);
-                    sprites.Add(romanticSprite);
+                    sprites.Add(sexualPreference.GetSprite(true));
+                    sprites.Add(romanticPreference.GetSprite(false));
 
                     if (unfitPreferences.Contains(sexualPreference) || unfitPreferences.Contains(romanticPreference))
                         actor.changeHappiness("orientation_does_not_fit");

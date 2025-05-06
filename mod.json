@@ -3,5 +3,8 @@
   "author": "MianReplicate",
   "version": "1.0.0",
   "description": "A mod that reworks the love system, making it more advanced by adding cross species breeding, orientations, romantic tasks, breaking up, cheating and more.",
-  "GUID": "topicoflove"
+  "GUID": "topicoflove",
+  "OptionalDependencies": [
+    "topicofidentity"
+  ]
 }

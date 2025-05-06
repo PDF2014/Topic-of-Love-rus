@@ -7,17 +7,17 @@ public class BehRandomizeDateTile : BehaviourActionActor
 {
     public override BehResult execute(Actor pActor)
     {
-        Util.Debug("Checking for date before continuing to randomize tile: "+ pActor.getName());
+        TolUtil.Debug("Checking for date before continuing to randomize tile: "+ pActor.getName());
         if (pActor.beh_actor_target == null)
         {
-            Util.Debug(pActor.getName()+": Cancelled from continuing date because actor was null");
+            TolUtil.Debug(pActor.getName()+": Cancelled from continuing date because actor was null");
             return BehResult.Stop;
         }
         var follower = pActor.beh_actor_target.a;
 
         if (!follower.isTask("follow_action_date"))
         {
-            Util.Debug(pActor.getName()+"'s date has ended!");
+            TolUtil.Debug(pActor.getName()+"'s date has ended!");
             return BehResult.Stop;
         }
         

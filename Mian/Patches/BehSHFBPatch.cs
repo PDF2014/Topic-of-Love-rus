@@ -14,7 +14,7 @@ public class BehSHFBPatch
             var target = pActor.beh_actor_target != null ? pActor.beh_actor_target.a : pActor.lover;
             if (target == null)
             {
-                Util.Debug(pActor.getName()+": Cant do sex because target is null");
+                TolUtil.Debug(pActor.getName()+": Cant do sex because target is null");
                 __result = BehResult.Stop;
                 return false;
             }

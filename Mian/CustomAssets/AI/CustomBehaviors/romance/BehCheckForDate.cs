@@ -5,11 +5,11 @@ public class BehCheckForDate : BehaviourActionActor
 {
     public override BehResult execute(Actor pActor)
     {
-        Util.Debug("Checking to start date: "+ pActor.getName());
+        TolUtil.Debug("Checking to start date: "+ pActor.getName());
         pActor.data.removeFloat("date_happiness");
         if (pActor.beh_actor_target == null)
         {
-            Util.Debug(pActor.getName()+": Cancelled from starting date because actor was null");
+            TolUtil.Debug(pActor.getName()+": Cancelled from starting date because actor was null");
             return BehResult.Stop;
         }
         var target = pActor.beh_actor_target.a;

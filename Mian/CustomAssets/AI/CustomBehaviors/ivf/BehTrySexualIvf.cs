@@ -5,7 +5,7 @@ public class BehTrySexualIvf : BehaviourActionActor
 {
     public override BehResult execute(Actor pActor)
     {
-        Util.Debug("Trying sexual ivf for "+pActor.getName());
+        TolUtil.Debug("Trying sexual ivf for "+pActor.getName());
 
         if (!pActor.hasHouse() || pActor.hasStatus("pregnant"))
             return BehResult.Stop;
@@ -18,7 +18,7 @@ public class BehTrySexualIvf : BehaviourActionActor
         target.beh_actor_target = pActor;
         target.beh_building_target = home;
             
-        Util.Debug("Starting sexual ivf tasks for "+pActor.getName()+" and "+target.getName());
+        TolUtil.Debug("Starting sexual ivf tasks for "+pActor.getName()+" and "+target.getName());
 
         target.setTask("go_and_wait_sexual_ivf", pCleanJob: true, pClean:false, pForceAction:true);
         target.timer_action = 0.0f;

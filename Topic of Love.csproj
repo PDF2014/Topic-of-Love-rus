@@ -7,6 +7,7 @@
         <RootNamespace>Topic_of_Love</RootNamespace>
         <AssemblyName>Topic_of_Love</AssemblyName>
         <TargetFramework>net48</TargetFramework>
+        <DefineConstants>DEBUG;TRACE;TOPICOFIDENTITY</DefineConstants>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>disable</Nullable>
@@ -38,6 +39,8 @@
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\sex\BehGetPossibleTileForSex.cs" />
         <Compile Include="Mian\CustomAssets\AI\Decisions.cs" />
         <Compile Include="Mian\CustomAssets\CommunicationTopics.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\Orientation.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\Preferences.cs" />
         <Compile Include="Mian\CustomAssets\GodPowers.cs" />
         <Compile Include="Mian\CustomAssets\Happiness.cs" />
         <Compile Include="Mian\CustomAssets\Opinions.cs" />
@@ -46,7 +49,6 @@
         <Compile Include="Mian\CustomAssets\Traits\ActorTraits.cs" />
         <Compile Include="Mian\CustomAssets\Traits\BaseTraits.cs" />
         <Compile Include="Mian\CustomAssets\Traits\CultureTraits.cs" />
-        <Compile Include="Mian\CustomAssets\Traits\QueerTraits.cs" />
         <Compile Include="Mian\CustomAssets\Traits\SubspeciesTraits.cs" />
         <Compile Include="Mian\CustomManagers\CustomSavedData.cs" />
         <Compile Include="Mian\CustomManagers\Dateable\Dateable.cs" />
@@ -54,6 +56,7 @@
         <Compile Include="Mian\CustomManagers\Dateable\DateableManager.cs" />
         <Compile Include="Mian\Patches\ActorManagerPatch.cs" />
         <Compile Include="Mian\Patches\ActorPatch.cs" />
+        <Compile Include="Mian\Patches\BabyHelperPatch.cs" />
         <Compile Include="Mian\Patches\BabyMakerPatch.cs" />
         <Compile Include="Mian\Patches\BehCFBFSRPatch.cs" />
         <Compile Include="Mian\Patches\BehSHFBPatch.cs" />
@@ -62,10 +65,11 @@
         <Compile Include="Mian\Patches\BaseSimObjectPatch.cs" />
         <Compile Include="Mian\Patches\MapBoxPatch.cs" />
         <Compile Include="Mian\Patches\SavedMapPatch.cs" />
+        <Compile Include="Mian\Patches\SpriteTextureLoaderPatch.cs" />
         <Compile Include="Mian\Patches\SubspeciesPatch.cs" />
-        <Compile Include="Mian\Patches\UnitWindowPatch.cs" />
+        <Compile Include="Mian\Patches\StatPatch.cs" />
         <Compile Include="Mian\TopicOfLove.cs" />
-        <Compile Include="Mian\Util.cs" />
+        <Compile Include="Mian\TolUtil.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="default_config.json" />
@@ -88,6 +92,13 @@
         </Reference>
         <Reference Include="UnityEngine.UI">
             <HintPath>..\..\worldbox_Data\Managed\UnityEngine.UI.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    
+    <!-- Optional Dependencies -->
+    <ItemGroup>
+        <Reference Include="TOPICOFIDENTITY">
+            <HintPath>..\..\worldbox_Data\StreamingAssets\mods\NML\CompiledMods\TOPICOFIDENTITY.dll</HintPath>
         </Reference>
     </ItemGroup>
 </Project>

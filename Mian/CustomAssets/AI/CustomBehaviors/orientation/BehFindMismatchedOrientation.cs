@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using ai.behaviours;
+using Topic_of_Love.Mian.CustomAssets.Custom;
 using Topic_of_Love.Mian.CustomAssets.Traits;
 
-namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors;
+namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.orientation;
 public class BehFindMismatchedOrientation : BehaviourActionActor
     {
         public override BehResult execute(Actor pActor)
@@ -18,23 +20,20 @@ public class BehFindMismatchedOrientation : BehaviourActionActor
         {
             using (ListPool<Actor> pCollection = new ListPool<Actor>(4))
             {
-                var unfitPreferences = new List<Preference>();
-                if (pActor.hasCultureTrait("homophobic"))
+                var unfitPreferences = Orientation.Orientations.Where(orientation =>
                 {
-                    unfitPreferences.Add(Preference.All);
-                    unfitPreferences.Add(Preference.SameSex);
-                    unfitPreferences.Add(Preference.SameOrDifferentSex);
-                }
-                if (pActor.hasCultureTrait("heterophobic"))
-                {
-                    unfitPreferences.Add(Preference.DifferentSex);
-                }
-                
-                var pActorTraits = QueerTraits.GetQueerTraits(pActor, true);
-                if (pActorTraits.Count < 2) return null;
+                    if (pActor.hasCultureTrait("homophobic"))
+                        return orientation.IsHomo;
+                    if (pActor.hasCultureTrait("heterophobic"))
+                        return orientation.IsHetero;
+                    return false;
+                });
 
-                if (unfitPreferences.Contains(pActorTraits[0].preference) ||
-                    unfitPreferences.Contains(pActorTraits[1].preference)) return null;
+                var sexualPreference = Orientation.GetOrientation(pActor, true);
+                var romanticPreference = Orientation.GetOrientation(pActor, false);
+
+                if (unfitPreferences.Contains(sexualPreference) ||
+                    unfitPreferences.Contains(romanticPreference)) return null;
                 // don't insult someone else
                 
                 var pRandom = Randy.randomBool();
@@ -43,11 +42,9 @@ public class BehFindMismatchedOrientation : BehaviourActionActor
                 foreach (Actor pTarget in Finder.getUnitsFromChunk(pActor.current_tile, pChunkRadius, pRandom: pRandom))
                 {
                     if (pTarget != pActor && pActor.isSameIslandAs(pTarget))
-                    {
-                        var queerTraits = QueerTraits.GetQueerTraits(pTarget, true);
-                        if (queerTraits.Count < 2) continue;
-                        var romanticPreference = queerTraits[1].preference;
-                        var sexualPreference = queerTraits[0].preference;
+                    { 
+                        sexualPreference = Orientation.GetOrientation(pTarget, true);
+                        romanticPreference = Orientation.GetOrientation(pTarget, false);
 
                         if (unfitPreferences.Contains(romanticPreference) || unfitPreferences.Contains(sexualPreference))
                         {

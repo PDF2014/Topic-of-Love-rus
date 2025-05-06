@@ -1,5 +1,6 @@
 ﻿using System;
 using ai.behaviours;
+using Topic_of_Love.Mian.CustomAssets.Custom;
 using Topic_of_Love.Mian.CustomAssets.Traits;
 
 namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.other;
@@ -39,7 +40,7 @@ public class BehFindAPartner : BehaviourActionActor
         if (_customCheck != null && !_customCheck(pActor))
             return BehResult.Stop;
         
-        Util.Debug(pActor.getName() + " is attempting to locate lover for romance!");
+        TolUtil.Debug(pActor.getName() + " is attempting to locate lover for romance!");
 
         Actor target = null;
 
@@ -48,15 +49,15 @@ public class BehFindAPartner : BehaviourActionActor
             target = pActor.lover;
 
         if (pActor.hasLover() && IsForReproduction() &&
-            Util.CanReproduce(pActor, pActor.lover) && target != pActor.lover)
+            TolUtil.CanReproduce(pActor, pActor.lover) && target != pActor.lover)
             return BehResult.Stop;
         
         if (target == null && _mustBeLover)
             return BehResult.Stop;
         
-        if (!Util.WillDoIntimacy(pActor, _sexReason, target != null, true))
+        if (!TolUtil.WillDoIntimacy(pActor, _sexReason, target != null, true))
         {
-            Util.Debug("They decided that they will not do it.");
+            TolUtil.Debug("They decided that they will not do it.");
             return BehResult.Stop;
         }
         
@@ -74,7 +75,7 @@ public class BehFindAPartner : BehaviourActionActor
                 return BehResult.Stop;
         }
         
-        Util.Debug("Lover found!");
+        TolUtil.Debug("Lover found!");
         
         pActor.beh_actor_target = target;
         target.makeWait(_distance / 2);
@@ -99,7 +100,7 @@ public class BehFindAPartner : BehaviourActionActor
         
         if (!pActor.isOnSameIsland(target) || target.isLying() || pActor.distanceToActorTile(target) > _distance)
             return false;
-        if (_mustBeReproduceable && (!Util.CanMakeBabies(target) || !Util.CanReproduce(pActor, target)))
+        if (_mustBeReproduceable && (!BabyHelper.canMakeBabies(target) || !TolUtil.CanReproduce(pActor, target)))
             return false;
         var isSexual = _sexReason != null;
         if (isSexual)
@@ -109,15 +110,15 @@ public class BehFindAPartner : BehaviourActionActor
             if(IsForReproduction())
                 return (pActor.isSameSubspecies(target.subspecies) 
                        || (target.isSapient() && pActor.isSapient() 
-                                               && QueerTraits.PreferenceMatches(target, pActor, true)))
-                       && Util.WillDoIntimacy(target, _sexReason, target.lover == pActor);
+                                               && Preferences.PreferenceMatches(target, pActor, true)))
+                       && TolUtil.WillDoIntimacy(target, _sexReason, target.lover == pActor);
 
-            return Util.WillDoIntimacy(target, _sexReason, target.lover == pActor) &&
-                   ((_mustMatchPreference && QueerTraits.PreferenceMatches(pActor, target, true)) ||
+            return TolUtil.WillDoIntimacy(target, _sexReason, target.lover == pActor) &&
+                   ((_mustMatchPreference && Preferences.PreferenceMatches(pActor, target, true)) ||
                     !_mustMatchPreference);
         }
         
-        if (_mustMatchPreference && !QueerTraits.PreferenceMatches(pActor, target, false))
+        if (_mustMatchPreference && !Preferences.PreferenceMatches(pActor, target, false))
         {
             return false;
         }

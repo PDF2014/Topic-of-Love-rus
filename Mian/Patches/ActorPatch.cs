@@ -5,12 +5,56 @@ using Topic_of_Love.Mian.CustomAssets;
 using Topic_of_Love.Mian.CustomAssets.Traits;
 using Topic_of_Love.Mian.CustomManagers.Dateable;
 using HarmonyLib;
+using NeoModLoader.General;
+using NeoModLoader.services;
+using Topic_of_Love.Mian.CustomAssets.Custom;
+using UnityEngine.Rendering;
 
 namespace Topic_of_Love.Mian.Patches;
 
 [HarmonyPatch(typeof(Actor))]
 public class ActorPatch
 {
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(Actor.removeTrait), typeof(ActorTrait))]
+    static void ClearTraitPatch(ActorTrait pTrait, Actor __instance)
+    {
+        if (pTrait is PreferenceTrait preferenceTrait)
+        {
+            Orientations.CreateOrientationBasedOnPrefChange(__instance, preferenceTrait);
+        }
+    }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(Actor.addTrait), typeof(ActorTrait), typeof(bool))]
+    static void AddTraitPatch(ActorTrait pTrait, Actor __instance)
+    {
+        // removes preference traits if they are all added for some reason 
+        foreach (var type in Preferences.PreferenceTypes.Keys)
+        {
+            // Romantic
+            
+            var list = Preferences.GetActorPreferencesFromType(__instance, type);
+            var toCompare = Preferences.GetPreferencesFromType(type);
+
+            if (list.Count == toCompare.Count)
+                __instance.removeTraits(list);
+            
+            // Sexual
+            
+            list = Preferences.GetActorPreferencesFromType(__instance, type, true);
+            toCompare = Preferences.GetPreferencesFromType(type, true);
+
+            if (list.Count == toCompare.Count)
+                __instance.removeTraits(list);
+        }
+
+        if (pTrait is PreferenceTrait preferenceTrait)
+        {
+            Orientations.CreateOrientationBasedOnPrefChange(__instance, preferenceTrait);
+        }
+    }
+    
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Actor.buildCityAndStartCivilization))]
     static void BuildCityAndStartCivPatch(Actor __instance)
@@ -35,7 +79,7 @@ public class ActorPatch
                 && __instance.attackedBy != null && !lover.isLying()  && !lover.shouldIgnoreTarget(__instance.attackedBy)
                 && lover.distanceToObjectTarget(__instance.attackedBy) < 40)
             {
-                Util.Debug(lover.getName() + "'s lover was attacked! They are going to defend them.");
+                TolUtil.Debug(lover.getName() + "'s lover was attacked! They are going to defend them.");
                 lover.startFightingWith(__instance.attackedBy);
             }
         }
@@ -56,39 +100,75 @@ public class ActorPatch
     {
         static void Postfix(Actor __instance)
         {
+            // maybe we can reintroduce fluid preferences in the future?
+            
             if (__instance.isAdult()) // fluid sexuality
             {
-                if (!QueerTraits.HasQueerTraits(__instance)){
-                    QueerTraits.GiveQueerTraits(__instance, false, true);
-                    __instance.changeHappiness("true_self");
-                }
-                else
+                if (!__instance.hasTrait("unfluid"))
                 {
-                    bool changed = false;
-                    var list = QueerTraits.GetQueerTraits(__instance);
-                    list = QueerTraits.RandomizeQueerTraits(__instance, true, list);
-                    if (__instance.hasTrait("abroromantic") && Randy.randomChance(0.1f))
+                    // preference for gender
+                    if (Randy.randomChance(0.005f))
                     {
-                        QueerTraits.CleanQueerTraits(__instance, false);
-                        __instance.addTrait(list[1]);
-                        changed = true;
+                        if (Randy.randomBool())
+                        {
+                            __instance.addTrait(Preferences.RandomPreferenceFromType("identity", Randy.randomBool()));
+                        }
+                        else
+                        {
+                            var preferences = Preferences.GetActorPreferencesFromType(__instance, "identity", Randy.randomBool());
+                            if (preferences.Count > 0)
+                            {
+                                __instance.removeTrait(preferences.GetRandom());
+                            }
+                        }
                     }
-                    if (__instance.hasTrait("abrosexual") && Randy.randomChance(0.1f))
+
+                    if (TolUtil.IsTOIInstalled())
                     {
-                        QueerTraits.CleanQueerTraits(__instance, true);
-                        __instance.addTrait(list[0]);
-                        changed = true;
+                        // preference for masculinity/femininity
+                        if (Randy.randomChance(0.01f))
+                        {
+                            if (Randy.randomBool())
+                            {
+                                __instance.addTrait(Preferences.RandomPreferenceFromType("expression", Randy.randomBool()));
+                            }
+                            else
+                            {
+                                var preferences = Preferences.GetActorPreferencesFromType(__instance, "expression", Randy.randomBool());
+                                if (preferences.Count > 0)
+                                {
+                                    __instance.removeTrait(preferences.GetRandom());
+                                }
+                            }
+                        }
+                
+                        // preference for genitals
+                        if (Randy.randomChance(0.005f))
+                        {
+                            if (Randy.randomBool())
+                            {
+                                __instance.addTrait(Preferences.RandomPreferenceFromType("genital", true));
+                            }
+                            else
+                            {
+                                var preferences = Preferences.GetActorPreferencesFromType(__instance, "genital", true);
+                                if (preferences.Count > 0)
+                                {
+                                    __instance.removeTrait(preferences.GetRandom());
+                                }
+                            }
+                        }   
                     }
-                    if(changed)
-                        __instance.changeHappiness("true_self");
                 }
-                if(QueerTraits.GetPreferenceFromActor(__instance, true) != Preference.Neither && Util.IsOrientationSystemEnabledFor(__instance))
-                    Util.ChangeIntimacyHappinessBy(__instance.a, -Randy.randomFloat(5, 10f));
+                
+                // maybe rework so that aromantic/asexual ppl still experience intimacy happiness in some way?
+                if(!Preferences.Dislikes(__instance, true) && TolUtil.IsOrientationSystemEnabledFor(__instance))
+                    TolUtil.ChangeIntimacyHappinessBy(__instance.a, -Randy.randomFloat(5, 10f));
                 else
                     __instance.data.set("intimacy_happiness", 100f);
-            } else if (!__instance.isAdult() && Randy.randomChance(0.1f)) // random chance younger kid finds their orientations
+            } else if (!__instance.isAdult() && Randy.randomChance(0.1f) && !Preferences.HasAPreference(__instance))
             {
-                QueerTraits.GiveQueerTraits(__instance, false, true);
+                TolUtil.NewPreferences(__instance);
                 __instance.changeHappiness("true_self");
             }
             
@@ -114,8 +194,8 @@ public class ActorPatch
                 {
                     if (Randy.randomChance(0.05f))
                     {
-                        Util.Debug(__instance.getName() + " has forgived " + actor.getName());
-                        Util.AddOrRemoveUndateableActor(__instance, actor); 
+                        TolUtil.Debug(__instance.getName() + " has forgived " + actor.getName());
+                        TolUtil.AddOrRemoveUndateableActor(__instance, actor); 
                     }   
                 }
             }
@@ -125,17 +205,23 @@ public class ActorPatch
                 __instance.data.set("just_lost_lover", false);
             } 
 
-            // Randomize breaking up (1% if preferences match. 25% if preferences do not match.) 
-            
-            // break up is too common rn, let's implement a system in the future to get lovers back together
-            if (__instance.hasLover() && Util.CanStopBeingLovers(__instance) &&
-                ((Util.IsOrientationSystemEnabledFor(__instance) 
-                  && Randy.randomChance(!QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.25f : 0.01f)) 
-                 || (!Util.IsOrientationSystemEnabledFor(__instance) && !Util.CanReproduce(__instance, __instance.lover))))
+            if (__instance.hasLover())
             {
-                if (!__instance.hasCultureTrait("committed") || !__instance.lover.hasCultureTrait("committed"))
+                var breakingUpChance = 0.005f;
+                if (!Preferences.PreferenceMatches(__instance, __instance.lover, "identity", false))
+                    breakingUpChance += 0.2f;
+                if (!Preferences.PreferenceMatches(__instance, __instance.lover, "expression", false))
+                    breakingUpChance += 0.05f;
+                var wantsToBreakUp = Randy.randomChance(breakingUpChance);
+                                
+                if(TolUtil.CanStopBeingLovers(__instance) &&
+                    ( (TolUtil.IsOrientationSystemEnabledFor(__instance) && wantsToBreakUp) 
+                     || (!TolUtil.IsOrientationSystemEnabledFor(__instance) && !TolUtil.CanReproduce(__instance, __instance.lover))))
                 {
-                    Util.BreakUp(__instance);   
+                    if (!__instance.hasCultureTrait("committed") || !__instance.lover.hasCultureTrait("committed"))
+                    {
+                        TolUtil.BreakUp(__instance);   
+                    }   
                 }
             }
         } 
@@ -162,10 +248,10 @@ public class ActorPatch
             
             if (
                 // DateableManager.Manager.IsActorUndateable(pTarget, __instance)
-                Util.CannotDate(pTarget, __instance)
+                TolUtil.CannotDate(pTarget, __instance)
                 ||
-                 (!QueerTraits.PreferenceMatches(__instance, pTarget, false) && Util.IsOrientationSystemEnabledFor(__instance))
-                 || (!QueerTraits.PreferenceMatches(pTarget, __instance, false) && Util.IsOrientationSystemEnabledFor(pTarget))
+                 (!Preferences.PreferenceMatches(__instance, pTarget, false) && TolUtil.IsOrientationSystemEnabledFor(__instance))
+                 || (!Preferences.PreferenceMatches(pTarget, __instance, false) && TolUtil.IsOrientationSystemEnabledFor(pTarget))
                 
                 || __instance.hasLover()
                 || pTarget.hasLover()
@@ -179,12 +265,12 @@ public class ActorPatch
                                                              && (__instance.isSapient() && pTarget.isSapient() || !mustBeSmart)
                                                              && !pTarget.hasXenophobic() || !allowCrossSpeciesLove)) // subspecies stuff!
                 
-                || !Util.CanFallInLove(pTarget)
-                || !Util.CanFallInLove(__instance)
+                || !TolUtil.CanFallInLove(pTarget)
+                || !TolUtil.CanFallInLove(__instance)
                 
                 // if queer but culture trait says they do not matter
-                || ((!Util.IsOrientationSystemEnabledFor(__instance) || !Util.IsOrientationSystemEnabledFor(pTarget))
-                    && !Util.CanReproduce(__instance, pTarget)))
+                || ((!TolUtil.IsOrientationSystemEnabledFor(__instance) || !TolUtil.IsOrientationSystemEnabledFor(pTarget))
+                    && !TolUtil.CanReproduce(__instance, pTarget)))
             {
                 __result = false;
                 return false;

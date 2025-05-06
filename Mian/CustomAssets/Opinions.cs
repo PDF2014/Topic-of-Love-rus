@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using NeoModLoader.services;
+using Topic_of_Love.Mian.CustomAssets.Custom;
 using Topic_of_Love.Mian.CustomAssets.Traits;
 
 namespace Topic_of_Love.Mian.CustomAssets;
@@ -15,9 +16,7 @@ public class Opinions
             calc = (pMain, pTarget) =>
             {
                 var requirement = pTarget.getUnits().Count() / 2;
-                var homoUnits = pTarget.getUnits().Count(unit => 
-                    QueerTraits.IncludesHomoPreference(QueerTraits.GetPreferenceFromActor(unit, false)) ||
-                    QueerTraits.IncludesHomoPreference(QueerTraits.GetPreferenceFromActor(unit, true)));
+                var homoUnits = pTarget.getUnits().Count(Orientation.IsAHomo);
                 
                 if (pMain.hasCulture() && pMain.culture.hasTrait("homophobic"))
                 {
@@ -36,18 +35,14 @@ public class Opinions
                     {
                         
                         requirement = pMain.getUnits().Count() / 2;
-                        homoUnits = pMain.getUnits().Count(unit => 
-                            QueerTraits.IncludesHomoPreference(QueerTraits.GetPreferenceFromActor(unit, false)) ||
-                            QueerTraits.IncludesHomoPreference(QueerTraits.GetPreferenceFromActor(unit, true)));
+                        homoUnits = pMain.getUnits().Count(Orientation.IsAHomo);
                         if (homoUnits > requirement)
                             return 20;
                     }   
                 } else if (pTarget.hasCulture() && pTarget.culture.hasTrait("homophobic"))
                 {
                     requirement = pMain.getUnits().Count() / 2;
-                    homoUnits = pMain.getUnits().Count(unit => 
-                        QueerTraits.IncludesHomoPreference(QueerTraits.GetPreferenceFromActor(unit, false)) ||
-                        QueerTraits.IncludesHomoPreference(QueerTraits.GetPreferenceFromActor(unit, true)));
+                    homoUnits = pMain.getUnits().Count(Orientation.IsAHomo);
                     if (homoUnits > requirement)
                         return -50;
                 }
@@ -63,9 +58,7 @@ public class Opinions
             calc = (pMain, pTarget) =>
             {
                 var requirement = pTarget.getUnits().Count() / 2;
-                var heteroUnits = pTarget.getUnits().Count(unit => 
-                    QueerTraits.GetPreferenceFromActor(unit, false).Equals(Preference.DifferentSex) ||
-                    QueerTraits.GetPreferenceFromActor(unit, true).Equals(Preference.DifferentSex));
+                var heteroUnits = pTarget.getUnits().Count(Orientation.IsAHetero);
                 
                 if (pMain.hasCulture() && pMain.culture.hasTrait("heterophobic"))
                 {
@@ -83,18 +76,14 @@ public class Opinions
                     if(heteroUnits > requirement)
                     {
                         requirement = pMain.getUnits().Count() / 2;
-                        heteroUnits = pMain.getUnits().Count(unit => 
-                            QueerTraits.GetPreferenceFromActor(unit, false).Equals(Preference.DifferentSex) ||
-                            QueerTraits.GetPreferenceFromActor(unit, true).Equals(Preference.DifferentSex));
+                        heteroUnits = pMain.getUnits().Count(Orientation.IsAHetero);
                         if (heteroUnits > requirement)
                             return 20;
                     }
                 }else if (pTarget.hasCulture() && pTarget.culture.hasTrait("heterophobic"))
                 {
                     requirement = pMain.getUnits().Count() / 2;
-                    heteroUnits = pMain.getUnits().Count(unit => 
-                        QueerTraits.GetPreferenceFromActor(unit, false).Equals(Preference.DifferentSex) ||
-                        QueerTraits.GetPreferenceFromActor(unit, true).Equals(Preference.DifferentSex));
+                    heteroUnits = pMain.getUnits().Count(Orientation.IsAHetero);
                     if (heteroUnits > requirement)
                         return -50;
                 }

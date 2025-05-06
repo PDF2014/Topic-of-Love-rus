@@ -1,6 +1,6 @@
 ﻿using ai.behaviours;
 
-namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors;
+namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.orientation;
 public class BehInsultOrientation : BehaviourActionActor
 {
     public override BehResult execute(Actor pActor)

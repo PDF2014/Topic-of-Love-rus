@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using HarmonyLib;
 using NeoModLoader.General;
+using NeoModLoader.services;
+using Topic_of_Love.Mian.CustomAssets;
+using Topic_of_Love.Mian.CustomAssets.Custom;
+using Topic_of_Love.Mian.CustomAssets.Traits;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,30 +13,61 @@ namespace Topic_of_Love.Mian.Patches;
 
 // Big credits to xing_yao on Discord for this!
 [HarmonyPatch(typeof(UnitWindow))]
-public class UnitWindowPatch
+public class StatPatch
 {
-    private class Stat
+    private class Stat<T>
     {
         public readonly string Name;
         public readonly string IconPath;
-        public readonly Func<Actor, float> Value;
+        public readonly Func<Actor, T> Value;
         
-        public Stat(string name, string iconPath, Func<Actor, float> value)
+        public Stat(string name, Func<Actor, T> value, string iconPath=null)
         {
             Name=name;
             IconPath=iconPath;
             Value=value;
         }
     }
-    private static Stat[] _stats = {
-        new ("intimacy_happiness", "ui/Icons/iconLovers", actor =>
+    private static Stat<float>[] _icons = {
+        new ("intimacy_happiness", actor =>
         {
             actor.data.get("intimacy_happiness", out float happiness);
             return happiness;
+        }, "ui/Icons/iconLovers"),
+    };
+    private static Stat<Dictionary<string, string>>[] _stats = {
+        new ("sexual_orientation", actor =>
+        {
+            var orientationType = Orientation.GetOrientation(actor, true);
+            if (orientationType != null)
+            {
+
+                Dictionary<string, string> dict = new();
+                dict.Add("value", LM.Get(orientationType.SexualPathLocale));
+                dict.Add("hex_code", orientationType.HexCode);
+                dict.Add("icon", orientationType.SexualPathIcon);
+
+                return dict;
+            }
+            return null;
         }),
+        new ("romantic_orientation", actor =>
+        {
+            var orientationType = Orientation.GetOrientation(actor, false);
+            if (orientationType != null)
+            {
+                Dictionary<string, string> dict = new();
+                dict.Add("value", LM.Get(orientationType.RomanticPathLocale));
+                dict.Add("hex_code", orientationType.HexCode);
+                dict.Add("icon", orientationType.RomanticPathIcon);
+
+                return dict;            
+            }
+            return null;
+        })
     };
     
-    private static bool _initialized;
+    private static bool _initializedIcons;
     [HarmonyPostfix]
     [HarmonyPatch(nameof(UnitWindow.OnEnable))]
     static void WindowCreatureInfo(UnitWindow __instance)
@@ -39,9 +75,9 @@ public class UnitWindowPatch
         if (__instance.actor == null || !__instance.actor.isAlive())
             return;
         
-        if (!_initialized)
+        if (!_initializedIcons)
         {
-            _initialized = true;
+            _initializedIcons = true;
             Initialize(__instance);
         }
 
@@ -50,7 +86,7 @@ public class UnitWindowPatch
     
     private static void OnEnable(UnitWindow window)
     {
-        foreach (var stat in _stats)
+        foreach (var stat in _icons)
         {
             window.setIconValue(stat.Name, stat.Value(window.actor));
         }
@@ -72,14 +108,14 @@ public class UnitWindowPatch
                 .GetComponent<Image>()
                 .enabled = true;
 
-            var contentTransform = window.gameObject.transform.Find(
+            var moreIconsTransform = window.gameObject.transform.Find(
                 "Background/Scroll View/Viewport/Content/content_more_icons"
             ); // where the icons are
 
-            contentTransform.gameObject.AddOrGetComponent<StatsIconContainer>();
+            moreIconsTransform.gameObject.AddOrGetComponent<StatsIconContainer>();
             
-            var iconGroupTemplate = contentTransform.GetChild(4);
-            var iconGroup = GameObject.Instantiate(iconGroupTemplate, contentTransform);
+            var iconGroupTemplate = moreIconsTransform.GetChild(4);
+            var iconGroup = GameObject.Instantiate(iconGroupTemplate, moreIconsTransform);
             
             var iconTemplate = iconGroup.Find("i_kills");
             
@@ -90,7 +126,7 @@ public class UnitWindowPatch
                     GameObject.DestroyImmediate(child.gameObject);
             }
 
-            foreach (var iconData in _stats)
+            foreach (var iconData in _icons)
             {
                 var baseIcon = GameObject.Instantiate(iconTemplate, iconGroup);
                 var icon = baseIcon.GetComponent<StatsIcon>();
@@ -105,4 +141,20 @@ public class UnitWindowPatch
             iconGroup.name = "tol_icons";
             iconGroup.transform.localScale = new Vector3(1, 1, 1);
         }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(UnitWindow.showStatsRows))]
+    static void ShowStatsRowsPatch(UnitWindow __instance)
+    {
+        foreach (var stat in _stats)
+        {
+            var value = stat.Value(__instance.actor);
+            if (value != null)
+            {
+                value.TryGetValue("hex_code", out var hexCode);
+                value.TryGetValue("icon", out var icon);
+                __instance.showStatRow(stat.Name, value["value"], hexCode, pColorText: true, pIconPath: icon);
+            }
+        }
+    }
 }

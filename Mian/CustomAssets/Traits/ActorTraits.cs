@@ -10,6 +10,17 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             
             Add(new ActorTrait
             {
+                id = "unfluid",
+                group_id = "mind",
+                rate_birth = 8,
+                type = TraitType.Other,
+                unlocked_with_achievement = false,
+                rarity = Rarity.R1_Rare,
+                needs_to_be_explored = true,
+                affects_mind = true
+            });
+            Add(new ActorTrait
+            {
                 id = "sex_indifferent",
                 group_id = "mind",
                 rate_birth = 2,
