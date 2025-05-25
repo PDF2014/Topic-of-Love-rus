@@ -21,7 +21,7 @@ public class DecisionAssetPatch
                 if (pActor.hasLover() && 
                     (!Preferences.PreferenceMatches(pParentA, pParentB, true)
                      || !Preferences.PreferenceMatches(pParentB, pParentA, true) 
-                     || !TolUtil.CanReproduce(pParentA, pParentB)
+                     || !TolUtil.CouldReproduce(pParentA, pParentB)
                     || !BabyHelper.canMakeBabies(pParentA) || !BabyHelper.canMakeBabies(pParentB)))
                 {
                     __result = false;

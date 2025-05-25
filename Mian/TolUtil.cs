@@ -36,7 +36,7 @@ namespace Topic_of_Love.Mian
 
             return canMake.GetRandom();
         }
-        public static bool CanReproduce(Actor pActor, Actor pTarget)
+        public static bool CouldReproduce(Actor pActor, Actor pTarget)
         {
             return pActor.subspecies.isPartnerSuitableForReproduction(pActor, pTarget);
         }
@@ -133,7 +133,7 @@ namespace Topic_of_Love.Mian
             
             if (intimacyHappiness < 0)
             {
-                var toReduce = intimacyHappiness / 100;
+                var toReduce = intimacyHappiness / 300;
                 reduceChances += toReduce;
             }
 
@@ -143,7 +143,7 @@ namespace Topic_of_Love.Mian
             reduceChances = Math.Max(-0.2f, reduceChances);
 
             if(!allowedToHaveIntimacy
-               && Randy.randomChance(Math.Max(0, (pActor.hasTrait("unfaithful") ? 0.6f : 0.95f) + reduceChances)))
+               && Randy.randomChance(Math.Max(0, (pActor.hasTrait("unfaithful") ? 0.6f : .99f) + reduceChances)))
             {
                 Debug("Not allowed to do intimacy because of lover and not low enough happiness");
                 return false;
@@ -247,7 +247,7 @@ namespace Topic_of_Love.Mian
                                                               && actor.lover.hasCultureTrait("sexual_expectations"))
                                                               || (actor.hasSubspeciesTrait("preservation") && IsDyingOut(actor) 
                                                                   && sexReason.Equals("reproduction")
-                                                                  && (!BabyHelper.canMakeBabies(actor.lover) || !CanReproduce(actor, actor.lover)))));
+                                                                  && (!BabyHelper.canMakeBabies(actor.lover) || !CouldReproduce(actor, actor.lover)))));
         }
         
         public static bool CanHaveRomanceWithoutRepercussionsWithSomeoneElse(Actor actor)
@@ -320,63 +320,7 @@ namespace Topic_of_Love.Mian
             lover.data.set("force_lover", false);
             actor.data.set("force_lover", false);
         }
-
-        public static void HandleFamilyRemoval(Actor actor)
-        {
-            if (actor.hasFamily() && actor.hasLover())
-            {
-                var family = actor.family;
-                var lover = actor.lover;
-                if (family.isMainFounder(actor) && family.isMainFounder(lover))
-                {
-                    if (family.countUnits() <= 2)
-                    {
-                        actor.setFamily(null);
-                        lover.setFamily(null);
-                        return;
-                    }
-                    
-                    var actor1Units = new List<Actor>();
-                    var actor2Units = new List<Actor>();
-                    
-                    foreach (var unit in family.getUnits())
-                    {
-                        if (unit == actor || unit == lover)
-                            continue;
-                        
-                        var sameAsActor1 = unit.isSameSubspecies(actor.subspecies);
-                        var sameAsActor2 = unit.isSameSubspecies(lover.subspecies);
-                        if ((sameAsActor1 && sameAsActor2) || (!sameAsActor1 && !sameAsActor2))
-                        {
-                            if(Randy.randomChance(0.5f))
-                                actor1Units.Add(unit);
-                            else
-                                actor2Units.Add(unit);
-                            continue;
-                        }
-                        
-                        if(sameAsActor1)
-                            actor1Units.Add(unit);
-                        if(sameAsActor2)
-                            actor2Units.Add(unit);
-                    }
-                    
-                    var family1 = BehaviourActionBase<Actor>.world.families.newFamily(actor, actor.current_tile, null);
-                    var family2 = BehaviourActionBase<Actor>.world.families.newFamily(lover, lover.current_tile, null);
-                    
-                    foreach (var unit in actor1Units)
-                    {
-                        unit.setFamily(family1);
-                    }
-                    
-                    foreach (var unit in actor2Units)
-                    {
-                        unit.setFamily(family2);
-                    }
-                }
-            }
-        }
-
+        
         public static bool IsOrientationSystemEnabledFor(Actor pActor)
         {
             return !pActor.hasCultureTrait("orientationless");

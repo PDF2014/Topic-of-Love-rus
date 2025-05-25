@@ -22,7 +22,7 @@ public class BehKissTarget : BehaviourActionActor
         pActor.makeWait(1.5f);
         pActor.beh_actor_target.a.makeWait(1.5f);
 
-        TolUtil.ActorsInteracted(pActor, pActor.beh_actor_target.a);
+        TolUtil.ActorsInteractedIntimately(pActor, pActor.beh_actor_target.a);
         pActor.addStatusEffect("just_kissed");
         pActor.beh_actor_target.addStatusEffect("just_kissed");
             

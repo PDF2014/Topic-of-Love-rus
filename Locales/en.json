@@ -122,6 +122,7 @@
   "sexualivf_successful": "Sexual IVF successful! They will attempt to make a baby via sexual IVF as soon as possible. Outer forces may interrupt this task.",
   "sexualivf_invalid_unit": "This unit is currently pregnant or has no house! Cancelled operation.",
   "sexualivf_cancelled": "Force sexual IVF cancelled!",
+  "sexualivf_incapable_reproduce": "The two are incapable of reproducing together!",
   "ForceSexualIVF": "Force Sexual IVF",
   "ForceSexualIVF Description": "Force a lover to make a baby via sexual IVF",
 

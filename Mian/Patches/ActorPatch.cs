@@ -216,7 +216,7 @@ public class ActorPatch
                                 
                 if(TolUtil.CanStopBeingLovers(__instance) &&
                     ( (TolUtil.IsOrientationSystemEnabledFor(__instance) && wantsToBreakUp) 
-                     || (!TolUtil.IsOrientationSystemEnabledFor(__instance) && !TolUtil.CanReproduce(__instance, __instance.lover))))
+                     || (!TolUtil.IsOrientationSystemEnabledFor(__instance) && !TolUtil.CouldReproduce(__instance, __instance.lover))))
                 {
                     if (!__instance.hasCultureTrait("committed") || !__instance.lover.hasCultureTrait("committed"))
                     {
@@ -270,7 +270,7 @@ public class ActorPatch
                 
                 // if queer but culture trait says they do not matter
                 || ((!TolUtil.IsOrientationSystemEnabledFor(__instance) || !TolUtil.IsOrientationSystemEnabledFor(pTarget))
-                    && !TolUtil.CanReproduce(__instance, pTarget)))
+                    && !TolUtil.CouldReproduce(__instance, pTarget)))
             {
                 __result = false;
                 return false;

@@ -40,7 +40,6 @@ public class BehGetPossibleTileForSex : BehaviourActionActor
                 pActor.beh_building_target = homeBuilding;
             }
             sexActor.setTask("have_sex_go", pCleanJob: true, pClean: false, pForceAction: true);
-            sexActor.timer_action = 0.0f;
             return forceTaskImmediate(pActor, "have_sex_go", pClean: false, pForceAction: true);
         }
 

@@ -127,15 +127,15 @@ public class Decisions
                     if (!TolUtil.WantsBaby(actor.lover, false))
                         return false;
                         
-                    if (TolUtil.CanReproduce(actor, actor.lover) && !Preferences.BothPreferencesMatch(actor, actor.lover, true))
+                    if (TolUtil.CouldReproduce(actor, actor.lover) && !Preferences.BothPreferencesMatch(actor, actor.lover, true))
                         return true;
 
-                    if (TolUtil.CanReproduce(actor, actor.lover) &&
+                    if (TolUtil.CouldReproduce(actor, actor.lover) &&
                         Preferences.BothPreferencesMatch(actor, actor.lover, true))
                         return false;
                 }
                     
-                return bestFriend != null && TolUtil.CanReproduce(actor, bestFriend) && !bestFriend.hasStatus("pregnant") && actor.hasHouse();
+                return bestFriend != null && TolUtil.CouldReproduce(actor, bestFriend) && !bestFriend.hasStatus("pregnant") && actor.hasHouse();
             },
             list_civ = true,
             weight = 0.5f,

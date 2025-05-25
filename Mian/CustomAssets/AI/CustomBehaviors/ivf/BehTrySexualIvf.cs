@@ -21,7 +21,6 @@ public class BehTrySexualIvf : BehaviourActionActor
         TolUtil.Debug("Starting sexual ivf tasks for "+pActor.getName()+" and "+target.getName());
 
         target.setTask("go_and_wait_sexual_ivf", pCleanJob: true, pClean:false, pForceAction:true);
-        target.timer_action = 0.0f;
         return forceTask(pActor, "go_sexual_ivf", pClean: false);
     }
 }

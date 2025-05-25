@@ -92,44 +92,33 @@ public class BabyMakerPatch
 
                 if (familyParentA != null)
                 {
-                    actorFromData.setParent1(familyParentA);
                     familyParentA.changeHappiness("adopted_baby");
                 }
                 else
                 {
                     familyParentA = dominantParent;
-                    actorFromData.setParent1(familyParentA);
                 }
-
+                
                 if (familyParentB != null){
-                    actorFromData.setParent2(familyParentB);
                     familyParentB.changeHappiness("adopted_baby");
                 }else if (nonDominantParent != null)
                 {
                     familyParentB = nonDominantParent;
-                    actorFromData.setParent2(nonDominantParent);
                 }
+                
+                actorFromData.setParent1(dominantParent);
+                if(nonDominantParent != null)
+                    actorFromData.setParent2(nonDominantParent);
 
                 if (pAddToFamily)
                 {
-                    // if (familyParentA != null)
-                    // {
-                        if (!familyParentA.hasFamily())
-                            World.world.families.newFamily(familyParentA, familyParentA.current_tile, 
-                                familyParentB != null & !familyParentB.hasFamily() ? familyParentB : null);
-                        else if (familyParentB != null && !familyParentB.hasFamily())
-                        {
-                            World.world.families.newFamily(familyParentB, familyParentA.current_tile, null);
-                        }
-                        // actorFromData.setFamily(familyParentA.family);
-                    // }
-                    // else
-                    // {
-                    //     var randomParentToGoTo = dominantParent.hasFamily() 
-                    //                              && (Randy.randomChance(0.5f) || nonDominantParent == null) ? dominantParent : nonDominantParent;
-                    //     if(randomParentToGoTo != null && randomParentToGoTo.hasFamily())
-                    //         actorFromData.setFamily(randomParentToGoTo.family);
-                    // }
+                    if (!familyParentA.hasFamily())
+                        World.world.families.newFamily(familyParentA, familyParentA.current_tile, 
+                            familyParentB != null && !familyParentB.hasFamily() ? familyParentB : null);
+                    else if (familyParentB != null && !familyParentB.hasFamily())
+                    {
+                        World.world.families.newFamily(familyParentB, familyParentA.current_tile, null);
+                    }
                 }
                 BabyHelper.applyParentsMeta(familyParentA, familyParentB, actorFromData);
                 // the game seems to have some sort of code that chooses a baby's subspecies based on generation? not really sure how it works tbh
@@ -137,30 +126,19 @@ public class BabyMakerPatch
 
                 if (pCloneTraits || dominantParent.hasSubspeciesTrait("genetic_mirror"))
                 {
-                    if (pCloneTraits)
-                    {
-                        BabyHelper.traitsClone(actorFromData, dominantParent);
-                        if (nonDominantParent != null)
-                        {
-                            BabyHelper.traitsClone(actorFromData, nonDominantParent);
-                        }
-                    }
-                    else
-                    {
-                        BabyHelper.traitsClone(actorFromData, dominantParent);
-
-                        if (nonDominantParent != null)
-                        {
-                            BabyHelper.traitsInherit(actorFromData, nonDominantParent, null);   
-                        }                        
-                    }
+                    BabyHelper.traitsClone(actorFromData, dominantParent);
                 }
                 else
                 {
+                    if(familyParentA == dominantParent)
+                        familyParentA = null;
+                    if(familyParentB == nonDominantParent)
+                        familyParentB = null;
+                    
                     foreach (ActorTrait trait in (IEnumerable<ActorTrait>)actorFromData.subspecies.getActorBirthTraits()
                                  .getTraits())
                         actorFromData.addTrait(trait);
-                    BabyHelper.traitsInherit(actorFromData, pParent1, nonDominantParent);
+                    BabyHelperPatch.TraitsInherit(actorFromData, dominantParent, nonDominantParent, familyParentA, familyParentB);
                 }
 
                 actorFromData.checkTraitMutationOnBirth();

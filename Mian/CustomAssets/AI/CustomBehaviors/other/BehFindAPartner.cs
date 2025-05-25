@@ -49,7 +49,7 @@ public class BehFindAPartner : BehaviourActionActor
             target = pActor.lover;
 
         if (pActor.hasLover() && IsForReproduction() &&
-            TolUtil.CanReproduce(pActor, pActor.lover) && target != pActor.lover)
+            TolUtil.CouldReproduce(pActor, pActor.lover) && target != pActor.lover)
             return BehResult.Stop;
         
         if (target == null && _mustBeLover)
@@ -100,7 +100,7 @@ public class BehFindAPartner : BehaviourActionActor
         
         if (!pActor.isOnSameIsland(target) || target.isLying() || pActor.distanceToActorTile(target) > _distance)
             return false;
-        if (_mustBeReproduceable && (!BabyHelper.canMakeBabies(target) || !TolUtil.CanReproduce(pActor, target)))
+        if (_mustBeReproduceable && (!BabyHelper.canMakeBabies(target) || !TolUtil.CouldReproduce(pActor, target)))
             return false;
         var isSexual = _sexReason != null;
         if (isSexual)

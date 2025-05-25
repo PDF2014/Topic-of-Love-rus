@@ -36,7 +36,7 @@ public class BehCFBFSRPatch
         bool flag = false;
         if (pActor.hasFamily())
         {
-            if (pActor.family != pLover.family)
+            if ((pLover != null && pActor.family != pLover.family) || !pActor.family.isMainFounder(pActor))
                 flag = true;
         }
         else
@@ -57,7 +57,7 @@ public class BehCFBFSRPatch
         {
             TolUtil.Debug($"\nAble to make a baby?\n{pParentA.getName()}: "+(BabyHelper.canMakeBabies(pParentA)+$"\n${pParentB.getName()}: "+(BabyHelper.canMakeBabies(pParentB))));
 
-            if (!BabyHelper.canMakeBabies(pParentA) || !BabyHelper.canMakeBabies(pParentB) || !TolUtil.CanReproduce(pParentA, pParentB))
+            if (!BabyHelper.canMakeBabies(pParentA) || !BabyHelper.canMakeBabies(pParentB) || !TolUtil.CouldReproduce(pParentA, pParentB))
                 return false;
 
             // ensures that both subspecies HAVE not reached population limit

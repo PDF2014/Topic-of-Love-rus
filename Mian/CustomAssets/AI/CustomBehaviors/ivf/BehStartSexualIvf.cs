@@ -59,6 +59,8 @@ public class BehStartSexualIvf : BehaviourActionActor
             {
                 pregnantActor.data.set("familyParentB", pActor.lover.getID());
             }
+            
+            (new BehCheckForBabiesFromSexualReproduction()).checkFamily(pActor, pActor.lover);
 
             var reproductionStrategy = pregnantActor.subspecies.getReproductionStrategy();
             switch (reproductionStrategy)

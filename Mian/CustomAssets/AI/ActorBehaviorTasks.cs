@@ -36,7 +36,7 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
                 locale_key = "task_find_partner",
                 path_icon = "ui/Icons/status/just_kissed"
             };
-            findToKiss.addBeh(new BehFindAPartner(false, true, distance: 40f));
+            findToKiss.addBeh(new BehFindAPartner(false, true, true, distance: 40f));
             findToKiss.addBeh(new BehSetNextTask("try_kiss", pClean: false, pForce: true));
             Add(findToKiss);
 

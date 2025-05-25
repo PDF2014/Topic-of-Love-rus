@@ -1,4 +1,5 @@
 ﻿
+using EpPathFinding.cs;
 using Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.sex;
 
 namespace Topic_of_Love.Mian.CustomAssets
@@ -83,6 +84,8 @@ namespace Topic_of_Love.Mian.CustomAssets
                 select_button_action = _ => 
                 {
                     WorldTip.showNow("lover_selected", pPosition: "top");
+                    _selectedActorA = null;
+                    _selectedActorB = null;
                     return false;
                 },
                 click_special_action = (pTile, _) =>
@@ -235,6 +238,8 @@ namespace Topic_of_Love.Mian.CustomAssets
                 select_button_action = _ => 
                 {
                     WorldTip.showNow("lover_selected", pPosition: "top");
+                    _selectedActorA = null;
+                    _selectedActorB = null;
                     return false;
                 },
                 click_special_action = (pTile, _) =>
@@ -242,18 +247,6 @@ namespace Topic_of_Love.Mian.CustomAssets
                     var pActor = pTile != null ? ActionLibrary.getActorFromTile(pTile) : World.world.getActorNearCursor();
                     if (pActor == null)
                         return false;
-                    
-                    // if (!pActor.hasLover())
-                    // {
-                    //     ActionLibrary.showWhisperTip("no_lover");
-                    //     return false;
-                    // }
-                    //
-                    // if (!pActor.hasLover() && !pActor.hasBestFriend())
-                    // {
-                    //     ActionLibrary.showWhisperTip("sexualivf_invalid_unit");
-                    //     return false;
-                    // }
                     
                     if (_selectedActorA == null)
                     {
@@ -293,23 +286,15 @@ namespace Topic_of_Love.Mian.CustomAssets
                         _selectedActorB = null;
                         return false;
                     }
+
+                    if (!TolUtil.CouldReproduce(_selectedActorA, _selectedActorB))
+                    {
+                        ActionLibrary.showWhisperTip("sexualivf_incapable_reproduce");
+                        _selectedActorA = null;
+                        _selectedActorB = null;
+                        return false;
+                    }
                     
-                    //
-                    // var home = pActor.getHomeBuilding();
-                    //
-                    // if (pActor.hasLover() && (pActor.lover.hasStatus("pregnant") || !pActor.isSameIslandAs(pActor.lover) || !Util.CanReproduce(pActor, pActor.lover))
-                    //     && pActor.hasBestFriend() && (pActor.getBestFriend().hasStatus("pregnant") || !pActor.isOnSameIsland(pActor.getBestFriend()) || !Util.CanReproduce(pActor, pActor.getBestFriend())))
-                    // {
-                    //     ActionLibrary.showWhisperTip("sexualivf_unavailable");
-                    //     return false;
-                    // }
-                    //
-                    // if (pActor.hasLover() && Util.CanReproduce(pActor, pActor.lover) 
-                    //                       && pActor.isSameIslandAs(pActor.lover)
-                    //                       && !pActor.lover.hasStatus("pregnant"))
-                    //     pActor.beh_actor_target = pActor.lover;
-                    // else
-                    //     pActor.beh_actor_target = pActor.getBestFriend();
                     _selectedActorA.cancelAllBeh();
                     _selectedActorA.stopMovement();
                     _selectedActorB.cancelAllBeh();
@@ -317,14 +302,6 @@ namespace Topic_of_Love.Mian.CustomAssets
                     
                     _selectedActorA.beh_actor_target = _selectedActorB;
                     _selectedActorA.setTask("try_sexual_ivf", pCleanJob: true, pClean: false, pForceAction: true);
-                    
-                    // pActor.beh_building_target = home;
-                    // target.beh_actor_target = pActor;
-                    // target.beh_building_target = home;
-                    //
-                    // pActor.beh_actor_target.a.setTask("go_and_wait_sexual_ivf", pCleanJob: true, pClean:false, pForceAction:true);
-                    // pActor.beh_actor_target.a.timer_action = 0.0f;
-                    // pActor.setTask("go_sexual_ivf", pClean: false, pForceAction:true);
                     
                     TolUtil.ShowWhisperTipWithTime("sexualivf_successful", 24f);
                     _selectedActorA = null;
@@ -346,6 +323,8 @@ namespace Topic_of_Love.Mian.CustomAssets
                 select_button_action = _ => 
                 {
                     WorldTip.showNow("lover_selected", pPosition: "top");
+                    _selectedActorA = null;
+                    _selectedActorB = null;
                     return false;
                 },
                 click_special_action = (pTile, _) =>
