@@ -380,7 +380,7 @@ namespace Topic_of_Love.Mian
             {
                 if (Randy.randomBool())
                 {
-                    if (Randy.randomBool() && pActor.lover != target)
+                    if (pActor.lover != target)
                     {
                         if (pActor.canFallInLoveWith(target) 
                             && WillDoIntimacy(pActor, null, false, true)
