@@ -315,6 +315,8 @@ namespace Topic_of_Love.Mian
         public static void RemoveLovers(Actor actor)
         {
             var lover = actor.lover;
+            if (lover == null)
+                return;
             lover.setLover(null);
             actor.setLover(null);
             actor.data.set("just_lost_lover", true);

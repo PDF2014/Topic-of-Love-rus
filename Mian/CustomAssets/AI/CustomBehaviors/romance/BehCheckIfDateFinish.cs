@@ -43,7 +43,7 @@ public class BehCheckIfDateFinish : BehaviourActionActor
             }
         }
 
-        if (happiness >= 25f && pActor.lover != target)
+        if (happiness >= (pActor.getBestFriend() == target ? 10f : 25f) && pActor.lover != target)
         {
             TolUtil.PotentiallyCheatedWith(pActor, target);
             pActor.becomeLoversWith(target);

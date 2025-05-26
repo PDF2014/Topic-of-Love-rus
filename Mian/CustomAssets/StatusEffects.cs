@@ -133,6 +133,8 @@ public class StatusEffects
                     return false;
                 
                 var lover = cheatedActor.a.lover;
+                if (lover == null)
+                    return false;
                 TolUtil.RemoveLovers(cheatedActor.a);
                 if (Randy.randomChance(0.5f))
                 {

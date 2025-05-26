@@ -28,7 +28,7 @@ public class BehFinishTalkPatch
         if (pActor.hasCulture() && pActor.culture.hasTrait("elder_reverence") && __instance.throwDiceForGift(pActor, pTarget) && pActor.isAdult() && pTarget.getAge() > pActor.getAge())
             __instance.makeGift(pActor, pTarget);
         __instance.checkPassLearningAttributes(pActor, pTarget);
-        if (num1 != 0 && Randy.randomChance(0.1f))
+        if (num1 != 0 && Randy.randomChance(pActor.getBestFriend() == pTarget ? 0.75f : 0.1f))
         {
             if(pActor.canFallInLoveWith(pTarget))
                 pActor.becomeLoversWith(pTarget);
