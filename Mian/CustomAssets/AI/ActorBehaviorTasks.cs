@@ -4,6 +4,7 @@ using Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.orientation;
 using Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.other;
 using Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.romance;
 using Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.sex;
+using Topic_of_Love.Mian.CustomAssets.Custom;
 
 namespace Topic_of_Love.Mian.CustomAssets.AI
 {
@@ -36,7 +37,8 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
                 locale_key = "task_find_partner",
                 path_icon = "ui/Icons/status/just_kissed"
             };
-            findToKiss.addBeh(new BehFindAPartner(false, true, true, distance: 40f));
+            findToKiss.addBeh(new BehFindAPartner(false, true, true, distance: 40f, customValidity: (actor, target) => 
+                Preferences.SAndRPreferencesMatch(actor, target) || Randy.randomChance(0.5f)));
             findToKiss.addBeh(new BehSetNextTask("try_kiss", pClean: false, pForce: true));
             Add(findToKiss);
 

@@ -35,8 +35,7 @@ public class Decisions
                                            && (actor.hasLover() || actor.hasBestFriend())
                                            && !TolUtil.IsIntimacyHappinessEnough(actor, 100f)
                                            && TolUtil.IsOrientationSystemEnabledFor(actor)
-                                           && !actor.hasStatus("just_kissed")
-                                           && (Preferences.SAndRPreferencesMatch(actor, actor.lover) || Randy.randomChance(0.5f)),
+                                           && !actor.hasStatus("just_kissed"),
             list_civ = true,
             weight_calculate_custom = actor => TolUtil.IsIntimacyHappinessEnough(actor, 75f) ? 0.5f: 
                 TolUtil.IsIntimacyHappinessEnough(actor, 50f) ? 0.6f : TolUtil.IsIntimacyHappinessEnough(actor, 0) ? .8f : 
@@ -89,7 +88,6 @@ public class Decisions
         AssetManager.subspecies_traits.get("reproduction_same_sex").addDecision("reproduce_preservation");
         AssetManager.subspecies_traits.get("reproduction_hermaphroditic").addDecision("reproduce_preservation");
         
-        // should not always cause a pregnancy!
         Add(new DecisionAsset
         {
             id = "invite_for_sex",
