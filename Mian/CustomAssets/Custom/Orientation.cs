@@ -41,12 +41,14 @@ public class Orientation
         if (sexual)
         {
             if (_sexualSprite == null)
-                _sexualSprite = Resources.Load<Sprite>("ui/Icons/" + SexualPathIcon);
+                _sexualSprite = SpriteTextureLoader.getSprite("ui/Icons/" + SexualPathIcon);
+                // _sexualSprite = Resources.Load<Sprite>("ui/Icons/" + SexualPathIcon);
             return _sexualSprite;
         }
 
         if (_romanticSprite == null)
-            _romanticSprite = Resources.Load<Sprite>("ui/Icons/" + RomanticPathIcon);
+            _romanticSprite = SpriteTextureLoader.getSprite("ui/Icons/" + RomanticPathIcon);
+            // _romanticSprite = Resources.Load<Sprite>("ui/Icons/" + RomanticPathIcon);
         return _romanticSprite;
     }
 

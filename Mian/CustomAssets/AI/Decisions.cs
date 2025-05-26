@@ -114,7 +114,7 @@ public class Decisions
             id = "find_sexual_ivf",
             priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/status/adopted_baby",
-            cooldown = 15,
+            cooldown = 10,
             action_check_launch = actor =>
             {
                 if (!actor.isSapient() || !TolUtil.WantsBaby(actor, false))
@@ -138,7 +138,7 @@ public class Decisions
                 return bestFriend != null && TolUtil.CouldReproduce(actor, bestFriend) && !bestFriend.hasStatus("pregnant") && actor.hasHouse();
             },
             list_civ = true,
-            weight = 0.5f,
+            weight = 1f,
             only_safe = true,
             only_adult = true,
             cooldown_on_launch_failure = true
@@ -148,47 +148,6 @@ public class Decisions
     
             private static void Finish()
         {
-            // using (ListPool<DecisionAsset> list1 = new ListPool<DecisionAsset>(AssetManager.decisions_library.list_only_civ))
-            // {
-            //     using (ListPool<DecisionAsset> list2 = new ListPool<DecisionAsset>(AssetManager.decisions_library.list_only_children))
-            //     {
-            //         using (ListPool<DecisionAsset> list3 = new ListPool<DecisionAsset>(AssetManager.decisions_library.list_only_city))
-            //         {
-            //             using (ListPool<DecisionAsset> list4 = new ListPool<DecisionAsset>(AssetManager.decisions_library.list_only_animal))
-            //             {
-            //                 using (ListPool<DecisionAsset> list5 = new ListPool<DecisionAsset>(AssetManager.decisions_library.list_others))
-            //                 {
-            //                     int num = 0;
-            //                     for(int i = 0; i < _decisionAssets.Count; i++)
-            //                     {
-            //                         DecisionAsset decisionAsset = _decisionAssets[i];
-            //                         decisionAsset.decision_index = num++;
-            //                         decisionAsset.priority_int_cached = (int) decisionAsset.priority;
-            //                         decisionAsset.has_weight_custom = decisionAsset.weight_calculate_custom != null;
-            //                         if (!decisionAsset.unique)
-            //                         {
-            //                             if (decisionAsset.list_baby)
-            //                                 list2.Add(decisionAsset);
-            //                             else if (decisionAsset.list_animal)
-            //                                 list4.Add(decisionAsset);
-            //                             else if (decisionAsset.list_civ)
-            //                                 list1.Add(decisionAsset);
-            //                             else
-            //                                 list5.Add(decisionAsset);
-            //                         }
-            //                     }
-            //                     this.list_only_civ = list1.ToArray<DecisionAsset>();
-            //                     this.list_only_children = list2.ToArray<DecisionAsset>();
-            //                     this.list_only_city = list3.ToArray<DecisionAsset>();
-            //                     this.list_only_animal = list4.ToArray<DecisionAsset>();
-            //                     this.list_others = list5.ToArray<DecisionAsset>();
-            //                     base.linkAssets();
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
-            
             for(int i = 0; i < _decisionAssets.Count; i++)
             {
                 var decisionAsset = _decisionAssets[i];

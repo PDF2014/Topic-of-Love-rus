@@ -144,8 +144,6 @@ namespace Topic_of_Love.Mian.CustomAssets
         private static void Add(HappinessAsset asset)
         {
             AssetManager.happiness_library.add(asset);
-            if(asset.path_icon == null)
-                asset.path_icon = "ui/Icons/status"+asset.id;
             asset.index = AssetManager.happiness_library.list.Count-1;
         }
     }

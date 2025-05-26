@@ -12,7 +12,7 @@ public class SpriteTextureLoaderPatch
     {
         if (__result == null)
         {
-            __result = (Sprite) Resources.Load("ui/Icons/wip");
+            __result = (Sprite) Resources.Load("ui/Icons/wip", typeof(Sprite));
         }
     }
 }
