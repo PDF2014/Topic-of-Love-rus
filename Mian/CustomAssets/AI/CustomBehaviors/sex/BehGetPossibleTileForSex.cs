@@ -3,6 +3,12 @@
 namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.sex;
 public class BehGetPossibleTileForSex : BehaviourActionActor
     {
+        private bool mustBePrivate;
+
+        public BehGetPossibleTileForSex(bool mustBePrivate=true)
+        {
+            this.mustBePrivate = mustBePrivate;
+        }
         public bool isPlacePrivateForBreeding(Actor actor, WorldTile tile)
         {
             int num1 = Toolbox.countUnitsInChunk(tile);
@@ -23,7 +29,7 @@ public class BehGetPossibleTileForSex : BehaviourActionActor
             var homeBuilding = GetHomeBuilding(pActor, pActor.beh_actor_target.a);
 
             pActor.beh_tile_target = homeBuilding != null ? homeBuilding.current_tile : pActor.beh_actor_target.current_tile;
-            if (!isPlacePrivateForBreeding(pActor, pActor.beh_tile_target))
+            if (!isPlacePrivateForBreeding(pActor, pActor.beh_tile_target) && mustBePrivate)
             {
                 TolUtil.Debug("Cancelled because of lack of privacy");
                 return BehResult.Stop;

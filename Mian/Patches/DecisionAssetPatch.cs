@@ -5,31 +5,30 @@ using Topic_of_Love.Mian.CustomAssets.Custom;
 
 namespace Topic_of_Love.Mian.Patches;
 
+[HarmonyPatch(typeof(DecisionAsset))]
 public class DecisionAssetPatch
 {
     // stops people with mismatching sexual preferences from attempting sex in the vanilla game 
-    [HarmonyPatch(typeof(DecisionAsset), nameof(DecisionAsset.isPossible))]
-    class DecisionPatch
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(DecisionAsset.isPossible))]
+    static bool DoPregnancyPatch(Actor pActor, DecisionAsset __instance, ref bool __result)
     {
-        static bool Prefix(Actor pActor, DecisionAsset __instance, ref bool __result)
+        // this is for decision asset: sexual_reproduction_try, this basically cancels sex with their partner
+        if (__instance.id.Equals("sexual_reproduction_try"))
         {
-            // this is for decision asset: sexual_reproduction_try, this basically cancels sex with their partner
-            if (__instance.id.Equals("sexual_reproduction_try"))
+            var pParentA = pActor;
+            var pParentB = pActor.lover;
+            if (pActor.hasLover() && 
+                (!Preferences.PreferenceMatches(pParentA, pParentB, true)
+                 || !Preferences.PreferenceMatches(pParentB, pParentA, true) 
+                 || !TolUtil.CouldReproduce(pParentA, pParentB)
+                 || !BabyHelper.canMakeBabies(pParentA) || !BabyHelper.canMakeBabies(pParentB)))
             {
-                var pParentA = pActor;
-                var pParentB = pActor.lover;
-                if (pActor.hasLover() && 
-                    (!Preferences.PreferenceMatches(pParentA, pParentB, true)
-                     || !Preferences.PreferenceMatches(pParentB, pParentA, true) 
-                     || !TolUtil.CouldReproduce(pParentA, pParentB)
-                    || !BabyHelper.canMakeBabies(pParentA) || !BabyHelper.canMakeBabies(pParentB)))
-                {
-                    __result = false;
-                    return false;
-                }
+                __result = false;
+                return false;
             }
-
-            return true;
         }
+
+        return true;
     }
 }

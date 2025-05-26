@@ -49,9 +49,6 @@ namespace Topic_of_Love.Mian
             Opinions.Init();
             GodPowers.Init();
             TabsAndButtons.Init();
-            
-            // Managers
-            // DateableManager.Init();
         }
         private void Awake()
         {

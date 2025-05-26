@@ -50,10 +50,6 @@
         <Compile Include="Mian\CustomAssets\Traits\BaseTraits.cs" />
         <Compile Include="Mian\CustomAssets\Traits\CultureTraits.cs" />
         <Compile Include="Mian\CustomAssets\Traits\SubspeciesTraits.cs" />
-        <Compile Include="Mian\CustomManagers\CustomSavedData.cs" />
-        <Compile Include="Mian\CustomManagers\Dateable\Dateable.cs" />
-        <Compile Include="Mian\CustomManagers\Dateable\DateableData.cs" />
-        <Compile Include="Mian\CustomManagers\Dateable\DateableManager.cs" />
         <Compile Include="Mian\Patches\ActorManagerPatch.cs" />
         <Compile Include="Mian\Patches\ActorPatch.cs" />
         <Compile Include="Mian\Patches\BabyHelperPatch.cs" />
@@ -64,7 +60,6 @@
         <Compile Include="Mian\Patches\DecisionAssetPatch.cs" />
         <Compile Include="Mian\Patches\BaseSimObjectPatch.cs" />
         <Compile Include="Mian\Patches\MapBoxPatch.cs" />
-        <Compile Include="Mian\Patches\SavedMapPatch.cs" />
         <Compile Include="Mian\Patches\SpriteTextureLoaderPatch.cs" />
         <Compile Include="Mian\Patches\SubspeciesPatch.cs" />
         <Compile Include="Mian\Patches\StatPatch.cs" />

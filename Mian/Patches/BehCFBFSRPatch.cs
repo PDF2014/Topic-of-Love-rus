@@ -1,4 +1,5 @@
-﻿using ai.behaviours;
+﻿using System;
+using ai.behaviours;
 using HarmonyLib;
 
 namespace Topic_of_Love.Mian.Patches;
@@ -33,16 +34,22 @@ public class BehCFBFSRPatch
     [HarmonyPatch(nameof(BehCheckForBabiesFromSexualReproduction.checkFamily))]
     static bool CheckFamilyFix(Actor pActor, Actor pLover)
     {
-        bool flag = false;
+        var flag = false;
+        TolUtil.Debug($"Checking if {pActor.getName()} needs a new family..");
         if (pActor.hasFamily())
         {
+            TolUtil.Debug( pActor.family.isMainFounder(pActor));
             if ((pLover != null && pActor.family != pLover.family) || !pActor.family.isMainFounder(pActor))
+            {
+                TolUtil.Debug($"{pActor.getName()} needs a new family.");
                 flag = true;
+            }
         }
         else
             flag = true;
         if (!flag)
             return false;
+        TolUtil.Debug($"Creating family for {pActor.getName()}!");
         BehaviourActionBase<Actor>.world.families.newFamily(pActor, pActor.current_tile, pLover);
         return false;
     }

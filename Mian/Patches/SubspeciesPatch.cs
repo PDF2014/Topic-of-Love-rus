@@ -4,10 +4,11 @@ using Topic_of_Love.Mian.CustomAssets.Custom;
 
 namespace Topic_of_Love.Mian.Patches;
 
+[HarmonyPatch(typeof(Subspecies))]
 public class SubspeciesPatch
 {
+    [HarmonyPatch(nameof(Subspecies.isPartnerSuitableForReproduction))]
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(Subspecies), nameof(Subspecies.isPartnerSuitableForReproduction))]
     [HarmonyAfter("netdot.mian.topicofidentity")]
         static bool SuitableReproductionPatch(Actor pActor, Actor pTarget, Subspecies __instance, ref bool __result)
         {

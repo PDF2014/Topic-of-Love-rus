@@ -418,12 +418,12 @@ namespace Topic_of_Love.Mian
             }
         }
 
-        public static void LogWithId(string message)
+        public static void LogWithId(object message)
         {
             LogService.LogInfo($"[{TopicOfLove.Mod.GetDeclaration().Name}]: "+message);
         }
         
-        public static void Debug(string message)
+        public static void Debug(object message)
         {
             var config = TopicOfLove.Mod.GetConfig();
             var slowOnLog = (bool)config["Misc"]["SlowOnLog"].GetValue();

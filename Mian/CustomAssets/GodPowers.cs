@@ -148,13 +148,13 @@ namespace Topic_of_Love.Mian.CustomAssets
                     
                     _selectedActorB = pActor;
                     _selectedActorA.cancelAllBeh();
-                    _selectedActorA.stopMovement();
+                    // _selectedActorA.stopMovement();
                     _selectedActorB.cancelAllBeh();
-                    _selectedActorB.stopMovement();
+                    // _selectedActorB.stopMovement();
                     _selectedActorB.data.set("sex_reason", "casual");
                     _selectedActorA.data.set("sex_reason", "casual");
                     _selectedActorA.beh_actor_target = _selectedActorB;
-                    new BehGetPossibleTileForSex().execute(_selectedActorA);
+                    new BehGetPossibleTileForSex(false).execute(_selectedActorA);
                     _selectedActorA = null;
                     _selectedActorB = null;
                 
@@ -212,9 +212,9 @@ namespace Topic_of_Love.Mian.CustomAssets
                     
                     TolUtil.ShowWhisperTipWithTime("kiss_successful", 24f);
                     _selectedActorA.cancelAllBeh();
-                    _selectedActorA.stopMovement();
+                    // _selectedActorA.stopMovement();
                     _selectedActorB.cancelAllBeh();
-                    _selectedActorB.stopMovement();
+                    // _selectedActorB.stopMovement();
                     
                     _selectedActorA.beh_actor_target = _selectedActorB;
                     _selectedActorA.setTask("try_kiss", pClean:false, pCleanJob:true, pForceAction:true);
@@ -296,10 +296,11 @@ namespace Topic_of_Love.Mian.CustomAssets
                     }
                     
                     _selectedActorA.cancelAllBeh();
-                    _selectedActorA.stopMovement();
+                    // _selectedActorA.stopMovement();
                     _selectedActorB.cancelAllBeh();
-                    _selectedActorB.stopMovement();
-                    
+                    // _selectedActorB.stopMovement();
+                    _selectedActorB.makeWait();
+
                     _selectedActorA.beh_actor_target = _selectedActorB;
                     _selectedActorA.setTask("try_sexual_ivf", pCleanJob: true, pClean: false, pForceAction: true);
                     
@@ -361,9 +362,9 @@ namespace Topic_of_Love.Mian.CustomAssets
                     TolUtil.ShowWhisperTipWithTime("date_successful", 24f);
 
                     _selectedActorA.cancelAllBeh();
-                    _selectedActorA.stopMovement();
+                    // _selectedActorA.stopMovement();
                     _selectedActorB.cancelAllBeh();
-                    _selectedActorB.stopMovement();
+                    // _selectedActorB.stopMovement();
                     _selectedActorA.beh_actor_target = _selectedActorB;
                     _selectedActorB.makeWait();
                     _selectedActorA.setTask("try_date", pClean: false, pForceAction:true);

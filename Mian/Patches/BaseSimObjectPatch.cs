@@ -2,17 +2,16 @@
 
 namespace Topic_of_Love.Mian.Patches;
 
+[HarmonyPatch(typeof(BaseSimObject))]
 public class BaseSimObjectPatch
 {
-    [HarmonyPatch(typeof(BaseSimObject), nameof(BaseSimObject.canAttackTarget))]
-    class FindEnemiesPatch
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(BaseSimObject.canAttackTarget))]
+    static void CanAttackTarget(BaseSimObject pTarget, ref bool __result, BaseSimObject __instance)
     {
-        static void Postfix(BaseSimObject pTarget, ref bool __result, BaseSimObject __instance)
+        if (__instance.isActor() && __instance.a.lover == pTarget)
         {
-            if (__instance.isActor() && __instance.a.lover == pTarget)
-            {
-                __result = false;
-            }
+            __result = false;
         }
     }
 }
