@@ -308,8 +308,9 @@ namespace Topic_of_Love.Mian
 
         public static bool CanFallInLove(Actor actor)
         {
-            actor.data.get("just_lost_lover", out bool justLostLover);
-            return !justLostLover && (!actor.isSapient() || actor.age > 10);
+            actor.data.get("just_lost_lover", out var justLostLover, false);
+            actor.data.get("force_lover", out var isForced, false);
+            return !justLostLover && !isForced;
         }
 
         public static void RemoveLovers(Actor actor)

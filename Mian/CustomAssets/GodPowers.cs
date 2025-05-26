@@ -59,10 +59,10 @@ namespace Topic_of_Love.Mian.CustomAssets
                     TolUtil.ShowWhisperTipWithTime("love_successful", 18f);
                     
                     _selectedActorB = pActor;
+                    TolUtil.RemoveLovers(_selectedActorA);
+                    TolUtil.RemoveLovers(_selectedActorB);
                     _selectedActorB.data.set("force_lover", true);
                     _selectedActorA.data.set("force_lover", true);
-                    TolUtil.BreakUp(_selectedActorA);
-                    TolUtil.BreakUp(_selectedActorB);
                     _selectedActorA.becomeLoversWith(_selectedActorB);
                     _selectedActorA = null;
                     _selectedActorB = null;
