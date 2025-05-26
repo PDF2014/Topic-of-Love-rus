@@ -8,13 +8,13 @@ public class BehTryToEatCityFoodIfCan : BehCityActor
     {
         City city = pActor.city;
         if (!city.hasSuitableFood(pActor.subspecies))
-            return BehResult.Skip;
+            return BehResult.Continue;
         ResourceAsset foodItem1 = city.getFoodItem(pActor.subspecies, pActor.data.favorite_food);
         bool pNeedToPay = !pActor.isFoodFreeForThisPerson();
         if (foodItem1 != null)
         {
             if (pNeedToPay && !pActor.hasEnoughMoney(foodItem1.money_cost))
-                return BehResult.Skip;
+                return BehResult.Continue;
             this.eatFood(pActor, city, foodItem1, pNeedToPay);
             if (pActor.hasTrait("gluttonous"))
             {

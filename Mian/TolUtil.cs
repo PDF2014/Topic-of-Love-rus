@@ -395,6 +395,7 @@ namespace Topic_of_Love.Mian
                         target.cancelAllBeh();
                         pActor.beh_actor_target = target;
                         new BehGetPossibleTileForSex().execute(pActor);
+                        return true;
                     }   
                 }
             }

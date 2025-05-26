@@ -20,11 +20,11 @@ public class BehCheckIfDateFinish : BehaviourActionActor
         pActor.data.get("date_happiness", out var happiness, 0f);
         if (Preferences.BothPreferencesMatch(pActor, target, false))
         {
-            happiness += Randy.randomFloat(5, 10f);
+            happiness += Randy.randomFloat(15, 20f);
         }
         else
         {
-            happiness += Randy.randomFloat(4, 7f);
+            happiness += Randy.randomFloat(8, 14f);
         }
         pActor.data.set("date_happiness", happiness);
 
@@ -37,12 +37,13 @@ public class BehCheckIfDateFinish : BehaviourActionActor
                 target.makeWait(wait);
                 EffectsLibrary.spawnAt("fx_hearts", pActor.current_position, pActor.current_scale.y);
                 EffectsLibrary.spawnAt("fx_hearts", pActor.beh_actor_target.current_position, pActor.beh_actor_target.current_scale.y);
+                pActor.beh_actor_target.a.beh_actor_target = pActor;
                 pActor.beh_actor_target.a.setTask("follow_action_date", false, pForceAction: true);
                 return BehResult.RestartTask;
             }
         }
 
-        if (happiness >= 50f && pActor.lover != target)
+        if (happiness >= 25f && pActor.lover != target)
         {
             TolUtil.PotentiallyCheatedWith(pActor, target);
             pActor.becomeLoversWith(target);

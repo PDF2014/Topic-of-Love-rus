@@ -81,8 +81,8 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
             actionDate.addBeh(new BehGoToTileTarget());
             actionDate.addBeh(new BehWait(0.2f));
             actionDate.addBeh(new BehCheckIfDateHere());
+            actionDate.addBeh(new BehTryToEatCityFoodIfCan());
             actionDate.addBeh(new BehDoTalk());
-            actionDate.addBeh(new BehTryToEatCityFood());
             actionDate.addBeh(new BehFinishTalk());
             actionDate.addBeh(new BehCheckIfDateFinish());
             Add(actionDate);

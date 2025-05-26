@@ -28,16 +28,14 @@ public class BehFinishTalkPatch
         if (pActor.hasCulture() && pActor.culture.hasTrait("elder_reverence") && __instance.throwDiceForGift(pActor, pTarget) && pActor.isAdult() && pTarget.getAge() > pActor.getAge())
             __instance.makeGift(pActor, pTarget);
         __instance.checkPassLearningAttributes(pActor, pTarget);
-        if (num1 != 0)
+        if (num1 != 0 && Randy.randomChance(0.1f))
         {
-            TolUtil.Socialized(__instance, pActor, pTarget);
+            if(pActor.canFallInLoveWith(pTarget))
+                pActor.becomeLoversWith(pTarget);
         }
-        else
-        {
-            float num2 = Randy.randomFloat(1.1f, 3.3f);
-            pActor.timer_action = num2;
-            pTarget.timer_action = num2;   
-        }
+        float num2 = Randy.randomFloat(1.1f, 3.3f);
+        pActor.timer_action = num2;
+        pTarget.timer_action = num2;   
         return false;
     }
 }
