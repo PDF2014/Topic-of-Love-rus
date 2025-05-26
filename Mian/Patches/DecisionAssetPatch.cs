@@ -30,7 +30,7 @@ public class DecisionAssetPatch
             }
         }
         
-        if (__instance.id.Equals("find_lover") && TolUtil.IsOrientationSystemEnabledFor(pActor))
+        if (__instance.id.Equals("find_lover") && TolUtil.IsOrientationSystemEnabledFor(pActor) && pActor.isSapient())
         {
             __result = false;
             return false;
