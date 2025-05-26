@@ -187,6 +187,7 @@ public class BabyMakerPatch
                 
                 pParent1.data.removeLong("familyParentA");
                 pParent1.data.removeLong("familyParentB");
+                ActorManagerPatch.NewUnit(actorFromData); // generate preferences
                 return false;
             }
         }

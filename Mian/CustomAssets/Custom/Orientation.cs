@@ -176,7 +176,7 @@ public class Orientations
         {
             if (Preferences.Dislikes(actor, isSexual))
                 return false;
-
+            
             if (!actor.isSapient())
             {
                 var preferredIdentities = Preferences.GetActorPreferencesFromType(actor, "identity", isSexual);

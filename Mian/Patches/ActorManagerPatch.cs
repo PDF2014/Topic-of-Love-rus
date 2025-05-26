@@ -19,11 +19,4 @@ public class ActorManagerPatch
     {
         NewUnit(__result);
     }
-
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(ActorManager.createActorFromData))]
-    static void CreateActorFromData(Actor __result)
-    {
-        NewUnit(__result);
-    }
 }
