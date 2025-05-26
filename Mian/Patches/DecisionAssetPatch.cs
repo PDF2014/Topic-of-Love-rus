@@ -1,4 +1,5 @@
-﻿using Topic_of_Love.Mian.CustomAssets;
+﻿using EpPathFinding.cs;
+using Topic_of_Love.Mian.CustomAssets;
 using Topic_of_Love.Mian.CustomAssets.Traits;
 using HarmonyLib;
 using Topic_of_Love.Mian.CustomAssets.Custom;
@@ -8,12 +9,12 @@ namespace Topic_of_Love.Mian.Patches;
 [HarmonyPatch(typeof(DecisionAsset))]
 public class DecisionAssetPatch
 {
-    // stops people with mismatching sexual preferences from attempting sex in the vanilla game 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(DecisionAsset.isPossible))]
-    static bool DoPregnancyPatch(Actor pActor, DecisionAsset __instance, ref bool __result)
+    static bool IsPossiblePatch(Actor pActor, DecisionAsset __instance, ref bool __result)
     {
         // this is for decision asset: sexual_reproduction_try, this basically cancels sex with their partner
+        // stops people with mismatching sexual preferences from attempting sex in the vanilla game 
         if (__instance.id.Equals("sexual_reproduction_try"))
         {
             var pParentA = pActor;
@@ -28,7 +29,13 @@ public class DecisionAssetPatch
                 return false;
             }
         }
-
+        
+        if (__instance.id.Equals("find_lover") && TolUtil.IsOrientationSystemEnabledFor(pActor))
+        {
+            __result = false;
+            return false;
+        }
+        
         return true;
     }
 }

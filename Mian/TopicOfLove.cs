@@ -34,7 +34,7 @@ namespace Topic_of_Love.Mian
             Mod = this;
             // Initialize your mod.
             // Methods are called in the order: OnLoad -> Awake -> OnEnable -> Start -> Update
-            TolUtil.LogWithId("Making people more loveable!");
+            TolUtil.LogInfo("Making people more loveable!");
 
             Orientations.Init();
             Preferences.Init();

@@ -248,8 +248,9 @@ public class ActorPatch
                  (!Preferences.PreferenceMatches(__instance, pTarget, false) && TolUtil.IsOrientationSystemEnabledFor(__instance))
                  || (!Preferences.PreferenceMatches(pTarget, __instance, false) && TolUtil.IsOrientationSystemEnabledFor(pTarget))
                 
-                || __instance.hasLover()
-                || pTarget.hasLover()
+                // allows for custom loving and cheating if orientation system is enabled
+                || (!TolUtil.IsOrientationSystemEnabledFor(__instance) && __instance.hasLover())
+                || (!TolUtil.IsOrientationSystemEnabledFor(pTarget) && pTarget.hasLover())
 
                 || !WithinOfAge(__instance, pTarget)
                 

@@ -124,12 +124,12 @@
   "sexualivf_cancelled": "Force sexual IVF cancelled!",
   "sexualivf_incapable_reproduce": "The two are incapable of reproducing together!",
   "ForceSexualIVF": "Force Sexual IVF",
-  "ForceSexualIVF Description": "Force a lover to make a baby via sexual IVF",
+  "ForceSexualIVF Description": "Force a unit to make a baby via sexual IVF",
 
   "date_cancelled": "Force dating cancelled!",
   "date_successful": "Date successful! They will attempt to start the date as soon as they can. Outer forces may interrupt this task.",
   "ForceDate": "Force Date",
-  "ForceDate Description": "Force a lover to go on a date with their lover",
+  "ForceDate Description": "Force a unit to go on a date",
 
   "trait_sex_indifferent": "Sex-Indifferent",
   "trait_sex_indifferent_info": "Couplating is not a requirement for them to be in a relationship.",

@@ -57,7 +57,7 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
                 locale_key = "task_find_partner",
                 path_icon = "ui/Icons/status/went_on_date"
             };
-            findDate.addBeh(new BehFindAPartner(distance: 40f));
+            findDate.addBeh(new BehFindAPartner(false, mustMatchPreference:true, distance: 40f, customValidity: (actor, actor1) => actor.canFallInLoveWith(actor1)));
             findDate.addBeh(new BehSetNextTask("try_date", pClean: false, pForce: true));
             Add(findDate);
 
@@ -81,6 +81,9 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
             actionDate.addBeh(new BehGoToTileTarget());
             actionDate.addBeh(new BehWait(0.2f));
             actionDate.addBeh(new BehCheckIfDateHere());
+            actionDate.addBeh(new BehDoTalk());
+            actionDate.addBeh(new BehTryToEatCityFood());
+            actionDate.addBeh(new BehFinishTalk());
             actionDate.addBeh(new BehCheckIfDateFinish());
             Add(actionDate);
 

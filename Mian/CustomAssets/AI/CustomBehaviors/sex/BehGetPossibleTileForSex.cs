@@ -3,18 +3,18 @@
 namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.sex;
 public class BehGetPossibleTileForSex : BehaviourActionActor
     {
-        private bool mustBePrivate;
+        private bool _mustBePrivate;
 
         public BehGetPossibleTileForSex(bool mustBePrivate=true)
         {
-            this.mustBePrivate = mustBePrivate;
+            _mustBePrivate = mustBePrivate;
         }
-        public bool isPlacePrivateForBreeding(Actor actor, WorldTile tile)
+        private static bool IsPlacePrivateForBreeding(Actor actor, WorldTile tile)
         {
-            int num1 = Toolbox.countUnitsInChunk(tile);
+            var num1 = Toolbox.countUnitsInChunk(tile);
             if (!actor.hasCity())
                 return actor.asset.animal_breeding_close_units_limit > num1;
-            int num2 = actor.city.getPopulationMaximum() * 2 + 10;
+            var num2 = actor.city.getPopulationMaximum() * 2 + 10;
             return actor.city.countUnits() < num2;
         }
         public override BehResult execute(Actor pActor)
@@ -29,7 +29,7 @@ public class BehGetPossibleTileForSex : BehaviourActionActor
             var homeBuilding = GetHomeBuilding(pActor, pActor.beh_actor_target.a);
 
             pActor.beh_tile_target = homeBuilding != null ? homeBuilding.current_tile : pActor.beh_actor_target.current_tile;
-            if (!isPlacePrivateForBreeding(pActor, pActor.beh_tile_target) && mustBePrivate)
+            if (!IsPlacePrivateForBreeding(pActor, pActor.beh_tile_target) && _mustBePrivate)
             {
                 TolUtil.Debug("Cancelled because of lack of privacy");
                 return BehResult.Stop;

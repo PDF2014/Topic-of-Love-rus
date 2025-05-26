@@ -37,8 +37,15 @@ public class BehCheckIfDateFinish : BehaviourActionActor
                 target.makeWait(wait);
                 EffectsLibrary.spawnAt("fx_hearts", pActor.current_position, pActor.current_scale.y);
                 EffectsLibrary.spawnAt("fx_hearts", pActor.beh_actor_target.current_position, pActor.beh_actor_target.current_scale.y);
+                pActor.beh_actor_target.a.setTask("follow_action_date", false, pForceAction: true);
                 return BehResult.RestartTask;
             }
+        }
+
+        if (happiness >= 50f && pActor.lover != target)
+        {
+            TolUtil.PotentiallyCheatedWith(pActor, target);
+            pActor.becomeLoversWith(target);
         }
 
         target.cancelAllBeh();

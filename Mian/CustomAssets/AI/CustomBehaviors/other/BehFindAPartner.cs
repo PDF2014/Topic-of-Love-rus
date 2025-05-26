@@ -20,7 +20,7 @@ public class BehFindAPartner : BehaviourActionActor
         bool mustBeLover=true,
         bool mustBeFriend=false, // if mustBeLover is false and lover is not found
         bool mustMatchPreference=false, 
-        bool mustBeReproduceable=false, 
+        bool mustBeReproduceable=false,
         string sexReason=null, 
         float distance=100f,
         Func<Actor, bool> customCheck=null,

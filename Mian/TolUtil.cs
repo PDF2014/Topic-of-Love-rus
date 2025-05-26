@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using ai.behaviours;
 using NeoModLoader.services;
+using Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.sex;
 using Topic_of_Love.Mian.CustomAssets.Custom;
 
 #if TOPICOFIDENTITY
@@ -369,6 +371,41 @@ namespace Topic_of_Love.Mian
             return false;
         }
 
+        public static bool Socialized(BehaviourActionActor __instance, Actor pActor, Actor target)
+        {
+            if (IsOrientationSystemEnabledFor(pActor) && IsOrientationSystemEnabledFor(target))
+            {
+                if (Randy.randomBool())
+                {
+                    if (Randy.randomBool() && pActor.lover != target)
+                    {
+                        if (pActor.canFallInLoveWith(target) 
+                            && WillDoIntimacy(pActor, null, false, true)
+                            && WillDoIntimacy(target, null, false))
+                        {
+                            // does date instead
+                            __instance.forceTask(pActor, "try_date", false);
+                            return true;
+                        }   
+                    }
+                    else if(WillDoIntimacy(pActor, "casual", pActor.lover == target, true) 
+                            && WillDoIntimacy(target, "casual", pActor.lover == target, false))
+                    {
+                        pActor.cancelAllBeh();
+                        target.cancelAllBeh();
+                        pActor.beh_actor_target = target;
+                        new BehGetPossibleTileForSex().execute(pActor);
+                    }   
+                }
+            }
+            else if (pActor.canFallInLoveWith(target))
+            {
+                pActor.becomeLoversWith(target);
+            }
+
+            return false;
+        }
+
         public static bool IsActorUndateable(Actor pActor, Actor toCheck)
         {
             pActor.data.get("amount_undateable", out var length, 0);
@@ -418,9 +455,9 @@ namespace Topic_of_Love.Mian
             }
         }
 
-        public static void LogWithId(object message)
+        public static void LogInfo(object message)
         {
-            LogService.LogInfo($"[{TopicOfLove.Mod.GetDeclaration().Name}]: "+message);
+            TopicOfLove.LogInfo(message.ToString());
         }
         
         public static void Debug(object message)
@@ -433,7 +470,7 @@ namespace Topic_of_Love.Mian
                 return;
             if(slowOnLog)
                 Config.setWorldSpeed(AssetManager.time_scales.get("slow_mo"));
-            LogWithId(message);
+            LogInfo(message);
         }
         
         public static bool NeedSameSexTypeForReproduction(Actor pActor)
