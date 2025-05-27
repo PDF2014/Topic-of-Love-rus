@@ -27,7 +27,7 @@ public class BehTryToSocializePatch
                 return false;
             }  
         }
-        else if (pActor.canFallInLoveWith(randomActorAround))
+        else if (pActor.canFallInLoveWith(randomActorAround) && !pActor.hasLover())
         {
             pActor.becomeLoversWith(randomActorAround);
         }

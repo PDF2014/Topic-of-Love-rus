@@ -30,7 +30,8 @@ public class DecisionAssetPatch
             }
         }
         
-        if (__instance.id.Equals("find_lover") && ((TolUtil.IsOrientationSystemEnabledFor(pActor) && pActor.isSapient()) || Randy.randomChance(0.2f)))
+        if (__instance.id.Equals("find_lover") && (pActor.hasLover() 
+                                                   || (TolUtil.IsOrientationSystemEnabledFor(pActor) && pActor.isSapient() && !Randy.randomChance(0.2f))))
         {
             __result = false;
             return false;
