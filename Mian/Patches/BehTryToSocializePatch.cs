@@ -1,4 +1,5 @@
-﻿using ai.behaviours;
+﻿using ai;
+using ai.behaviours;
 using HarmonyLib;
 
 namespace Topic_of_Love.Mian.Patches;
@@ -27,9 +28,9 @@ public class BehTryToSocializePatch
                 return false;
             }  
         }
-        else if (pActor.canFallInLoveWith(randomActorAround) && !pActor.hasLover())
+        else
         {
-            pActor.becomeLoversWith(randomActorAround);
+            ActorTool.checkFallInLove(pActor, randomActorAround);
         }
         pActor.resetSocialize();
         randomActorAround.resetSocialize();

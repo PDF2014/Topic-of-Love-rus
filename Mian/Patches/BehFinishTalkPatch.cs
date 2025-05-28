@@ -18,8 +18,6 @@ public class BehFinishTalkPatch
         pTarget.changeHappiness("just_talked", pValue);
         pActor.addStatusEffect("recovery_social");
         pTarget.addStatusEffect("recovery_social");
-        // if (num1 != 0)
-        //     ActorTool.checkFallInLove(pActor, pTarget);
         if (num1 != 0)
             ActorTool.checkBecomingBestFriends(pActor, pTarget);
         __instance.checkMetaSpread(pActor, pTarget);
@@ -30,8 +28,7 @@ public class BehFinishTalkPatch
         __instance.checkPassLearningAttributes(pActor, pTarget);
         if (num1 != 0 && Randy.randomChance(pActor.getBestFriend() == pTarget ? 0.75f : 0.25f))
         {
-            if(pActor.canFallInLoveWith(pTarget))
-                pActor.becomeLoversWith(pTarget);
+            ActorTool.checkFallInLove(pActor, pTarget);
         }
         float num2 = Randy.randomFloat(1.1f, 3.3f);
         pActor.timer_action = num2;

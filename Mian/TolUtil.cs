@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ai;
 using ai.behaviours;
 using NeoModLoader.services;
 using Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.sex;
@@ -265,6 +266,7 @@ namespace Topic_of_Love.Mian
             if (actor.hasLover() && actor.lover != actor2 && CanStopBeingLovers(actor))
             {
                 var cheatedActor = actor.lover;
+                // will they know :O
                 if (cheatedActor.isLying() || !cheatedActor.isOnSameIsland(actor))
                     return;
                 
@@ -279,7 +281,7 @@ namespace Topic_of_Love.Mian
             return IsActorUndateable(actor, actor2) || IsActorUndateable(actor2, actor);
         }
 
-        public static void BreakUp(Actor actor)
+        public static void BreakUp(Actor actor, bool actorIsSad=true)
         {
             if (!actor.hasLover())
                 return;
@@ -295,7 +297,8 @@ namespace Topic_of_Love.Mian
             AddOrRemoveUndateableActor(actor.lover, actor);
             
             actor.lover.changeHappiness("breakup");
-            actor.changeHappiness("breakup");
+            if(actorIsSad)
+                actor.changeHappiness("breakup");
             
             RemoveLovers(actor);
         }
@@ -402,9 +405,9 @@ namespace Topic_of_Love.Mian
                     }   
                 }
             }
-            else if (pActor.canFallInLoveWith(target))
+            else
             {
-                pActor.becomeLoversWith(target);
+                ActorTool.checkFallInLove(pActor, target);
             }
 
             return false;

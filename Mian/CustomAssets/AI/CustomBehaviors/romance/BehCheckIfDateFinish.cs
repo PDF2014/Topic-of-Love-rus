@@ -1,4 +1,5 @@
 ﻿using System;
+using ai;
 using ai.behaviours;
 using Topic_of_Love.Mian.CustomAssets.Custom;
 using Topic_of_Love.Mian.CustomAssets.Traits;
@@ -43,10 +44,9 @@ public class BehCheckIfDateFinish : BehaviourActionActor
             }
         }
 
-        if (happiness >= (pActor.getBestFriend() == target ? 10f : 25f) && pActor.lover != target)
+        if (happiness >= (pActor.getBestFriend() == target ? 10f : 25f))
         {
-            TolUtil.PotentiallyCheatedWith(pActor, target);
-            pActor.becomeLoversWith(target);
+            ActorTool.checkFallInLove(pActor, target);
         }
 
         target.cancelAllBeh();
