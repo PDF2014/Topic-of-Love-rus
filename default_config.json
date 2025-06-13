@@ -26,11 +26,6 @@
       "Id": "SlowOnLog",
       "Type": "SWITCH",
       "BoolVal": false
-    },
-    {
-      "Id":"StackTrace",
-      "Type": "SWITCH",
-      "BoolVal": false
     }
   ]
 }
