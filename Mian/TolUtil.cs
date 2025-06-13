@@ -70,7 +70,7 @@ namespace Topic_of_Love.Mian
             actor.data.set("intimacy_happiness", Math.Max(-100, Math.Min(happiness + init, 100)));
         }
 
-        private static void OpinionOnSex(Actor actor1, Actor actor2)
+        private static string OpinionOnSex(Actor actor1, Actor actor2)
         {
             if (actor1.hasSubspeciesTrait("amygdala"))
             {
@@ -95,10 +95,16 @@ namespace Topic_of_Love.Mian
                     
                     var type = Randy.randomChance(Math.Min(1, normal)) ? "enjoyed_sex" : "okay_sex"; 
                     actor1.addStatusEffect(type);
+                    return type;
                 }
                 else
-                    actor1.addStatusEffect("disliked_sex");   
+                {
+                    actor1.addStatusEffect("disliked_sex");
+                    return "disliked_sex";
+                }
             }
+
+            return null;
         }
 
         public static bool IsFaithful(Actor pActor)
@@ -198,9 +204,19 @@ namespace Topic_of_Love.Mian
                 actor2.addStatusEffect("just_kissed");
             }
             
-            OpinionOnSex(actor1, actor2);
-            OpinionOnSex(actor2, actor1);
+            var opinion = OpinionOnSex(actor1, actor2);
+            var opinion1 = OpinionOnSex(actor2, actor1);
 
+            if (actor1.hasLover() && actor1.lover != actor2)
+            {
+                ChangeIntimacyHappinessBy(actor1.lover, -25f);
+            }
+
+            if (actor2.hasLover() && actor2.lover != actor1)
+            {
+                ChangeIntimacyHappinessBy(actor2.lover, -25f);
+            }
+            
             if (actor1.lover != actor2)
             {
                 actor1.data.get("sex_reason", out var sexReason, "reproduction");
@@ -213,17 +229,20 @@ namespace Topic_of_Love.Mian
                 if (!CanHaveSexWithoutRepercussionsWithSomeoneElse(actor2, sexReason))
                 {
                     PotentiallyCheatedWith(actor2, actor1);
-                }   
-            }
+                }
 
-            if (actor1.hasLover() && actor1.lover != actor2)
-            {
-                ChangeIntimacyHappinessBy(actor1.lover, -25f);
-            }
-
-            if (actor2.hasLover() && actor2.lover != actor1)
-            {
-                ChangeIntimacyHappinessBy(actor2.lover, -25f);
+                // did you really fucking enjoy it?
+                if (sexReason.Equals("casual") 
+                    && opinion.Equals("enjoyed_sex") 
+                    && opinion1.Equals("enjoyed_sex")
+                   )
+                {
+                    if (actor1.hasLover() && actor1.hasTrait("faithful"))
+                        return;
+                    if (actor2.hasLover() && actor2.hasTrait("faithful"))
+                        return;
+                    actor1.becomeLoversWith(actor2);
+                }
             }
         }
         public static void NewPreferences(Actor actor)
@@ -379,7 +398,7 @@ namespace Topic_of_Love.Mian
             return false;
         }
 
-        public static bool Socialized(BehaviourActionActor __instance, Actor pActor, Actor target)
+        public static bool Socialized(BehaviourActionActor __instance, Actor pActor, Actor target, bool noBoringLove=false)
         {
             if (IsOrientationSystemEnabledFor(pActor) && IsOrientationSystemEnabledFor(target))
             {
@@ -396,15 +415,29 @@ namespace Topic_of_Love.Mian
                             return true;
                         }   
                     }
-                    else if(WillDoIntimacy(pActor, "casual", pActor.lover == target, true) 
-                            && WillDoIntimacy(target, "casual", pActor.lover == target, false))
+                    else if (WillDoIntimacy(pActor, "casual", pActor.lover == target, true)
+                             && WillDoIntimacy(target, "casual", pActor.lover == target, false))
                     {
                         pActor.cancelAllBeh();
                         target.cancelAllBeh();
                         pActor.beh_actor_target = target;
                         new BehGetPossibleTileForSex().execute(pActor);
                         return true;
-                    }   
+                    }
+                    else if(WillDoIntimacy(pActor, null, pActor.lover == target, true) 
+                            && WillDoIntimacy(target, null, pActor.lover == target, false))
+                    {
+                        pActor.cancelAllBeh();
+                        target.cancelAllBeh();
+                        pActor.beh_actor_target = target;
+                        __instance.forceTask(pActor, "try_kiss", false);
+                        return true;
+                    } else if (!noBoringLove && Randy.randomBool() && pActor.canFallInLoveWith(target) && !pActor.hasLover() &&
+                                  !target.hasLover())
+                    {
+                        pActor.becomeLoversWith(target);
+                        return true;
+                    }
                 }
             }
             else

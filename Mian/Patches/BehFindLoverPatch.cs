@@ -8,15 +8,22 @@ public class BehFindLoverPatch
 {
     [HarmonyPrefix]
     [HarmonyPatch(nameof(BehFindLover.execute))]
-    static bool FindLoverPatch(Actor pActor, ref BehResult __result)
+    static bool FindLoverPatch(Actor pActor, ref BehResult __result, BehFindLover __instance)
     {
         if (pActor.hasLover())
         {
             __result = BehResult.Stop;
             return false;
         }
+        Actor pTarget = __instance.findLoverAround(pActor) ?? __instance.checkCityLovers(pActor);
+        if (pTarget != null)
+            if (TolUtil.Socialized(__instance, pActor, pTarget, true)){
+                __result = BehResult.Skip;
+                return false;
+            }
 
-        return true;
+        __result = BehResult.Continue;
+        return false;
     }
 
     [HarmonyPrefix]
