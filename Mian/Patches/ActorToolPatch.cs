@@ -18,9 +18,6 @@ public class ActorToolPatch
             TolUtil.BreakUp(pActor, false);
         if(pTarget.hasLover() && Randy.randomBool())
             TolUtil.BreakUp(pTarget, false);
-        TolUtil.PotentiallyCheatedWith(pActor, pTarget);
-        TolUtil.PotentiallyCheatedWith(pTarget, pActor);
-
         pActor.becomeLoversWith(pTarget);
         return false;
     }

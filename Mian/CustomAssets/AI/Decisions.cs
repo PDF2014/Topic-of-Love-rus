@@ -125,11 +125,11 @@ public class Decisions
                     if (!TolUtil.WantsBaby(actor.lover, false))
                         return false;
                         
-                    if (TolUtil.CouldReproduce(actor, actor.lover) && !Preferences.BothPreferencesMatch(actor, actor.lover, true))
+                    if (TolUtil.CouldReproduce(actor, actor.lover) && !Preferences.BothActorsPreferenceMatch(actor, actor.lover, true))
                         return true;
 
                     if (TolUtil.CouldReproduce(actor, actor.lover) &&
-                        Preferences.BothPreferencesMatch(actor, actor.lover, true))
+                        Preferences.BothActorsPreferenceMatch(actor, actor.lover, true))
                         return false;
                 }
                     

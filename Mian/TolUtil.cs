@@ -192,7 +192,7 @@ namespace Topic_of_Love.Mian
             actor1.addAfterglowStatus();
             actor2.addAfterglowStatus();   
             
-            if (Randy.randomChance(actor1.lover == actor2 ? 1f : Preferences.BothPreferencesMatch(actor1, actor2, true) ? 0.25f : 0f))
+            if (Randy.randomChance(actor1.lover == actor2 ? 1f : Preferences.BothActorsPreferenceMatch(actor1, actor2, true) ? 0.25f : 0f))
             {
                 actor1.addStatusEffect("just_kissed");
                 actor2.addStatusEffect("just_kissed");
@@ -255,7 +255,7 @@ namespace Topic_of_Love.Mian
         public static bool CanHaveRomanceWithoutRepercussionsWithSomeoneElse(Actor actor)
         {
             return !actor.hasLover()
-                   || (actor.hasLover() && !Preferences.SAndRPreferencesMatch(actor, actor.lover)
+                   || (actor.hasLover() && !Preferences.PreferenceMatches(actor, actor.lover)
                                              && actor.lover.hasCultureTrait("sexual_expectations"));
         }
 
@@ -266,15 +266,22 @@ namespace Topic_of_Love.Mian
             {
                 var cheatedActor = actor.lover;
                 // will they know :O
-                if (cheatedActor.isLying() || !cheatedActor.isOnSameIsland(actor))
-                    return;
+                // if (cheatedActor.isLying() || !cheatedActor.isOnSameIsland(actor))
+                //     return;
                 
-                // HandleFamilyRemoval(actor);
-
                 cheatedActor.addStatusEffect("cheated_on");
             }
         }
 
+        public static bool WithinOfAge(Actor pActor, Actor pTarget)
+        { 
+            int higherAge = Math.Max(pActor.age, pTarget.age);
+            int lowerAge = Math.Min(pActor.age, pTarget.age);
+            int minimumAge = higherAge / 2 + 7;
+            return lowerAge >= minimumAge || (!pActor.hasCultureTrait("mature_dating") && !pTarget.hasCultureTrait("mature_dating"));
+        }
+        
+        // can this actor date the other actor?
         public static bool CannotDate(Actor actor, Actor actor2)
         {
             return IsActorUndateable(actor, actor2) || IsActorUndateable(actor2, actor);
@@ -286,11 +293,6 @@ namespace Topic_of_Love.Mian
                 return;
             
             Debug(actor.getName() + " broke up with "+ actor.lover.getName());
-            
-            // HandleFamilyRemoval(actor);
-            
-            // DateableManager.Manager.AddOrRemoveUndateable(actor, actor.lover);
-            // DateableManager.Manager.AddOrRemoveUndateable(actor.lover, actor);
             
             AddOrRemoveUndateableActor(actor, actor.lover);
             AddOrRemoveUndateableActor(actor.lover, actor);
@@ -308,6 +310,7 @@ namespace Topic_of_Love.Mian
             return !isForced;
         }
 
+        // can they fall in love in some way?
         public static bool CanFallInLove(Actor actor)
         {
             actor.data.get("just_lost_lover", out var justLostLover, false);
@@ -346,7 +349,7 @@ namespace Topic_of_Love.Mian
 
         public static bool IsDyingOut(Actor pActor)
         {
-            if (!pActor.hasSubspecies()) return false;
+            if (!pActor.hasSubspecies() || BabyHelper.isMetaLimitsReached(pActor)) return false;
             var limit = (int)pActor.subspecies.base_stats_meta["limit_population"];
             return pActor.subspecies.countCurrentFamilies() <= 10
                    || (limit != 0 ? pActor.subspecies.countUnits() <= limit / 3 : pActor.subspecies.countUnits() <= 50);
@@ -461,9 +464,9 @@ namespace Topic_of_Love.Mian
             }
         }
 
-        public static void LogInfo(object message)
+        public static void LogInfo(string message)
         {
-            TopicOfLove.LogInfo(message.ToString());
+            TopicOfLove.LogInfo(message);
         }
         
         public static void Debug(object message)
@@ -471,12 +474,17 @@ namespace Topic_of_Love.Mian
             var config = TopicOfLove.Mod.GetConfig();
             var slowOnLog = (bool)config["Misc"]["SlowOnLog"].GetValue();
             var debug = (bool)config["Misc"]["Debug"].GetValue();
+            // var printStackTrace = (bool)config["Misc"]["StackTrace"].GetValue();
 
+            message = message.ToString();
+            
+            // if(printStackTrace)
+            //     message += "\nStackTrace: " + Environment.StackTrace;
             if (!debug)
                 return;
             if(slowOnLog)
                 Config.setWorldSpeed(AssetManager.time_scales.get("slow_mo"));
-            LogInfo(message);
+            LogInfo((string) message);
         }
         
         public static bool NeedSameSexTypeForReproduction(Actor pActor)

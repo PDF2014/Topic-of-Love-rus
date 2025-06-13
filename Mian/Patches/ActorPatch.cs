@@ -1,4 +1,5 @@
 ﻿using System;
+using EpPathFinding.cs;
 using HarmonyLib;
 using NeoModLoader.General;
 using NeoModLoader.services;
@@ -80,20 +81,17 @@ public class ActorPatch
         }
     }
     
-    [HarmonyPatch(typeof(Actor), nameof(Actor.create))]
-    class ActorCreatePatch
-    {
-        static void Postfix(Actor __instance)
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(Actor.create))]
+        static void ActorCreatePatch(Actor __instance)
         {
             __instance.asset.addDecision("find_lover");
             __instance.data.set("intimacy_happiness", 10f);
         }
-    }
 
-    [HarmonyPatch(typeof(Actor), nameof(Actor.updateAge))]
-    class CalcAgeStatesPatch
-    {
-        static void Postfix(Actor __instance)
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(Actor.updateAge))]
+        static void CalcAgeStages(Actor __instance)
         {
             // maybe we can reintroduce fluid preferences in the future?
             
@@ -167,19 +165,6 @@ public class ActorPatch
                 __instance.changeHappiness("true_self");
             }
             
-            // List<Actor> undateables = DateableManager.Manager.GetUndateablesFor(__instance);
-            // if (undateables != null)
-            // {
-            //     foreach (var actor in undateables)
-            //     {
-            //         if (Randy.randomChance(0.2f))
-            //         {
-            //             Util.Debug(__instance.getName() + " has forgived " + actor.getName());
-            //             DateableManager.Manager.AddOrRemoveUndateable(__instance, actor); 
-            //         }
-            //     }   
-            // }
-            
             __instance.data.get("amount_undateable", out var length, 0);
             for(var i = 0; i < length; i++)
             {
@@ -219,68 +204,101 @@ public class ActorPatch
                     }   
                 }
             }
-        } 
+        }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(Actor.becomeLoversWith))]
+    static void BecomeLoversWith(Actor pTarget, Actor __instance)
+    {
+        // if they become new lovers with someone, the others were cheated on
+        TolUtil.PotentiallyCheatedWith(__instance, pTarget);
+        TolUtil.PotentiallyCheatedWith(pTarget, __instance);
     }
-    
+        
     // This is where we handle the beef of our code for having cross species and non-same reproduction method ppl fall in love
     // important to note this should check for both actors
-    [HarmonyPatch(typeof(Actor), nameof(Actor.canFallInLoveWith))]
-    class CanFallInLoveWithPatch
-    {
-        private static bool WithinOfAge(Actor pActor, Actor pTarget)
-        { 
-            int higherAge = Math.Max(pActor.age, pTarget.age);
-            int lowerAge = Math.Min(pActor.age, pTarget.age);
-            int minimumAge = higherAge / 2 + 7;
-            return lowerAge >= minimumAge || (!pActor.hasCultureTrait("mature_dating") && !pTarget.hasCultureTrait("mature_dating"));
-        }
-        static bool Prefix(Actor pTarget, ref bool __result, Actor __instance)
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(Actor.canFallInLoveWith))]
+        static bool CanFallInLoveWithPatch(Actor pTarget, ref bool __result, Actor __instance)
         {
-            // LogService.LogInfo($"Can {__instance.getName()} fall in love with {pTarget.getName()}?");
+            // TolUtil.Debug($"Can {__instance.getName()} fall in love with {pTarget.getName()}?");
             var config = TopicOfLove.Mod.GetConfig();
-            var allowCrossSpeciesLove = (bool)config["CrossSpecies"]["AllowCrossSpeciesLove"].GetValue();
-            var mustBeSmart = (bool)config["CrossSpecies"]["MustBeSmart"].GetValue();
-            var mustBeXenophile = (bool)config["CrossSpecies"]["MustBeXenophile"].GetValue();
+
+            // we will add traits for these in the future
+            // var allowCrossSpeciesLove = (bool)config["CrossSpecies"]["AllowCrossSpeciesLove"].GetValue();
+            // var mustBeSmart = (bool)config["CrossSpecies"]["MustBeSmart"].GetValue();
+            // var mustBeXenophile = (bool)config["CrossSpecies"]["MustBeXenophile"].GetValue();
 
             if (TolUtil.CannotDate(pTarget, __instance))
             {
                 __result = false;
                 return false;
             }
-            
-            // let's ungroup these if conditions cuz my head hurts
-            
-            if (
-                // DateableManager.Manager.IsActorUndateable(pTarget, __instance)
-                TolUtil.CannotDate(pTarget, __instance)
-                ||
-                 (!Preferences.PreferenceMatches(__instance, pTarget, false) && TolUtil.IsOrientationSystemEnabledFor(__instance))
-                 || (!Preferences.PreferenceMatches(pTarget, __instance, false) && TolUtil.IsOrientationSystemEnabledFor(pTarget))
-                
-                // allows for custom loving and cheating if orientation system is enabled
-                || (!TolUtil.IsOrientationSystemEnabledFor(__instance) && __instance.hasLover())
-                || (!TolUtil.IsOrientationSystemEnabledFor(pTarget) && pTarget.hasLover())
 
-                || !WithinOfAge(__instance, pTarget)
-                
-                || __instance.areFoes(pTarget)
-                
-                || (!(__instance.isSameSpecies(pTarget) || __instance.isSameSubspecies(pTarget.subspecies))
-                                                       && !((__instance.hasXenophiles() || !mustBeXenophile)
-                                                             && (__instance.isSapient() && pTarget.isSapient() || !mustBeSmart)
-                                                             && !pTarget.hasXenophobic() || !allowCrossSpeciesLove)) // subspecies stuff!
-                
-                || !TolUtil.CanFallInLove(pTarget)
-                || !TolUtil.CanFallInLove(__instance)
-                
-                // if queer but culture trait says they do not matter
-                || ((!TolUtil.IsOrientationSystemEnabledFor(__instance) || !TolUtil.IsOrientationSystemEnabledFor(pTarget))
-                    && !TolUtil.CouldReproduce(__instance, pTarget)))
+            // both actors must have the same orientation system otherwise we will run into issues tbh
+            if (TolUtil.IsOrientationSystemEnabledFor(__instance) != TolUtil.IsOrientationSystemEnabledFor(pTarget))
             {
                 __result = false;
                 return false;
             }
 
+            // there is no cheating when the orientation system is disabled
+            var orientationSystemInvolved = TolUtil.IsOrientationSystemEnabledFor(__instance);
+            if (!orientationSystemInvolved && (__instance.hasLover() || pTarget.hasLover()))
+            {
+                __result = false;
+                return false;
+            }
+
+            if (orientationSystemInvolved)
+            {
+                if (!Preferences.BothActorsPreferenceMatch(__instance, pTarget, false))
+                {
+                    __result = false;
+                    return false;
+                }
+            }
+            else if (!TolUtil.CouldReproduce(pTarget, __instance))
+            {
+                __result = false;
+                return false;
+            }
+
+            // makes sure they are both within age of dating (mature dating trait involved)
+            if (!TolUtil.WithinOfAge(__instance, pTarget))
+            {
+                __result = false;
+                return false;
+            }
+
+            // they literally hate each other (maybe implement toxic relationships in the future?)
+            if (__instance.areFoes(pTarget))
+            {
+                __result = false;
+                return false;
+            }
+
+            // both must exhibit the same sapientness
+            var bothAreSapient = __instance.isSapient();
+            if (__instance.isSapient() != pTarget.isSapient())
+            {
+                __result = false;
+                return false;
+            }
+
+            if (!__instance.isSameSpecies(pTarget) && (__instance.hasXenophobic() || pTarget.hasXenophobic() || !bothAreSapient))
+            {
+                __result = false;
+                return false;
+            }
+            
+            if (!TolUtil.CanFallInLove(pTarget) || !TolUtil.CanFallInLove(__instance))
+            {
+                __result = false;
+                return false;
+            }
+
+            // no more incest for now
             // if (__instance.isRelatedTo(pTarget) && (!__instance.hasCultureTrait("incest") || !pTarget.hasCultureTrait("incest")))
             // {
                 // __result = false;
@@ -293,10 +311,9 @@ public class ActorPatch
                 __result = false;
                 return false;
             }
+            
             __result = true;
-
-            // LogService.LogInfo($"Success! They in love :D");
+            TolUtil.Debug($"{__instance.getName()} fell in love {pTarget.getName()}!");
             return false;
         }
-    }
 }

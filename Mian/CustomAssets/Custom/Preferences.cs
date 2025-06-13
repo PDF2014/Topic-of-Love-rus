@@ -178,9 +178,14 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             LM.ApplyLocale("en");
         }
 
+        // checks for one actor based on a type, if you are checking for multiple types or multiple actors, then use the other methods
         public static bool PreferenceMatches(Actor pActor, Actor pTarget, string type, bool sexual)
         {
             if (pActor == null || pTarget == null) return false;
+            
+            // preferences do not matter
+            if (pActor.hasCultureTrait("orientationless"))
+                return true;
 
             var list = GetActorPreferencesFromType(pActor, type, sexual)
                 .Select(trait => ((PreferenceTrait)trait).WithoutOrientationID).ToList();
@@ -191,6 +196,8 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             
             return true;
         }
+        
+        // checks for one actor, if you are checking for both, use the other methods
         public static bool PreferenceMatches(Actor pActor, Actor pTarget, bool sexual)
         {
             return PreferenceMatches(pActor, pTarget, "identity", sexual) 
@@ -198,14 +205,20 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                    && (!sexual || PreferenceMatches(pActor, pTarget, "genital", true));
         }
 
-        public static bool SAndRPreferencesMatch(Actor actor1, Actor actor2)
+        public static bool PreferenceMatches(Actor actor1, Actor actor2)
         {
             return PreferenceMatches(actor1, actor2, false) && PreferenceMatches(actor1, actor2, true);
         }
 
-        public static bool BothPreferencesMatch(Actor actor1, Actor actor2, bool sexual)
+        public static bool BothActorsPreferenceMatch(Actor actor1, Actor actor2, bool sexual)
         {
             return PreferenceMatches(actor1, actor2, sexual) && PreferenceMatches(actor2, actor1, sexual);
+        }
+        
+        public static bool BothActorsPreferenceMatch(Actor actor1, Actor actor2)
+        {
+            return PreferenceMatches(actor1, actor2, false) && PreferenceMatches(actor2, actor1, false)
+                && PreferenceMatches(actor2, actor1, true) &&  PreferenceMatches(actor1, actor2, true);;
         }
 
         public static List<PreferenceTrait> GetRandomPreferences(Actor actor)
