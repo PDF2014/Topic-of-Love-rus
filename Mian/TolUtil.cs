@@ -228,7 +228,7 @@ namespace Topic_of_Love.Mian
         }
         public static void NewPreferences(Actor actor)
         {
-            if (actor != null)
+            if (actor != null && CanDoLove(actor))
             {
                 var oldPreferences = Preferences.GetActorPreferences(actor);
                 oldPreferences.AddRange(Preferences.GetActorPreferences(actor, true));
@@ -315,7 +315,7 @@ namespace Topic_of_Love.Mian
         {
             actor.data.get("just_lost_lover", out var justLostLover, false);
             actor.data.get("force_lover", out var isForced, false);
-            return !justLostLover && !isForced;
+            return !justLostLover && !isForced && CanDoLove(actor);
         }
 
         public static void RemoveLovers(Actor actor)
@@ -499,6 +499,12 @@ namespace Topic_of_Love.Mian
         public static bool NeedDifferentSexTypeForReproduction(Actor pActor)
         {
             return pActor.hasSubspeciesTrait("reproduction_sexual");
+        }
+
+        // this is to typically catch types like boats
+        public static bool CanDoLove(Actor pActor)
+        {
+            return pActor.hasSubspecies();
         }
 
         public static bool IsTOIInstalled()

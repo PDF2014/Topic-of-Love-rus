@@ -228,7 +228,7 @@ public class ActorPatch
             // var allowCrossSpeciesLove = (bool)config["CrossSpecies"]["AllowCrossSpeciesLove"].GetValue();
             // var mustBeSmart = (bool)config["CrossSpecies"]["MustBeSmart"].GetValue();
             // var mustBeXenophile = (bool)config["CrossSpecies"]["MustBeXenophile"].GetValue();
-
+            
             if (TolUtil.CannotDate(pTarget, __instance))
             {
                 __result = false;

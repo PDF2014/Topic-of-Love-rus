@@ -8,6 +8,7 @@ using Topic_of_Love.Mian.CustomAssets.Custom;
 using Topic_of_Love.Mian.CustomAssets.Traits;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 namespace Topic_of_Love.Mian.Patches;
 
@@ -18,25 +19,27 @@ public class StatPatch
     private class Stat<T>
     {
         public readonly string Name;
+        public readonly Func<Actor, bool> Valid;
         public readonly string IconPath;
         public readonly Func<Actor, T> Value;
         
-        public Stat(string name, Func<Actor, T> value, string iconPath=null)
+        public Stat(string name, Func<Actor, bool> valid, Func<Actor, T> value, string iconPath=null)
         {
             Name=name;
+            Valid = valid;
             IconPath=iconPath;
             Value=value;
         }
     }
-    private static Stat<float>[] _icons = {
-        new ("intimacy_happiness", actor =>
+    private static readonly Stat<float>[] Icons = {
+        new ("intimacy_happiness", TolUtil.CanDoLove, actor =>
         {
             actor.data.get("intimacy_happiness", out float happiness);
             return happiness;
         }, "ui/Icons/iconLovers"),
     };
-    private static Stat<Dictionary<string, string>>[] _stats = {
-        new ("sexual_orientation", actor =>
+    private static readonly Stat<Dictionary<string, string>>[] Stats = {
+        new ("sexual_orientation", TolUtil.CanDoLove, actor =>
         {
             var orientationType = Orientation.GetOrientation(actor, true);
             if (orientationType != null)
@@ -51,7 +54,7 @@ public class StatPatch
             }
             return null;
         }),
-        new ("romantic_orientation", actor =>
+        new ("romantic_orientation", TolUtil.CanDoLove, actor =>
         {
             var orientationType = Orientation.GetOrientation(actor, false);
             if (orientationType != null)
@@ -86,9 +89,20 @@ public class StatPatch
     
     private static void OnEnable(UnitWindow window)
     {
-        foreach (var stat in _icons)
+        foreach (var stat in Icons)
         {
-            window.setIconValue(stat.Name, stat.Value(window.actor));
+            if (stat.Valid(window.actor))
+            {
+                window.setIconValue(stat.Name, stat.Value(window.actor));
+            }
+            else
+            {
+                Transform recursive = window.transform.FindRecursive(stat.Name);
+                if (recursive == null)
+                    continue;
+                var component = recursive.GetComponent<StatsIcon>();
+                component.gameObject.SetActive(false);
+            }
         }
         window.showInfo();
     }
@@ -126,7 +140,7 @@ public class StatPatch
                     GameObject.DestroyImmediate(child.gameObject);
             }
 
-            foreach (var iconData in _icons)
+            foreach (var iconData in Icons)
             {
                 var baseIcon = GameObject.Instantiate(iconTemplate, iconGroup);
                 var icon = baseIcon.GetComponent<StatsIcon>();
@@ -146,10 +160,10 @@ public class StatPatch
     [HarmonyPatch(nameof(UnitWindow.showStatsRows))]
     static void ShowStatsRowsPatch(UnitWindow __instance)
     {
-        foreach (var stat in _stats)
+        foreach (var stat in Stats)
         {
             var value = stat.Value(__instance.actor);
-            if (value != null)
+            if (value != null && stat.Valid(__instance.actor))
             {
                 value.TryGetValue("hex_code", out var hexCode);
                 value.TryGetValue("icon", out var icon);
