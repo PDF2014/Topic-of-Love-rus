@@ -472,7 +472,6 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 unlocked_with_achievement = false,
                 rarity = Rarity.R3_Legendary,
                 needs_to_be_explored = true,
-                affects_mind = true,
                 can_be_in_book = false,
             };
         }

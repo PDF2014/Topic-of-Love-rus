@@ -42,6 +42,7 @@ public class BabyMakerPatch
             int pMutationRate,
             WorldTile pTile,
             bool pAddToFamily,
+            bool pJoinFamily,
             ref Actor __result
             )
         {
@@ -119,6 +120,12 @@ public class BabyMakerPatch
                     {
                         World.world.families.newFamily(familyParentB, familyParentA.current_tile, null);
                     }
+                } else if (pJoinFamily) {
+                    Family pObject = 
+                        familyParentA.hasFamily() ? 
+                        familyParentA.family : World.world.families.newFamily(familyParentA, familyParentA.current_tile, familyParentB);
+                    if (pObject != null)
+                        actorFromData.setFamily(pObject);
                 }
                 BabyHelper.applyParentsMeta(familyParentA, familyParentB, actorFromData);
                 // the game seems to have some sort of code that chooses a baby's subspecies based on generation? not really sure how it works tbh

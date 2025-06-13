@@ -81,7 +81,7 @@
             <HintPath>..\..\worldbox_Data\StreamingAssets\mods\NeoModLoader.dll</HintPath>
         </Reference>
         <Reference Include="Assembly-CSharp">
-            <HintPath>Assemblies\Assembly-CSharp.dll</HintPath>
+            <HintPath>..\..\worldbox_Data\StreamingAssets\mods\NML\Assembly-CSharp-Publicized.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine">
             <HintPath>..\..\worldbox_Data\Managed\UnityEngine.dll</HintPath>

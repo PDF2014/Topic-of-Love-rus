@@ -223,6 +223,7 @@ public class ActorPatch
     }
     
     // This is where we handle the beef of our code for having cross species and non-same reproduction method ppl fall in love
+    // important to note this should check for both actors
     [HarmonyPatch(typeof(Actor), nameof(Actor.canFallInLoveWith))]
     class CanFallInLoveWithPatch
     {
@@ -240,6 +241,14 @@ public class ActorPatch
             var allowCrossSpeciesLove = (bool)config["CrossSpecies"]["AllowCrossSpeciesLove"].GetValue();
             var mustBeSmart = (bool)config["CrossSpecies"]["MustBeSmart"].GetValue();
             var mustBeXenophile = (bool)config["CrossSpecies"]["MustBeXenophile"].GetValue();
+
+            if (TolUtil.CannotDate(pTarget, __instance))
+            {
+                __result = false;
+                return false;
+            }
+            
+            // let's ungroup these if conditions cuz my head hurts
             
             if (
                 // DateableManager.Manager.IsActorUndateable(pTarget, __instance)
@@ -272,12 +281,18 @@ public class ActorPatch
                 return false;
             }
 
-            if (__instance.isRelatedTo(pTarget) && (!__instance.hasCultureTrait("incest") || !pTarget.hasCultureTrait("incest")))
+            // if (__instance.isRelatedTo(pTarget) && (!__instance.hasCultureTrait("incest") || !pTarget.hasCultureTrait("incest")))
+            // {
+                // __result = false;
+                // return false;
+            // }
+
+
+            if (__instance.isRelatedTo(pTarget))
             {
                 __result = false;
                 return false;
             }
-            
             __result = true;
 
             // LogService.LogInfo($"Success! They in love :D");

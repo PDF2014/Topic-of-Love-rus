@@ -16,8 +16,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 type = TraitType.Other,
                 unlocked_with_achievement = false,
                 rarity = Rarity.R1_Rare,
-                needs_to_be_explored = true,
-                affects_mind = true
+                needs_to_be_explored = true
             });
             Add(new ActorTrait
             {
@@ -28,8 +27,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 type = TraitType.Other,
                 unlocked_with_achievement = false,
                 rarity = Rarity.R1_Rare,
-                needs_to_be_explored = true,
-                affects_mind = true
+                needs_to_be_explored = true
             });
             
             Add(new ActorTrait
@@ -42,7 +40,6 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 unlocked_with_achievement = false,
                 rarity = Rarity.R1_Rare,
                 needs_to_be_explored = true,
-                affects_mind = true,
                 opposite_traits = new HashSet<ActorTrait>()
             }).addOpposite("unfaithful");
             Add(new ActorTrait
@@ -55,7 +52,6 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 unlocked_with_achievement = false,
                 rarity = Rarity.R1_Rare,
                 needs_to_be_explored = true,
-                affects_mind = true,
             }).addOpposite("faithful");
             Finish();
         }

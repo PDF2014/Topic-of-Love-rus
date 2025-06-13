@@ -41,17 +41,18 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 can_be_removed = true,
                 can_be_given = true
             }, List.Of("flower_bud", "garl")).addOpposite("homophobic");
-            
-            Add(new CultureTrait
-            {
-                id = "incest",
-                group_id = "miscellaneous",
-                needs_to_be_explored = true,
-                rarity = Rarity.R1_Rare,
-                can_be_in_book = true,
-                can_be_removed = true,
-                can_be_given = true
-            }, List.Of("orc", "demon"), List.Of("biome_infernal", "biome_corrupted"));
+
+            // incest was a bug in the original game so let's not actually make it a feature cuz uh.. for obvious reasons
+            // Add(new CultureTrait
+            // {
+            //     id = "incest",
+            //     group_id = "miscellaneous",
+            //     needs_to_be_explored = true,
+            //     rarity = Rarity.R1_Rare,
+            //     can_be_in_book = true,
+            //     can_be_removed = true,
+            //     can_be_given = true
+            // }, List.Of("orc", "demon"), List.Of("biome_infernal", "biome_corrupted"));
             
             Add(new CultureTrait
             {
