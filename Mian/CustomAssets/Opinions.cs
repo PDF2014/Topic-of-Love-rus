@@ -98,7 +98,7 @@ public class Opinions
             translation_key = "opinion_king_lovers",
             calc = (pMain, pTarget) =>
             {
-                if (pMain.king.lover == pTarget.king)
+                if (pMain.hasKing() && pMain.king.lover == pTarget.king)
                     return 100;
                 return 0;
             }
