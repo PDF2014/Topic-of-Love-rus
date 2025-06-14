@@ -76,9 +76,12 @@ public class StatPatch
         {
             foreach (var stat in Icons)
             {
-                if (__instance.actor.asset.inspect_stats)
+                if (stat.Valid(__instance.actor))
                 {
-                    __instance.setIconValue(stat.Name, stat.Value(__instance.actor),"", "", stat.IsFloat);
+                    if (__instance.actor.asset.inspect_stats)
+                    {
+                        __instance.setIconValue(stat.Name, stat.Value(__instance.actor),"", "", stat.IsFloat);
+                    }   
                 }
             }
         }
