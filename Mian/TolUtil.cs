@@ -128,7 +128,9 @@ namespace Topic_of_Love.Mian
             if(sexReason != null)
                 Debug("\n"+sexReason);
 
-            if (sexReason == null && !pActor.isAdult())
+            if (sexReason != null && !pActor.isAdult())
+                return false;
+            if(Preferences.Dislikes(pActor, sexReason != null))
                 return false;
             
             if (!isInit)

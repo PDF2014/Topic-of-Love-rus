@@ -154,11 +154,10 @@ public class ActorPatch
                     }
                 }
                 
-                // maybe rework so that aromantic/asexual ppl still experience intimacy happiness in some way?
                 if(!Preferences.Dislikes(__instance, true) && TolUtil.IsOrientationSystemEnabledFor(__instance))
-                    TolUtil.ChangeIntimacyHappinessBy(__instance.a, -Randy.randomFloat(5, 10f));
-                else
-                    __instance.data.set("intimacy_happiness", 100f);
+                    TolUtil.ChangeIntimacyHappinessBy(__instance.a, -Randy.randomFloat(7, 12f));
+                // else
+                    // __instance.data.set("intimacy_happiness", 100f);
             } else if (!__instance.isAdult() && Randy.randomChance(0.1f) && !Preferences.HasAPreference(__instance))
             {
                 TolUtil.NewPreferences(__instance);
