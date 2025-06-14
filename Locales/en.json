@@ -16,6 +16,9 @@
 
   "status_title_cheated_on": "Cheated On",
   "status_description_cheated_on": "Their ex-lover cheated on them",
+  
+  "status_title_broke_up": "Broke Up",
+  "status_description_broke_up": "It wasn't working out",
 
   "happiness_went_on_date": "Went on date",
   "happiness_dialog_went_on_date_0": "That was an amazing date!",
@@ -60,11 +63,11 @@
   "happiness_dialog_cheated_on_2": "What did I do to deserve this?",
   "happiness_dialog_cheated_on_3": "Where did it all go wrong?",
 
-  "happiness_breakup": "Broke up",
-  "happiness_dialog_breakup_0": "I wish it didn't have to end..",
-  "happiness_dialog_breakup_1": "At least I wasn't cheated on..",
-  "happiness_dialog_breakup_2": "I loved them so much.",
-  "happiness_dialog_breakup_3": "I'm sorry that we ended up this way.",
+  "happiness_broke_up": "Broke up",
+  "happiness_dialog_broke_up_0": "I wish it didn't have to end..",
+  "happiness_dialog_broke_up_1": "At least I wasn't cheated on..",
+  "happiness_dialog_broke_up_2": "I loved them so much.",
+  "happiness_dialog_broke_up_3": "I'm sorry that we ended up this way.",
   
   "happiness_true_self": "Orientation feels different",
   "happiness_dialog_true_self_0": "It feels so good to realize myself.",

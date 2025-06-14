@@ -128,15 +128,15 @@ public class Decisions
                     if (TolUtil.CouldReproduce(actor, actor.lover) && !Preferences.BothActorsPreferenceMatch(actor, actor.lover, true))
                         return true;
 
-                    if (TolUtil.CouldReproduce(actor, actor.lover) &&
-                        Preferences.BothActorsPreferenceMatch(actor, actor.lover, true))
-                        return false;
+                    // if (TolUtil.CouldReproduce(actor, actor.lover) &&
+                    //     Preferences.BothActorsPreferenceMatch(actor, actor.lover, true))
+                    //     return false;
                 }
                     
                 return bestFriend != null && TolUtil.CouldReproduce(actor, bestFriend) && !bestFriend.hasStatus("pregnant") && actor.hasHouse();
             },
             list_civ = true,
-            weight = 1f,
+            weight = 1.5f,
             only_safe = true,
             only_adult = true,
             cooldown_on_launch_failure = true

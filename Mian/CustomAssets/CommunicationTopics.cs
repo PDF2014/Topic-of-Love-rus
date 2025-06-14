@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Topic_of_Love.Mian.CustomAssets.Custom;
-using Topic_of_Love.Mian.CustomAssets.Traits;
 
 namespace Topic_of_Love.Mian.CustomAssets
 {

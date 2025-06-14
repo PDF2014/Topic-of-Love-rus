@@ -325,9 +325,9 @@ namespace Topic_of_Love.Mian
             AddOrRemoveUndateableActor(actor, actor.lover);
             AddOrRemoveUndateableActor(actor.lover, actor);
             
-            actor.lover.changeHappiness("breakup");
+            actor.lover.addStatusEffect("broke_up");
             if(actorIsSad)
-                actor.changeHappiness("breakup");
+                actor.addStatusEffect("broke_up");
             
             RemoveLovers(actor);
         }
@@ -343,7 +343,7 @@ namespace Topic_of_Love.Mian
         {
             actor.data.get("just_lost_lover", out var justLostLover, false);
             actor.data.get("force_lover", out var isForced, false);
-            return !justLostLover && !isForced && CanDoLove(actor);
+            return !justLostLover && !actor.hasStatus("broke_up") && !isForced && CanDoLove(actor);
         }
 
         public static void RemoveLovers(Actor actor)

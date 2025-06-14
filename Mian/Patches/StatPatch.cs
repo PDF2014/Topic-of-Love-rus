@@ -91,20 +91,9 @@ public class StatPatch
     {
         foreach (var stat in Icons)
         {
-            if (stat.Valid(window.actor))
-            {
-                window.setIconValue(stat.Name, stat.Value(window.actor));
-            }
-            else
-            {
-                Transform recursive = window.transform.FindRecursive(stat.Name);
-                if (recursive == null)
-                    continue;
-                var component = recursive.GetComponent<StatsIcon>();
-                component.gameObject.SetActive(false);
-            }
+            window.setIconValue(stat.Name, stat.Value(window.actor));
         }
-        window.showInfo();
+        // window.showInfo();
     }
     
     private static void Initialize(UnitWindow window)

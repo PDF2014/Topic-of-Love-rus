@@ -19,7 +19,7 @@ namespace Topic_of_Love.Mian.CustomAssets
             // breakup
             Add(new HappinessAsset
             {
-                id = "breakup",
+                id = "broke_up",
                 value = -15,
                 pot_task_id = "crying",
                 path_icon = "ui/Icons/iconCrying",

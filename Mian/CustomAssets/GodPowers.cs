@@ -78,7 +78,7 @@ namespace Topic_of_Love.Mian.CustomAssets
                 rank = PowerRank.Rank0_free,
                 show_close_actor = true,
                 unselect_when_window = true,
-                path_icon = "status/disliked_sex",
+                path_icon = "status/broke_up",
                 can_drag_map = true,
                 type = PowerActionType.PowerSpecial,
                 select_button_action = _ => 

@@ -123,6 +123,21 @@ public class StatusEffects
                 return true;
             }
         });
+        
+        Add(new StatusAsset
+        {
+            id = "broke_up",
+            duration = 60f,
+            action_on_receive = (actor, _) =>
+            {
+                actor.a.changeHappiness("broke_up");
+                
+                // depression :(
+                TolUtil.ChangeIntimacyHappinessBy(actor.a, -50);
+                return true;
+            }
+        });
+        
         Add(new StatusAsset
         {
             id="cheated_on",
@@ -156,6 +171,9 @@ public class StatusEffects
                             cheatedActor.a.startFightingWith(lover);
                     }
                 }
+                
+                // that's a fucking mood killer
+                TolUtil.ChangeIntimacyHappinessBy(cheatedActor.a, -100);
                 cheatedActor.a.changeHappiness("cheated_on");
                 cheatedActor.a.data.set("cheated_" +lover.getID(),true);
                 
