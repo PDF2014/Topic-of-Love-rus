@@ -203,7 +203,7 @@ public class ActorPatch
                 {
                     if (intimacy < 0)
                     {
-                        breakingUpChance += Math.Abs(intimacy / 2); // -100 will result in 50% additional chance of breaking up
+                        breakingUpChance += Math.Abs(intimacy / 8);
                     }
                 }
                 
