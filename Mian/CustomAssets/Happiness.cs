@@ -4,9 +4,10 @@ namespace Topic_of_Love.Mian.CustomAssets
 {
     public class Happiness
     {
+        public static HappinessAsset FeelsLonely;
         public static void Init()
         {
-            Add(new HappinessAsset
+            FeelsLonely = Add(new HappinessAsset
             {
                 id = "feels_lonely",
                 value = -15,
@@ -150,10 +151,11 @@ namespace Topic_of_Love.Mian.CustomAssets
             });
         }
 
-        private static void Add(HappinessAsset asset)
+        private static HappinessAsset Add(HappinessAsset asset)
         {
             AssetManager.happiness_library.add(asset);
             asset.index = AssetManager.happiness_library.list.Count-1;
+            return asset;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             });
             Add(new ActorTrait
             {
-                id = "sex_indifferent",
+                id = "intimacy_averse",
                 group_id = "mind",
                 rate_birth = 2,
                 rate_acquire_grow_up = 4,

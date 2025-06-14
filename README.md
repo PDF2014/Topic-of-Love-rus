@@ -48,7 +48,7 @@ More over.. not all units will enjoy every copulating. The enjoyment of a unit's
 - Sexual Expectations : A lover expectation that if both lovers do not prefer each other sexually, then they are allowed to copulate with others that do fit their preferences without it being considered cheating.
 #### Actor Traits
 - Unfluid : This unit's preferences will never change even over time.
-- Sex Indifferent : This unit does not require intimacy in a relationship and will not cheat or break up based on that.
+- Intimacy-Averse : This unit does not require intimacy to function. As such, their actions in relationships, whether cheating, or breaking up, will not be impacted by intimacy. 
 - Faithful : This unit will never cheat.
 - Unfaithful : This unit is more likely to cheat than your average Joe.
 

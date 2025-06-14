@@ -137,9 +137,9 @@
   "force_date": "Force Date",
   "force_date_description": "Force a unit to go on a date",
 
-  "trait_sex_indifferent": "Sex-Indifferent",
-  "trait_sex_indifferent_info": "Copulating is not a requirement for them to be in a relationship.",
-  "trait_sex_indifferent_info_2": "They'd rather love than do the deed!",
+  "trait_intimacy_averse": "Intimacy-Averse",
+  "trait_intimacy_averse_info": "Intimacy does not affect this unit and thus will not break up or feel lonely because of intimacy.",
+  "trait_intimacy_averse_info_2": "They could be alone and wouldn't mind!",
 
   "trait_faithful": "Faithful",
   "trait_faithful_info": "They will never cheat on someone even if their romantic preference no longer matches their partner's sex",

@@ -153,7 +153,7 @@ namespace Topic_of_Love.Mian
                 reduceChances += toReduce;
             }
 
-            if (pActor.hasTrait("sex_indifferent") && sexReason != null)
+            if (pActor.hasTrait("intimacy_averse"))
                 reduceChances = 0f;
             
             reduceChances = Math.Max(-0.2f, reduceChances);

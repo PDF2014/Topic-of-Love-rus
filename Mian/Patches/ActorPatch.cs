@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using EpPathFinding.cs;
 using HarmonyLib;
 using NeoModLoader.General;
 using NeoModLoader.services;
+using Topic_of_Love.Mian.CustomAssets;
 using Topic_of_Love.Mian.CustomAssets.Custom;
 using UnityEngine.Rendering;
 
@@ -190,7 +192,7 @@ public class ActorPatch
             {
                 var breakingUpChance = 0.005f;
 
-                if (!__instance.hasTrait("sex_indifferent"))
+                if (!__instance.hasTrait("intimacy_averse"))
                 {
                     if (intimacy < 0)
                     {
@@ -215,11 +217,11 @@ public class ActorPatch
                 }
             }
 
-            if (intimacy < 0)
+            if (intimacy < 0 && !__instance.hasTrait("intimacy_averse"))
             {
                 var feelsLonely = Randy.randomChance(Math.Abs(intimacy));
-                if (feelsLonely)
-                    __instance.changeHappiness("feels_lonely", (int) intimacy * 25);
+                if (feelsLonely && __instance._last_happiness_history.Count(asset => asset.index == Happiness.FeelsLonely.index) < 5)
+                    __instance.changeHappiness("feels_lonely", (int) (intimacy * 25));
             }
         }
 
@@ -232,6 +234,10 @@ public class ActorPatch
         TolUtil.PotentiallyCheatedWith(pTarget, __instance);
         
         TolUtil.Debug($"{__instance.getName()} fell in love {pTarget.getName()}!");
+        
+        // falling in love is fucking amazing cherish it mate
+        TolUtil.ChangeIntimacyHappinessBy(pTarget, 100);
+        TolUtil.ChangeIntimacyHappinessBy(__instance, 100);
     }
         
     // This is where we handle the beef of our code for having cross species and non-same reproduction method ppl fall in love
