@@ -232,14 +232,15 @@ namespace Topic_of_Love.Mian
                 }
 
                 // did you really fucking enjoy it?
-                if (sexReason.Equals("casual") 
-                    && opinion.Equals("enjoyed_sex") 
-                    && opinion1.Equals("enjoyed_sex")
+                if (opinion != null && opinion1 != null && 
+                    sexReason.Equals("casual") && 
+                    opinion.Equals("enjoyed_sex") && 
+                    opinion1.Equals("enjoyed_sex")
                    )
                 {
-                    if (actor1.hasLover() && actor1.hasTrait("faithful"))
+                    if (actor1.hasLover() && IsFaithful(actor1))
                         return;
-                    if (actor2.hasLover() && actor2.hasTrait("faithful"))
+                    if (actor2.hasLover() && IsFaithful(actor2))
                         return;
                     actor1.becomeLoversWith(actor2);
                 }
@@ -294,9 +295,9 @@ namespace Topic_of_Love.Mian
 
         public static bool WithinOfAge(Actor pActor, Actor pTarget)
         { 
-            int higherAge = Math.Max(pActor.age, pTarget.age);
-            int lowerAge = Math.Min(pActor.age, pTarget.age);
-            int minimumAge = higherAge / 2 + 7;
+            var higherAge = Math.Max(pActor.age, pTarget.age);
+            var lowerAge = Math.Min(pActor.age, pTarget.age);
+            var minimumAge = Math.Min(higherAge, higherAge / 2 + 7);
             return lowerAge >= minimumAge || (!pActor.hasCultureTrait("mature_dating") && !pTarget.hasCultureTrait("mature_dating"));
         }
         
@@ -398,16 +399,18 @@ namespace Topic_of_Love.Mian
             return false;
         }
 
-        public static bool Socialized(BehaviourActionActor __instance, Actor pActor, Actor target, bool noBoringLove=false)
+        public static bool SocializedLoveCheck(BehaviourActionActor __instance, Actor pActor, Actor target, bool noBoringLove=false)
         {
+            if (!pActor.canFallInLoveWith(target))
+                return false;
+            
             if (IsOrientationSystemEnabledFor(pActor) && IsOrientationSystemEnabledFor(target))
             {
                 if (Randy.randomBool())
                 {
                     if (pActor.lover != target)
                     {
-                        if (pActor.canFallInLoveWith(target) 
-                            && WillDoIntimacy(pActor, null, false, true)
+                        if (WillDoIntimacy(pActor, null, false, true)
                             && WillDoIntimacy(target, null, false))
                         {
                             // does date instead
@@ -432,12 +435,11 @@ namespace Topic_of_Love.Mian
                         pActor.beh_actor_target = target;
                         __instance.forceTask(pActor, "try_kiss", false);
                         return true;
-                    } else if (!noBoringLove && Randy.randomBool() && pActor.canFallInLoveWith(target) && !pActor.hasLover() &&
-                                  !target.hasLover())
-                    {
-                        pActor.becomeLoversWith(target);
-                        return true;
                     }
+                } else if (!noBoringLove && !pActor.hasLover() && !target.hasLover())
+                {
+                    pActor.becomeLoversWith(target);
+                    return true;
                 }
             }
             else
@@ -505,19 +507,19 @@ namespace Topic_of_Love.Mian
         public static void Debug(object message)
         {
             var config = TopicOfLove.Mod.GetConfig();
-            var slowOnLog = (bool)config["Misc"]["SlowOnLog"].GetValue();
+            var slowOnLog = (string)config["Misc"]["SlowOnLog"].GetValue();
+            var stackTrace = (string)config["Misc"]["StackTrace"].GetValue();
             var debug = (bool)config["Misc"]["Debug"].GetValue();
-            // var printStackTrace = (bool)config["Misc"]["StackTrace"].GetValue();
 
-            message = message.ToString();
-            
-            // if(printStackTrace)
-            //     message += "\nStackTrace: " + Environment.StackTrace;
+            var stringMsg = message.ToString();
+
             if (!debug)
                 return;
-            if(slowOnLog)
+            if(stackTrace.Length > 0 && stringMsg.Contains(stackTrace))
+                stringMsg += "\nStackTrace: " + Environment.StackTrace;
+            if(slowOnLog.Length > 0 && stringMsg.Contains(slowOnLog))
                 Config.setWorldSpeed(AssetManager.time_scales.get("slow_mo"));
-            LogInfo((string) message);
+            LogInfo(stringMsg);
         }
         
         public static bool NeedSameSexTypeForReproduction(Actor pActor)

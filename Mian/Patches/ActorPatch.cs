@@ -97,7 +97,7 @@ public class ActorPatch
             
             if (__instance.isAdult()) // fluid sexuality
             {
-                if (!__instance.hasTrait("unfluid"))
+                if (!__instance.hasTrait("unfluid") && MapBox.instance.world_laws.isEnabled("world_law_fluid_sexuality"))
                 {
                     // preference for gender
                     if (Randy.randomChance(0.005f))
@@ -213,6 +213,8 @@ public class ActorPatch
         // if they become new lovers with someone, the others were cheated on
         TolUtil.PotentiallyCheatedWith(__instance, pTarget);
         TolUtil.PotentiallyCheatedWith(pTarget, __instance);
+        
+        TolUtil.Debug($"{__instance.getName()} fell in love {pTarget.getName()}!");
     }
         
     // This is where we handle the beef of our code for having cross species and non-same reproduction method ppl fall in love
@@ -313,7 +315,6 @@ public class ActorPatch
             }
             
             __result = true;
-            TolUtil.Debug($"{__instance.getName()} fell in love {pTarget.getName()}!");
             return false;
         }
 }

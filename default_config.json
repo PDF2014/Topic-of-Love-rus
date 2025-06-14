@@ -24,8 +24,13 @@
     },
     {
       "Id": "SlowOnLog",
-      "Type": "SWITCH",
-      "BoolVal": false
+      "Type": "TEXT",
+      "TextVal": ""
+    },
+    {
+      "Id": "StackTrace",
+      "Type": "TEXT",
+      "TextVal": ""
     }
   ]
 }

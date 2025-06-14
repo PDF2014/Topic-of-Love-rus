@@ -10,7 +10,7 @@ public class ActorToolPatch
     [HarmonyPatch(nameof(ActorTool.checkFallInLove))]
     public static bool FallInLovePatch(Actor pActor, Actor pTarget)
     {
-        if (pActor.lover == pTarget.lover)
+        if (pActor.lover == pTarget)
             return false;
         if (!pActor.canFallInLoveWith(pTarget))
             return false;

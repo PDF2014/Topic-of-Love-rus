@@ -222,6 +222,10 @@
   "subspecies_trait_reproduction_same_sex": "Same Sex Reproduction",
   "subspecies_trait_reproduction_same_sex_info": "Two of the same sex are required to reproduce",
   "subspecies_trait_reproduction_same_sex_info_2": "Two indeed become more",
+  
+  "world_law_fluid_sexuality_title": "Fluid Preferences",
+  "world_law_fluid_sexuality_description": "Unit preferences may change overtime even when already established",
+  "world_law_fluid_sexuality_description_2": "Sexuality can be fluid!",
 
   "opinion_homosexual": "Opinions on Homosexuality",
   "opinion_heterosexual": "Opinions on Heterosexuality",
@@ -235,11 +239,14 @@
   "tab_desc_tol": "For all your romantic and sexual needs!",
   
   "Misc": "Developer Settings",
-  "SlowOnLog": "Slow on Log",
-  "SlowOnLog Description": "Slows the game automatically when logs happen when enabled. You can ignore this as a player.",
+  "SlowOnLog": "Slow on Debug",
+  "SlowOnLog Description": "Slows the game automatically when a specific part of a debug message is outputted. Put nothing in the text box to disable.",
+
+  "StackTrace": "Stack Trace",
+  "StackTrace Description": "Print stack trace when a specific part of a debug message is outputted. Put nothing in the text box to disable.",
 
   "Debug": "Debug",
-  "Debug Description": "Enables debug logs. Helpful for testing out a feature or needing to report information.",
+  "Debug Description": "Enables debug logs. Only turn this on if requested by someone to do so.",
 
   "CrossSpecies": "Cross Species",
   "AllowCrossSpeciesLove": "Allow Cross Species Love",

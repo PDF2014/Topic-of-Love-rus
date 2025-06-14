@@ -43,12 +43,7 @@ public class BehCheckIfDateFinish : BehaviourActionActor
                 return BehResult.RestartTask;
             }
         }
-
-        if (happiness >= (pActor.getBestFriend() == target ? 10f : 25f))
-        {
-            ActorTool.checkFallInLove(pActor, target);
-        }
-
+        
         target.cancelAllBeh();
 
         pActor.addStatusEffect("went_on_date");
@@ -60,6 +55,12 @@ public class BehCheckIfDateFinish : BehaviourActionActor
         pActor.data.removeFloat("date_happiness");
         
         TolUtil.Debug("The date for "+pActor.getName()+" and "+target.getName() + " has finalized! Total happiness: "+happiness);
+        
+        if (happiness >= (pActor.getBestFriend() == target ? 10f : 25f))
+        {
+            ActorTool.checkFallInLove(pActor, target);
+        }
+        
         return BehResult.Continue;
     }
 }

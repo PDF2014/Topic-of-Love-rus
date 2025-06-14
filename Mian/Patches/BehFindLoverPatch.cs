@@ -17,7 +17,7 @@ public class BehFindLoverPatch
         }
         Actor pTarget = __instance.findLoverAround(pActor) ?? __instance.checkCityLovers(pActor);
         if (pTarget != null)
-            if (TolUtil.Socialized(__instance, pActor, pTarget, true)){
+            if (TolUtil.SocializedLoveCheck(__instance, pActor, pTarget, true)){
                 __result = BehResult.Skip;
                 return false;
             }
