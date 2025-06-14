@@ -92,6 +92,13 @@ public class ActorPatch
         }
 
     [HarmonyPostfix]
+    [HarmonyPatch(nameof(Actor.updateStats))]
+    static void UpdateStatsPatch(Actor __instance)
+    {
+        __instance.stats["intimacy_happiness"] = __instance.data["intimacy_happiness"];
+    }
+        
+    [HarmonyPostfix]
     [HarmonyPatch(nameof(Actor.updateAge))]
         static void CalcAgeStages(Actor __instance)
         {

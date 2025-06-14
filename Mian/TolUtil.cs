@@ -547,7 +547,7 @@ namespace Topic_of_Love.Mian
         // this is to typically catch types like boats
         public static bool CanDoLove(Actor pActor)
         {
-            return pActor.hasSubspecies();
+            return pActor.hasSubspecies() && !pActor.asset.is_boat;
         }
 
         public static bool IsTOIInstalled()

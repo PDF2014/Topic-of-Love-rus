@@ -47,6 +47,7 @@ namespace Topic_of_Love.Mian
             ActorBehaviorTasks.Init();
             Decisions.Init();
             Opinions.Init();
+            BaseStatAssets.Init();
             WorldLawAssets.Init();
             GodPowers.Init();
             TabsAndButtons.Init();

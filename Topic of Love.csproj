@@ -39,6 +39,7 @@
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\sex\BehCheckForSexTarget.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\sex\BehGetPossibleTileForSex.cs" />
         <Compile Include="Mian\CustomAssets\AI\Decisions.cs" />
+        <Compile Include="Mian\CustomAssets\BaseStatAssets.cs" />
         <Compile Include="Mian\CustomAssets\CommunicationTopics.cs" />
         <Compile Include="Mian\CustomAssets\Custom\Orientation.cs" />
         <Compile Include="Mian\CustomAssets\Custom\Preferences.cs" />

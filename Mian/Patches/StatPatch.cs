@@ -22,6 +22,7 @@ public class StatPatch
         public readonly Func<Actor, bool> Valid;
         public readonly string IconPath;
         public readonly Func<Actor, T> Value;
+        public readonly bool IsFloat = typeof(T) == typeof(float);
         
         public Stat(string name, Func<Actor, bool> valid, Func<Actor, T> value, string iconPath=null)
         {
@@ -31,12 +32,8 @@ public class StatPatch
             Value=value;
         }
     }
-    private static readonly Stat<float>[] Icons = {
-        new ("intimacy_happiness", TolUtil.CanDoLove, actor =>
-        {
-            actor.data.get("intimacy_happiness", out float happiness);
-            return happiness;
-        }, "ui/Icons/iconLovers"),
+    private static readonly Stat<int>[] Icons = {
+        new ("intimacy_happiness", TolUtil.CanDoLove, actor => (int) actor.stats["intimacy_happiness"], "ui/Icons/god_powers/force_lover"),
     };
     private static readonly Stat<Dictionary<string, string>>[] Stats = {
         new ("sexual_orientation", TolUtil.CanDoLove, actor =>
@@ -69,6 +66,23 @@ public class StatPatch
             return null;
         })
     };
+
+    [HarmonyPatch(typeof(UnitStatsElement))]
+    public class UnitStatsElementClass
+    {
+        [HarmonyPostfix]
+        [HarmonyPatch(nameof(UnitStatsElement.showContent))]
+        static void ShowContent(UnitStatsElement __instance)
+        {
+            foreach (var stat in Icons)
+            {
+                if (__instance.actor.asset.inspect_stats)
+                {
+                    __instance.setIconValue(stat.Name, stat.Value(__instance.actor),"", "", stat.IsFloat);
+                }
+            }
+        }
+    }
     
     private static bool _initializedIcons;
     [HarmonyPostfix]
@@ -83,19 +97,8 @@ public class StatPatch
             _initializedIcons = true;
             Initialize(__instance);
         }
+    }
 
-        OnEnable(__instance);
-    }
-    
-    private static void OnEnable(UnitWindow window)
-    {
-        foreach (var stat in Icons)
-        {
-            window.setIconValue(stat.Name, stat.Value(window.actor));
-        }
-        // window.showInfo();
-    }
-    
     private static void Initialize(UnitWindow window)
         {
             window
@@ -110,12 +113,10 @@ public class StatPatch
                 .gameObject.transform.Find("Background/Scroll View/Viewport")
                 .GetComponent<Image>()
                 .enabled = true;
-
+    
             var moreIconsTransform = window.gameObject.transform.Find(
                 "Background/Scroll View/Viewport/Content/content_more_icons"
             ); // where the icons are
-
-            moreIconsTransform.gameObject.AddOrGetComponent<StatsIconContainer>();
             
             var iconGroupTemplate = moreIconsTransform.GetChild(4);
             var iconGroup = GameObject.Instantiate(iconGroupTemplate, moreIconsTransform);
@@ -128,7 +129,7 @@ public class StatPatch
                 if(child.name != "i_kills")
                     GameObject.DestroyImmediate(child.gameObject);
             }
-
+    
             foreach (var iconData in Icons)
             {
                 var baseIcon = GameObject.Instantiate(iconTemplate, iconGroup);
