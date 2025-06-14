@@ -25,7 +25,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         {
             var identities = List.Of("female", "male");
 
-            if (TolUtil.IsTOIInstalled()) 
+            if (TolUtil.IsTOIInstalled())
                 identities.Add("xenogender");
             
             AddPreferenceType("identity", "#B57EDC", identities);
@@ -90,12 +90,21 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                     romanticTrait.group_id = type;
                     romanticTrait.opposite_traits = new HashSet<ActorTrait>();
                     romanticTraits.Add(romanticTrait);
+
+                    var stringToUse = preference;
+                    if (TolUtil.IsTOIInstalled())
+                    {
+                        if (preference.Equals("male"))
+                            stringToUse = "men";
+                        if (preference.Equals("female"))
+                            stringToUse = "women";
+                    }
                     
                     if (!LM.Has("trait_" + preference + "_romantic"))
                         LM.AddToCurrentLocale("trait_" + preference + "_romantic", 
-                            "Prefers " + preference.Substring(0, 1).ToUpper() + preference.Substring(1) + " (Romantic)");
+                            "Prefers " + stringToUse.Substring(0, 1).ToUpper() + stringToUse.Substring(1) + " (Romantic)");
                     if (!LM.Has("trait_" + preference + "_romantic_info"))
-                        LM.AddToCurrentLocale("trait_" + preference + "_romantic_info", "Romantically prefers " + preference);
+                        LM.AddToCurrentLocale("trait_" + preference + "_romantic_info", "Romantically prefers " + stringToUse);
                     if (!LM.Has("trait_" + preference + "_romantic_info_2"))
                         LM.AddToCurrentLocale("trait_" + preference + "_romantic_info_2", "");
                 }
@@ -115,9 +124,18 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 sexualTrait.opposite_traits = new HashSet<ActorTrait>();
                 sexualTraits.Add(sexualTrait);
                 
+                var stringToUse = preference;
+                if (TolUtil.IsTOIInstalled())
+                {
+                    if (preference.Equals("male"))
+                        stringToUse = "men";
+                    if (preference.Equals("female"))
+                        stringToUse = "women";
+                }
+                
                 if (!LM.Has("trait_" + preference + "_sexual"))
                     LM.AddToCurrentLocale("trait_" + preference + "_sexual", 
-                        "Prefers " + preference.Substring(0, 1).ToUpper() + preference.Substring(1) + (canBeRomantic ? " (Sexual)" : ""));
+                        "Prefers " + stringToUse.Substring(0, 1).ToUpper() + stringToUse.Substring(1) + (canBeRomantic ? " (Sexual)" : ""));
                 if (!LM.Has("trait_" + preference + "_sexual_info"))
                     LM.AddToCurrentLocale("trait_" + preference + "_sexual_info", "Sexually prefers " + preference);
                 if (!LM.Has("trait_" + preference + "_sexual_info_2"))
@@ -414,7 +432,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 // some code;
             }
 
-            return actor.isSexFemale() ? "female" : "male";
+            return actor.isSexFemale() ? "woman" : "man";
         }
 
         public static string GetExpression(Actor actor)
@@ -459,11 +477,11 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         {
             return GetIdentity(actor).Equals("xenogender");
         }
-        public static bool IdentifiesAsFemale(Actor actor)
+        public static bool IdentifiesAsWoman(Actor actor)
         {
             return GetIdentity(actor).Equals("female");
         }
-        public static bool IdentifiesAsMale(Actor actor)
+        public static bool IdentifiesAsMan(Actor actor)
         {
             return GetIdentity(actor).Equals("male");
         }

@@ -100,7 +100,7 @@ public class Orientations
             if (Preferences.Dislikes(actor, isSexual))
                 return false;
 
-            if ((Preferences.IdentifiesAsFemale(actor) || Preferences.IsEnby(actor)) && actor.isSapient())
+            if ((Preferences.IdentifiesAsWoman(actor) || Preferences.IsEnby(actor)) && actor.isSapient())
             {
                 var preferredIdentities = Preferences.GetActorPreferencesFromType(actor, "identity", isSexual);
 
@@ -122,7 +122,7 @@ public class Orientations
             if (Preferences.Dislikes(actor, isSexual))
                 return false;
 
-            if ((Preferences.IdentifiesAsMale(actor) || Preferences.IsEnby(actor)) && actor.isSapient())
+            if ((Preferences.IdentifiesAsMan(actor) || Preferences.IsEnby(actor)) && actor.isSapient())
             {
                 var preferredIdentities = Preferences.GetActorPreferencesFromType(actor, "identity", isSexual);
 
