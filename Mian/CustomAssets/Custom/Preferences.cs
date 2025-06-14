@@ -91,20 +91,11 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                     romanticTrait.opposite_traits = new HashSet<ActorTrait>();
                     romanticTraits.Add(romanticTrait);
 
-                    var stringToUse = preference;
-                    if (TolUtil.IsTOIInstalled())
-                    {
-                        if (preference.Equals("male"))
-                            stringToUse = "men";
-                        if (preference.Equals("female"))
-                            stringToUse = "women";
-                    }
-                    
                     if (!LM.Has("trait_" + preference + "_romantic"))
                         LM.AddToCurrentLocale("trait_" + preference + "_romantic", 
-                            "Prefers " + stringToUse.Substring(0, 1).ToUpper() + stringToUse.Substring(1) + " (Romantic)");
+                            "Prefers " + preference.Substring(0, 1).ToUpper() + preference.Substring(1) + " (Romantic)");
                     if (!LM.Has("trait_" + preference + "_romantic_info"))
-                        LM.AddToCurrentLocale("trait_" + preference + "_romantic_info", "Romantically prefers " + stringToUse);
+                        LM.AddToCurrentLocale("trait_" + preference + "_romantic_info", "Romantically prefers " + preference);
                     if (!LM.Has("trait_" + preference + "_romantic_info_2"))
                         LM.AddToCurrentLocale("trait_" + preference + "_romantic_info_2", "");
                 }
@@ -124,18 +115,9 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 sexualTrait.opposite_traits = new HashSet<ActorTrait>();
                 sexualTraits.Add(sexualTrait);
                 
-                var stringToUse = preference;
-                if (TolUtil.IsTOIInstalled())
-                {
-                    if (preference.Equals("male"))
-                        stringToUse = "men";
-                    if (preference.Equals("female"))
-                        stringToUse = "women";
-                }
-                
                 if (!LM.Has("trait_" + preference + "_sexual"))
                     LM.AddToCurrentLocale("trait_" + preference + "_sexual", 
-                        "Prefers " + stringToUse.Substring(0, 1).ToUpper() + stringToUse.Substring(1) + (canBeRomantic ? " (Sexual)" : ""));
+                        "Prefers " + preference.Substring(0, 1).ToUpper() + preference.Substring(1) + (canBeRomantic ? " (Sexual)" : ""));
                 if (!LM.Has("trait_" + preference + "_sexual_info"))
                     LM.AddToCurrentLocale("trait_" + preference + "_sexual_info", "Sexually prefers " + preference);
                 if (!LM.Has("trait_" + preference + "_sexual_info_2"))
@@ -432,7 +414,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 // some code;
             }
 
-            return actor.isSexFemale() ? "woman" : "man";
+            return actor.isSexFemale() ? "female" : "male";
         }
 
         public static string GetExpression(Actor actor)

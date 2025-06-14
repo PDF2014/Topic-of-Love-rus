@@ -58,6 +58,12 @@ namespace Topic_of_Love.Mian
             return false;
         }
 
+        public static float GetIntimacy(Actor actor)
+        {
+            actor.data.get("intimacy_happiness", out float intimacy);
+            return intimacy;
+        }
+
         public static bool IsIntimacyHappinessEnough(Actor actor, float happiness)
         {
             actor.data.get("intimacy_happiness", out float compare);
@@ -259,7 +265,7 @@ namespace Topic_of_Love.Mian
                 {
                     actor.addTrait(trait);
                 }
-                Orientations.LabelOrientations(actor);   
+                Orientations.RollOrientationLabel(actor);   
             }
         }
         public static bool CanHaveSexWithoutRepercussionsWithSomeoneElse(Actor actor, string sexReason)

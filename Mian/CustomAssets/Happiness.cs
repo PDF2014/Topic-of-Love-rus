@@ -6,6 +6,15 @@ namespace Topic_of_Love.Mian.CustomAssets
     {
         public static void Init()
         {
+            Add(new HappinessAsset
+            {
+                id = "feels_lonely",
+                value = -15,
+                pot_task_id = "crying",
+                path_icon = "ui/Icons/iconCrying",
+                ignored_by_psychopaths = true,
+                pot_amount = 5,
+            });
             // breakup
             Add(new HappinessAsset
             {

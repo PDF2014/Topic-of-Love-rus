@@ -184,14 +184,25 @@ public class ActorPatch
             {
                 __instance.data.set("just_lost_lover", false);
             } 
+            
+            var intimacy = TolUtil.GetIntimacy(__instance) / 100;
 
             if (__instance.hasLover())
             {
                 var breakingUpChance = 0.005f;
-                if (!Preferences.PreferenceMatches(__instance, __instance.lover, "identity", false))
-                    breakingUpChance += 0.2f;
-                if (!Preferences.PreferenceMatches(__instance, __instance.lover, "expression", false))
-                    breakingUpChance += 0.05f;
+
+                if (!__instance.hasTrait("sex_indifferent"))
+                {
+                    if (intimacy < 0)
+                    {
+                        breakingUpChance += Math.Abs(intimacy / 2); // -100 will result in 50% additional chance of breaking up
+                    }
+                }
+                
+                // if (!Preferences.PreferenceMatches(__instance, __instance.lover, "identity", false))
+                //     breakingUpChance += 0.2f;
+                // if (!Preferences.PreferenceMatches(__instance, __instance.lover, "expression", false))
+                //     breakingUpChance += 0.05f;
                 var wantsToBreakUp = Randy.randomChance(breakingUpChance);
                                 
                 if(TolUtil.CanStopBeingLovers(__instance) &&
@@ -203,6 +214,13 @@ public class ActorPatch
                         TolUtil.BreakUp(__instance);   
                     }   
                 }
+            }
+
+            if (intimacy < 0)
+            {
+                var feelsLonely = Randy.randomChance(Math.Abs(intimacy));
+                if (feelsLonely)
+                    __instance.changeHappiness("feels_lonely", (int) intimacy * 25);
             }
         }
 

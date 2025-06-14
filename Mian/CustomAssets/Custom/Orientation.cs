@@ -100,7 +100,7 @@ public class Orientations
             if (Preferences.Dislikes(actor, isSexual))
                 return false;
 
-            if ((Preferences.IdentifiesAsWoman(actor) || Preferences.IsEnby(actor)) && actor.isSapient())
+            if (!Preferences.IdentifiesAsMan(actor) && actor.isSapient())
             {
                 var preferredIdentities = Preferences.GetActorPreferencesFromType(actor, "identity", isSexual);
 
@@ -122,7 +122,7 @@ public class Orientations
             if (Preferences.Dislikes(actor, isSexual))
                 return false;
 
-            if ((Preferences.IdentifiesAsMan(actor) || Preferences.IsEnby(actor)) && actor.isSapient())
+            if (!Preferences.IdentifiesAsWoman(actor) && actor.isSapient())
             {
                 var preferredIdentities = Preferences.GetActorPreferencesFromType(actor, "identity", isSexual);
 
@@ -229,7 +229,7 @@ public class Orientations
         return orientations.GetRandom(); // at the very least should be pansexual
     }
 
-    public static void LabelOrientations(Actor actor)
+    public static void RollOrientationLabel(Actor actor)
     {
         var sexualOrientation = GetOrientationFromActor(actor, true);
         var romanticOrientation = GetOrientationFromActor(actor);
