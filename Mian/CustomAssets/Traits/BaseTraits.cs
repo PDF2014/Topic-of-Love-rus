@@ -86,7 +86,10 @@ public class BaseTraits<T, TR>
             }
 
         }
-        
+
+        if (trait.spawn_random_trait_allowed)
+            _library._pot_allowed_to_be_given_randomly.AddTimes(trait.spawn_random_rate, trait);
+
         trait.path_icon = "ui/Icons/"+_id+"_traits/" + trait.id;
         _assets.Add(trait);
         return _library.add(trait);

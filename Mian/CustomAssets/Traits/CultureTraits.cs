@@ -28,7 +28,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 rarity = Rarity.R1_Rare,
                 can_be_in_book = true,
                 can_be_removed = true,
-                can_be_given = true
+                can_be_given = true,
             }, List.Of("orc", "demon")).addOpposite("heterophobic");
 
             Add(new CultureTrait
@@ -39,7 +39,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 rarity = Rarity.R1_Rare,
                 can_be_in_book = true,
                 can_be_removed = true,
-                can_be_given = true
+                can_be_given = true,
             }, List.Of("flower_bud", "garl")).addOpposite("homophobic");
 
             // incest doesnt really have any gameplay value to it :shrug:
