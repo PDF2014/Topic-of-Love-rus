@@ -75,8 +75,6 @@
         <Compile Include="Mian\TolUtil.cs" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include=".github\ISSUE_TEMPLATE\bug_report.md" />
-      <Content Include=".github\ISSUE_TEMPLATE\feature_request.md" />
       <Content Include="default_config.json" />
       <Folder Include="Locales\" />
       <Content Include="mod.json" />
