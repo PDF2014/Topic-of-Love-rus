@@ -31,12 +31,11 @@ public class Decisions
             priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/status/just_kissed",
             cooldown = 15,
-            action_check_launch = actor => actor.isSapient()
+            action_check_launch = actor => TolUtil.CapableOfLove(actor)
                                            && (actor.hasLover() || actor.hasBestFriend())
                                            && !TolUtil.IsIntimacyHappinessEnough(actor, 100f)
                                            && TolUtil.IsOrientationSystemEnabledFor(actor)
                                            && !actor.hasStatus("just_kissed"),
-            list_civ = true,
             weight_calculate_custom = actor => TolUtil.IsIntimacyHappinessEnough(actor, 75f) ? 0.5f: 
                 TolUtil.IsIntimacyHappinessEnough(actor, 50f) ? 0.6f : TolUtil.IsIntimacyHappinessEnough(actor, 0) ? .8f : 
                 TolUtil.IsIntimacyHappinessEnough(actor, -50) ? 1f : TolUtil.IsIntimacyHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
@@ -50,13 +49,10 @@ public class Decisions
             priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/status/went_on_date",
             cooldown = 30,
-            action_check_launch = actor => actor.isSapient()
-                                           // && actor.hasLover()
+            action_check_launch = actor => TolUtil.CapableOfLove(actor)
                                            && !TolUtil.IsIntimacyHappinessEnough(actor, 100f)
                                            && TolUtil.IsOrientationSystemEnabledFor(actor)
-                                           // && (Preferences.BothPreferencesMatch(actor, actor.lover, false) || Randy.randomChance(0.5f))
                                            && !actor.hasStatus("went_on_date"),
-            list_civ = true,
             weight_calculate_custom = actor => !actor.hasLover() ? 1.5f : TolUtil.IsIntimacyHappinessEnough(actor, 75f) ? 0.5f: 
                 TolUtil.IsIntimacyHappinessEnough(actor, 50f) ? 0.6f : TolUtil.IsIntimacyHappinessEnough(actor, 0) ? .8f : 
                 TolUtil.IsIntimacyHappinessEnough(actor, -50) ? 1f : TolUtil.IsIntimacyHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
@@ -94,11 +90,10 @@ public class Decisions
             priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/status/enjoyed_sex",
             cooldown = 15,
-            action_check_launch = actor => actor.isSapient()
+            action_check_launch = actor => TolUtil.CapableOfLove(actor)
                                            && !Preferences.Dislikes(actor, true)
                                            && !TolUtil.IsIntimacyHappinessEnough(actor, 100f)
                                            && TolUtil.IsOrientationSystemEnabledFor(actor),
-            list_civ = true,
             weight_calculate_custom = actor => TolUtil.IsIntimacyHappinessEnough(actor, 75f) ? 0.25f: 
                 TolUtil.IsIntimacyHappinessEnough(actor, 50f) ? 0.5f : TolUtil.IsIntimacyHappinessEnough(actor, 0) ? .75f : 
                 TolUtil.IsIntimacyHappinessEnough(actor, -50) ? 1f : TolUtil.IsIntimacyHappinessEnough(actor, -100f) ? 1.5f : 1.25f,

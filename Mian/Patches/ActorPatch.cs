@@ -164,7 +164,7 @@ public class ActorPatch
                 }
                 
                 if(!Preferences.Dislikes(__instance, true) && TolUtil.IsOrientationSystemEnabledFor(__instance))
-                    TolUtil.ChangeIntimacyHappinessBy(__instance.a, -Randy.randomFloat(7, 12f));
+                    TolUtil.ChangeIntimacyHappinessBy(__instance.a, TolUtil.HasNoOne(__instance) ? -Randy.randomFloat(13f, 18f) : -Randy.randomFloat(7f, 12f));
                 // else
                     // __instance.data.set("intimacy_happiness", 100f);
             } else if (!__instance.isAdult() && Randy.randomChance(0.1f) && !Preferences.HasAPreference(__instance))
@@ -199,7 +199,7 @@ public class ActorPatch
             {
                 var breakingUpChance = 0.005f;
 
-                if (!__instance.hasTrait("intimacy_averse"))
+                if (TolUtil.AffectedByIntimacy(__instance))
                 {
                     if (intimacy < 0)
                     {
@@ -224,7 +224,7 @@ public class ActorPatch
                 }
             }
 
-            if (intimacy < 0 && !__instance.hasTrait("intimacy_averse"))
+            if (intimacy < 0 && TolUtil.AffectedByIntimacy(__instance))
             {
                 var feelsLonely = Randy.randomChance(Math.Abs(intimacy));
                 if (feelsLonely && __instance._last_happiness_history.Count(asset => asset.index == Happiness.FeelsLonely.index) < 5)

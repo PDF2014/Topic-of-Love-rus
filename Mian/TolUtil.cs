@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ai;
 using ai.behaviours;
 using Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.sex;
@@ -153,7 +154,7 @@ namespace Topic_of_Love.Mian
                 reduceChances += toReduce;
             }
 
-            if (pActor.hasTrait("intimacy_averse"))
+            if (!AffectedByIntimacy(pActor))
                 reduceChances = 0f;
             
             reduceChances = Math.Max(-0.2f, reduceChances);
@@ -256,7 +257,7 @@ namespace Topic_of_Love.Mian
         }
         public static void NewPreferences(Actor actor)
         {
-            if (actor != null && CanDoLove(actor))
+            if (actor != null && CapableOfLove(actor))
             {
                 var oldPreferences = Preferences.GetActorPreferences(actor);
                 oldPreferences.AddRange(Preferences.GetActorPreferences(actor, true));
@@ -343,7 +344,7 @@ namespace Topic_of_Love.Mian
         {
             actor.data.get("just_lost_lover", out var justLostLover, false);
             actor.data.get("force_lover", out var isForced, false);
-            return !justLostLover && !actor.hasStatus("broke_up") && !isForced && CanDoLove(actor);
+            return !justLostLover && !actor.hasStatus("broke_up") && !isForced && CapableOfLove(actor);
         }
 
         public static void RemoveLovers(Actor actor)
@@ -444,7 +445,7 @@ namespace Topic_of_Love.Mian
                         __instance.forceTask(pActor, "try_kiss", false);
                         return true;
                     }
-                } else if (!noBoringLove && !pActor.hasLover() && !target.hasLover())
+                } else if ((!noBoringLove || !pActor.isSapient()) && !pActor.hasLover() && !target.hasLover())
                 {
                     pActor.becomeLoversWith(target);
                     return true;
@@ -545,9 +546,19 @@ namespace Topic_of_Love.Mian
         }
 
         // this is to typically catch types like boats
-        public static bool CanDoLove(Actor pActor)
+        public static bool CapableOfLove(Actor pActor)
         {
             return pActor.hasSubspecies() && !pActor.asset.is_boat;
+        }
+
+        public static bool HasNoOne(Actor pActor)
+        {
+            return !pActor.hasBestFriend() && !pActor.hasFamily() && !pActor.hasLover() && !pActor.getParents().Any();
+        }
+
+        public static bool AffectedByIntimacy(Actor pActor)
+        {
+            return !pActor.hasTrait("intimacy_averse") && !pActor.hasTrait("psychopath");
         }
 
         public static bool IsTOIInstalled()

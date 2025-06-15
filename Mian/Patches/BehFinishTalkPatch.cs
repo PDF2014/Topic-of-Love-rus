@@ -16,6 +16,8 @@ public class BehFinishTalkPatch
         int pValue = num1 == 0 ? -15 : 10;
         pActor.changeHappiness("just_talked", pValue);
         pTarget.changeHappiness("just_talked", pValue);
+        TolUtil.ChangeIntimacyHappinessBy(pActor, 15);
+        TolUtil.ChangeIntimacyHappinessBy(pTarget, 15);
         pActor.addStatusEffect("recovery_social");
         pTarget.addStatusEffect("recovery_social");
         if (num1 != 0)

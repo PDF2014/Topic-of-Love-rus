@@ -62,6 +62,7 @@
         <Compile Include="Mian\Patches\BehCheckReproductionBasicsPatch.cs" />
         <Compile Include="Mian\Patches\BehFindLoverPatch.cs" />
         <Compile Include="Mian\Patches\BehFinishTalkPatch.cs" />
+        <Compile Include="Mian\Patches\BehIntimacyPatches.cs" />
         <Compile Include="Mian\Patches\BehSHFBPatch.cs" />
         <Compile Include="Mian\Patches\BehTryToSocializePatch.cs" />
         <Compile Include="Mian\Patches\CultureManagerPatch.cs" />
