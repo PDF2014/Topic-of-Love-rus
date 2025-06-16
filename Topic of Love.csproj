@@ -15,11 +15,6 @@
         <OutputType>Library</OutputType>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="0Harmony, Version=2.3.5.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>packages\Lib.Harmony.2.3.5\lib\net48\0Harmony.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-    <ItemGroup>
         <Compile Include="AssemblyInfo.cs" />
         <Compile Include="Mian\CustomAssets\AI\ActorBehaviorTasks.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\ivf\BehCheckForSexualIvf.cs" />
@@ -103,5 +98,8 @@
         <Reference Include="TOPICOFIDENTITY">
             <HintPath>..\..\worldbox_Data\StreamingAssets\mods\NML\CompiledMods\TOPICOFIDENTITY.dll</HintPath>
         </Reference>
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Lib.Harmony" Version="2.3.6" />
     </ItemGroup>
 </Project>
