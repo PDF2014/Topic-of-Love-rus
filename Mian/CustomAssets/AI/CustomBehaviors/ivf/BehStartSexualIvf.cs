@@ -20,34 +20,13 @@ public class BehStartSexualIvf : BehaviourActionActor
 
             _target = pActor.beh_actor_target.a;
 
-            Actor pregnantActor = null;
-            
-            if (TolUtil.NeedDifferentSexTypeForReproduction(pActor) && TolUtil.NeedDifferentSexTypeForReproduction(_target))
-            {
-                if (pActor.data.sex == _target.data.sex) return Cancel();
-                
-                if (pActor.isSexFemale())
-                    pregnantActor = pActor;
-                else if (_target.isSexFemale())
-                    pregnantActor = _target;
-            }
-            else if(TolUtil.NeedSameSexTypeForReproduction(pActor) && TolUtil.NeedSameSexTypeForReproduction(_target))
-            {
-                if (pActor.data.sex != _target.data.sex) return Cancel();
-                pregnantActor = !Randy.randomBool() ? _target : pActor;
-            } else if (TolUtil.CanDoAnySexType(pActor) || TolUtil.CanDoAnySexType(_target))
-            {
-                if(TolUtil.CanDoAnySexType(pActor) && TolUtil.CanDoAnySexType(_target))
-                    pregnantActor = !Randy.randomBool() ? _target : pActor;
-                else if (TolUtil.CanDoAnySexType(pActor))
-                {
-                    pregnantActor = pActor;
-                }
-                else
-                {
-                    pregnantActor = _target;
-                }
-            }
+            var aCanBePregnant = TolUtil.IsAbleToBecomePregnant(pActor);
+            var bCanBePregnant = TolUtil.IsAbleToBecomePregnant(_target);
+            Actor pregnantActor;
+            if (aCanBePregnant && bCanBePregnant)
+                pregnantActor = Randy.randomBool() ? pActor : _target;
+            else
+                pregnantActor = aCanBePregnant ? pActor : bCanBePregnant ? _target : null; 
 
             if (pregnantActor == null)
                 return Cancel();

@@ -398,13 +398,13 @@ namespace Topic_of_Love.Mian
                 }   
             }
             
-            if (pActor.hasHouse() && pActor.getHappiness() >= 75)
+            if ((pActor.hasHouse() || (pActor.hasLover() && pActor.lover.hasHouse())) && pActor.getHappiness() >= 75)
             {
                 Debug(pActor.getName() + " wants a baby because they have a house and are happy enough");
                 return true;
             }
             
-            // Debug(pActor.getName() + " does not want a baby.");
+            Debug(pActor.getName() + " does not want a baby.");
             return false;
         }
 
@@ -512,21 +512,29 @@ namespace Topic_of_Love.Mian
         {
             TopicOfLove.LogInfo(message);
         }
+
+        public static string[] GetKeywords(string word)
+        {
+            return word.Split(',').Where(keyword => !string.IsNullOrEmpty(keyword)).ToArray();
+        }
         
         public static void Debug(object message)
         {
             var config = TopicOfLove.Mod.GetConfig();
-            var slowOnLog = (string)config["Misc"]["SlowOnLog"].GetValue();
-            var stackTrace = (string)config["Misc"]["StackTrace"].GetValue();
+            var slowOnLog = GetKeywords((string)config["Misc"]["SlowOnLog"].GetValue());
+            var stackTrace = GetKeywords((string)config["Misc"]["StackTrace"].GetValue());
+            var ignore = GetKeywords((string)config["Misc"]["Ignore"].GetValue());
             var debug = (bool)config["Misc"]["Debug"].GetValue();
 
             var stringMsg = message.ToString();
 
             if (!debug)
                 return;
-            if(stackTrace.Length > 0 && stringMsg.Contains(stackTrace))
+            if (ignore.Length > 0 && ignore.Any(keyword => stringMsg.Contains(keyword)))
+                return;
+            if(stackTrace.Length > 0 && stackTrace.Any(keyword => stringMsg.Contains(keyword)))
                 stringMsg += "\nStackTrace: " + Environment.StackTrace;
-            if(slowOnLog.Length > 0 && stringMsg.Contains(slowOnLog))
+            if(slowOnLog.Length > 0 && slowOnLog.Any(keyword => stringMsg.Contains(keyword)))
                 Config.setWorldSpeed(AssetManager.time_scales.get("slow_mo"));
             LogInfo(stringMsg);
         }

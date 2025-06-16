@@ -2,7 +2,8 @@
   "name": "Topic of Love",
   "author": "MianReplicate",
   "version": "1.0.0",
-  "description": "A mod that reworks the love system, making it more advanced by adding cross species breeding, orientations, romantic tasks, breaking up, cheating and more.",
+  "description": "A mod that allows units to have intimacy and fall in love for more than just their ability to reproduce!",
+  "RepoUrl": "https://github.com/MianReplicate/Topic-of-Love",
   "GUID": "topicoflove",
   "OptionalDependencies": [
     "topicofidentity"

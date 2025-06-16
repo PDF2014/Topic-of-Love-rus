@@ -257,6 +257,9 @@
 
   "Debug": "Debug",
   "Debug Description": "Enables debug logs. Only turn this on if requested by someone to do so.",
+  
+  "Ignore": "Ignore",
+  "Ignore Description": "Ignore logs with these key words",
 
   "CrossSpecies": "Cross Species",
   "AllowCrossSpeciesLove": "Allow Cross Species Love",

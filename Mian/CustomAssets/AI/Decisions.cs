@@ -119,16 +119,23 @@ public class Decisions
                 {
                     if (!TolUtil.WantsBaby(actor.lover, false))
                         return false;
-                        
-                    if (TolUtil.CouldReproduce(actor, actor.lover) && !Preferences.BothActorsPreferenceMatch(actor, actor.lover, true))
+
+                    if (TolUtil.CouldReproduce(actor, actor.lover) &&
+                        !Preferences.BothActorsPreferenceMatch(actor, actor.lover, true))
+                    {
+                        TolUtil.Debug("SUCCEZ");
                         return true;
+                    }
 
                     // if (TolUtil.CouldReproduce(actor, actor.lover) &&
                     //     Preferences.BothActorsPreferenceMatch(actor, actor.lover, true))
                     //     return false;
                 }
-                    
-                return bestFriend != null && TolUtil.CouldReproduce(actor, bestFriend) && !bestFriend.hasStatus("pregnant") && actor.hasHouse();
+
+                bool success = bestFriend != null && TolUtil.CouldReproduce(actor, bestFriend) &&
+                               !bestFriend.hasStatus("pregnant");
+                TolUtil.Debug("sexual ivf almost successful : " + success);
+                return success;
             },
             list_civ = true,
             weight = 1.5f,
