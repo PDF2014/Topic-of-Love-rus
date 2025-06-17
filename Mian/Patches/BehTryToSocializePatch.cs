@@ -11,7 +11,7 @@ public class BehTryToSocializePatch
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(BehTryToSocialize.execute))]
-    static IEnumerable<CodeInstruction> SocializeTranspiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    static IEnumerable<CodeInstruction> SocializePatch(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
         var codeMatcher = new CodeMatcher(instructions, generator);
 
@@ -34,14 +34,14 @@ public class BehTryToSocializePatch
         
         codeMatcher = codeMatcher.InsertAndAdvance(
             // if (TolUtil.IsOrientationSystemEnabledFor(pActor))
-            new CodeInstruction(OpCodes.Ldarg_1), // loads actor from argument 1
+            CodeInstruction.LoadArgument(1), // loads actor from argument 1
             CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.IsOrientationSystemEnabledFor)), // calls TolUtil.IsOrientationSystemEnabledFor,
             new CodeInstruction(OpCodes.Brfalse_S, labelElse), // go to else block
             
             // if(TolUtil.SocializedLoveCheck(__instance, pActor, randomActorAround))
-            new CodeInstruction(OpCodes.Ldarg_0), // loads instance from argument 0
-            new CodeInstruction(OpCodes.Ldarg_1), // loads actor from argument 1
-            new CodeInstruction(OpCodes.Ldloc_0), // gets stored randomActorAround
+            CodeInstruction.LoadArgument(0), // loads instance from argument 0
+            CodeInstruction.LoadArgument(1), // loads actor from argument 1
+            CodeInstruction.LoadLocal(0), // gets stored randomActorAround
             new CodeInstruction(OpCodes.Ldc_I4_0), // pushes 0 integer which is just false in this case (BINARY WHOA)
             CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.SocializedLoveCheck)), // calls SocializedLoveCheck
             
@@ -53,8 +53,8 @@ public class BehTryToSocializePatch
             new CodeInstruction(OpCodes.Ret),
             
             // continue
-            new CodeInstruction(OpCodes.Ldarg_1).WithLabels(labelElse), // load actor (and is the destination)
-            new CodeInstruction(OpCodes.Ldloc_0), // load randomActorAround
+            CodeInstruction.LoadArgument(1).WithLabels(labelElse), // load actor (and is the destination)
+            CodeInstruction.LoadLocal(0), // load randomActorAround
             CodeInstruction.Call(typeof(ActorTool), nameof(ActorTool.checkFallInLove)) // calls checkFallInLove
         );
         codeMatcher = codeMatcher.AddLabels(List.Of(labelContinue)); // destination

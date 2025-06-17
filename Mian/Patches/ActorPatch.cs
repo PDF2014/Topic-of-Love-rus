@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using EpPathFinding.cs;
 using HarmonyLib;
 using NeoModLoader.General;
@@ -249,102 +251,191 @@ public class ActorPatch
         
     // This is where we handle the beef of our code for having cross species and non-same reproduction method ppl fall in love
     // important to note this should check for both actors
-    [HarmonyPrefix]
+    [HarmonyTranspiler]
     [HarmonyPatch(nameof(Actor.canFallInLoveWith))]
-        static bool CanFallInLoveWithPatch(Actor pTarget, ref bool __result, Actor __instance)
+        static IEnumerable<CodeInstruction> CanFallInLoveWithPatch(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
         {
-            // TolUtil.Debug($"Can {__instance.getName()} fall in love with {pTarget.getName()}?");
-            var config = TopicOfLove.Mod.GetConfig();
+            var codeMatcher = new CodeMatcher(instructions, generator);
 
-            // we will add traits for these in the future
-            // var allowCrossSpeciesLove = (bool)config["CrossSpecies"]["AllowCrossSpeciesLove"].GetValue();
-            // var mustBeSmart = (bool)config["CrossSpecies"]["MustBeSmart"].GetValue();
-            // var mustBeXenophile = (bool)config["CrossSpecies"]["MustBeXenophile"].GetValue();
+            try
+            {
+                var startPos = codeMatcher
+                    .MatchStartForward(new CodeMatch(OpCodes.Call,
+                        AccessTools.Method(typeof(Actor), nameof(Actor.hasLover))))
+                    .ThrowIfInvalid("Could not find hasLover!")
+                    .Advance(-1)
+                    .Pos; // we wanna make sure we start at hasLover and remove until get_needs_mate
+
+                var endPos = codeMatcher.MatchEndForward(new CodeMatch(OpCodes.Call,
+                        AccessTools.Method(typeof(Subspecies), nameof(Subspecies.needs_mate))))
+                    .ThrowIfInvalid("Could not find get_needs_mate!")
+                    .Advance(3)
+                    .Pos;
+
+                codeMatcher.RemoveInstructionsInRange(startPos, endPos); // removes everything from hasLover to get_needs_mate call!
+            }
+            catch (InvalidOperationException)
+            {
+                TolUtil.LogInfo("Failed to remove hasLover to get_needs_mate. A mod might have done this already?");
+            }
+
+            try
+            {
+                var startPos = codeMatcher
+                    .MatchStartForward(new CodeMatch(OpCodes.Callvirt,
+                        AccessTools.Method(typeof(Subspecies), nameof(Subspecies.isPartnerSuitableForReproduction),
+                            new[] { typeof(Actor), typeof(Actor) })))
+                    .ThrowIfInvalid("Could not find isPartnerSuitableForReproduction!")
+                    .Advance(-4)
+                    .Pos;
+
+                var endPos = codeMatcher
+                    .MatchEndForward(new CodeMatch(OpCodes.Callvirt,
+                        AccessTools.Method(typeof(Actor), nameof(Actor.isBreedingAge))))
+                    .ThrowIfInvalid("Could not find isBreedingAge!")
+                    .Advance(3)
+                    .Pos;
             
-            if (TolUtil.CannotDate(pTarget, __instance))
+                codeMatcher.RemoveInstructionsInRange(startPos, endPos); // removes everything from isPartnerSuitableForReproduction to isBreedingAge call!
+            }
+            catch (InvalidOperationException)
             {
-                __result = false;
-                return false;
+                TolUtil.LogInfo("Failed to remove isPartnerSuitableForReproduction to isBreedingAge. A mod might have done this already?");
             }
 
-            // both actors must have the same orientation system otherwise we will run into issues tbh
-            if (TolUtil.IsOrientationSystemEnabledFor(__instance) != TolUtil.IsOrientationSystemEnabledFor(pTarget))
-            {
-                __result = false;
-                return false;
-            }
+            codeMatcher = codeMatcher
+                .MatchStartForward(new CodeMatch(OpCodes.Call,
+                    AccessTools.Method(typeof(Actor), nameof(Actor.isSameSpecies))))
+                .ThrowIfInvalid("Could not find isSameSpecies! Did someone remove this... grrrrrr")
+                .Advance(1);
 
-            // there is no cheating when the orientation system is disabled
-            var orientationSystemInvolved = TolUtil.IsOrientationSystemEnabledFor(__instance);
-            if (!orientationSystemInvolved && (__instance.hasLover() || pTarget.hasLover()))
-            {
-                __result = false;
-                return false;
-            }
+            var outtaHere = codeMatcher.Instruction.labels[0]; // snatch the label so that we can skip ahead to it later on
+            codeMatcher = codeMatcher.Advance(1);
 
-            if (orientationSystemInvolved)
-            {
-                if (!Preferences.BothActorsPreferenceMatch(__instance, pTarget, false))
-                {
-                    __result = false;
-                    return false;
-                }
-            }
-            else if (!TolUtil.CouldReproduce(pTarget, __instance))
-            {
-                __result = false;
-                return false;
-            }
+            var returnFalse = generator.DefineLabel();
+            
+            codeMatcher.Instruction.WithLabels(returnFalse);
+            
+            codeMatcher.Advance(2); // go past the return
+            
+            codeMatcher.InsertAndAdvance(
+                CodeInstruction.LoadArgument(0), // load instance actor
+                CodeInstruction.Call(typeof(Actor), nameof(Actor.isSapient)), // is actor sapient?
+                new CodeMatch(OpCodes.Brfalse, returnFalse)
+            ).Advance(1);
 
-            // makes sure they are both within age of dating (mature dating trait involved)
-            if (!TolUtil.WithinOfAge(__instance, pTarget))
-            {
-                __result = false;
-                return false;
-            }
+            codeMatcher.InsertAndAdvance(
+                CodeInstruction.LoadArgument(1),
+                CodeInstruction.Call(typeof(Actor), nameof(Actor.isSapient)),
+                new CodeMatch(OpCodes.Brfalse, returnFalse)
+            ).Advance(1);
 
-            // they literally hate each other (maybe implement toxic relationships in the future?)
-            if (__instance.areFoes(pTarget))
-            {
-                __result = false;
-                return false;
-            }
+            codeMatcher.InsertAndAdvance(
+                CodeInstruction.LoadArgument(0),
+                CodeInstruction.Call(typeof(Actor), nameof(Actor.hasXenophobic)),
+                new CodeMatch(OpCodes.Brtrue, returnFalse)
+            ).Advance(1);
+            
+            codeMatcher.InsertAndAdvance(
+                CodeInstruction.LoadArgument(1),
+                CodeInstruction.Call(typeof(Actor), nameof(Actor.hasXenophobic)),
+                new CodeMatch(OpCodes.Brtrue, returnFalse)
+            ).Advance(1);
+            
+            // codeMatcher.MatchEndForward(new CodeMatch(OpCodes.Call,
+            //         AccessTools.Method(typeof(Actor),
+            //             nameof(Actor
+            //                 .isRelatedTo)))) // this is probably bad and we should do something else just in case someone removes this method
+            //     .ThrowIfInvalid("Could not find isRelatedTo call??")
+            //     .Advance(-3);
+                
+            // can they date each other
+            codeMatcher.InsertAndAdvance(
+                CodeInstruction.LoadArgument(0).WithLabels(outtaHere),
+                CodeInstruction.LoadArgument(1),
+                CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.CannotDate)),
+                new CodeMatch(OpCodes.Brtrue, returnFalse)
+                ).Advance(1);
+            
+            // do they both have orientation system
+            codeMatcher.InsertAndAdvance(
+                CodeInstruction.LoadArgument(0),
+                CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.IsOrientationSystemEnabledFor)),
+                CodeInstruction.LoadArgument(1),
+                CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.IsOrientationSystemEnabledFor)),
+                new CodeMatch(OpCodes.Ceq),
+                new CodeMatch(OpCodes.Brfalse, returnFalse)
+            ).Advance(1);
 
-            // both must exhibit the same sapientness
-            var bothAreSapient = __instance.isSapient();
-            if (__instance.isSapient() != pTarget.isSapient())
-            {
-                __result = false;
-                return false;
-            }
+            var orientationSystemInvolved = generator.DeclareLocal(typeof(bool));
+            var skipOrientationChecks = generator.DefineLabel();
+            
+            // has lover with orientation system checks
+            codeMatcher.InsertAndAdvance(
+                CodeInstruction.LoadArgument(0),
+                CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.IsOrientationSystemEnabledFor)),
+                CodeInstruction.StoreLocal(orientationSystemInvolved.LocalIndex),
+                CodeInstruction.LoadLocal(orientationSystemInvolved.LocalIndex),
+                new CodeMatch(OpCodes.Brtrue, skipOrientationChecks), // skip the next checks if true
+                
+                CodeInstruction.LoadArgument(0),
+                CodeInstruction.Call(typeof(Actor), nameof(Actor.hasLover)),
+                new CodeInstruction(OpCodes.Brtrue, returnFalse),
+                
+                CodeInstruction.LoadArgument(1),
+                CodeInstruction.Call(typeof(Actor), nameof(Actor.hasLover)),
+                new CodeInstruction(OpCodes.Brtrue, returnFalse)
+            ).Advance(1);
+            
+            var reproductionBranch = generator.DefineLabel();
+            var withinAgeBranch = generator.DefineLabel();
+            var toFoes = generator.DefineLabel();
 
-            if (!__instance.isSameSpecies(pTarget) && (__instance.hasXenophobic() || pTarget.hasXenophobic() || !bothAreSapient))
+            // reproduction and within age
+            codeMatcher.InsertAndAdvance(
+                CodeInstruction.LoadLocal(orientationSystemInvolved.LocalIndex).WithLabels(skipOrientationChecks),
+                new CodeInstruction(OpCodes.Brfalse, reproductionBranch),
+                CodeInstruction.LoadArgument(0),
+                CodeInstruction.LoadArgument(1),
+                new CodeInstruction(OpCodes.Ldc_I4_0),
+                CodeInstruction.Call(typeof(Preferences), nameof(Preferences.BothActorsPreferenceMatch)),
+                new CodeInstruction(OpCodes.Brfalse, returnFalse),
+                
+                CodeInstruction.LoadArgument(0).WithLabels(withinAgeBranch), // within age branch
+                CodeInstruction.LoadArgument(1),
+                CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.WithinOfAge)),
+                new CodeInstruction(OpCodes.Brfalse, returnFalse),
+                new CodeInstruction(OpCodes.Nop, toFoes),
+                
+                CodeInstruction.LoadArgument(0).WithLabels(reproductionBranch),
+                CodeInstruction.LoadArgument(1),
+                CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.CouldReproduce)),
+                new CodeInstruction(OpCodes.Brfalse, returnFalse),
+                new CodeInstruction(OpCodes.Nop, withinAgeBranch)
+            ).Advance(1);
+
+            // if foes return false
+            codeMatcher.InsertAndAdvance(
+                CodeInstruction.LoadArgument(1), // target
+                CodeInstruction.LoadArgument(0), // instance
+                new CodeInstruction(OpCodes.Callvirt, AccessTools.Method(typeof(Actor), nameof(Actor.areFoes))),
+                new CodeInstruction(OpCodes.Brtrue, returnFalse)).Advance(1);
+
+            // can they both fall in love at all?
+            codeMatcher.InsertAndAdvance(
+                CodeInstruction.LoadArgument(0),
+                CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.CanFallInLove)),
+                new CodeMatch(OpCodes.Brfalse, returnFalse),
+
+                CodeInstruction.LoadArgument(1),
+                CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.CanFallInLove)),
+                new CodeMatch(OpCodes.Brfalse, returnFalse)).Advance(1);
+
+            foreach (var instruction in codeMatcher.InstructionEnumeration())
             {
-                __result = false;
-                return false;
+                TolUtil.LogInfo(instruction.ToString());
             }
             
-            if (!TolUtil.CanFallInLove(pTarget) || !TolUtil.CanFallInLove(__instance))
-            {
-                __result = false;
-                return false;
-            }
-
-            // no more incest for now
-            // if (__instance.isRelatedTo(pTarget) && (!__instance.hasCultureTrait("incest") || !pTarget.hasCultureTrait("incest")))
-            // {
-                // __result = false;
-                // return false;
-            // }
-
-
-            if (__instance.isRelatedTo(pTarget))
-            {
-                __result = false;
-                return false;
-            }
-            
-            __result = true;
-            return false;
+            return codeMatcher.InstructionEnumeration();
         }
 }
