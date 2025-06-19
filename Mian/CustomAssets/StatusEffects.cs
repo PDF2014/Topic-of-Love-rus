@@ -151,7 +151,7 @@ public class StatusEffects
                 if (lover == null)
                     return false;
                 TolUtil.RemoveLovers(cheatedActor.a);
-                if (Randy.randomChance(0.9f)) // 90% chance of crying rather than fighting
+                if (Randy.randomChance(0.5f) || !(cheatedActor.a.warfare > 10)) // only ppl with warfare above 10 will consider fighting
                 {
                     cheatedActor.a.addStatusEffect("crying");
                 } else

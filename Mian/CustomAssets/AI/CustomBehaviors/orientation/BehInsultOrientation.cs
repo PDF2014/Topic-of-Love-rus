@@ -18,7 +18,7 @@ public class BehInsultOrientation : BehaviourActionActor
         else if (Randy.randomChance(0.6f))
         {
             target.addStatusEffect("crying");
-        } else if (Randy.randomChance(0.8f))
+        } else if (Randy.randomChance(0.8f) && target.warfare > 10)
         {
             target.addAggro(pActor);
             target.startFightingWith(pActor);
