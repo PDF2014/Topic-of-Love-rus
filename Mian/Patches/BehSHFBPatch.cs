@@ -10,6 +10,20 @@ namespace Topic_of_Love.Mian.Patches;
 [HarmonyPatch(typeof(BehSpawnHeartsFromBuilding))]
 public class BehSHFBPatch
 {
+
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(BehSpawnHeartsFromBuilding.execute))]
+    static bool ExecutePatch(Actor pActor, ref BehResult __result)
+    {
+        if (!pActor.hasLover() && pActor.beh_actor_target == null) // who tf are you having sex with
+        {
+            __result = BehResult.Stop;
+            return false;
+        }
+
+        return true;
+    }
+    
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(BehSpawnHeartsFromBuilding.execute))]
     static IEnumerable<CodeInstruction> AllowForTargets(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
@@ -18,20 +32,9 @@ public class BehSHFBPatch
         
         codeMatcher.MatchStartForward(new CodeMatch(OpCodes.Callvirt,
             AccessTools.Method(typeof(Actor), nameof(Actor.hasLover)))).Advance(1);
+        var operandLabel = (Label)codeMatcher.Operand;
         codeMatcher.RemoveInstructionsInRange(codeMatcher.Pos - 2, codeMatcher.Pos);
-
-        var outtaHere  = generator.DefineLabel();
         
-        codeMatcher.Start().InsertAndAdvance(
-            new CodeInstruction(OpCodes.Ldarg_0),
-            new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Actor), nameof(Actor.beh_actor_target))),
-            new CodeInstruction(OpCodes.Brtrue, outtaHere),
-            
-            new CodeInstruction(OpCodes.Ldarg_0),
-            new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Actor), nameof(Actor.lover))),
-            new CodeInstruction(OpCodes.Brtrue, outtaHere)
-        );
-
         try
         {
             var afterglowPos = codeMatcher.Start().MatchStartForward(new CodeMatch(OpCodes.Callvirt,
@@ -42,11 +45,16 @@ public class BehSHFBPatch
         {
             TolUtil.LogInfo("Did someone remove addAfterGlowStatus..? It's not here :(\n"+e.Message);
         }
-        
-        codeMatcher.Start().MatchStartForward(new CodeMatch(OpCodes.Ldc_I4_1)); // might be unreliable, but for now it's whatever
-        codeMatcher.Labels.Clear();
-            
-        codeMatcher.Advance(2).AddLabels(new[]{outtaHere});
+
+        var listOfInstructions = codeMatcher.Instructions();
+        for(var i = 0; i < listOfInstructions.Count; i++)
+        {
+            if (listOfInstructions[i].labels.Contains(operandLabel))
+            {
+                codeMatcher.RemoveInstructionsInRange(i, i + 1);
+                break;
+            }
+        }
 
         return codeMatcher.InstructionEnumeration();
     }
