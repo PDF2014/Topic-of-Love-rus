@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Emit;
 using EpPathFinding.cs;
 using HarmonyLib;
@@ -255,92 +256,145 @@ public class ActorPatch
     [HarmonyPatch(nameof(Actor.canFallInLoveWith))]
         static IEnumerable<CodeInstruction> CanFallInLoveWithPatch(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
         {
-            var codeMatcher = new CodeMatcher(instructions, generator);
-
-            try
+            var listOfMethodsToRemove = new List<MethodInfo>
             {
-                var startPos = codeMatcher
-                    .MatchStartForward(new CodeMatch(OpCodes.Call,
-                        AccessTools.Method(typeof(Actor), nameof(Actor.hasLover))))
-                    .ThrowIfInvalid("Could not find hasLover!")
-                    .Advance(-1)
-                    .Pos; // we wanna make sure we start at hasLover and remove until get_needs_mate
-
-                var endPos = codeMatcher.MatchEndForward(new CodeMatch(OpCodes.Call,
-                        AccessTools.Method(typeof(Subspecies), nameof(Subspecies.needs_mate))))
-                    .ThrowIfInvalid("Could not find get_needs_mate!")
-                    .Advance(3)
-                    .Pos;
-
-                codeMatcher.RemoveInstructionsInRange(startPos, endPos); // removes everything from hasLover to get_needs_mate call!
-            }
-            catch (InvalidOperationException)
-            {
-                TolUtil.LogInfo("Failed to remove hasLover to get_needs_mate. A mod might have done this already?");
-            }
-
-            try
-            {
-                var startPos = codeMatcher
-                    .MatchStartForward(new CodeMatch(OpCodes.Callvirt,
-                        AccessTools.Method(typeof(Subspecies), nameof(Subspecies.isPartnerSuitableForReproduction),
-                            new[] { typeof(Actor), typeof(Actor) })))
-                    .ThrowIfInvalid("Could not find isPartnerSuitableForReproduction!")
-                    .Advance(-4)
-                    .Pos;
-
-                var endPos = codeMatcher
-                    .MatchEndForward(new CodeMatch(OpCodes.Callvirt,
-                        AccessTools.Method(typeof(Actor), nameof(Actor.isBreedingAge))))
-                    .ThrowIfInvalid("Could not find isBreedingAge!")
-                    .Advance(3)
-                    .Pos;
+                AccessTools.Method(typeof(Actor), nameof(Actor.hasLover)),
+                AccessTools.Method(typeof(Actor), nameof(Actor.isAdult)),
+                AccessTools.Method(typeof(Actor), nameof(Actor.isBreedingAge)),
+                AccessTools.PropertyGetter(typeof(Subspecies), nameof(Subspecies.needs_mate)),
+                AccessTools.Method(typeof(Subspecies), nameof(Subspecies.isPartnerSuitableForReproduction), new []{typeof(Actor), typeof(Actor)})
+            };
             
-                codeMatcher.RemoveInstructionsInRange(startPos, endPos); // removes everything from isPartnerSuitableForReproduction to isBreedingAge call!
-            }
-            catch (InvalidOperationException)
+            var codeMatcher = new CodeMatcher(instructions, generator);
+            
+            foreach (var instruction in codeMatcher.InstructionEnumeration())
             {
-                TolUtil.LogInfo("Failed to remove isPartnerSuitableForReproduction to isBreedingAge. A mod might have done this already?");
+                TolUtil.LogInfo(instruction.ToString());
             }
+
+            var _instructions = codeMatcher.Instructions();
+            for (var i = 0; i < _instructions.Count; i++)
+            {
+                var instruction = _instructions[i];
+                var methodInfos = listOfMethodsToRemove.Where(method => instruction.Calls(method)).ToList();
+                if (methodInfos.Any())
+                {
+                    var methodInfo = methodInfos.First();
+                    
+                    // var start = i - methodInfo.GetParameters().Length;
+                    // start -= methodInfo.IsStatic ? 0 : 1;
+                    // start -= methodInfo.IsSpecialName ? 1 : 0;
+                    var start = 0;
+                    
+                    for (var _i = i; _i >= 0; _i--)
+                    {
+                        if (_instructions[_i].opcode == OpCodes.Ret)
+                        {
+                            start = _i + 1;
+                            break;
+                        }
+                    }
+
+                    var end = i + 3;
+                    codeMatcher.RemoveInstructionsInRange(start, end);
+
+                    i = 0; // reset for the sake of it
+                }
+            }
+
+            TolUtil.LogInfo("----");
+            // try
+            // {
+            //     var startPos = codeMatcher
+            //         .MatchStartForward(new CodeMatch(OpCodes.Call,
+            //             AccessTools.Method(typeof(Actor), nameof(Actor.hasLover))))
+            //         .ThrowIfInvalid("Could not find hasLover!")
+            //         .Advance(-1)
+            //         .Pos; // we wanna make sure we start at hasLover and remove until get_needs_mate
+            //
+            //     var endPos = codeMatcher.End().MatchStartBackwards(new CodeMatch(OpCodes.Callvirt,
+            //             AccessTools.PropertyGetter(typeof(Subspecies), nameof(Subspecies.needs_mate))))
+            //         .ThrowIfInvalid("Could not find get_needs_mate!")
+            //         .Advance(3)
+            //         .Pos;
+            //
+            //     codeMatcher.RemoveInstructionsInRange(startPos, endPos); // removes everything from hasLover to get_needs_mate call!
+            // }
+            // catch (InvalidOperationException exception)
+            // {
+            //     TolUtil.LogInfo("Failed to remove hasLover to get_needs_mate. A mod might have done this already?\n"+exception.Message);
+            // }
+            //
+            // try
+            // {
+            //     var startPos = codeMatcher
+            //         .Start()
+            //         .MatchStartForward(new CodeMatch(OpCodes.Callvirt,
+            //             AccessTools.Method(typeof(Subspecies), nameof(Subspecies.isPartnerSuitableForReproduction),
+            //                 new[] { typeof(Actor), typeof(Actor) })))
+            //         .ThrowIfInvalid("Could not find isPartnerSuitableForReproduction!")
+            //         .Advance(-4)
+            //         .Pos;
+            //
+            //     var endPos = codeMatcher
+            //         .End().MatchStartBackwards(new CodeMatch(OpCodes.Callvirt,
+            //             AccessTools.Method(typeof(Actor), nameof(Actor.isBreedingAge))))
+            //         .ThrowIfInvalid("Could not find isBreedingAge!")
+            //         .Advance(3)
+            //         .Pos;
+            //
+            //     codeMatcher.RemoveInstructionsInRange(startPos, endPos); // removes everything from isPartnerSuitableForReproduction to isBreedingAge call!
+            // }
+            // catch (InvalidOperationException exception)
+            // {
+            //     TolUtil.LogInfo("Failed to remove isPartnerSuitableForReproduction to isBreedingAge. A mod might have done this already?\n"+exception.Message);
+            // }
 
             codeMatcher = codeMatcher
+                .Start()
                 .MatchStartForward(new CodeMatch(OpCodes.Call,
-                    AccessTools.Method(typeof(Actor), nameof(Actor.isSameSpecies))))
+                    AccessTools.Method(typeof(Actor), nameof(Actor.isSameSpecies), new[]{typeof(Actor)})))
                 .ThrowIfInvalid("Could not find isSameSpecies! Did someone remove this... grrrrrr")
                 .Advance(1);
 
-            var outtaHere = codeMatcher.Instruction.labels[0]; // snatch the label so that we can skip ahead to it later on
-            codeMatcher = codeMatcher.Advance(1);
-
-            var returnFalse = generator.DefineLabel();
+            foreach (var instruction in codeMatcher.InstructionEnumeration())
+            {
+                TolUtil.LogInfo(instruction.ToString());
+            }
+            var outtaHere = (Label) codeMatcher.Instruction.operand; // snatch the label so that we can skip ahead to it later on
             
+            codeMatcher.Advance(1); // go onto return false
+            var returnFalse = generator.DefineLabel();
             codeMatcher.Instruction.WithLabels(returnFalse);
+            
+            var goOntoMoreChecks = generator.DefineLabel();
+            codeMatcher = codeMatcher.InsertAndAdvance(new CodeInstruction(OpCodes.Nop, goOntoMoreChecks));
             
             codeMatcher.Advance(2); // go past the return
             
             codeMatcher.InsertAndAdvance(
-                CodeInstruction.LoadArgument(0), // load instance actor
+                new CodeInstruction(OpCodes.Ldarg_0).WithLabels(goOntoMoreChecks), // load instance actor
                 CodeInstruction.Call(typeof(Actor), nameof(Actor.isSapient)), // is actor sapient?
-                new CodeMatch(OpCodes.Brfalse, returnFalse)
-            ).Advance(1);
+                new CodeInstruction(OpCodes.Brfalse, returnFalse)
+            );
 
             codeMatcher.InsertAndAdvance(
-                CodeInstruction.LoadArgument(1),
+                new CodeInstruction(OpCodes.Ldarg_1),
                 CodeInstruction.Call(typeof(Actor), nameof(Actor.isSapient)),
-                new CodeMatch(OpCodes.Brfalse, returnFalse)
-            ).Advance(1);
+                new CodeInstruction(OpCodes.Brfalse, returnFalse)
+            );
 
             codeMatcher.InsertAndAdvance(
-                CodeInstruction.LoadArgument(0),
+                new CodeInstruction(OpCodes.Ldarg_0),
                 CodeInstruction.Call(typeof(Actor), nameof(Actor.hasXenophobic)),
-                new CodeMatch(OpCodes.Brtrue, returnFalse)
-            ).Advance(1);
+                new CodeInstruction(OpCodes.Brtrue, returnFalse)
+            );
             
             codeMatcher.InsertAndAdvance(
-                CodeInstruction.LoadArgument(1),
+                new CodeInstruction(OpCodes.Ldarg_1),
                 CodeInstruction.Call(typeof(Actor), nameof(Actor.hasXenophobic)),
-                new CodeMatch(OpCodes.Brtrue, returnFalse)
-            ).Advance(1);
+                new CodeInstruction(OpCodes.Brtrue, returnFalse)
+            );
             
             // codeMatcher.MatchEndForward(new CodeMatch(OpCodes.Call,
             //         AccessTools.Method(typeof(Actor),
@@ -351,41 +405,41 @@ public class ActorPatch
                 
             // can they date each other
             codeMatcher.InsertAndAdvance(
-                CodeInstruction.LoadArgument(0).WithLabels(outtaHere),
-                CodeInstruction.LoadArgument(1),
+                new CodeInstruction(OpCodes.Ldarg_0).WithLabels(outtaHere),
+                new CodeInstruction(OpCodes.Ldarg_1),
                 CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.CannotDate)),
-                new CodeMatch(OpCodes.Brtrue, returnFalse)
-                ).Advance(1);
+                new CodeInstruction(OpCodes.Brtrue, returnFalse)
+                );
             
             // do they both have orientation system
             codeMatcher.InsertAndAdvance(
-                CodeInstruction.LoadArgument(0),
+                new CodeInstruction(OpCodes.Ldarg_0),
                 CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.IsOrientationSystemEnabledFor)),
-                CodeInstruction.LoadArgument(1),
+                new CodeInstruction(OpCodes.Ldarg_1),
                 CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.IsOrientationSystemEnabledFor)),
-                new CodeMatch(OpCodes.Ceq),
-                new CodeMatch(OpCodes.Brfalse, returnFalse)
-            ).Advance(1);
+                new CodeInstruction(OpCodes.Ceq),
+                new CodeInstruction(OpCodes.Brfalse, returnFalse)
+            );
 
             var orientationSystemInvolved = generator.DeclareLocal(typeof(bool));
             var skipOrientationChecks = generator.DefineLabel();
             
             // has lover with orientation system checks
             codeMatcher.InsertAndAdvance(
-                CodeInstruction.LoadArgument(0),
+                new CodeInstruction(OpCodes.Ldarg_0),
                 CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.IsOrientationSystemEnabledFor)),
-                CodeInstruction.StoreLocal(orientationSystemInvolved.LocalIndex),
-                CodeInstruction.LoadLocal(orientationSystemInvolved.LocalIndex),
-                new CodeMatch(OpCodes.Brtrue, skipOrientationChecks), // skip the next checks if true
+                new CodeInstruction(OpCodes.Stloc, orientationSystemInvolved.LocalIndex),
+                new CodeInstruction(OpCodes.Ldloc, orientationSystemInvolved.LocalIndex),
+                new CodeInstruction(OpCodes.Brtrue, skipOrientationChecks), // skip the next checks if true
                 
-                CodeInstruction.LoadArgument(0),
+                new CodeInstruction(OpCodes.Ldarg_0),
                 CodeInstruction.Call(typeof(Actor), nameof(Actor.hasLover)),
                 new CodeInstruction(OpCodes.Brtrue, returnFalse),
                 
-                CodeInstruction.LoadArgument(1),
+                new CodeInstruction(OpCodes.Ldarg_1),
                 CodeInstruction.Call(typeof(Actor), nameof(Actor.hasLover)),
                 new CodeInstruction(OpCodes.Brtrue, returnFalse)
-            ).Advance(1);
+            );
             
             var reproductionBranch = generator.DefineLabel();
             var withinAgeBranch = generator.DefineLabel();
@@ -393,44 +447,45 @@ public class ActorPatch
 
             // reproduction and within age
             codeMatcher.InsertAndAdvance(
-                CodeInstruction.LoadLocal(orientationSystemInvolved.LocalIndex).WithLabels(skipOrientationChecks),
+                new CodeInstruction(OpCodes.Ldloc, orientationSystemInvolved.LocalIndex).WithLabels(skipOrientationChecks),
                 new CodeInstruction(OpCodes.Brfalse, reproductionBranch),
-                CodeInstruction.LoadArgument(0),
-                CodeInstruction.LoadArgument(1),
+                new CodeInstruction(OpCodes.Ldarg_0),
+                new CodeInstruction(OpCodes.Ldarg_1),
                 new CodeInstruction(OpCodes.Ldc_I4_0),
-                CodeInstruction.Call(typeof(Preferences), nameof(Preferences.BothActorsPreferenceMatch)),
+                CodeInstruction.Call(typeof(Preferences), nameof(Preferences.BothActorsPreferenceMatch), new[]{typeof(Actor), typeof(Actor), typeof(bool)}),
                 new CodeInstruction(OpCodes.Brfalse, returnFalse),
                 
-                CodeInstruction.LoadArgument(0).WithLabels(withinAgeBranch), // within age branch
-                CodeInstruction.LoadArgument(1),
+                new CodeInstruction(OpCodes.Ldarg_0).WithLabels(withinAgeBranch), // within age branch
+                new CodeInstruction(OpCodes.Ldarg_1),
                 CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.WithinOfAge)),
                 new CodeInstruction(OpCodes.Brfalse, returnFalse),
                 new CodeInstruction(OpCodes.Nop, toFoes),
                 
-                CodeInstruction.LoadArgument(0).WithLabels(reproductionBranch),
-                CodeInstruction.LoadArgument(1),
+                new CodeInstruction(OpCodes.Ldarg_0).WithLabels(reproductionBranch),
+                new CodeInstruction(OpCodes.Ldarg_1),
                 CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.CouldReproduce)),
                 new CodeInstruction(OpCodes.Brfalse, returnFalse),
                 new CodeInstruction(OpCodes.Nop, withinAgeBranch)
-            ).Advance(1);
+            );
 
             // if foes return false
             codeMatcher.InsertAndAdvance(
-                CodeInstruction.LoadArgument(1), // target
-                CodeInstruction.LoadArgument(0), // instance
+                new CodeInstruction(OpCodes.Ldarg_1).WithLabels(toFoes), // target
+                new CodeInstruction(OpCodes.Ldarg_0), // instance
                 new CodeInstruction(OpCodes.Callvirt, AccessTools.Method(typeof(Actor), nameof(Actor.areFoes))),
-                new CodeInstruction(OpCodes.Brtrue, returnFalse)).Advance(1);
+                new CodeInstruction(OpCodes.Brtrue, returnFalse));
 
             // can they both fall in love at all?
             codeMatcher.InsertAndAdvance(
-                CodeInstruction.LoadArgument(0),
+                new CodeInstruction(OpCodes.Ldarg_0),
                 CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.CanFallInLove)),
-                new CodeMatch(OpCodes.Brfalse, returnFalse),
+                new CodeInstruction(OpCodes.Brfalse, returnFalse),
 
-                CodeInstruction.LoadArgument(1),
+                new CodeInstruction(OpCodes.Ldarg_1),
                 CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.CanFallInLove)),
-                new CodeMatch(OpCodes.Brfalse, returnFalse)).Advance(1);
+                new CodeInstruction(OpCodes.Brfalse, returnFalse));
 
+            TolUtil.LogInfo("----");
             foreach (var instruction in codeMatcher.InstructionEnumeration())
             {
                 TolUtil.LogInfo(instruction.ToString());

@@ -79,6 +79,9 @@
         <Reference Include="NeoModLoader">
             <HintPath>..\..\worldbox_Data\StreamingAssets\mods\NeoModLoader.dll</HintPath>
         </Reference>
+        <Reference Include="0Harmony">
+            <HintPath>..\..\worldbox_Data\StreamingAssets\mods\NML\Assemblies\0Harmony.dll</HintPath>
+        </Reference>
         <Reference Include="Assembly-CSharp">
             <HintPath>..\..\worldbox_Data\StreamingAssets\mods\NML\Assembly-CSharp-Publicized.dll</HintPath>
         </Reference>
@@ -98,8 +101,5 @@
         <Reference Include="TOPICOFIDENTITY">
             <HintPath>..\..\worldbox_Data\StreamingAssets\mods\NML\CompiledMods\TOPICOFIDENTITY.dll</HintPath>
         </Reference>
-    </ItemGroup>
-    <ItemGroup>
-      <PackageReference Include="Lib.Harmony" Version="2.3.6" />
     </ItemGroup>
 </Project>
