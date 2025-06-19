@@ -7,6 +7,7 @@ namespace Topic_of_Love.Mian.Patches;
 public class ActorToolPatch
 {
     [HarmonyPrefix]
+    [HarmonyPriority(Priority.Last)] // we're overwriting the method so let's try to let others do what they want
     [HarmonyPatch(nameof(ActorTool.checkFallInLove))]
     public static bool FallInLovePatch(Actor pActor, Actor pTarget)
     {

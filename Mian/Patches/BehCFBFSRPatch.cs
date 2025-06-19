@@ -8,6 +8,7 @@ namespace Topic_of_Love.Mian.Patches;
 public class BehCFBFSRPatch
 {
     [HarmonyPrefix]
+    [HarmonyPriority(Priority.Last)]
     [HarmonyPatch(nameof(BehCheckForBabiesFromSexualReproduction.execute))]
     // code is running twice??
     static bool SexPatch(Actor pActor, ref BehResult __result, BehCheckForBabiesFromSexualReproduction __instance)

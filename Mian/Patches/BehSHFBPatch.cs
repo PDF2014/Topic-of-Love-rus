@@ -17,32 +17,19 @@ public class BehSHFBPatch
         var codeMatcher = new CodeMatcher(instructions, generator);
         
         codeMatcher.MatchStartForward(new CodeMatch(OpCodes.Callvirt,
-            AccessTools.Method(typeof(Actor), nameof(Actor.hasLover))));
-        var returnFalse = (Label)codeMatcher.Advance(1).Operand;
+            AccessTools.Method(typeof(Actor), nameof(Actor.hasLover)))).Advance(1);
         codeMatcher.RemoveInstructionsInRange(codeMatcher.Pos - 2, codeMatcher.Pos);
 
-        var goToLoverCheck = generator.DefineLabel();
         var outtaHere  = generator.DefineLabel();
-        var sexTarget = generator.DeclareLocal(typeof(Actor));
         
         codeMatcher.Start().InsertAndAdvance(
             new CodeInstruction(OpCodes.Ldarg_0),
             new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Actor), nameof(Actor.beh_actor_target))),
-            new CodeInstruction(OpCodes.Brfalse, goToLoverCheck),
+            new CodeInstruction(OpCodes.Brtrue, outtaHere),
             
             new CodeInstruction(OpCodes.Ldarg_0),
-            new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Actor), nameof(Actor.beh_actor_target))),
-            new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(BaseSimObject), nameof(BaseSimObject.a))),
-            new CodeInstruction(OpCodes.Stloc, sexTarget),
-            new CodeInstruction(OpCodes.Nop, outtaHere),
-            
-            new CodeInstruction(OpCodes.Ldarg_0).WithLabels(goToLoverCheck),
             new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Actor), nameof(Actor.lover))),
-            new CodeInstruction(OpCodes.Brfalse, returnFalse),
-            new CodeInstruction(OpCodes.Ldarg_0),
-            new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Actor), nameof(Actor.lover))),
-            new CodeInstruction(OpCodes.Stloc, sexTarget),
-            new CodeInstruction(OpCodes.Nop, outtaHere)
+            new CodeInstruction(OpCodes.Brtrue, outtaHere)
         );
 
         try
@@ -56,8 +43,11 @@ public class BehSHFBPatch
             TolUtil.LogInfo("Did someone remove addAfterGlowStatus..? It's not here :(\n"+e.Message);
         }
         
-        codeMatcher.Start().SearchForward(instruction => instruction.labels.Contains(returnFalse)).Advance(2).AddLabels(new[]{outtaHere});
-        
+        codeMatcher.Start().MatchStartForward(new CodeMatch(OpCodes.Ldc_I4_1)); // might be unreliable, but for now it's whatever
+        codeMatcher.Labels.Clear();
+            
+        codeMatcher.Advance(2).AddLabels(new[]{outtaHere});
+
         return codeMatcher.InstructionEnumeration();
     }
 }

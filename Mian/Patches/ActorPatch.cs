@@ -311,7 +311,7 @@ public class ActorPatch
             codeMatcher.Instruction.WithLabels(returnFalse);
             
             var goOntoMoreChecks = generator.DefineLabel();
-            codeMatcher = codeMatcher.InsertAndAdvance(new CodeInstruction(OpCodes.Nop, goOntoMoreChecks));
+            codeMatcher = codeMatcher.InsertAndAdvance(new CodeInstruction(OpCodes.Br, goOntoMoreChecks));
             
             codeMatcher.Advance(2); // go past the return
             
@@ -402,13 +402,13 @@ public class ActorPatch
                 new CodeInstruction(OpCodes.Ldarg_1),
                 CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.WithinOfAge)),
                 new CodeInstruction(OpCodes.Brfalse, returnFalse),
-                new CodeInstruction(OpCodes.Nop, toFoes),
+                new CodeInstruction(OpCodes.Br, toFoes),
                 
                 new CodeInstruction(OpCodes.Ldarg_0).WithLabels(reproductionBranch),
                 new CodeInstruction(OpCodes.Ldarg_1),
                 CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.CouldReproduce)),
                 new CodeInstruction(OpCodes.Brfalse, returnFalse),
-                new CodeInstruction(OpCodes.Nop, withinAgeBranch)
+                new CodeInstruction(OpCodes.Br, withinAgeBranch)
             );
 
             // if foes return false

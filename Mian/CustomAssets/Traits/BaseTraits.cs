@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using HarmonyLib;
 using NeoModLoader.services;
 
 namespace Topic_of_Love.Mian.CustomAssets.Traits;
@@ -57,11 +58,7 @@ public class BaseTraits<T, TR>
 
         if (actorAssets != null)
         {
-            var method = typeof(ActorAsset).GetMethod(methodCall, BindingFlags.Instance
-                                                                | BindingFlags.Static
-                                                                | BindingFlags.Public
-                                                                | BindingFlags.NonPublic, null,
-                new Type[] { typeof(string) }, null);
+            var method = AccessTools.Method(typeof(ActorAsset), methodCall, new[] {typeof(string)});
             
             trait.default_for_actor_assets = new List<ActorAsset>();
             
@@ -78,11 +75,7 @@ public class BaseTraits<T, TR>
 
         if (biomeAssets != null)
         {
-            var method = typeof(BiomeAsset).GetMethod(methodCall, BindingFlags.Instance
-                                                                  | BindingFlags.Static
-                                                                  | BindingFlags.Public
-                                                                  | BindingFlags.NonPublic, null,
-                new Type[] { typeof(string) }, null);
+            var method = AccessTools.Method(typeof(BiomeAsset), methodCall, new[] { typeof(string) });
             foreach (var asset in biomeAssets)
             {
                 var biomeAsset = AssetManager.biome_library.get(asset);

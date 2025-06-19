@@ -7,6 +7,7 @@ namespace Topic_of_Love.Mian.Patches;
 public class BehFindLoverPatch
 {
     [HarmonyPrefix]
+    [HarmonyPriority(Priority.Last)]
     [HarmonyPatch(nameof(BehFindLover.execute))]
     static bool FindLoverPatch(Actor pActor, ref BehResult __result, BehFindLover __instance)
     {
@@ -27,6 +28,7 @@ public class BehFindLoverPatch
     }
 
     [HarmonyPrefix]
+    [HarmonyPriority(Priority.Last)]
     [HarmonyPatch(nameof(BehFindLover.checkIfPossibleLover))]
     static bool IsPossibleLover(Actor pActor, Actor pTarget, ref bool __result)
     {
