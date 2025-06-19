@@ -266,11 +266,6 @@ public class ActorPatch
             };
             
             var codeMatcher = new CodeMatcher(instructions, generator);
-            
-            foreach (var instruction in codeMatcher.InstructionEnumeration())
-            {
-                TolUtil.LogInfo(instruction.ToString());
-            }
 
             var _instructions = codeMatcher.Instructions();
             for (var i = 0; i < _instructions.Count; i++)
@@ -302,65 +297,13 @@ public class ActorPatch
                 }
             }
 
-            TolUtil.LogInfo("----");
-            // try
-            // {
-            //     var startPos = codeMatcher
-            //         .MatchStartForward(new CodeMatch(OpCodes.Call,
-            //             AccessTools.Method(typeof(Actor), nameof(Actor.hasLover))))
-            //         .ThrowIfInvalid("Could not find hasLover!")
-            //         .Advance(-1)
-            //         .Pos; // we wanna make sure we start at hasLover and remove until get_needs_mate
-            //
-            //     var endPos = codeMatcher.End().MatchStartBackwards(new CodeMatch(OpCodes.Callvirt,
-            //             AccessTools.PropertyGetter(typeof(Subspecies), nameof(Subspecies.needs_mate))))
-            //         .ThrowIfInvalid("Could not find get_needs_mate!")
-            //         .Advance(3)
-            //         .Pos;
-            //
-            //     codeMatcher.RemoveInstructionsInRange(startPos, endPos); // removes everything from hasLover to get_needs_mate call!
-            // }
-            // catch (InvalidOperationException exception)
-            // {
-            //     TolUtil.LogInfo("Failed to remove hasLover to get_needs_mate. A mod might have done this already?\n"+exception.Message);
-            // }
-            //
-            // try
-            // {
-            //     var startPos = codeMatcher
-            //         .Start()
-            //         .MatchStartForward(new CodeMatch(OpCodes.Callvirt,
-            //             AccessTools.Method(typeof(Subspecies), nameof(Subspecies.isPartnerSuitableForReproduction),
-            //                 new[] { typeof(Actor), typeof(Actor) })))
-            //         .ThrowIfInvalid("Could not find isPartnerSuitableForReproduction!")
-            //         .Advance(-4)
-            //         .Pos;
-            //
-            //     var endPos = codeMatcher
-            //         .End().MatchStartBackwards(new CodeMatch(OpCodes.Callvirt,
-            //             AccessTools.Method(typeof(Actor), nameof(Actor.isBreedingAge))))
-            //         .ThrowIfInvalid("Could not find isBreedingAge!")
-            //         .Advance(3)
-            //         .Pos;
-            //
-            //     codeMatcher.RemoveInstructionsInRange(startPos, endPos); // removes everything from isPartnerSuitableForReproduction to isBreedingAge call!
-            // }
-            // catch (InvalidOperationException exception)
-            // {
-            //     TolUtil.LogInfo("Failed to remove isPartnerSuitableForReproduction to isBreedingAge. A mod might have done this already?\n"+exception.Message);
-            // }
-
             codeMatcher = codeMatcher
                 .Start()
                 .MatchStartForward(new CodeMatch(OpCodes.Call,
                     AccessTools.Method(typeof(Actor), nameof(Actor.isSameSpecies), new[]{typeof(Actor)})))
                 .ThrowIfInvalid("Could not find isSameSpecies! Did someone remove this... grrrrrr")
                 .Advance(1);
-
-            foreach (var instruction in codeMatcher.InstructionEnumeration())
-            {
-                TolUtil.LogInfo(instruction.ToString());
-            }
+            
             var outtaHere = (Label) codeMatcher.Instruction.operand; // snatch the label so that we can skip ahead to it later on
             
             codeMatcher.Advance(1); // go onto return false
@@ -484,12 +427,6 @@ public class ActorPatch
                 new CodeInstruction(OpCodes.Ldarg_1),
                 CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.CanFallInLove)),
                 new CodeInstruction(OpCodes.Brfalse, returnFalse));
-
-            TolUtil.LogInfo("----");
-            foreach (var instruction in codeMatcher.InstructionEnumeration())
-            {
-                TolUtil.LogInfo(instruction.ToString());
-            }
             
             return codeMatcher.InstructionEnumeration();
         }

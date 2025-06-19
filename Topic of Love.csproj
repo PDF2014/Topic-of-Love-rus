@@ -60,9 +60,7 @@
         <Compile Include="Mian\Patches\BehIntimacyPatches.cs" />
         <Compile Include="Mian\Patches\BehSHFBPatch.cs" />
         <Compile Include="Mian\Patches\BehTryToSocializePatch.cs" />
-        <Compile Include="Mian\Patches\CultureManagerPatch.cs" />
         <Compile Include="Mian\Patches\BaseSimObjectPatch.cs" />
-        <Compile Include="Mian\Patches\MapBoxPatch.cs" />
         <Compile Include="Mian\Patches\SpriteTextureLoaderPatch.cs" />
         <Compile Include="Mian\Patches\SubspeciesPatch.cs" />
         <Compile Include="Mian\Patches\StatPatch.cs" />

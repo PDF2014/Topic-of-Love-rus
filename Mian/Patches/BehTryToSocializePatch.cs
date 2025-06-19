@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection.Emit;
 using ai;
 using HarmonyLib;
@@ -15,17 +16,24 @@ public class BehTryToSocializePatch
     {
         var codeMatcher = new CodeMatcher(instructions, generator);
 
-        codeMatcher = codeMatcher
-            .MatchStartForward(new CodeMatch(OpCodes.Callvirt,
-                AccessTools.Method(typeof(Actor), nameof(Actor.canFallInLoveWith), new[] { typeof(Actor) })))
-            .ThrowIfInvalid("Could not find canFallInLoveWith call!")
-            .Advance(-2) // go back to first instruction
-            .RemoveInstructions(7); // remove the whole thingy ma jig
-        codeMatcher.Instruction.labels.Clear(); // remove the label here since we removed the branch
+        try
+        {
+            codeMatcher = codeMatcher
+                .MatchStartForward(new CodeMatch(OpCodes.Callvirt,
+                    AccessTools.Method(typeof(Actor), nameof(Actor.canFallInLoveWith), new[] { typeof(Actor) })))
+                .ThrowIfInvalid("Could not find canFallInLoveWith call!")
+                .Advance(-2) // go back to first instruction
+                .RemoveInstructions(7); // remove the whole thingy ma jig
+            codeMatcher.Instruction.labels.Clear(); // remove the label here since we removed the branch
+        }
+        catch (InvalidOperationException e)
+        {
+            TolUtil.LogInfo("Failed to remove canFallInLoveWith call! Perhaps another mod already removed it\n"+e.Message);
+        }
         
-        codeMatcher = codeMatcher.MatchStartForward(new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Actor), nameof(Actor.hasTelepathicLink))))
-            .ThrowIfInvalid("Could not find TelepathicLink call!")
-            .Advance(-1); // moves backwards
+        codeMatcher = codeMatcher.Start().MatchStartForward(new CodeMatch(OpCodes.Stfld, AccessTools.Field(typeof(Actor), nameof(Actor.beh_actor_target))))
+            .ThrowIfInvalid("Could not find beh_actor_target setter! Did a mod remove this..")
+            .Advance(1); // moves forward
         
         // we are inserting our code after the resetSocialize methods
 
