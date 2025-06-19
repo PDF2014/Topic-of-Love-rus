@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Topic_of_Love.Mian.CustomAssets.Traits
 {
@@ -7,6 +8,8 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
         public void Init()
         {
             Init("subspecies");
+            
+            // preservation is a mustttttttt for preventing population collapse
             Add(new SubspeciesTrait
             {
                 id="preservation",
@@ -16,13 +19,8 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 in_mutation_pot_add = true,
                 in_mutation_pot_remove = true,
                 remove_for_zombies = true
-            });
-            // preservation is a mustttttttt for preventing population collapse
-            foreach (var actorAsset in AssetManager.actor_library.list)
-            {
-                actorAsset.addSubspeciesTrait("preservation");
-            }
-            
+            }, AssetManager.actor_library.list.Select(asset => asset.id));
+
             SubspeciesTrait reproductionSameSex = new SubspeciesTrait
             {
                 id = "reproduction_same_sex",
@@ -41,12 +39,12 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             reproductionSameSex.base_stats_meta = new BaseStats();
             reproductionSameSex.base_stats_meta.addTag("needs_mate");
             
-            reproductionSameSex.addOpposites(new List<string>{"reproduction_sexual", "reproduction_hermaphroditic"});
+            reproductionSameSex.addOpposites(new[]{"reproduction_sexual", "reproduction_hermaphroditic"});
             
             AssetManager.subspecies_traits.get("reproduction_sexual").opposite_traits.Add(reproductionSameSex);
             AssetManager.subspecies_traits.get("reproduction_hermaphroditic").opposite_traits.Add(reproductionSameSex);
             
-            Add(reproductionSameSex, actorAssets: new List<string>{"skeleton"});
+            Add(reproductionSameSex, new[]{"skeleton"});
             AssetManager.actor_library.get("skeleton").addSubspeciesTrait("reproduction_strategy_viviparity");
             
             Finish();

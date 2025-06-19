@@ -62,12 +62,17 @@ public class BaseTraits<T, TR>
                                                                 | BindingFlags.Public
                                                                 | BindingFlags.NonPublic, null,
                 new Type[] { typeof(string) }, null);
-
+            
+            trait.default_for_actor_assets = new List<ActorAsset>();
+            
             foreach (var asset in actorAssets)
             {
                 var actorAsset = AssetManager.actor_library.get(asset);
                 if (actorAsset != null)
+                {
                     method.Invoke(actorAsset, new object[] { trait.id });
+                    trait.default_for_actor_assets.Add(actorAsset);
+                }
             }
         }
 
