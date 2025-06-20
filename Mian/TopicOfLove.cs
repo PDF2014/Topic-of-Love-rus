@@ -35,9 +35,7 @@ namespace Topic_of_Love.Mian
             // Initialize your mod.
             // Methods are called in the order: OnLoad -> Awake -> OnEnable -> Start -> Update
             TolUtil.LogInfo("Making people more loveable!");
-
-            Orientations.Init();
-            Preferences.Init();
+            
             new ActorTraits().Init();
             new CultureTraits().Init();
             new SubspeciesTraits().Init();
@@ -47,10 +45,12 @@ namespace Topic_of_Love.Mian
             ActorBehaviorTasks.Init();
             Decisions.Init();
             Opinions.Init();
-            BaseStatAssets.Init();
+            BaseStatAssets.Init(); // make sure this loads before preferences
             WorldLawAssets.Init();
             GodPowers.Init();
             TabsAndButtons.Init();
+            Orientations.Init();
+            Preferences.Init();
         }
         private void Awake()
         {

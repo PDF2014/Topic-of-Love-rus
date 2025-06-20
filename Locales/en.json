@@ -198,7 +198,7 @@
 
   "culture_trait_heterophobic": "Heterophobic",
   "culture_trait_heterophobic_info": "They despise others who get romantically or sexually involved with a different sex from themselves",
-  "culture_trait_heterophobic_info_2": "It's strange to think of two different sex people getting together.",
+  "culture_trait_heterophobic_info_2": "Why would you ever wanna date the other gender?",
 
   "culture_trait_incest": "Incest",
   "culture_trait_incest_info": "Biologically related members may fall in love and copulate",
@@ -235,7 +235,19 @@
   "world_law_fluid_sexuality_title": "Fluid Preferences",
   "world_law_fluid_sexuality_description": "Unit preferences may change overtime even when already established",
   "world_law_fluid_sexuality_description_2": "Sexuality can be fluid!",
-
+  
+  "orientations_lesbian_description": "They statistically pull more women than straight men ever could",
+  "orientations_gay_description": "They statistically pull more men than straight woman ever could",
+  "orientations_straight_description": "They statistically are boring as fuck",
+  "orientations_bisexual_description": "They statistically love swinging back and forth",
+  "orientations_pansexual_description": "They don't actually like pans, dumbass",
+  "orientations_heterosexual_description": "They like a sex different from them",
+  "orientations_homosexual_description": "They like those that are of the same sex as them",
+  "orientations_asexual_description": "Romantic/sexual intimacy is bleh to them",
+  
+  "statistic_loneliness": "Lonely Units",
+  "statistic_loneliness_description": "They just want a hug or to talk to someone",
+  
   "opinion_homosexual": "Opinions on Homosexuality",
   "opinion_heterosexual": "Opinions on Heterosexuality",
   "opinion_king_lovers": "Kings Are Lovers",

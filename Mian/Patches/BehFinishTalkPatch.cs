@@ -48,7 +48,7 @@ public class BehFinishTalkPatch
     [HarmonyPatch(nameof(BehFinishTalk.finishTalk))]
     static void FinishTalkPatch(Actor pActor, Actor pTarget)
     {
-        TolUtil.ChangeIntimacyHappinessBy(pActor, 15);
-        TolUtil.ChangeIntimacyHappinessBy(pTarget, 15);
+        TolUtil.ChangeIntimacyHappinessBy(pActor, 25);
+        TolUtil.ChangeIntimacyHappinessBy(pTarget, 25);
     }
 }

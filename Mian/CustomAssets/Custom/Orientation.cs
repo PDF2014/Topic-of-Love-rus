@@ -12,6 +12,7 @@ public class Orientation
     public readonly string OrientationType;
     public readonly string SexualPathLocale;
     public readonly string RomanticPathLocale;
+    public readonly string DescriptionLocale;
     public readonly bool IsHomo;
     public readonly string HexCode;
     public readonly bool IsHetero;
@@ -21,13 +22,14 @@ public class Orientation
     private Sprite _romanticSprite;
     public readonly Func<Actor, bool, bool> Criteria;
 
-    private Orientation(string orientationType, string sexualPathLocale, string romanticPathLocale,
+    private Orientation(string orientationType, string sexualPathLocale, string romanticPathLocale, string descriptionLocale,
         string sexualPathIcon, string romanticPathIcon, bool isHomo, bool isHetero, string hexCode,
         Func<Actor, bool, bool> criteriaCheck)
     {
         OrientationType = orientationType;
         SexualPathLocale = sexualPathLocale;
         RomanticPathLocale = romanticPathLocale;
+        DescriptionLocale=descriptionLocale;
         Criteria = criteriaCheck;
         IsHomo = isHomo;
         HexCode = hexCode;
@@ -57,14 +59,17 @@ public class Orientation
     {
         var pathLocale = "orientations_" + orientation;
         var romanticPathLocale = "orientations_" + orientation + "_romantic";
+        var descriptionLocale = pathLocale + "_description";
         var sexualPathIcon = "orientations/" + orientation;
         var romanticPathIcon = "orientations/" + romanticVariant;
-        var orientationType = new Orientation(orientation, pathLocale, romanticPathLocale, sexualPathIcon,
+        var orientationType = new Orientation(orientation, pathLocale, romanticPathLocale, descriptionLocale, sexualPathIcon,
             romanticPathIcon, isHomo, isHetero, hexCode, fitsCriteria);
         Orientations.Add(orientationType);
 
         LM.AddToCurrentLocale(pathLocale, char.ToUpper(orientation.First()) + orientation.Substring(1));
         LM.AddToCurrentLocale(romanticPathLocale, char.ToUpper(romanticVariant.First()) + romanticVariant.Substring(1));
+        LM.AddToCurrentLocale("count_" + pathLocale, char.ToUpper(orientation.First()) + orientation.Substring(1) + "s");
+        LM.AddToCurrentLocale("count_" + romanticPathLocale, char.ToUpper(romanticVariant.First()) + romanticVariant.Substring(1) + "s");
         return orientationType;
     }
 
@@ -221,6 +226,18 @@ public class Orientations
         Orientation.Create("asexual", "aromantic", false, false, "#FFFFFF", Preferences.Dislikes);
     }
 
+    // homosexuals count as gay, lesbian, etc (and same goes for heterosexual)
+    public static bool HasOrientation(Actor actor, string id, bool sexual)
+    {
+        var orientation = GetOrientationFromActor(actor, sexual);
+        if (id.Equals("homosexual"))
+            return orientation.IsHomo;
+        if(id.Equals("heterosexual"))
+            return orientation.IsHetero;
+        
+        return orientation.OrientationType.Equals(id);
+    }
+    
     public static Orientation GetOrientationFromActor(Actor actor, bool sexual = false)
     {
         var orientations =

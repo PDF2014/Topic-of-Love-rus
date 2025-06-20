@@ -146,12 +146,16 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             dislikeSex.group_id = "dislikes";
             dislikeSex.path_icon = "ui/Icons/orientations/asexual";
             dislikeSex.IsSexual = true;
+            dislikeSex.base_stats = new();
+            dislikeSex.base_stats["multiplier_intimacy_happiness"] = 0.5f;
             dislikeSex.opposite_traits = new HashSet<ActorTrait>();
             
             var dislikeRomance = CreateBaseTrait();
             dislikeRomance.id = "dislike_romance";
             dislikeRomance.group_id = "dislikes";
             dislikeRomance.path_icon = "ui/Icons/orientations/aromantic";
+            dislikeRomance.base_stats = new();
+            dislikeRomance.base_stats["multiplier_intimacy_happiness"] = 0.5f;
             dislikeRomance.opposite_traits = new HashSet<ActorTrait>();
 
             AllTraits.Add(dislikeRomance);

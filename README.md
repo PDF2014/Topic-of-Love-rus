@@ -1,6 +1,11 @@
 ﻿# Topic of Love
 **..is a WorldBox mod that allows units to have intimacy and fall in love for more than just their ability to reproduce! If you want a Sims-like experience with your units, this may be the mod!**
 
+## 📩 Installation
+If downloading through GitHub or GameBanana, download the latest release and extract the contents into a folder in "worldbox/Mods"
+
+If downloading through Steam, subscribe to the mod and you're good to go!
+
 ## ➕ Main Features
 ### New Behaviors
 - Units no longer instantly fall in love with the first person they see. Rather, they socialize, which can lead to dates, copulating, and then can possibly lead to falling in love!

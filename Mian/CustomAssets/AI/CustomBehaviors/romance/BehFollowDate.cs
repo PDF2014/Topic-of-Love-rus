@@ -22,7 +22,7 @@ public class BehFollowDate : BehaviourActionActor
             return BehResult.Stop;
         }
         
-        if (pActor.beh_tile_target != toFollow.beh_tile_target)
+        if (pActor.beh_tile_target != toFollow.beh_tile_target || (pActor.beh_tile_target != null && !pActor.beh_tile_target.Equals(toFollow.beh_tile_target)))
         {
             pActor.beh_tile_target = toFollow.beh_tile_target;
             TolUtil.Debug(pActor.getName()+"'s date has moved! Attempting to follow!");

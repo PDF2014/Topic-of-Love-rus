@@ -123,18 +123,16 @@ public class Decisions
                     if (TolUtil.CouldReproduce(actor, actor.lover) &&
                         !Preferences.BothActorsPreferenceMatch(actor, actor.lover, true))
                     {
-                        TolUtil.Debug("SUCCEZ");
                         return true;
                     }
 
-                    // if (TolUtil.CouldReproduce(actor, actor.lover) &&
-                    //     Preferences.BothActorsPreferenceMatch(actor, actor.lover, true))
-                    //     return false;
+                    if (TolUtil.CouldReproduce(actor, actor.lover) &&
+                        Preferences.BothActorsPreferenceMatch(actor, actor.lover, true))
+                        return false;
                 }
 
                 bool success = bestFriend != null && TolUtil.CouldReproduce(actor, bestFriend) &&
                                !bestFriend.hasStatus("pregnant");
-                TolUtil.Debug("sexual ivf almost successful : " + success);
                 return success;
             },
             list_civ = true,
