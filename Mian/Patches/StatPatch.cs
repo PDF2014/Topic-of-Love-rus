@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using HarmonyLib;
 using NeoModLoader.General;
 using NeoModLoader.services;
@@ -67,6 +69,146 @@ public class StatPatch
         })
     };
 
+    static StatsIcon CreateNewIcon(Transform parent, Transform iconTemplate, string id, Sprite sprite)
+    {
+        var baseIcon = GameObject.Instantiate(iconTemplate, parent);
+        var icon = baseIcon.GetComponent<StatsIcon>();
+        var iconText = baseIcon.GetComponent<TipButton>();
+        iconText.textOnClick = LM.Get("statistic_"+id);
+        iconText.textOnClickDescription = "statistic_"+id+"_description";
+        icon.name = id;
+        icon.getIcon().sprite = sprite;
+                        
+        return icon;
+    }
+    
+    static void ShowCustomIcons<TMetaObject, TData>(StatsIconContainer __instance, TMetaObject pMetaObject) where TMetaObject : MetaObject<TData> where TData : MetaObjectData
+    {
+            if (!__instance._stats_icons.ContainsKey("lesbian")) // this is how we will check if the ui was made for this menu yet
+            {
+                var iconTemplate = __instance._stats_icons.Values.First(source => true).transform;
+                var iconGroupTemplate = iconTemplate.parent;
+                
+                for (int _i = 0; _i <= 1; _i++)
+                {
+                    bool isSexual = _i == 0;
+                    var iconGroup = GameObject.Instantiate(iconGroupTemplate, iconGroupTemplate.parent);
+                
+                    for (var i = iconGroup.transform.childCount - 1; i >= 0; i--)
+                    {
+                        var child = iconGroup.transform.GetChild(i);
+                        GameObject.DestroyImmediate(child.gameObject);
+                    }
+                
+                    iconGroup.name = "orientation_icons_" + (isSexual ? "sexual" : "romantic");
+                    iconGroup.transform.localScale = new Vector3(1, 1, 1);     
+                    
+                    foreach (var orientation in Orientation.Orientations)
+                    {
+                        var baseIcon = GameObject.Instantiate(iconTemplate, iconGroup);
+                        var icon = baseIcon.GetComponent<StatsIcon>();
+                        var iconText = baseIcon.GetComponent<TipButton>();
+                        iconText.textOnClick = LM.Get("count_"+(isSexual ? orientation.SexualPathLocale : orientation.RomanticPathLocale));
+                        iconText.textOnClickDescription = orientation.DescriptionLocale;
+                        icon.name = isSexual ? orientation.OrientationType : orientation.OrientationType + "_romantic";
+                        icon.getIcon().sprite = Resources.Load<Sprite>("ui/Icons/" + (isSexual ? orientation.SexualPathIcon : orientation.RomanticPathIcon));
+                        
+                        __instance._stats_icons.Add(icon.name, icon);
+                    }   
+                }
+
+                var lonelinessGroup = __instance._stats_icons.Values
+                .First(source => source.name.Equals("i_single_females")).transform.parent;
+                var lonelyIcon = CreateNewIcon(
+                    lonelinessGroup,
+                    iconTemplate,
+                    "loneliness",
+                    Resources.Load<Sprite>("ui/Icons/status/broke_up"));
+                __instance._stats_icons.Add(lonelyIcon.name, lonelyIcon);
+            }
+            
+            Orientation.Orientations.ForEach(orientation =>
+            {
+                var orientationType = orientation.OrientationType;
+                __instance.setIconValue(orientationType, pMetaObject.countOrientation(orientationType, true));
+                __instance.setIconValue(orientationType+"_romantic", pMetaObject.countOrientation(orientationType, false));
+            });
+            
+            __instance.setIconValue("loneliness", World.world.units.Count(unit => TolUtil.GetIntimacy(unit) < 0 && TolUtil.AffectedByIntimacy(unit)));
+    }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(SubspeciesStatsElement), nameof(SubspeciesStatsElement.showContent))]
+    static void ShowSubspeciesCustomStats(SubspeciesStatsElement __instance)
+    {
+        if(__instance._stats_icons.transform.name.Equals("content_more_icons"))
+            ShowCustomIcons<Subspecies, SubspeciesData>(__instance._stats_icons, __instance.meta_object);
+    }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(ReligionStatsElement), nameof(ReligionStatsElement.showContent))]
+    static void ShowReligionCustomStats(ReligionStatsElement __instance)
+    {
+        if(__instance._stats_icons.transform.name.Equals("content_more_icons"))
+            ShowCustomIcons<Religion, ReligionData>(__instance._stats_icons, __instance.meta_object);
+    }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(LanguageStatsElement), nameof(LanguageStatsElement.showContent))]
+    static void ShowLanguageCustomStats(LanguageStatsElement __instance)
+    {
+        if(__instance._stats_icons.transform.name.Equals("content_more_icons"))
+            ShowCustomIcons<Language, LanguageData>(__instance._stats_icons, __instance.meta_object);
+    }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(FamilyStatsElement), nameof(FamilyStatsElement.showContent))]
+    static void ShowFamilyCustomStats(FamilyStatsElement __instance)
+    {
+        if(__instance._stats_icons.transform.name.Equals("content_more_icons"))
+            ShowCustomIcons<Family, FamilyData>(__instance._stats_icons, __instance.meta_object);
+    }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(CultureStatsElement), nameof(CultureStatsElement.showContent))]
+    static void ShowCultureCustomStats(CultureStatsElement __instance)
+    {
+        if(__instance._stats_icons.transform.name.Equals("content_more_icons"))
+            ShowCustomIcons<Culture, CultureData>(__instance._stats_icons, __instance.meta_object);
+    }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(ClanStatsElement), nameof(ClanStatsElement.showContent))]
+    static void ShowClanCustomStats(ClanStatsElement __instance)
+    {
+        if(__instance._stats_icons.transform.name.Equals("content_more_icons"))
+            ShowCustomIcons<Clan, ClanData>(__instance._stats_icons, __instance.meta_object);
+    }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(AllianceStatsElement), nameof(AllianceStatsElement.showContent))]
+    static void ShowAllianceCustomStats(AllianceStatsElement __instance)
+    {
+        if(__instance._stats_icons.transform.name.Equals("content_more_icons"))
+            ShowCustomIcons<Alliance, AllianceData>(__instance._stats_icons, __instance.meta_object);
+    }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(KingdomStatsElement), nameof(KingdomStatsElement.showContent))]
+    static void ShowKingdomCustomStats(KingdomStatsElement __instance)
+    {
+        if(__instance._stats_icons.transform.name.Equals("content_more_icons"))
+            ShowCustomIcons<Kingdom, KingdomData>(__instance._stats_icons, __instance.meta_object);
+    }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(CityStatsElement), nameof(CityStatsElement.showContent))]
+    static void ShowCityCustomStats(CityStatsElement __instance)
+    {
+        if(__instance._stats_icons.transform.name.Equals("content_more_icons"))
+            ShowCustomIcons<City, CityData>(__instance._stats_icons, __instance.meta_object);
+    }
+
     [HarmonyPatch(typeof(UnitStatsElement))]
     public class UnitStatsElementClass
     {
@@ -87,7 +229,7 @@ public class StatPatch
         }
     }
     
-    private static bool _initializedIcons;
+    private static bool _initializedUnitIcons;
     [HarmonyPostfix]
     [HarmonyPatch(nameof(UnitWindow.OnEnable))]
     static void WindowCreatureInfo(UnitWindow __instance)
@@ -95,9 +237,9 @@ public class StatPatch
         if (__instance.actor == null || !__instance.actor.isAlive())
             return;
         
-        if (!_initializedIcons)
+        if (!_initializedUnitIcons)
         {
-            _initializedIcons = true;
+            _initializedUnitIcons = true;
             Initialize(__instance);
         }
     }
