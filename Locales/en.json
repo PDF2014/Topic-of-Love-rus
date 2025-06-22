@@ -236,17 +236,17 @@
   "world_law_fluid_sexuality_description": "Unit preferences may change overtime even when already established",
   "world_law_fluid_sexuality_description_2": "Sexuality can be fluid!",
   
-  "orientations_lesbian_description": "They statistically pull more women than straight men ever could",
-  "orientations_gay_description": "They statistically pull more men than straight woman ever could",
-  "orientations_straight_description": "They statistically are boring as fuck",
-  "orientations_bisexual_description": "They statistically love swinging back and forth",
-  "orientations_pansexual_description": "They don't actually like pans, dumbass",
-  "orientations_heterosexual_description": "They like a sex different from them",
-  "orientations_homosexual_description": "They like those that are of the same sex as them",
-  "orientations_asexual_description": "Romantic/sexual intimacy is bleh to them",
-  
-  "statistic_loneliness": "Lonely Units",
-  "statistic_loneliness_description": "They just want a hug or to talk to someone",
+  "statistics_lesbian_description": "They statistically pull more women than straight men ever could",
+  "statistics_gay_description": "They statistically pull more men than straight woman ever could",
+  "statistics_straight_description": "They statistically are boring as fuck",
+  "statistics_bisexual_description": "They statistically love swinging back and forth",
+  "statistics_pansexual_description": "They don't actually like pans, dumbass",
+  "statistics_heterosexual_description": "They like a sex different from them",
+  "statistics_homosexual_description": "They like those that are of the same sex as them",
+  "statistics_asexual_description": "Romantic/sexual intimacy is bleh to them",
+
+  "statistics_lonely": "Lonely Units",
+  "statistics_lonely_description": "They just want someone to care :(",
   
   "opinion_homosexual": "Opinions on Homosexuality",
   "opinion_heterosexual": "Opinions on Heterosexuality",

@@ -15,6 +15,7 @@ using Object = UnityEngine.Object;
 namespace Topic_of_Love.Mian.Patches;
 
 // Big credits to xing_yao on Discord for this!
+// TODO : lowkey let's remake this class to be less fucking radically insane
 [HarmonyPatch(typeof(UnitWindow))]
 public class StatPatch
 {
@@ -74,8 +75,8 @@ public class StatPatch
         var baseIcon = GameObject.Instantiate(iconTemplate, parent);
         var icon = baseIcon.GetComponent<StatsIcon>();
         var iconText = baseIcon.GetComponent<TipButton>();
-        iconText.textOnClick = LM.Get("statistic_"+id);
-        iconText.textOnClickDescription = "statistic_"+id+"_description";
+        iconText.textOnClick = LM.Get("statistics_"+id);
+        iconText.textOnClickDescription = "statistics_"+id+"_description";
         icon.name = id;
         icon.getIcon().sprite = sprite;
                         
@@ -105,14 +106,12 @@ public class StatPatch
                     
                     foreach (var orientation in Orientation.Orientations)
                     {
-                        var baseIcon = GameObject.Instantiate(iconTemplate, iconGroup);
-                        var icon = baseIcon.GetComponent<StatsIcon>();
-                        var iconText = baseIcon.GetComponent<TipButton>();
-                        iconText.textOnClick = LM.Get("count_"+(isSexual ? orientation.SexualPathLocale : orientation.RomanticPathLocale));
-                        iconText.textOnClickDescription = orientation.DescriptionLocale;
-                        icon.name = isSexual ? orientation.OrientationType : orientation.OrientationType + "_romantic";
-                        icon.getIcon().sprite = Resources.Load<Sprite>("ui/Icons/" + (isSexual ? orientation.SexualPathIcon : orientation.RomanticPathIcon));
-                        
+                        var icon = CreateNewIcon(
+                            iconGroup,
+                            iconTemplate,
+                            isSexual ? orientation.OrientationType : orientation.OrientationType + "_romantic",
+                            Resources.Load<Sprite>("ui/Icons/" + (isSexual ? orientation.SexualPathIcon : orientation.RomanticPathIcon)));
+
                         __instance._stats_icons.Add(icon.name, icon);
                     }   
                 }
@@ -122,7 +121,7 @@ public class StatPatch
                 var lonelyIcon = CreateNewIcon(
                     lonelinessGroup,
                     iconTemplate,
-                    "loneliness",
+                    "lonely",
                     Resources.Load<Sprite>("ui/Icons/status/broke_up"));
                 __instance._stats_icons.Add(lonelyIcon.name, lonelyIcon);
             }
@@ -134,7 +133,7 @@ public class StatPatch
                 __instance.setIconValue(orientationType+"_romantic", pMetaObject.countOrientation(orientationType, false));
             });
             
-            __instance.setIconValue("loneliness", World.world.units.Count(unit => TolUtil.GetIntimacy(unit) < 0 && TolUtil.AffectedByIntimacy(unit)));
+            __instance.setIconValue("lonely", World.world.units.Count(unit => TolUtil.GetIntimacy(unit) < 0 && TolUtil.AffectedByIntimacy(unit)));
     }
     
     [HarmonyPostfix]

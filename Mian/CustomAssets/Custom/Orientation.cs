@@ -68,8 +68,8 @@ public class Orientation
 
         LM.AddToCurrentLocale(pathLocale, char.ToUpper(orientation.First()) + orientation.Substring(1));
         LM.AddToCurrentLocale(romanticPathLocale, char.ToUpper(romanticVariant.First()) + romanticVariant.Substring(1));
-        LM.AddToCurrentLocale("count_" + pathLocale, char.ToUpper(orientation.First()) + orientation.Substring(1) + "s");
-        LM.AddToCurrentLocale("count_" + romanticPathLocale, char.ToUpper(romanticVariant.First()) + romanticVariant.Substring(1) + "s");
+        LM.AddToCurrentLocale("statistics_" + orientation, char.ToUpper(orientation.First()) + orientation.Substring(1) + "s");
+        LM.AddToCurrentLocale("statistics_" + orientation + "_romantic", char.ToUpper(romanticVariant.First()) + romanticVariant.Substring(1) + "s");
         return orientationType;
     }
 
