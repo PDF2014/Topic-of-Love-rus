@@ -6,6 +6,8 @@ If downloading through GitHub or GameBanana, download the latest release and ext
 
 If downloading through Steam, subscribe to the mod and you're good to go!
 
+When enabling or disabling the mod, restarting the game is a must otherwise you will run into issues extremely quickly.
+
 ## ➕ Main Features
 ### New Behaviors
 - Units no longer instantly fall in love with the first person they see. Rather, they socialize, which can lead to dates, copulating, and then can possibly lead to falling in love!

@@ -15,7 +15,7 @@ namespace Topic_of_Love.Mian.CustomAssets;
 
 public class HistoryMetaDataAssets
 {
-    private static readonly Dictionary<string, HistoryInterval> Intervals = new()
+    public static readonly Dictionary<string, HistoryInterval> Intervals = new()
     {
         ["1"] = HistoryInterval.Yearly1,
         ["5"] = HistoryInterval.Yearly5,
@@ -32,7 +32,7 @@ public class HistoryMetaDataAssets
         AssemblyBuilder.DefineDynamicAssembly(new AssemblyName("DynamicTypesAssembly"), AssemblyBuilderAccess.Run)
         .DefineDynamicModule("MainModule");
 
-    private static readonly Dictionary<string, Dictionary<string, Func<NanoObject, long?>>> Collectors = new()
+    public static readonly Dictionary<string, Dictionary<string, Func<NanoObject, long?>>> Collectors = new()
     {
         ["world"] = new()
         {

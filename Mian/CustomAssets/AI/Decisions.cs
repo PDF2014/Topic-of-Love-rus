@@ -63,21 +63,25 @@ public class Decisions
         Add(new DecisionAsset
         {
             id = "reproduce_preservation",
-            priority = NeuroLayer.Layer_3_High,
+            priority = NeuroLayer.Layer_4_Critical,
             path_icon = "ui/Icons/status/disliked_sex",
             cooldown = 20,
             action_check_launch = actor =>
             {
-                actor.subspecies.countReproductionNeuron();
-                return TolUtil.IsDyingOut(actor)
-                       && BabyHelper.canMakeBabies(actor)
-                       && actor.hasSubspeciesTrait("preservation")
-                       && TolUtil.IsOrientationSystemEnabledFor(actor);
+                if (TolUtil.IsDyingOut(actor)
+                    && BabyHelper.canMakeBabies(actor)
+                    && actor.hasSubspeciesTrait("preservation")
+                    && TolUtil.IsOrientationSystemEnabledFor(actor))
+                {
+                    actor.subspecies.countReproductionNeuron();
+                    return true;
+                }
+
+                return false;
             },
             weight_calculate_custom = actor => 3f,
             only_adult = true,
-            only_safe = true,
-            cooldown_on_launch_failure = true
+            only_safe = true
         });
         // will force all units to make babies regardless of orientation if they have preservation
         AssetManager.subspecies_traits.get("reproduction_sexual").addDecision("reproduce_preservation");

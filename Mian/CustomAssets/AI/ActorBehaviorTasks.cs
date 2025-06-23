@@ -108,7 +108,7 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
                 locale_key = "task_reproduce_preservation",
                 path_icon = "ui/Icons/status/disliked_sex",
             };
-            reproduceForPreservation.addBeh(new BehFindAPartner(false, false, false, true, "reproduction"));
+            reproduceForPreservation.addBeh(new BehFindAPartner( false, false, false, true, "reproduction", 200f));
             reproduceForPreservation.addBeh(new BehGetPossibleTileForSex());
             Add(reproduceForPreservation);
             

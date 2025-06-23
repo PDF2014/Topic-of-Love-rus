@@ -378,10 +378,10 @@ namespace Topic_of_Love.Mian
 
         public static bool IsDyingOut(Actor pActor)
         {
-            if (!pActor.hasSubspecies() || BabyHelper.isMetaLimitsReached(pActor)) return false;
+            if (!pActor.hasSubspecies()) return false;
             var limit = (int)pActor.subspecies.base_stats_meta["limit_population"];
             return pActor.subspecies.countCurrentFamilies() <= 10
-                   || (limit != 0 ? pActor.subspecies.countUnits() <= limit / 3 : pActor.subspecies.countUnits() <= 50);
+                   || (limit != 0 ? pActor.subspecies.countUnits() <= limit / 3 : pActor.subspecies.countUnits() <= 100);
         }
         
         public static bool WantsBaby(Actor pActor, bool reproductionPurposesIncluded=true)
@@ -398,9 +398,9 @@ namespace Topic_of_Love.Mian
                 }   
             }
             
-            if ((pActor.hasHouse() || (pActor.hasLover() && pActor.lover.hasHouse())) && pActor.getHappiness() >= 75)
+            if (pActor.getHappiness() >= 50 & GetIntimacy(pActor) > 10)
             {
-                Debug(pActor.getName() + " wants a baby because they have a house and are happy enough");
+                Debug(pActor.getName() + " wants a baby because they are happy enough");
                 return true;
             }
             
