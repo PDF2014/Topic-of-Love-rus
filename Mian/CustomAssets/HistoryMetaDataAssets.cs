@@ -441,7 +441,7 @@ public class HistoryMetaDataAssets
             }
 
             return ((IMetaObject)nano).countLonely();
-        }), new(){"kingdom", "city", "family", "world", "clan"});
+        }), new(){"kingdom", "city", "world"});
         
 
         Orientation.Orientations.ForEach(orientation =>
@@ -455,7 +455,7 @@ public class HistoryMetaDataAssets
                 }
 
                 return ((IMetaObject)nano).countOrientation(orientation.OrientationType, true);
-            }), new(){"kingdom", "city", "alliance", "world", "subspecies", "culture"});
+            }), new(){"kingdom", "city", "alliance", "world", "culture"});
         });
         
         var toUse = new Dictionary<string, Dictionary<string, Func<NanoObject, long?>>>();

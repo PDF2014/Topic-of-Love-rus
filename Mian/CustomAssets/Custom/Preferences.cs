@@ -273,7 +273,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 {
                     randomKey = keys.GetRandom();
                 
-                    var preferredIdentitySexual = Randy.randomChance(0.95f) ? 
+                    var preferredIdentitySexual = Randy.randomChance(0.7f) ? 
                         GetPreferenceTraitFromID(randomKey, true) : RandomPreferenceFromType("identity", true);
                     var preferredIdentityRomantic = Randy.randomChance(0.95f) ?
                         GetOtherVariant(preferredIdentitySexual) : RandomPreferenceFromType("identity");

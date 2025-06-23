@@ -116,10 +116,9 @@ public class StatPatch
                     }   
                 }
 
-                var lonelinessGroup = __instance._stats_icons.Values
-                .First(source => source.name.Equals("i_single_females")).transform.parent;
+                var mainGroup = GameObject.Instantiate(iconGroupTemplate, iconGroupTemplate.parent);
                 var lonelyIcon = CreateNewIcon(
-                    lonelinessGroup,
+                    mainGroup,
                     iconTemplate,
                     "lonely",
                     Resources.Load<Sprite>("ui/Icons/status/broke_up"));
