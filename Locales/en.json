@@ -243,7 +243,16 @@
   "statistics_pansexual_description": "They don't actually like pans, dumbass",
   "statistics_heterosexual_description": "They like a sex different from them",
   "statistics_homosexual_description": "They like those that are of the same sex as them",
-  "statistics_asexual_description": "Romantic/sexual intimacy is bleh to them",
+  "statistics_asexual_description": "Sexual intimacy is bleh to them",
+
+  "statistics_lesbian_romantic_description": "They statistically pull more women than straight men ever could",
+  "statistics_gay_romantic_description": "They statistically pull more men than straight woman ever could",
+  "statistics_straight_romantic_description": "They statistically are boring as fuck",
+  "statistics_bisexual_romantic_description": "They statistically love swinging back and forth",
+  "statistics_pansexual_romantic_description": "They don't actually like pans, dumbass",
+  "statistics_heterosexual_romantic_description": "They like a sex different from them",
+  "statistics_homosexual_romantic_description": "They like those that are of the same sex as them",
+  "statistics_asexual_romantic_description": "Romantic intimacy is bleh to them",
 
   "statistics_lonely": "Lonely Units",
   "statistics_lonely_description": "They just want someone to care :(",

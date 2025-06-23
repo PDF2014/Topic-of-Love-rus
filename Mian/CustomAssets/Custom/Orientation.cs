@@ -85,11 +85,13 @@ public class Orientation
         return GetOrientation(orientation);
     }
 
+    // includes bisexuals
     public static bool IsAHomo(Actor actor)
     {
-        return GetOrientation(actor, false).IsHomo || GetOrientation(actor, true).IsHomo;
+        return (GetOrientation(actor, false).IsHomo || GetOrientation(actor, true).IsHomo);
     }
-
+    
+    // includes bisexuals
     public static bool IsAHetero(Actor actor)
     {
         return GetOrientation(actor, false).IsHetero || GetOrientation(actor, true).IsHetero;
@@ -227,14 +229,15 @@ public class Orientations
     }
 
     // homosexuals count as gay, lesbian, etc (and same goes for heterosexual)
+    // bisexuals do not count as homosexuals or heterosexuals
     public static bool HasOrientation(Actor actor, string id, bool sexual)
     {
         var orientation = GetOrientationFromActor(actor, sexual);
         if (id.Equals("homosexual"))
-            return orientation.IsHomo;
+            return orientation.IsHomo && !orientation.IsHetero;
         if(id.Equals("heterosexual"))
-            return orientation.IsHetero;
-        
+            return orientation.IsHetero && !orientation.IsHomo;
+
         return orientation.OrientationType.Equals(id);
     }
     

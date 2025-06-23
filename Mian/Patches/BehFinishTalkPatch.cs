@@ -24,13 +24,17 @@ public class BehFinishTalkPatch
         codeMatcher.Advance(1);
         var higherChanceBranch = generator.DefineLabel();
         var fallInLoveBranch = generator.DefineLabel();
+        var skipFriendLabel = generator.DefineLabel();
         
         codeMatcher.InsertAndAdvance(
+            new CodeInstruction(OpCodes.Ldarg_0),
+            new CodeInstruction(OpCodes.Callvirt, AccessTools.Method(typeof(Actor), nameof(Actor.hasBestFriend))),
+            new CodeInstruction(OpCodes.Brfalse, skipFriendLabel),
             new CodeInstruction(OpCodes.Ldarg_0),
             new CodeInstruction(OpCodes.Callvirt, AccessTools.Method(typeof(Actor), nameof(Actor.getBestFriend))),
             new CodeInstruction(OpCodes.Ldarg_1),
             new CodeInstruction(OpCodes.Ceq),
-            new CodeInstruction(OpCodes.Brtrue, higherChanceBranch),
+            new CodeInstruction(OpCodes.Brtrue, higherChanceBranch).WithLabels(skipFriendLabel),
             new CodeInstruction(OpCodes.Ldc_R4, 0.25f),
             new CodeInstruction(OpCodes.Br, fallInLoveBranch),
             new CodeInstruction(OpCodes.Ldc_R4, 0.75f).WithLabels(higherChanceBranch),

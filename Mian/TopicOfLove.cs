@@ -50,7 +50,7 @@ namespace Topic_of_Love.Mian
             GodPowers.Init();
             TabsAndButtons.Init();
             Orientations.Init();
-            WorldStatisticAssets.Init(); // uses orientations
+            StatisticAssets.Init(); // uses orientations
             HistoryDataAssets.Init();
             HistoryMetaDataAssets.Init();
             Preferences.Init();

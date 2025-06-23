@@ -43,7 +43,7 @@
         <Compile Include="Mian\CustomAssets\HistoryDataAssets.cs" />
         <Compile Include="Mian\CustomAssets\HistoryMetaDataAssets.cs" />
         <Compile Include="Mian\CustomAssets\Opinions.cs" />
-        <Compile Include="Mian\CustomAssets\WorldStatisticAssets.cs" />
+        <Compile Include="Mian\CustomAssets\StatisticAssets.cs" />
         <Compile Include="Mian\CustomAssets\StatusEffects.cs" />
         <Compile Include="Mian\CustomAssets\TabsAndButtons.cs" />
         <Compile Include="Mian\CustomAssets\Traits\ActorTraits.cs" />

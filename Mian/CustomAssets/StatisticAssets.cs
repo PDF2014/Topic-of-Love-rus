@@ -2,13 +2,13 @@
 
 namespace Topic_of_Love.Mian.CustomAssets;
 
-public class WorldStatisticAssets
+public class StatisticAssets
 {
     public static void Init()
     {
         Add(new StatisticsAsset
         {
-            id = "world_statistics_lonely",
+            id = "statistics_lonely",
             path_icon = "ui/Icons/status/broke_up",
             is_world_statistics = true,
             list_window_meta_type = MetaType.Unit,
@@ -25,26 +25,19 @@ public class WorldStatisticAssets
             {
                 Add(new StatisticsAsset
                 {
-                    id = "world_statistics_" + (isSexual ? orientation.OrientationType : orientation.OrientationType + "_romantic"),
-                    localized_key = "statistics_" + (isSexual ? orientation.OrientationType : orientation.OrientationType +  "_romantic"),
-                    localized_key_description = "statistics_" + orientation.OrientationType + "_description",
+                    id = "statistics_" + (isSexual ? orientation.OrientationType : orientation.OrientationType + "_romantic"),
                     path_icon = "ui/Icons/" + (isSexual ? orientation.SexualPathIcon : orientation.RomanticPathIcon),
                     is_world_statistics = true,
                     list_window_meta_type = MetaType.Unit,
                     long_action = _ => World.world.world_object.countOrientation(orientation.OrientationType, isSexual),
                     world_stats_tabs = WorldStatsTabs.Noosphere
-                }, false);
+                });
             }
         }
     }
 
-    static void Add(StatisticsAsset asset, bool handleLocales=true)
+    static void Add(StatisticsAsset asset)
     {
-        if (handleLocales)
-        {
-            asset.localized_key = asset.id.Substring(asset.id.IndexOf("_") + 1);
-            asset.localized_key_description = asset.id.Substring(asset.id.IndexOf("_") + 1) + "_description";   
-        }
         AssetManager.statistics_library.add(asset);
     }
 }
