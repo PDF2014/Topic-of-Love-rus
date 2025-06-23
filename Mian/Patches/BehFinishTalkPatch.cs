@@ -34,8 +34,8 @@ public class BehFinishTalkPatch
             new CodeInstruction(OpCodes.Callvirt, AccessTools.Method(typeof(Actor), nameof(Actor.getBestFriend))),
             new CodeInstruction(OpCodes.Ldarg_1),
             new CodeInstruction(OpCodes.Ceq),
-            new CodeInstruction(OpCodes.Brtrue, higherChanceBranch).WithLabels(skipFriendLabel),
-            new CodeInstruction(OpCodes.Ldc_R4, 0.25f),
+            new CodeInstruction(OpCodes.Brtrue, higherChanceBranch),
+            new CodeInstruction(OpCodes.Ldc_R4, 0.25f).WithLabels(skipFriendLabel),
             new CodeInstruction(OpCodes.Br, fallInLoveBranch),
             new CodeInstruction(OpCodes.Ldc_R4, 0.75f).WithLabels(higherChanceBranch),
             
