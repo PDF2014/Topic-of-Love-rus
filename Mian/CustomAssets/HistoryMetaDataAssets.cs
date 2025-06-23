@@ -443,23 +443,20 @@ public class HistoryMetaDataAssets
             return ((IMetaObject)nano).countLonely();
         }), new(){"kingdom", "city", "family", "world", "clan"});
         
-        for (int i = 0; i <= 1; i++)
-        {
-            var isSexual = i == 0;
-            Orientation.Orientations.ForEach(orientation =>
-            {
-                var id = isSexual ? orientation.OrientationType : orientation.OrientationType + "_romantic";
-                toAdd.Add(new(id, nano =>
-                {
-                    if (nano.getMetaType().Equals(MetaType.World))
-                    {
-                        return StatsHelper.getStat("statistics_" + id);
-                    }
 
-                    return ((IMetaObject)nano).countOrientation(orientation.OrientationType, isSexual);
-                }), new(){"kingdom", "city", "family", "world", "clan", "alliance", "subspecies", "culture"});
-            });
-        }
+        Orientation.Orientations.ForEach(orientation =>
+        {
+            var id = orientation.OrientationType;
+            toAdd.Add(new(id, nano =>
+            {
+                if (nano.getMetaType().Equals(MetaType.World))
+                {
+                    return StatsHelper.getStat("statistics_" + id);
+                }
+
+                return ((IMetaObject)nano).countOrientation(orientation.OrientationType, true);
+            }), new(){"kingdom", "city", "alliance", "world", "subspecies", "culture"});
+        });
         
         var toUse = new Dictionary<string, Dictionary<string, Func<NanoObject, long?>>>();
         
