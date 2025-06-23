@@ -74,7 +74,7 @@ public class Decisions
                        && actor.hasSubspeciesTrait("preservation")
                        && TolUtil.IsOrientationSystemEnabledFor(actor);
             },
-            weight_calculate_custom = actor => BabyHelper.canMakeBabies(actor) ? 2f : 0.1f,
+            weight_calculate_custom = actor => 3f,
             only_adult = true,
             only_safe = true,
             cooldown_on_launch_failure = true

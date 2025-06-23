@@ -28,8 +28,10 @@ public class BehFinishTalkPatch
         
         codeMatcher.InsertAndAdvance(
             new CodeInstruction(OpCodes.Ldarg_0),
-            new CodeInstruction(OpCodes.Callvirt, AccessTools.Method(typeof(Actor), nameof(Actor.hasBestFriend))),
-            new CodeInstruction(OpCodes.Brfalse, skipFriendLabel),
+            new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Actor), nameof(Actor.data))),
+            new CodeInstruction(OpCodes.Ldnull),
+            new CodeInstruction(OpCodes.Ceq),
+            new CodeInstruction(OpCodes.Brtrue, skipFriendLabel),
             new CodeInstruction(OpCodes.Ldarg_0),
             new CodeInstruction(OpCodes.Callvirt, AccessTools.Method(typeof(Actor), nameof(Actor.getBestFriend))),
             new CodeInstruction(OpCodes.Ldarg_1),
@@ -52,7 +54,7 @@ public class BehFinishTalkPatch
     [HarmonyPatch(nameof(BehFinishTalk.finishTalk))]
     static void FinishTalkPatch(Actor pActor, Actor pTarget)
     {
-        TolUtil.ChangeIntimacyHappinessBy(pActor, 25);
-        TolUtil.ChangeIntimacyHappinessBy(pTarget, 25);
+        TolUtil.ChangeIntimacyHappinessBy(pActor, 45);
+        TolUtil.ChangeIntimacyHappinessBy(pTarget, 45);
     }
 }

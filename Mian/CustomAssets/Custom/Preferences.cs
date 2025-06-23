@@ -228,20 +228,20 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         public static List<PreferenceTrait> GetRandomPreferences(Actor actor)
         {
             var bio = GetBiologicalSex(actor);
-            var givenSets = new Dictionary<string, List<string>>();
+            var preferredSets = new Dictionary<string, List<string>>();
             
             if (TolUtil.NeedDifferentSexTypeForReproduction(actor))
             {
                 var oppositeSex = bio.Equals("female") ? "male" : "female";
-                givenSets.Add(oppositeSex, MatchingSets[oppositeSex]);
+                preferredSets.Add(oppositeSex, MatchingSets[oppositeSex]);
             } else if (TolUtil.NeedSameSexTypeForReproduction(actor))
             {
-                givenSets.Add(bio, MatchingSets[bio]);
+                preferredSets.Add(bio, MatchingSets[bio]);
             }
 
             var preferences = new List<PreferenceTrait>();
 
-            if (givenSets.Count <= 0)
+            if (preferredSets.Count <= 0)
             {
                 if (Randy.randomChance(0.33f))
                     return new List<PreferenceTrait>();
@@ -260,39 +260,37 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                     }
                 else
                 {
-                    givenSets.AddRange(MatchingSets);
+                    preferredSets.AddRange(MatchingSets);
                 }
             }
 
-            if (givenSets.Count > 0)
+            if (preferredSets.Count > 0)
             {
-                var keys = givenSets.Keys.ToList();
+                var keys = preferredSets.Keys.ToList();
                 string randomKey;
 
-                if (Randy.randomChance(0.7f))
+                if (Randy.randomChance(0.8f))
                 {
                     randomKey = keys.GetRandom();
-                
-                    var preferredIdentitySexual = Randy.randomChance(0.7f) ? 
-                        GetPreferenceTraitFromID(randomKey, true) : RandomPreferenceFromType("identity", true);
+
+                    var sexualMatches = Randy.randomChance(0.7f);
+                    
+                    var preferredIdentitySexual = sexualMatches ? 
+                        GetPreferenceTraitFromID(randomKey, true) : RandomPreferenceFromType("identity", true, new[]{randomKey});
                     var preferredIdentityRomantic = Randy.randomChance(0.95f) ?
-                        GetOtherVariant(preferredIdentitySexual) : RandomPreferenceFromType("identity");
+                        GetOtherVariant(preferredIdentitySexual) : RandomPreferenceFromType("identity", true, new[]{preferredIdentitySexual.id});
 
                     preferences.Add(preferredIdentitySexual);
                     preferences.Add(preferredIdentityRomantic);
                     
-                    if (Randy.randomChance(0.5f))
+                    // multiple preferences chance
+                    if (Randy.randomChance(0.4f) && sexualMatches)
                     {
-                        var randomSexual = RandomPreferenceFromType("identity", true);
-                        while(preferences.Contains(randomSexual))
-                            randomSexual = RandomPreferenceFromType("identity", true);
+                        var randomSexual = RandomPreferenceFromType("identity", true, new []{preferredIdentitySexual.id});
                         preferences.Add(randomSexual);
 
-                        var randomRomantic = Randy.randomChance(0.95f)
-                            ? GetOtherVariant(randomSexual)
-                            : RandomPreferenceFromType("identity");
-                        while(preferences.Contains(randomRomantic))
-                            randomRomantic = RandomPreferenceFromType("identity");
+                        var randomRomantic = Randy.randomChance(0.95f) ? 
+                            GetOtherVariant(randomSexual) : RandomPreferenceFromType("identity", false, new[]{preferredIdentityRomantic.id});
                         preferences.Add(randomRomantic);
                     }
                 }
@@ -303,7 +301,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                     if (Randy.randomChance(0.2f))
                     {
                         var preferredExpressionSexual = Randy.randomChance(0.5f) ? 
-                            GetPreferenceTraitFromID(givenSets[randomKey][0], true) : RandomPreferenceFromType("expression", true);
+                            GetPreferenceTraitFromID(preferredSets[randomKey][0], true) : RandomPreferenceFromType("expression", true);
                         var preferredExpressionRomantic = Randy.randomChance(0.5f) ?
                             GetOtherVariant(preferredExpressionSexual) : RandomPreferenceFromType("expression");   
                         preferences.Add(preferredExpressionSexual);
@@ -314,7 +312,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                     {
                         randomKey = keys.GetRandom();
                         var preferredGenitalSexual = Randy.randomChance(0.8f) ? 
-                            GetPreferenceTraitFromID(givenSets[randomKey][1], true) : RandomPreferenceFromType("genital", true);
+                            GetPreferenceTraitFromID(preferredSets[randomKey][1], true) : RandomPreferenceFromType("genital", true);
                     
                         preferences.Add(preferredGenitalSexual);   
                     }
@@ -380,9 +378,9 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             PreferenceTypes.Values.ForEach(list.AddRange);
             return list;
         }
-        public static PreferenceTrait RandomPreferenceFromType(string type, bool sexual = false)
+        public static PreferenceTrait RandomPreferenceFromType(string type, bool sexual = false, string[] exclude=null)
         {
-            return GetPreferencesFromType(type, sexual).GetRandom();
+            return GetPreferencesFromType(type, sexual).Where(trait => exclude == null || !exclude.Contains(trait.id)).ToList().GetRandom();
         }
         
         public static PreferenceTrait RandomPreference(bool sexual = false)

@@ -11,7 +11,7 @@ public class BehIntimacyPatches
         static void Postfix(Actor pBabyActor, BehResult __result)
         {
             if(__result == BehResult.Continue)
-                TolUtil.ChangeIntimacyHappinessBy(pBabyActor, 10);
+                TolUtil.ChangeIntimacyHappinessBy(pBabyActor, 20);
         }
     }
 
@@ -21,7 +21,7 @@ public class BehIntimacyPatches
         static void Postfix(Actor pActor, BehResult __result)
         {
             if(__result == BehResult.Continue)
-                TolUtil.ChangeIntimacyHappinessBy(pActor, 10);
+                TolUtil.ChangeIntimacyHappinessBy(pActor, 20);
         }
     }
     
@@ -44,14 +44,14 @@ public class BehIntimacyPatches
             {
                 var lover = __instance.lover;
                 if(lover != null)
-                    TolUtil.ChangeIntimacyHappinessBy(lover, -40);
+                    TolUtil.ChangeIntimacyHappinessBy(lover, -30);
                 var bestFriend = __instance.getBestFriend();
                 if(bestFriend != null)
-                    TolUtil.ChangeIntimacyHappinessBy(bestFriend, -20);
+                    TolUtil.ChangeIntimacyHappinessBy(bestFriend, -15);
                 var parents = __instance.getParents();
                 foreach(var parent in parents)
                 {
-                    TolUtil.ChangeIntimacyHappinessBy(parent, -15);
+                    TolUtil.ChangeIntimacyHappinessBy(parent, -10);
                 }
 
                 var family = __instance.family;
