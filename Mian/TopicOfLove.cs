@@ -51,6 +51,8 @@ namespace Topic_of_Love.Mian
             TabsAndButtons.Init();
             Orientations.Init();
             WorldStatisticAssets.Init(); // uses orientations
+            HistoryDataAssets.Init();
+            HistoryMetaDataAssets.Init();
             Preferences.Init();
         }
         private void Awake()
