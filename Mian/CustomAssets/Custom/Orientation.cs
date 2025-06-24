@@ -104,6 +104,14 @@ public class Orientation
     {
         return GetOrientation(actor, false).IsHetero || GetOrientation(actor, true).IsHetero;
     }
+    
+    // includes pansexuals
+    public static bool IsABisexual(Actor actor)
+    {
+        var romantic = GetOrientation(actor, false);
+        var sexual = GetOrientation(actor, true);
+        return (romantic.IsHetero && romantic.IsHomo) || (sexual.IsHetero && sexual.IsHomo);
+    }
 }
 
 public class Orientations

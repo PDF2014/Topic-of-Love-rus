@@ -568,6 +568,16 @@ namespace Topic_of_Love.Mian
         {
             return !pActor.hasTrait("intimacy_averse") && !pActor.hasTrait("psychopath");
         }
+        
+        public static int sortUnitsByOrientation(Actor pActor1, Actor pActor2, Orientation pTopOrientation, bool sexual)
+        {
+            var orientation1 = Orientations.GetOrientationFromActor(pActor1, sexual);
+            var orientation2 = Orientations.GetOrientationFromActor(pActor2, sexual);
+        
+            if (orientation1.OrientationType.Equals(orientation2.OrientationType))
+                return 0;
+            return orientation1.OrientationType.Equals(pTopOrientation.OrientationType) ? -1 : 1;
+        }
 
         public static bool IsTOIInstalled()
         {
