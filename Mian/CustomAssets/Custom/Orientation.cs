@@ -8,7 +8,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom;
 
 public class Orientation
 {
-    public static readonly List<Orientation> Orientations = new();
+    public static readonly Dictionary<string, Orientation> Orientations = new();
     public readonly string OrientationType;
     public readonly string SexualPathLocale;
     public readonly string RomanticPathLocale;
@@ -16,8 +16,8 @@ public class Orientation
     public readonly bool IsHomo;
     public readonly string HexCode;
     public readonly bool IsHetero;
-    public readonly string SexualPathIcon;
-    public readonly string RomanticPathIcon;
+    private readonly string _sexualPathIcon;
+    private readonly string _romanticPathIcon;
     private Sprite _sexualSprite;
     private Sprite _romanticSprite;
     public readonly Func<Actor, bool, bool> Criteria;
@@ -34,8 +34,8 @@ public class Orientation
         IsHomo = isHomo;
         HexCode = hexCode;
         IsHetero = isHetero;
-        SexualPathIcon = sexualPathIcon;
-        RomanticPathIcon = romanticPathIcon;
+        _sexualPathIcon = sexualPathIcon;
+        _romanticPathIcon = romanticPathIcon;
     }
 
     public Sprite GetSprite(bool sexual)
@@ -43,30 +43,38 @@ public class Orientation
         if (sexual)
         {
             if (_sexualSprite == null)
-                _sexualSprite = SpriteTextureLoader.getSprite("ui/Icons/" + SexualPathIcon);
+                _sexualSprite = SpriteTextureLoader.getSprite(_sexualPathIcon);
                 // _sexualSprite = Resources.Load<Sprite>("ui/Icons/" + SexualPathIcon);
             return _sexualSprite;
         }
 
         if (_romanticSprite == null)
-            _romanticSprite = SpriteTextureLoader.getSprite("ui/Icons/" + RomanticPathIcon);
+            _romanticSprite = SpriteTextureLoader.getSprite(_romanticPathIcon);
             // _romanticSprite = Resources.Load<Sprite>("ui/Icons/" + RomanticPathIcon);
         return _romanticSprite;
+    }
+
+    public string GetPathIcon(bool sexual, bool withPrefix)
+    {
+        var path = sexual ? _sexualPathIcon : _romanticPathIcon;
+        if (withPrefix)
+            path = "ui/Icons/" + path;
+        return path;
     }
 
     public static Orientation Create(string orientation, string romanticVariant, bool isHomo, bool isHetero,
         string hexCode, Func<Actor, bool, bool> fitsCriteria)
     {
-        var pathLocale = "orientations_" + orientation;
+        var sexualPathLocale = "orientations_" + orientation;
         var romanticPathLocale = "orientations_" + orientation + "_romantic";
-        var descriptionLocale = pathLocale + "_description";
+        var descriptionLocale = sexualPathLocale + "_description";
         var sexualPathIcon = "orientations/" + orientation;
         var romanticPathIcon = "orientations/" + romanticVariant;
-        var orientationType = new Orientation(orientation, pathLocale, romanticPathLocale, descriptionLocale, sexualPathIcon,
+        var orientationType = new Orientation(orientation, sexualPathLocale, romanticPathLocale, descriptionLocale, sexualPathIcon,
             romanticPathIcon, isHomo, isHetero, hexCode, fitsCriteria);
-        Orientations.Add(orientationType);
+        Orientations.Add(orientationType.OrientationType, orientationType);
 
-        LM.AddToCurrentLocale(pathLocale, char.ToUpper(orientation.First()) + orientation.Substring(1));
+        LM.AddToCurrentLocale(sexualPathLocale, char.ToUpper(orientation.First()) + orientation.Substring(1));
         LM.AddToCurrentLocale(romanticPathLocale, char.ToUpper(romanticVariant.First()) + romanticVariant.Substring(1));
         LM.AddToCurrentLocale("statistics_" + orientation, char.ToUpper(orientation.First()) + orientation.Substring(1) + "s");
         LM.AddToCurrentLocale("statistics_" + orientation + "_romantic", char.ToUpper(romanticVariant.First()) + romanticVariant.Substring(1) + "s");
@@ -75,7 +83,7 @@ public class Orientation
 
     public static Orientation GetOrientation(string orientation)
     {
-        return Orientations.Find(orientationType => orientationType.OrientationType.Equals(orientation));
+        return Orientations[orientation];
     }
 
     public static Orientation GetOrientation(Actor actor, bool sexual)
@@ -244,7 +252,7 @@ public class Orientations
     public static Orientation GetOrientationFromActor(Actor actor, bool sexual = false)
     {
         var orientations =
-            Orientation.Orientations.Where(orientationType => orientationType.Criteria(actor, sexual)).ToList();
+            Orientation.Orientations.Values.Where(orientationType => orientationType.Criteria(actor, sexual)).ToList();
 
         return orientations.GetRandom(); // at the very least should be pansexual
     }

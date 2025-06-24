@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using NCMS.Extensions;
 using NeoModLoader.General;
 using NeoModLoader.services;
 using Topic_of_Love.Mian.CustomAssets;
@@ -15,7 +16,7 @@ using Object = UnityEngine.Object;
 namespace Topic_of_Love.Mian.Patches;
 
 // Big credits to xing_yao on Discord for this!
-// TODO : lowkey let's remake this class to be less fucking radically insane
+// TODO : lowkey let's remake this class to be less fucking radically insane. More automating would be nice :O
 [HarmonyPatch(typeof(UnitWindow))]
 public class StatPatch
 {
@@ -48,7 +49,7 @@ public class StatPatch
                 Dictionary<string, string> dict = new();
                 dict.Add("value", LM.Get(orientationType.SexualPathLocale));
                 dict.Add("hex_code", orientationType.HexCode);
-                dict.Add("icon", orientationType.SexualPathIcon);
+                dict.Add("icon", orientationType.GetPathIcon(true, false));
 
                 return dict;
             }
@@ -62,7 +63,7 @@ public class StatPatch
                 Dictionary<string, string> dict = new();
                 dict.Add("value", LM.Get(orientationType.RomanticPathLocale));
                 dict.Add("hex_code", orientationType.HexCode);
-                dict.Add("icon", orientationType.RomanticPathIcon);
+                dict.Add("icon", orientationType.GetPathIcon(false, false));
 
                 return dict;            
             }
@@ -109,13 +110,13 @@ public class StatPatch
                     iconGroup.name = "orientation_icons_" + (isSexual ? "sexual" : "romantic");
                     iconGroup.transform.localScale = new Vector3(1, 1, 1);     
                     
-                    foreach (var orientation in Orientation.Orientations)
+                    foreach (var orientation in Orientation.Orientations.Values)
                     {
                         var icon = CreateNewIcon(
                             iconGroup,
                             __instance,
                             isSexual ? orientation.OrientationType : orientation.OrientationType + "_romantic",
-                            Resources.Load<Sprite>("ui/Icons/" + (isSexual ? orientation.SexualPathIcon : orientation.RomanticPathIcon)));
+                            Resources.Load<Sprite>(orientation.GetPathIcon(true, true)));
 
                         __instance._stats_icons.Add(icon.name, icon);
                     }   
@@ -130,7 +131,7 @@ public class StatPatch
                 __instance._stats_icons.Add(lonelyIcon.name, lonelyIcon);
             }
             
-            Orientation.Orientations.ForEach(orientation =>
+            Orientation.Orientations.Values.ForEach(orientation =>
             {
                 var orientationType = orientation.OrientationType;
                 __instance.setIconValue(orientationType, pMetaObject.countOrientation(orientationType, true));
@@ -210,6 +211,36 @@ public class StatPatch
     {
         if(__instance._stats_icons != null && __instance._stats_icons.transform.name.Equals("content_more_icons"))
             ShowCustomIcons<City, CityData>(__instance._stats_icons, __instance.meta_object);
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(KingdomWindow), nameof(KingdomWindow.showStatsRows))]
+    static void ShowKingdomRows(KingdomWindow __instance)
+    {
+        __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
+    }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(CityWindow), nameof(CityWindow.showStatsRows))]
+    static void ShowCityRows(CityWindow __instance)
+    {
+        // __instance.showStatRow(
+        //     "founder_orientation",
+        //     __instance.meta_object.getFounderOrientation().OrientationType,
+        // );
+        // __instance.showStatRow(
+        //     "main_orientation",
+        //     __instance.meta_object.getMainOrientation(true).OrientationType,
+        //
+        // );
+        __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
+    }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(CultureWindow), nameof(CultureWindow.showStatsRows))]
+    static void ShowCultureRows(CultureWindow __instance)
+    {
+        __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
     }
 
     [HarmonyPatch(typeof(UnitStatsElement))]

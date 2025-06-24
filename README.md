@@ -28,7 +28,7 @@ When enabling or disabling the mod, restarting the game is a must otherwise you 
 <img src=https://i.imgur.com/WIdunXO.png>
 
 ### Intimacy
-Intimacy is a new stat (find it in the unit's statistics!) and need that units will actively try to maintain. Whether in the form of dating, copulating, kissing, etc, they will do what they can to feel loved!
+Intimacy is a new stat (find it in the unit's statistics!) and need that units will actively try to maintain. Whether in the form of socializing, following others, dating, copulating, kissing, etc, they will do what they can to feel loved!
 
 <img src=https://i.imgur.com/YUziNOm.png>
 
@@ -93,6 +93,10 @@ More over.. not all units will enjoy every copulating. The enjoyment of a unit's
 - Special compatibility with Topic of Identity (alongside bonus features with it!)
 
 <img src=https://i.imgur.com/yx7HlMJ.png>
+
+- New graph statistics!
+
+<img src=https://i.imgur.com/1cTIM0i.png>
 
 - More goodies that I've probably forgotten..
 

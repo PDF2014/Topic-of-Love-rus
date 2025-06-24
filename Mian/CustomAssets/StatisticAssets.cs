@@ -21,12 +21,12 @@ public class StatisticAssets
         for (int i = 0; i <= 1; i++)
         {
             var isSexual = i == 0;
-            foreach (var orientation in Orientation.Orientations)
+            foreach (var orientation in Orientation.Orientations.Values)
             {
                 Add(new StatisticsAsset
                 {
                     id = "statistics_" + (isSexual ? orientation.OrientationType : orientation.OrientationType + "_romantic"),
-                    path_icon = "ui/Icons/" + (isSexual ? orientation.SexualPathIcon : orientation.RomanticPathIcon),
+                    path_icon = orientation.GetPathIcon(isSexual, true),
                     is_world_statistics = true,
                     list_window_meta_type = MetaType.Unit,
                     long_action = _ => World.world.world_object.countOrientation(orientation.OrientationType, isSexual),

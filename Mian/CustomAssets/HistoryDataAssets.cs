@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using db;
+using NCMS.Extensions;
 using Topic_of_Love.Mian.CustomAssets.Custom;
 using UnityEngine;
 
@@ -23,12 +24,12 @@ public class HistoryDataAssets
         for (int i = 0; i <= 1; i++)
         {
             var isSexual = i == 0;
-            Orientation.Orientations.ForEach(orientation =>
+            Orientation.Orientations.Values.ForEach(orientation =>
             {
                 Add(new HistoryDataAsset
                 {
                     id = isSexual ? orientation.OrientationType : orientation.OrientationType + "_romantic",
-                    path_icon = "ui/Icons/" + (isSexual ? orientation.SexualPathIcon : orientation.RomanticPathIcon),
+                    path_icon = orientation.GetPathIcon(isSexual, true),
                     color_hex = orientation.HexCode,
                     statistics_asset = "statistics_" + (isSexual ? orientation.OrientationType : orientation.OrientationType + "_romantic"),
                     category_group = GraphCategoryGroup.Noosphere
