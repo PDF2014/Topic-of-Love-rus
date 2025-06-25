@@ -569,14 +569,22 @@ namespace Topic_of_Love.Mian
             return !pActor.hasTrait("intimacy_averse") && !pActor.hasTrait("psychopath");
         }
         
-        public static int sortUnitsByOrientation(Actor pActor1, Actor pActor2, Orientation pTopOrientation, bool sexual)
+        // orientations earlier in the list are prioritized
+        public static int SortUnitsByOrientations(Actor pActor1, Actor pActor2, List<Orientation> orientations, bool sexual)
         {
             var orientation1 = Orientations.GetOrientationFromActor(pActor1, sexual);
             var orientation2 = Orientations.GetOrientationFromActor(pActor2, sexual);
+
+            if (orientations.Contains(orientation1) && orientations.Contains(orientation2))
+            {
+                // if orientation1 index is lower, then return -1, else return 1
+                return orientations.IndexOf(orientation1) < orientations.IndexOf(orientation2) ? -1 : 1;
+            }
         
-            if (orientation1.OrientationType.Equals(orientation2.OrientationType))
+            if (orientation1.OrientationType.Equals(orientation2.OrientationType) 
+                || (!orientations.Contains(orientation2) && !orientations.Contains(orientation1)))
                 return 0;
-            return orientation1.OrientationType.Equals(pTopOrientation.OrientationType) ? -1 : 1;
+            return orientations.Contains(orientation1) ? -1 : 1;
         }
 
         public static bool IsTOIInstalled()

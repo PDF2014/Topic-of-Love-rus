@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using NeoModLoader.General.Game.extensions;
 
 namespace Topic_of_Love.Mian.CustomAssets.Traits
 {
@@ -20,7 +21,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 can_be_given = true
             }, List.Of("angle", "snowman")).addOpposites(new List<string>{"heterophobic", "homophobic"});
 
-            Add(new CultureTrait
+            var homo = Add(new CultureTrait
             {
                 id = "homophobic",
                 group_id = "worldview",
@@ -29,9 +30,11 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 can_be_in_book = true,
                 can_be_removed = true,
                 can_be_given = true,
-            }, List.Of("orc", "demon")).addOpposite("heterophobic");
+            }, List.Of("orc", "demon"));
+            
+            homo.addOpposite("heterophobic");
 
-            Add(new CultureTrait
+            var hetero = Add(new CultureTrait
             {
                 id = "heterophobic",
                 group_id = "worldview",
@@ -40,7 +43,9 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 can_be_in_book = true,
                 can_be_removed = true,
                 can_be_given = true,
-            }, List.Of("flower_bud", "garl")).addOpposite("homophobic");
+            }, List.Of("flower_bud", "garl"));
+            
+            hetero.addOpposite("homophobic");
 
             // incest doesnt really have any gameplay value to it :shrug:
             // Add(new CultureTrait

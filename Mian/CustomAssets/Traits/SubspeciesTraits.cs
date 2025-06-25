@@ -39,10 +39,14 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             reproductionSameSex.base_stats_meta = new BaseStats();
             reproductionSameSex.base_stats_meta.addTag("needs_mate");
             
-            reproductionSameSex.addOpposites(new[]{"reproduction_sexual", "reproduction_hermaphroditic"});
+            reproductionSameSex.addOpposites(new[]{"reproduction_sexual"});
+            reproductionSameSex.addOpposites(AssetManager.subspecies_traits.get("reproduction_sexual").opposite_list);
+            foreach (var opposite in AssetManager.subspecies_traits.get("reproduction_sexual").opposite_list)
+            {
+                AssetManager.subspecies_traits.get(opposite).opposite_traits.Add(reproductionSameSex);
+            }
             
             AssetManager.subspecies_traits.get("reproduction_sexual").opposite_traits.Add(reproductionSameSex);
-            AssetManager.subspecies_traits.get("reproduction_hermaphroditic").opposite_traits.Add(reproductionSameSex);
             
             Add(reproductionSameSex, new[]{"skeleton"});
             AssetManager.actor_library.get("skeleton").addSubspeciesTrait("reproduction_strategy_viviparity");
