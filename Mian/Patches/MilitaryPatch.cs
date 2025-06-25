@@ -8,21 +8,18 @@ public class MilitaryPatch
 {
     [HarmonyPostfix]
     [HarmonyPatch(nameof(City.checkCanMakeWarrior))]
-    public static bool CanMakeWarrior(City __instance, Actor pActor, ref bool __result)
+    public static void CanMakeWarrior(Actor pActor, City __instance, ref bool __result)
     {
         if (__instance.hasCulture())
         {
             if (__instance.culture.hasTrait("homophobic") && Orientation.IsAHomo(pActor))
             {
                 __result = false;
-                return false;
             }
             if (__instance.culture.hasTrait("heterophobic") && Orientation.IsAHetero(pActor))
             {
                 __result = false;
-                return false;
             }
         }
-        return true;
     }
 }

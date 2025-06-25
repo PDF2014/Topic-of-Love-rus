@@ -113,7 +113,7 @@ More over.. not all units will enjoy every copulating. The enjoyment of a unit's
 - To all the queers out there in the world, you are wonderful and are absolutely valid <3
 - And finally.. a big thank you to Maxim, mastef, and the rest of the WorldBox team for making update 0.50.0 and for making WorldBox.
 
-If you enjoy Topic of Love, perhaps try out its sister mod Topic of Identity!
+If you enjoy Topic of Love, perhaps try out its sister mod Topic of Identity! (coming soon..)
 
 ## 💌 A Message
 The topic of love is truly a beautiful thing. Whether platonic or romantic, everyone should be able to love who they want without consequence.
