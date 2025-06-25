@@ -107,10 +107,15 @@ More over.. not all units will enjoy every copulating. The enjoyment of a unit's
   - At the moment, a baby will inherit one random species from their parents. This may change in the future.
 
 ## 👏 Credits
-- The Rimworld mods, Way Better Romance, Romance on the Rim and Intimacy - A Lovin' Expansion for inspiring me to make this mod
+- Rimworld mods such as, Edges of Acceptance, Way Better Romance, Romance on the Rim and Intimacy - A Lovin' Expansion. Thanks to them for inspiring me to make this mod
 - The Lumity ship for literally being why I wanted to make this in the first place (literally having other sapient species dating each other is awesome)
 - The Athena Coding Event for giving me motivation to work on the mod
 - To all the queers out there in the world, you are wonderful and are absolutely valid <3
 - And finally.. a big thank you to Maxim, mastef, and the rest of the WorldBox team for making update 0.50.0 and for making WorldBox.
 
 If you enjoy Topic of Love, perhaps try out its sister mod Topic of Identity!
+
+## 💌 A Message
+The topic of love is truly a beautiful thing. Whether platonic or romantic, everyone should be able to love who they want without consequence.
+
+You are valid, no matter who you love. 💖
