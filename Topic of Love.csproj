@@ -67,6 +67,7 @@
         <Compile Include="Mian\Patches\BaseSimObjectPatch.cs" />
         <Compile Include="Mian\Patches\CustomDataPatch.cs" />
         <Compile Include="Mian\Patches\ListSortersPatch.cs" />
+        <Compile Include="Mian\Patches\MilitaryPatch.cs" />
         <Compile Include="Mian\Patches\SpriteTextureLoaderPatch.cs" />
         <Compile Include="Mian\Patches\SubspeciesPatch.cs" />
         <Compile Include="Mian\Patches\StatPatch.cs" />
