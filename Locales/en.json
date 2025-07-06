@@ -89,6 +89,7 @@
   
   "task_insult_orientation": "Insult Orientations",
   "task_invite_for_sex": "Invite for Copulating",
+  "task_invite_for_reproduction": "Invite for Procreating",
   "task_try_kiss": "Try Kissing",
   "task_have_sex_go": "Go Copulating",
   "task_reproduce_preservation": "Reproduce Preservation",
@@ -256,6 +257,15 @@
 
   "statistics_lonely": "Lonely Units",
   "statistics_lonely_description": "They just want someone to care :(",
+
+  "statistics_broke_up": "Broken Up",
+  "statistics_broke_up_description": "So many promises lost to time",
+
+  "statistics_cheated_on": "Cheated On",
+  "statistics_cheated_on_description": "Beloved memories, now shattered on the floor",
+
+  "statistics_adopted_baby": "Adopted Babies",
+  "statistics_adopted_baby_description": "So many younglings!",
   
   "main_orientation": "Main Orientation",
   "founder_orientation": "Founder Orientation",
@@ -271,6 +281,8 @@
 
   "tab_title_tol": "Topic of Love",
   "tab_desc_tol": "For all your romantic and sexual needs!",
+  "tab_mind_preference": "Preferences",
+  "tab_mind_preference_description": "Look into their romantic and sexual desires... who would they like to fuck?",
   
   "Misc": "Developer Settings",
   "SlowOnLog": "Slow on Debug",

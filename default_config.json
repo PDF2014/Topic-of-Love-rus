@@ -1,21 +1,4 @@
 ﻿{
-  "CrossSpecies": [
-    {
-      "Id": "AllowCrossSpeciesLove",
-      "Type": "SWITCH",
-      "BoolVal": true
-    },
-    {
-      "Id": "MustBeSmart",
-      "Type": "SWITCH",
-      "BoolVal": true
-    },
-    {
-      "Id": "MustBeXenophile",
-      "Type": "SWITCH",
-      "BoolVal": true
-    }
-  ],
   "Misc": [
     {
       "Id": "Debug",

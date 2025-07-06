@@ -33,12 +33,12 @@ public class Decisions
             cooldown = 15,
             action_check_launch = actor => TolUtil.CapableOfLove(actor)
                                            && (actor.hasLover() || actor.hasBestFriend())
-                                           && !TolUtil.IsIntimacyHappinessEnough(actor, 100f)
+                                           && !actor.isIntimacyHappinessEnough(100f)
                                            && TolUtil.IsOrientationSystemEnabledFor(actor)
                                            && !actor.hasStatus("just_kissed"),
-            weight_calculate_custom = actor => TolUtil.IsIntimacyHappinessEnough(actor, 75f) ? 0.5f: 
-                TolUtil.IsIntimacyHappinessEnough(actor, 50f) ? 0.6f : TolUtil.IsIntimacyHappinessEnough(actor, 0) ? .8f : 
-                TolUtil.IsIntimacyHappinessEnough(actor, -50) ? 1f : TolUtil.IsIntimacyHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
+            weight_calculate_custom = actor => actor.isIntimacyHappinessEnough(75f) ? 0.5f: 
+                actor.isIntimacyHappinessEnough( 50f) ? 0.6f : actor.isIntimacyHappinessEnough( 0) ? .8f : 
+                actor.isIntimacyHappinessEnough( -50) ? 1f : actor.isIntimacyHappinessEnough( -100f) ? 1.5f : 1.25f,
             only_safe = true,
             cooldown_on_launch_failure = true
         });
@@ -50,12 +50,12 @@ public class Decisions
             path_icon = "ui/Icons/status/went_on_date",
             cooldown = 30,
             action_check_launch = actor => TolUtil.CapableOfLove(actor)
-                                           && !TolUtil.IsIntimacyHappinessEnough(actor, 100f)
+                                           && !actor.isIntimacyHappinessEnough( 100f)
                                            && TolUtil.IsOrientationSystemEnabledFor(actor)
                                            && !actor.hasStatus("went_on_date"),
-            weight_calculate_custom = actor => !actor.hasLover() ? 1.5f : TolUtil.IsIntimacyHappinessEnough(actor, 75f) ? 0.5f: 
-                TolUtil.IsIntimacyHappinessEnough(actor, 50f) ? 0.6f : TolUtil.IsIntimacyHappinessEnough(actor, 0) ? .8f : 
-                TolUtil.IsIntimacyHappinessEnough(actor, -50) ? 1f : TolUtil.IsIntimacyHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
+            weight_calculate_custom = actor => !actor.hasLover() ? 1.5f : actor.isIntimacyHappinessEnough( 75f) ? 0.5f: 
+                actor.isIntimacyHappinessEnough( 50f) ? 0.6f : actor.isIntimacyHappinessEnough( 0) ? .8f : 
+                actor.isIntimacyHappinessEnough( -50) ? 1f : actor.isIntimacyHappinessEnough( -100f) ? 1.5f : 1.25f,
             only_safe = true,
             cooldown_on_launch_failure = true
         });
@@ -65,11 +65,10 @@ public class Decisions
             id = "reproduce_preservation",
             priority = NeuroLayer.Layer_4_Critical,
             path_icon = "ui/Icons/status/disliked_sex",
-            cooldown = 20,
+            cooldown = 15,
             action_check_launch = actor =>
             {
                 if (TolUtil.IsDyingOut(actor)
-                    && BabyHelper.canMakeBabies(actor)
                     && actor.hasSubspeciesTrait("preservation")
                     && TolUtil.IsOrientationSystemEnabledFor(actor))
                 {
@@ -79,7 +78,7 @@ public class Decisions
 
                 return false;
             },
-            weight_calculate_custom = actor => 3f,
+            weight = 2.5f,
             only_adult = true,
             only_safe = true
         });
@@ -91,19 +90,30 @@ public class Decisions
         Add(new DecisionAsset
         {
             id = "invite_for_sex",
-            priority = NeuroLayer.Layer_2_Moderate,
+            priority = NeuroLayer.Layer_3_High,
             path_icon = "ui/Icons/status/enjoyed_sex",
             cooldown = 15,
             action_check_launch = actor => TolUtil.CapableOfLove(actor)
                                            && !Preferences.Dislikes(actor, true)
-                                           && !TolUtil.IsIntimacyHappinessEnough(actor, 100f)
+                                           && !actor.isIntimacyHappinessEnough( 100f)
                                            && TolUtil.IsOrientationSystemEnabledFor(actor),
-            weight_calculate_custom = actor => TolUtil.IsIntimacyHappinessEnough(actor, 75f) ? 0.25f: 
-                TolUtil.IsIntimacyHappinessEnough(actor, 50f) ? 0.5f : TolUtil.IsIntimacyHappinessEnough(actor, 0) ? .75f : 
-                TolUtil.IsIntimacyHappinessEnough(actor, -50) ? 1f : TolUtil.IsIntimacyHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
+            weight_calculate_custom = actor =>
+            {
+                var weight = actor.isIntimacyHappinessEnough( 75f) ? 0.75f :
+                    actor.isIntimacyHappinessEnough( 50f) ? 1f :
+                    actor.isIntimacyHappinessEnough( 0) ? 1.25f :
+                    actor.isIntimacyHappinessEnough( -50) ? 1.5f :
+                    actor.isIntimacyHappinessEnough( -100f) ? 2f : 1.75f;
+
+                if (actor.hasLover() && actor.distanceToActorTile(actor) <= 50)
+                {
+                    weight += 0.5f;
+                }
+                
+                return weight;
+            },
             only_adult = true,
-            only_safe = true,
-            cooldown_on_launch_failure = true
+            only_safe = true
         });
 
         Add(new DecisionAsset
@@ -142,8 +152,7 @@ public class Decisions
             list_civ = true,
             weight = 1.5f,
             only_safe = true,
-            only_adult = true,
-            cooldown_on_launch_failure = true
+            only_adult = true
         });
         Finish();
     }

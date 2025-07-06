@@ -16,8 +16,35 @@ public class HistoryDataAssets
         {
             id = "lonely",
             color_hex = "#FB8B8B",
-            path_icon = "ui/Icons/status/broke_up",
+            path_icon = "ui/Icons/status/okay_sex",
             statistics_asset = "statistics_lonely",
+            category_group = GraphCategoryGroup.Noosphere
+        });
+        
+        Add(new HistoryDataAsset
+        {
+            id = "broke_up",
+            color_hex = "#77AFB2",
+            path_icon = "ui/Icons/status/broke_up",
+            statistics_asset = "statistics_broke_up",
+            category_group = GraphCategoryGroup.Noosphere
+        });
+        
+        Add(new HistoryDataAsset
+        {
+            id = "cheated_on",
+            color_hex = "#431206",
+            path_icon = "ui/Icons/status/cheated_on",
+            statistics_asset = "statistics_cheated_on",
+            category_group = GraphCategoryGroup.Noosphere
+        });
+        
+        Add(new HistoryDataAsset
+        {
+            id = "adopted_baby",
+            color_hex = "#64E039",
+            path_icon = "ui/Icons/status/adopted_baby",
+            statistics_asset = "statistics_adopted_baby",
             category_group = GraphCategoryGroup.Noosphere
         });
 

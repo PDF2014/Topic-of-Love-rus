@@ -72,8 +72,8 @@ public class BehCFBFSRPatch
             if (pParentA.subspecies.hasReachedPopulationLimit() || pParentB.subspecies.hasReachedPopulationLimit())
                 return false;
 
-            var aCanBePregnant = TolUtil.IsAbleToBecomePregnant(pParentA);
-            var bCanBePregnant = TolUtil.IsAbleToBecomePregnant(pParentB);
+            var aCanBePregnant = pParentA.isAbleToBecomePregnant();
+            var bCanBePregnant = pParentB.isAbleToBecomePregnant();
             Actor pregnantActor;
             if (aCanBePregnant && bCanBePregnant)
                 pregnantActor = Randy.randomBool() ? pParentA : pParentB;
@@ -93,6 +93,7 @@ public class BehCFBFSRPatch
 
             var aWantsBaby = TolUtil.WantsBaby(pParentA);
             var bWantsBaby = TolUtil.WantsBaby(pParentB);
+            
             bool success = sexReason1.Equals("casual") || sexReason.Equals("casual") ? 
                 aWantsBaby && bWantsBaby : true;
             
@@ -112,7 +113,7 @@ public class BehCFBFSRPatch
                 }
             }
             
-            // bool success = sexReason1.Equals("casual") || sexReason.Equals("casual") ? Randy.randomChance(0.2F) : true;
+            // bool success = true;
             // Util.Debug($"\nDo parents want a baby?\n{pParentA.getName()}: {Util.WantsBaby(pParentA)}\n{pParentB.getName()}: {Util.WantsBaby(pParentB)}\nSex Reason: ${sexReason}, ${sexReason1}");
             if (success)
             {

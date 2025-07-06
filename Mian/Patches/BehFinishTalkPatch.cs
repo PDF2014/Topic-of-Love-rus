@@ -54,10 +54,10 @@ public class BehFinishTalkPatch
     [HarmonyPatch(nameof(BehFinishTalk.finishTalk))]
     static void FinishTalkPatch(Actor pActor, Actor pTarget)
     {
-        if(Randy.randomChance(0.3f))
+        if(Randy.randomChance(pActor.getBestFriend() == pTarget ? 0.2f : 0.05f))
             ActorTool.checkFallInLove(pActor, pTarget);
         
-        TolUtil.ChangeIntimacyHappinessBy(pActor, 45);
-        TolUtil.ChangeIntimacyHappinessBy(pTarget, 45);
+        pActor.changeIntimacyHappiness(45);
+        pTarget.changeIntimacyHappiness(45);
     }
 }

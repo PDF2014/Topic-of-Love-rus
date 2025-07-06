@@ -55,7 +55,7 @@ public class BehFindAPartner : BehaviourActionActor
         if (target == null && _mustBeLover)
             return BehResult.Stop;
         
-        if (!TolUtil.WillDoIntimacy(pActor, _sexReason, target != null, true))
+        if (!TolUtil.WillDoIntimacy(pActor, target, _sexReason, true))
         {
             TolUtil.Debug("They decided that they will not do it.");
             return BehResult.Stop;
@@ -111,9 +111,9 @@ public class BehFindAPartner : BehaviourActionActor
                 return (pActor.isSameSubspecies(target.subspecies) 
                        || (target.isSapient() && pActor.isSapient() 
                                                && Preferences.PreferenceMatches(target, pActor, true)))
-                       && TolUtil.WillDoIntimacy(target, _sexReason, target.lover == pActor);
+                       && TolUtil.WillDoIntimacy(target, pActor, _sexReason);
 
-            return TolUtil.WillDoIntimacy(target, _sexReason, target.lover == pActor) &&
+            return TolUtil.WillDoIntimacy(target, pActor, _sexReason) &&
                    ((_mustMatchPreference && Preferences.PreferenceMatches(pActor, target, true)) ||
                     !_mustMatchPreference);
         }

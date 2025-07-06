@@ -20,8 +20,8 @@ public class BehStartSexualIvf : BehaviourActionActor
 
             _target = pActor.beh_actor_target.a;
 
-            var aCanBePregnant = TolUtil.IsAbleToBecomePregnant(pActor);
-            var bCanBePregnant = TolUtil.IsAbleToBecomePregnant(_target);
+            var aCanBePregnant = pActor.isAbleToBecomePregnant();
+            var bCanBePregnant = _target.isAbleToBecomePregnant();
             Actor pregnantActor;
             if (aCanBePregnant && bCanBePregnant)
                 pregnantActor = Randy.randomBool() ? pActor : _target;

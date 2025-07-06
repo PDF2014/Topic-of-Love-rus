@@ -109,7 +109,7 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
                 path_icon = "ui/Icons/status/disliked_sex",
             };
             reproduceForPreservation.addBeh(new BehFindAPartner( false, false, false, true, "reproduction", 200f));
-            reproduceForPreservation.addBeh(new BehGetPossibleTileForSex());
+            reproduceForPreservation.addBeh(new BehGetPossibleTileForSex(false));
             Add(reproduceForPreservation);
             
             var inviteForSex = new BehaviourTaskActor

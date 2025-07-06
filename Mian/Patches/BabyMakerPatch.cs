@@ -93,6 +93,13 @@ public class BabyMakerPatch
 
                 if (familyParentA != null)
                 {
+                    // sexual ivf adoption :O
+                    if(familyParentA.hasKingdom())
+                        familyParentA.kingdom.increaseAdoptedBaby();
+                    if(familyParentA.hasCity())
+                        familyParentA.city.increaseAdoptedBaby();
+                    World.world.increaseAdoptedBaby();
+
                     familyParentA.changeHappiness("adopted_baby");
                 }
                 else
@@ -101,6 +108,11 @@ public class BabyMakerPatch
                 }
                 
                 if (familyParentB != null){
+                    if(familyParentB.hasKingdom() && familyParentB.kingdom != familyParentA.kingdom)
+                        familyParentB.kingdom.increaseAdoptedBaby();
+                    if(familyParentB.hasCity() && familyParentB.city != familyParentA.city)
+                        familyParentB.city.increaseAdoptedBaby();
+                    
                     familyParentB.changeHappiness("adopted_baby");
                 }else if (nonDominantParent != null)
                 {

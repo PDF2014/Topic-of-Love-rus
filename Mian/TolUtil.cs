@@ -43,40 +43,7 @@ namespace Topic_of_Love.Mian
         {
             return pActor.subspecies.isPartnerSuitableForReproduction(pActor, pTarget);
         }
-
-        // this method may be a bit confusing but it's to determine if actors can get pregnant based on their genitalia and if they have eggs
-        public static bool IsAbleToBecomePregnant(Actor pActor)
-        {
-            if (IsTOIInstalled())
-            {
-                // TOI compatibility
-            }
-            
-            if (NeedSameSexTypeForReproduction(pActor) || CanDoAnySexType(pActor))
-                return true;
-            if (NeedDifferentSexTypeForReproduction(pActor))
-                return Preferences.HasVulva(pActor);
-            return false;
-        }
-
-        public static float GetIntimacy(Actor actor)
-        {
-            actor.data.get("intimacy_happiness", out float intimacy);
-            return intimacy;
-        }
-
-        public static bool IsIntimacyHappinessEnough(Actor actor, float happiness)
-        {
-            actor.data.get("intimacy_happiness", out float compare);
-            return compare >= happiness;
-        }
         
-        public static void ChangeIntimacyHappinessBy(Actor actor, float happiness)
-        {
-            actor.data.get("intimacy_happiness", out float init);
-            actor.data.set("intimacy_happiness", Math.Max(-100, Math.Min(happiness + init, 100)));
-        }
-
         private static string OpinionOnSex(Actor actor1, Actor actor2)
         {
             if (actor1.hasSubspeciesTrait("amygdala"))
@@ -119,8 +86,10 @@ namespace Topic_of_Love.Mian
             return pActor.hasCultureTrait("committed") || pActor.hasTrait("faithful");
         }
 
-        public static bool WillDoIntimacy(Actor pActor, string sexReason=null, bool withLover=true, bool isInit=false)
+        public static bool WillDoIntimacy(Actor pActor, Actor pTarget, string sexReason=null, bool isInit=false)
         {
+            var withLover = pActor.hasLover() && pActor.lover == pTarget;
+            
             pActor.data.get("intimacy_happiness", out float d);
             if (isInit)
                 Debug(pActor.getName() + " is requesting to do intimacy. Sexual happiness: "+d + ". With lover: "+withLover);
@@ -218,12 +187,12 @@ namespace Topic_of_Love.Mian
 
             if (actor1.hasLover() && actor1.lover != actor2)
             {
-                ChangeIntimacyHappinessBy(actor1.lover, -25f);
+                actor1.lover.changeIntimacyHappiness(-25f);
             }
 
             if (actor2.hasLover() && actor2.lover != actor1)
             {
-                ChangeIntimacyHappinessBy(actor2.lover, -25f);
+                actor2.lover.changeIntimacyHappiness(-25f);
             }
             
             if (actor1.lover != actor2)
@@ -299,6 +268,12 @@ namespace Topic_of_Love.Mian
                 //     return;
                 
                 cheatedActor.addStatusEffect("cheated_on");
+                
+                if(actor.hasKingdom())
+                    actor.kingdom.increaseCheated();
+                if(actor.hasCity())
+                    actor.city.increaseCheated();
+                World.world.increaseCheated();
             }
         }
 
@@ -325,6 +300,12 @@ namespace Topic_of_Love.Mian
             
             AddOrRemoveUndateableActor(actor, actor.lover);
             AddOrRemoveUndateableActor(actor.lover, actor);
+
+            if(actor.hasKingdom())
+                actor.kingdom.increaseBrokenUp();
+            if(actor.hasCity())
+                actor.city.increaseBrokenUp();
+            World.world.increaseBrokenUp();
             
             actor.lover.addStatusEffect("broke_up");
             if(actorIsSad)
@@ -365,23 +346,14 @@ namespace Topic_of_Love.Mian
             return !pActor.hasCultureTrait("orientationless");
         }
 
-        // public static bool CanMakeBabies(Actor pActor)
-        // {
-        //     
-        //     return pActor.canBreed() &&
-        //            pActor.isAdult() && !pActor.hasReachedOffspringLimit() &&
-        //            !pActor.subspecies.hasReachedPopulationLimit() && (!pActor.hasCity() || !pActor.city.hasReachedWorldLawLimit()
-        //     && ((pActor.subspecies.isReproductionSexual() || pActor.subspecies.hasTraitReproductionSexualHermaphroditic() 
-        //                                                   || pActor.hasSubspeciesTrait("reproduction_same_sex"))
-        //     && pActor.current_children_count == 0 || pActor.city.hasFreeHouseSlots()));
-        // }
-
         public static bool IsDyingOut(Actor pActor)
         {
-            if (!pActor.hasSubspecies()) return false;
+            if (!pActor.hasSubspecies() || pActor.hasReachedOffspringLimit()
+                || (pActor.hasCity() && pActor.city.getUnitsTotal() >= pActor.city.getPopulationMaximum())) return false;
             var limit = (int)pActor.subspecies.base_stats_meta["limit_population"];
-            return pActor.subspecies.countCurrentFamilies() <= 10
-                   || (limit != 0 ? pActor.subspecies.countUnits() <= limit / 3 : pActor.subspecies.countUnits() <= 100);
+            return pActor.subspecies.countCurrentFamilies() <= 10 
+                   || (pActor.hasCity() && pActor.city.getAge() < 100)
+        || (limit != 0 ? pActor.subspecies.countUnits() <= limit / 3 : pActor.subspecies.countUnits() <= 100);
         }
         
         public static bool WantsBaby(Actor pActor, bool reproductionPurposesIncluded=true)
@@ -397,14 +369,16 @@ namespace Topic_of_Love.Mian
                     return true;
                 }   
             }
+
+            if (pActor.hasCity() && pActor.city.getUnitsTotal() >= pActor.city.getPopulationMaximum())
+                return false;
             
-            if (pActor.getHappiness() >= 50 & GetIntimacy(pActor) > 10)
+            if (pActor.getHappiness() >= 50 & pActor.getIntimacy() > 10)
             {
                 Debug(pActor.getName() + " wants a baby because they are happy enough");
                 return true;
             }
             
-            Debug(pActor.getName() + " does not want a baby.");
             return false;
         }
 
@@ -419,16 +393,16 @@ namespace Topic_of_Love.Mian
                 {
                     if (pActor.lover != target)
                     {
-                        if (WillDoIntimacy(pActor, null, false, true)
-                            && WillDoIntimacy(target, null, false))
+                        if (WillDoIntimacy(pActor, target, null, true)
+                            && WillDoIntimacy(target, pActor))
                         {
                             // does date instead
                             __instance.forceTask(pActor, "try_date", false);
                             return true;
                         }   
                     }
-                    else if (WillDoIntimacy(pActor, "casual", pActor.lover == target, true)
-                             && WillDoIntimacy(target, "casual", pActor.lover == target, false))
+                    else if (WillDoIntimacy(pActor, target, "casual",  true)
+                             && WillDoIntimacy(target, pActor, "casual"))
                     {
                         pActor.cancelAllBeh();
                         target.cancelAllBeh();
@@ -436,8 +410,8 @@ namespace Topic_of_Love.Mian
                         new BehGetPossibleTileForSex().execute(pActor);
                         return true;
                     }
-                    else if(WillDoIntimacy(pActor, null, pActor.lover == target, true) 
-                            && WillDoIntimacy(target, null, pActor.lover == target, false))
+                    else if(WillDoIntimacy(pActor, target, null, true) 
+                            && WillDoIntimacy(target, pActor))
                     {
                         pActor.cancelAllBeh();
                         target.cancelAllBeh();

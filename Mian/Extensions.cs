@@ -8,6 +8,133 @@ namespace Topic_of_Love.Mian;
 
 public static class Extensions
 {
+    public static IBaseSystemData AsBaseSystemData<TData>(this CoreSystemObject<TData> systemObject) where TData : BaseSystemData
+    {
+        return new BaseSystemDataHolder<TData>(systemObject);
+    }
+    
+    public interface IBaseSystemData
+    {
+        public BaseSystemData GetData();
+    }
+    private class BaseSystemDataHolder<TData> : IBaseSystemData where TData : BaseSystemData
+    {
+        private readonly CoreSystemObject<TData> _coreObject; 
+        public BaseSystemDataHolder(CoreSystemObject<TData> coreObject)
+        {
+            _coreObject = coreObject;
+        }
+        public BaseSystemData GetData()
+        {
+            return _coreObject.data;
+        }
+    }
+    
+    // this method may be a bit confusing but it's to determine if actors can get pregnant based on their genitalia and if they have eggs
+    public static bool isAbleToBecomePregnant(this Actor pActor)
+    {
+        if (TolUtil.IsTOIInstalled())
+        {
+            // TOI compatibility
+        }
+        
+        // if (TolUtil.NeedSameSexTypeForReproduction(pActor) || TolUtil.CanDoAnySexType(pActor))
+        //     return true;
+        // if (TolUtil.NeedDifferentSexTypeForReproduction(pActor))
+        //     return Preferences.HasVulva(pActor);
+        return Preferences.HasVulva(pActor); // vulva required for pregnancy
+    }
+
+    public static float getIntimacy(this Actor actor)
+    {
+        actor.data.get("intimacy_happiness", out float intimacy);
+        return intimacy;
+    }
+
+    public static bool isIntimacyHappinessEnough(this Actor actor, float happiness)
+    {
+        actor.data.get("intimacy_happiness", out float compare);
+        return compare >= happiness;
+    }
+        
+    public static void changeIntimacyHappiness(this Actor actor, float happiness)
+    {
+        actor.data.get("intimacy_happiness", out float init);
+        actor.data.set("intimacy_happiness", Math.Max(-100, Math.Min(happiness + init, 100)));
+    }
+
+    public static void increaseCheated<TData>(this CoreSystemObject<TData> instance) where TData : BaseSystemData
+    {
+        instance.data.get("cheated_on_amount", out int amount);
+        instance.data.set("cheated_on_amount", amount + 1);
+    }
+    
+    public static void increaseBrokenUp<TData>(this CoreSystemObject<TData> instance) where TData : BaseSystemData
+    {
+        instance.data.get("broken_up_amount", out int amount);
+        instance.data.set("broken_up_amount", amount + 1);
+    }
+    
+    public static void increaseAdoptedBaby<TData>(this CoreSystemObject<TData> instance) where TData : BaseSystemData
+    {
+        instance.data.get("broken_up_amount", out int amount);
+        instance.data.set("broken_up_amount", amount + 1);
+    }
+    
+    public static void increaseCheated(this MapBox instance)
+    {
+        instance.map_stats.custom_data.get("cheated_on_amount", out int amount);
+        instance.map_stats.custom_data.set("cheated_on_amount", amount + 1);
+    }
+    
+    public static void increaseBrokenUp(this MapBox instance)
+    {
+        instance.map_stats.custom_data.get("broken_up_amount", out int amount);
+        instance.map_stats.custom_data.set("broken_up_amount", amount + 1);
+    }
+    
+    public static void increaseAdoptedBaby(this MapBox instance)
+    {
+        instance.map_stats.custom_data.get("broken_up_amount", out int amount);
+        instance.map_stats.custom_data.set("broken_up_amount", amount + 1);
+    }
+
+    public static int countCheated<TData>(this CoreSystemObject<TData> instance) where TData : BaseSystemData
+    {
+        instance.data.get("cheated_on_amount", out int amount);
+        return amount;
+    }
+    
+    public static int countBrokenUp<TData>(this CoreSystemObject<TData> instance) where TData : BaseSystemData
+    {
+        instance.data.get("broken_up_amount", out int amount);
+        return amount;
+    }
+    
+    public static int countAdoptedBaby<TData>(this CoreSystemObject<TData> instance) where TData : BaseSystemData
+    {
+        instance.data.get("adopted_amount", out int amount);
+        return amount;
+    }
+    
+    public static int countCheated(this MapBox box)
+    {
+        box.map_stats.custom_data.get("cheated_on_amount", out int cheatedAmount);
+        return cheatedAmount;
+    }
+
+    public static int countBrokenUp(this MapBox box)
+    {
+        box.map_stats.custom_data.get("broken_up_amount", out int brokenUpCount);
+        return brokenUpCount;
+    }
+    
+    public static int countAdoptedBaby(this MapBox box)
+    {
+        box.map_stats.custom_data.get("adopted_amount", out int adoptedCount);
+        return adoptedCount;
+    }
+
     public static long countOrientation(this WorldObject world, string id, bool sexual)
     {
         return world.units
@@ -24,11 +151,11 @@ public static class Extensions
     }
     public static long countLonely(this IMetaObject instance)
     {
-        return instance.getUnits().LongCount(unit => TolUtil.GetIntimacy(unit) < 0 && TolUtil.AffectedByIntimacy(unit));
+        return instance.getUnits().LongCount(unit => unit.getIntimacy() < 0 && TolUtil.AffectedByIntimacy(unit));
     }
     public static long countLonely(this WorldObject world)
     {
-        return world.units.LongCount(unit => TolUtil.GetIntimacy(unit) < 0 && TolUtil.AffectedByIntimacy(unit));
+        return world.units.LongCount(unit => unit.getIntimacy() < 0 && TolUtil.AffectedByIntimacy(unit));
     }
 
     public static void showSplitPopulationByOrientation<TMetaObject, TData>(this WindowMetaGeneric<TMetaObject, TData> instance, ICollection<Actor> pListWithUnits, bool sexual)

@@ -167,7 +167,7 @@ public class ActorPatch
                 }
                 
                 if(!Preferences.Dislikes(__instance, true) && TolUtil.IsOrientationSystemEnabledFor(__instance))
-                    TolUtil.ChangeIntimacyHappinessBy(__instance.a, TolUtil.HasNoOne(__instance) ? -Randy.randomFloat(13f, 18f) : -Randy.randomFloat(5f, 7f));
+                    __instance.a.changeIntimacyHappiness(TolUtil.HasNoOne(__instance) ? -Randy.randomFloat(13f, 18f) : -Randy.randomFloat(5f, 7f));
                 // else
                     // __instance.data.set("intimacy_happiness", 100f);
             } else if (!__instance.isAdult() && Randy.randomChance(0.1f) && !Preferences.HasAPreference(__instance))
@@ -196,7 +196,7 @@ public class ActorPatch
                 __instance.data.set("just_lost_lover", false);
             } 
             
-            var intimacy = TolUtil.GetIntimacy(__instance) / 100;
+            var intimacy = __instance.getIntimacy() / 100;
 
             if (__instance.hasLover())
             {
@@ -246,8 +246,8 @@ public class ActorPatch
         TolUtil.Debug($"{__instance.getName()} fell in love {pTarget.getName()}!");
         
         // falling in love is fucking amazing cherish it mate
-        TolUtil.ChangeIntimacyHappinessBy(pTarget, 100);
-        TolUtil.ChangeIntimacyHappinessBy(__instance, 100);
+        pTarget.changeIntimacyHappiness(100);
+        __instance.changeIntimacyHappiness(100);
     }
         
     // This is where we handle the beef of our code for having cross species and non-same reproduction method ppl fall in love

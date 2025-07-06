@@ -9,12 +9,39 @@ public class StatisticAssets
         Add(new StatisticsAsset
         {
             id = "statistics_lonely",
-            path_icon = "ui/Icons/status/broke_up",
+            path_icon = "ui/Icons/status/okay_sex",
             is_world_statistics = true,
-            list_window_meta_type = MetaType.Unit,
             long_action = _ => World.world.world_object.countLonely(),
             world_stats_tabs = WorldStatsTabs.Noosphere
         });
+        
+        Add(new StatisticsAsset
+        {
+            id = "statistics_broke_up",
+            path_icon = "ui/Icons/status/broke_up",
+            is_world_statistics = true,
+            long_action = _ => World.world.countBrokenUp(),
+            world_stats_tabs = WorldStatsTabs.Noosphere
+        });
+        
+        Add(new StatisticsAsset
+        {
+            id = "statistics_cheated_on",
+            path_icon = "ui/Icons/status/cheated_on",
+            is_world_statistics = true,
+            long_action = _ => World.world.countCheated(),
+            world_stats_tabs = WorldStatsTabs.Noosphere
+        });
+        
+        Add(new StatisticsAsset
+        {
+            id = "statistics_adopted_baby",
+            path_icon = "ui/Icons/status/adopted_baby",
+            is_world_statistics = true,
+            long_action = _ => World.world.countAdoptedBaby(),
+            world_stats_tabs = WorldStatsTabs.Noosphere
+        });
+
 
         // statistics for break up and cheating in da future?
         

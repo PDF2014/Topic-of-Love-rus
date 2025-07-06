@@ -445,6 +445,9 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         {
             return GetExpression(actor).Equals("feminine");
         }
+        
+        // uterus is more correct, vulva is only needed for external pregnancies
+        // we will later intervene with Topic of Identity to replace these methods
         public static bool HasVulva(Actor actor)
         {
             return GetGenitalia(actor).Equals("vulva");
@@ -453,6 +456,8 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         {
             return GetGenitalia(actor).Equals("phallus");
         }
+        
+        
         public static string GetBiologicalSex(Actor actor)
         {
             return actor.isSexFemale() ? "female" : "male";

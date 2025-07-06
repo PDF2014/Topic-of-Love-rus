@@ -138,7 +138,7 @@ public class StatPatch
                 __instance.setIconValue(orientationType+"_romantic", pMetaObject.countOrientation(orientationType, false));
             });
             
-            __instance.setIconValue("lonely", World.world.units.Count(unit => TolUtil.GetIntimacy(unit) < 0 && TolUtil.AffectedByIntimacy(unit)));
+            __instance.setIconValue("lonely", World.world.units.Count(unit => unit.getIntimacy() < 0 && TolUtil.AffectedByIntimacy(unit)));
     }
     
     [HarmonyPostfix]
@@ -256,14 +256,16 @@ public class StatPatch
                 {
                     if (__instance.actor.asset.inspect_stats)
                     {
-                        __instance.setIconValue(stat.Name, stat.Value(__instance.actor),"", "", stat.IsFloat);
+                        object grr = stat.Value(__instance.actor);
+                        TolUtil.LogInfo(grr.ToString());
+                        __instance.setIconValue(stat.Name, stat.Value(__instance.actor), pFloat : stat.IsFloat);
                     }   
                 }
             }
         }
     }
     
-    private static bool _initializedUnitIcons;
+    private static bool _initializedUnitWindow;
     [HarmonyPostfix]
     [HarmonyPatch(nameof(UnitWindow.OnEnable))]
     static void WindowCreatureInfo(UnitWindow __instance)
@@ -271,14 +273,32 @@ public class StatPatch
         if (__instance.actor == null || !__instance.actor.isAlive())
             return;
         
-        if (!_initializedUnitIcons)
+        if (!_initializedUnitWindow)
         {
-            _initializedUnitIcons = true;
-            Initialize(__instance);
+            _initializedUnitWindow = true;
+            InitializeIcons(__instance);
+            InitializePreferenceMind(__instance);
         }
     }
 
-    private static void Initialize(UnitWindow window)
+    private static void InitializePreferenceMind(UnitWindow window)
+    {
+        var mindPreferenceEntry = Object.Instantiate(
+            ResourcesFinder.FindResource<GameObject>("Mind"), 
+            ResourcesFinder.FindResource<GameObject>("Tabs").transform);
+
+        // var newPos = mindPreferenceEntry.transform.position;
+        // newPos.y -= 22;
+        // mindPreferenceEntry.transform.position = newPos;
+        mindPreferenceEntry.transform.SetSiblingIndex(7);
+        
+        mindPreferenceEntry.name = "MindPreferences";
+
+        var tip = mindPreferenceEntry.GetComponent<TipButton>();
+        tip.textOnClick = "tab_mind_preference";
+        tip.textOnClick = "tab_mind_preference_description";
+    }
+    private static void InitializeIcons(UnitWindow window)
         {
             window
                 .gameObject.transform.Find("Background/Scroll View")

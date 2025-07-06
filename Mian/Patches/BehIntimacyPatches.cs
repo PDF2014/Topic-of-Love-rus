@@ -11,7 +11,7 @@ public class BehIntimacyPatches
         static void Postfix(Actor pBabyActor, BehResult __result)
         {
             if(__result == BehResult.Continue)
-                TolUtil.ChangeIntimacyHappinessBy(pBabyActor, 20);
+                pBabyActor.changeIntimacyHappiness(20);
         }
     }
 
@@ -21,7 +21,7 @@ public class BehIntimacyPatches
         static void Postfix(Actor pActor, BehResult __result)
         {
             if(__result == BehResult.Continue)
-                TolUtil.ChangeIntimacyHappinessBy(pActor, 20);
+                pActor.changeIntimacyHappiness(20);
         }
     }
     
@@ -31,7 +31,7 @@ public class BehIntimacyPatches
         static void Postfix(Actor pActor, BehResult __result)
         {
             if(__result == BehResult.Continue && pActor.hasFamily())
-                TolUtil.ChangeIntimacyHappinessBy(pActor, 50);
+                pActor.changeIntimacyHappiness(50);
         }
     }
 
@@ -44,21 +44,21 @@ public class BehIntimacyPatches
             {
                 var lover = __instance.lover;
                 if(lover != null)
-                    TolUtil.ChangeIntimacyHappinessBy(lover, -30);
+                    lover.changeIntimacyHappiness(-30);
                 var bestFriend = __instance.getBestFriend();
                 if(bestFriend != null)
-                    TolUtil.ChangeIntimacyHappinessBy(bestFriend, -15);
+                    bestFriend.changeIntimacyHappiness(-15);
                 var parents = __instance.getParents();
                 foreach(var parent in parents)
                 {
-                    TolUtil.ChangeIntimacyHappinessBy(parent, -10);
+                    parent.changeIntimacyHappiness(-10);
                 }
 
                 var family = __instance.family;
                 if (family != null)
                 {
                     foreach(var unit in family.getUnits())
-                        TolUtil.ChangeIntimacyHappinessBy(unit, -5);
+                        unit.changeIntimacyHappiness(-5);
                 }
             }
         }

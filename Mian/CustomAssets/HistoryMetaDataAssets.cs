@@ -443,6 +443,39 @@ public class HistoryMetaDataAssets
             return ((IMetaObject)nano).countLonely();
         }), new(){"kingdom", "city", "world"});
         
+        // toAdd.Add(new ("cheated_on", nano =>
+        // {
+        //     if (nano.getMetaType().Equals(MetaType.World))
+        //     {
+        //         return StatsHelper.getStat("statistics_cheated_on");
+        //     }
+        //
+        //     var method = nano.GetType().GetMethod("countCheated");
+        //     return Extensions.countCheated((object)nano);
+        // }), new(){"kingdom", "city", "world"});
+        //
+        // toAdd.Add(new ("broke_up", nano =>
+        // {
+        //     if (nano.getMetaType().Equals(MetaType.World))
+        //     {
+        //         return StatsHelper.getStat("statistics_broke_up");
+        //     }
+        //
+        //     dynamic coreObject = nano;
+        //     return coreObject.countBrokenUp();
+        // }), new(){"kingdom", "city", "world"});
+        //
+        // toAdd.Add(new ("adopted_baby", nano =>
+        // {
+        //     if (nano.getMetaType().Equals(MetaType.World))
+        //     {
+        //         return StatsHelper.getStat("statistics_adopted_baby");
+        //     }
+        //
+        //     dynamic coreObject = nano;
+        //     return coreObject.countAdoptedBaby();
+        // }), new(){"kingdom", "city", "world"});
+        //
 
         Orientation.Orientations.Values.ForEach(orientation =>
         {
