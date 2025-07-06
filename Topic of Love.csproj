@@ -83,7 +83,7 @@
     </ItemGroup>
     <ItemGroup>
         <Reference Include="NeoModLoader">
-            <HintPath>..\..\worldbox_Data\StreamingAssets\mods\NeoModLoader.dll.disabled</HintPath>
+            <HintPath>..\..\worldbox_Data\StreamingAssets\mods\NeoModLoader.dll</HintPath>
         </Reference>
         <Reference Include="0Harmony">
             <HintPath>..\..\worldbox_Data\StreamingAssets\mods\NML\Assemblies\0Harmony.dll</HintPath>

@@ -256,14 +256,14 @@ public class StatPatch
                 {
                     if (__instance.actor.asset.inspect_stats)
                     {
-                        object grr = stat.Value(__instance.actor);
-                        TolUtil.LogInfo(grr.ToString());
                         __instance.setIconValue(stat.Name, stat.Value(__instance.actor), pFloat : stat.IsFloat);
                     }   
                 }
             }
         }
     }
+
+    private static WindowMetaTab _preferenceTabEntry;
     
     private static bool _initializedUnitWindow;
     [HarmonyPostfix]
@@ -276,11 +276,21 @@ public class StatPatch
         if (!_initializedUnitWindow)
         {
             _initializedUnitWindow = true;
-            InitializeIcons(__instance);
             InitializePreferenceMind(__instance);
+            InitializeIcons(__instance);
         }
+        
+        _preferenceTabEntry.toggleActive(true);
     }
 
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(UnitWindow.clear))]
+    static void Clear()
+    {
+        if(_preferenceTabEntry != null)
+            _preferenceTabEntry.toggleActive(false);
+    }
+    
     private static void InitializePreferenceMind(UnitWindow window)
     {
         var mindPreferenceEntry = Object.Instantiate(
@@ -291,12 +301,23 @@ public class StatPatch
         // newPos.y -= 22;
         // mindPreferenceEntry.transform.position = newPos;
         mindPreferenceEntry.transform.SetSiblingIndex(7);
-        
         mindPreferenceEntry.name = "MindPreferences";
 
         var tip = mindPreferenceEntry.GetComponent<TipButton>();
         tip.textOnClick = "tab_mind_preference";
         tip.textOnClick = "tab_mind_preference_description";
+
+        _preferenceTabEntry = mindPreferenceEntry.GetComponent<WindowMetaTab>();
+        _preferenceTabEntry.tab_action.RemoveAllListeners();
+        _preferenceTabEntry.tab_action.AddListener(_ => window.showTab(_preferenceTabEntry));
+        
+        var mindContent = Object.Instantiate(
+            ResourcesFinder.FindResource<GameObject>("content_mind"), 
+            ResourcesFinder.FindResource<GameObject>("Content").transform); // the whole menu shabang
+        
+        mindContent.transform.GetChild(1).gameObject.SetActive(false);
+        
+        window.tabs._tabs.Add(_preferenceTabEntry);
     }
     private static void InitializeIcons(UnitWindow window)
         {
