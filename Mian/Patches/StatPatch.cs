@@ -295,27 +295,33 @@ public class StatPatch
     {
         var mindPreferenceEntry = Object.Instantiate(
             ResourcesFinder.FindResource<GameObject>("Mind"), 
-            ResourcesFinder.FindResource<GameObject>("Tabs").transform);
+            window._button_equipment_editor.transform.parent.transform);
+        // var resources = ResourcesFinder.FindResources<GameObject>("Tabs");
 
+        // resources.ForEach(resource => TolUtil.LogInfo(resource.name));
+        
         // var newPos = mindPreferenceEntry.transform.position;
         // newPos.y -= 22;
         // mindPreferenceEntry.transform.position = newPos;
         mindPreferenceEntry.transform.SetSiblingIndex(7);
+        mindPreferenceEntry.SetActive(true);
         mindPreferenceEntry.name = "MindPreferences";
 
         var tip = mindPreferenceEntry.GetComponent<TipButton>();
         tip.textOnClick = "tab_mind_preference";
-        tip.textOnClick = "tab_mind_preference_description";
+        tip.textOnClickDescription = "tab_mind_preference_description";
+        
+        var mind = ResourcesFinder.FindResource<GameObject>("content_mind");
+        var mindPreferences = Object.Instantiate(mind, mind.transform.parent); // the whole menu shabang
+        GameObject.Destroy(mindPreferences.GetComponent<NeuronsOverview>());
+        mindPreferences.name = "content_mind_preferences";
+        
+        // not working for some reason
+        mindPreferences.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "Preferences";
 
         _preferenceTabEntry = mindPreferenceEntry.GetComponent<WindowMetaTab>();
-        _preferenceTabEntry.tab_action.RemoveAllListeners();
-        _preferenceTabEntry.tab_action.AddListener(_ => window.showTab(_preferenceTabEntry));
-        
-        var mindContent = Object.Instantiate(
-            ResourcesFinder.FindResource<GameObject>("content_mind"), 
-            ResourcesFinder.FindResource<GameObject>("Content").transform); // the whole menu shabang
-        
-        mindContent.transform.GetChild(1).gameObject.SetActive(false);
+        _preferenceTabEntry.tab_elements.Remove(mind.transform);
+        _preferenceTabEntry.tab_elements.Add(mindPreferences.transform);
         
         window.tabs._tabs.Add(_preferenceTabEntry);
     }

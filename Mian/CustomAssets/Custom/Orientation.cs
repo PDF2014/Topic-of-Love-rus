@@ -171,7 +171,7 @@ public class Orientations
                 var preferredIdentities = Preferences.GetActorPreferencesFromType(actor, "identity", isSexual);
                 if (preferredIdentities.Count == 1)
                 {
-                    if (((PreferenceTrait)preferredIdentities.First()).WithoutOrientationID !=
+                    if (preferredIdentities.First().WithoutOrientationID !=
                         Preferences.GetIdentity(actor))
                         return true;
                 }
@@ -189,7 +189,7 @@ public class Orientations
                 var preferredIdentities = Preferences.GetActorPreferencesFromType(actor, "identity", isSexual);
                 if (preferredIdentities.Count == 1)
                 {
-                    if (((PreferenceTrait)preferredIdentities.First()).WithoutOrientationID !=
+                    if (preferredIdentities.First().WithoutOrientationID !=
                         Preferences.GetIdentity(actor))
                         return true;
                 }
@@ -273,10 +273,10 @@ public class Orientations
         actor.data.set("sexual_orientation", sexualOrientation.OrientationType);
     }
 
-    public static void CreateOrientationBasedOnPrefChange(Actor actor, PreferenceTrait newTrait)
+    public static void CreateOrientationBasedOnPrefChange(Actor actor, Preference newPreference)
     {
-        var orientation = GetOrientationFromActor(actor, newTrait.IsSexual);
-        if (newTrait.IsSexual)
+        var orientation = GetOrientationFromActor(actor, newPreference.IsSexual);
+        if (newPreference.IsSexual)
             actor.data.set("sexual_orientation", orientation.OrientationType);
         else
             actor.data.set("romantic_orientation", orientation.OrientationType);

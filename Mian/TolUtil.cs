@@ -230,14 +230,17 @@ namespace Topic_of_Love.Mian
             {
                 var oldPreferences = Preferences.GetActorPreferences(actor);
                 oldPreferences.AddRange(Preferences.GetActorPreferences(actor, true));
-                actor.removeTraits(oldPreferences);
+                foreach (var preference in oldPreferences)
+                {
+                    actor.data.set(preference.id, false);
+                }
                 
                 var preferences =  Preferences.GetRandomPreferences(actor);
-                foreach (var trait in preferences)
+                foreach (var preference in preferences)
                 {
-                    actor.addTrait(trait);
+                    actor.data.set(preference.id, true);
                 }
-                Orientations.RollOrientationLabel(actor);   
+                Orientations.RollOrientationLabel(actor);
             }
         }
         public static bool CanHaveSexWithoutRepercussionsWithSomeoneElse(Actor actor, string sexReason)

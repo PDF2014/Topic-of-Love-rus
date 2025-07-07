@@ -16,45 +16,45 @@ namespace Topic_of_Love.Mian.Patches;
 [HarmonyPatch(typeof(Actor))]
 public class ActorPatch
 {
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(Actor.removeTrait), typeof(ActorTrait))]
-    static void ClearTraitPatch(ActorTrait pTrait, Actor __instance)
-    {
-        if (pTrait is PreferenceTrait preferenceTrait)
-        {
-            Orientations.CreateOrientationBasedOnPrefChange(__instance, preferenceTrait);
-        }
-    }
+    // [HarmonyPostfix]
+    // [HarmonyPatch(nameof(Actor.removeTrait), typeof(ActorTrait))]
+    // static void ClearTraitPatch(ActorTrait pTrait, Actor __instance)
+    // {
+    //     if (pTrait is PreferenceTrait preferenceTrait)
+    //     {
+    //         Orientations.CreateOrientationBasedOnPrefChange(__instance, preferenceTrait);
+    //     }
+    // }
     
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(Actor.addTrait), typeof(ActorTrait), typeof(bool))]
-    static void AddTraitPatch(ActorTrait pTrait, Actor __instance)
-    {
-        // removes preference traits if they are all added for some reason 
-        foreach (var type in Preferences.PreferenceTypes.Keys)
-        {
-            // Romantic
-            
-            var list = Preferences.GetActorPreferencesFromType(__instance, type);
-            var toCompare = Preferences.GetPreferencesFromType(type);
-
-            if (list.Count == toCompare.Count)
-                __instance.removeTraits(list);
-            
-            // Sexual
-            
-            list = Preferences.GetActorPreferencesFromType(__instance, type, true);
-            toCompare = Preferences.GetPreferencesFromType(type, true);
-
-            if (list.Count == toCompare.Count)
-                __instance.removeTraits(list);
-        }
-
-        if (pTrait is PreferenceTrait preferenceTrait)
-        {
-            Orientations.CreateOrientationBasedOnPrefChange(__instance, preferenceTrait);
-        }
-    }
+    // [HarmonyPostfix]
+    // [HarmonyPatch(nameof(Actor.addTrait), typeof(ActorTrait), typeof(bool))]
+    // static void AddTraitPatch(ActorTrait pTrait, Actor __instance)
+    // {
+    //     // removes preference traits if they are all added for some reason 
+    //     foreach (var type in Preferences.PreferenceTypes.Keys)
+    //     {
+    //         // Romantic
+    //         
+    //         var list = Preferences.GetActorPreferencesFromType(__instance, type);
+    //         var toCompare = Preferences.GetRegisteredPreferencesFromType(type);
+    //
+    //         if (list.Count == toCompare.Count)
+    //             __instance.removeTraits(list);
+    //         
+    //         // Sexual
+    //         
+    //         list = Preferences.GetActorPreferencesFromType(__instance, type, true);
+    //         toCompare = Preferences.GetRegisteredPreferencesFromType(type, true);
+    //
+    //         if (list.Count == toCompare.Count)
+    //             __instance.removeTraits(list);
+    //     }
+    //
+    //     if (pTrait is PreferenceTrait preferenceTrait)
+    //     {
+    //         Orientations.CreateOrientationBasedOnPrefChange(__instance, preferenceTrait);
+    //     }
+    // }
     
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Actor.buildCityAndStartCivilization))]
@@ -116,14 +116,14 @@ public class ActorPatch
                     {
                         if (Randy.randomBool())
                         {
-                            __instance.addTrait(Preferences.RandomPreferenceFromType("identity", Randy.randomBool()));
+                            __instance.TogglePreference(Preferences.RandomPreferenceFromType("identity", Randy.randomBool()), true);
                         }
                         else
                         {
                             var preferences = Preferences.GetActorPreferencesFromType(__instance, "identity", Randy.randomBool());
                             if (preferences.Count > 0)
                             {
-                                __instance.removeTrait(preferences.GetRandom());
+                                __instance.TogglePreference(preferences.GetRandom(), false);
                             }
                         }
                     }
@@ -135,14 +135,14 @@ public class ActorPatch
                         {
                             if (Randy.randomBool())
                             {
-                                __instance.addTrait(Preferences.RandomPreferenceFromType("expression", Randy.randomBool()));
+                                __instance.TogglePreference(Preferences.RandomPreferenceFromType("expression", Randy.randomBool()), true);
                             }
                             else
                             {
                                 var preferences = Preferences.GetActorPreferencesFromType(__instance, "expression", Randy.randomBool());
                                 if (preferences.Count > 0)
                                 {
-                                    __instance.removeTrait(preferences.GetRandom());
+                                    __instance.TogglePreference(preferences.GetRandom(), false);
                                 }
                             }
                         }
@@ -152,14 +152,14 @@ public class ActorPatch
                         {
                             if (Randy.randomBool())
                             {
-                                __instance.addTrait(Preferences.RandomPreferenceFromType("genital", true));
+                                __instance.TogglePreference(Preferences.RandomPreferenceFromType("genital", true), true);
                             }
                             else
                             {
                                 var preferences = Preferences.GetActorPreferencesFromType(__instance, "genital", true);
                                 if (preferences.Count > 0)
                                 {
-                                    __instance.removeTrait(preferences.GetRandom());
+                                    __instance.TogglePreference(preferences.GetRandom(), false);
                                 }
                             }
                         }   
