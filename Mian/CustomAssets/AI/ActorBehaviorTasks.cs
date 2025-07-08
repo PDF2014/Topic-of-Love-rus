@@ -38,7 +38,7 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
                 path_icon = "ui/Icons/status/just_kissed"
             };
             findToKiss.addBeh(new BehFindAPartner(false, true, true, distance: 40f, customValidity: (actor, target) => 
-                Preferences.PreferenceMatches(actor, target) || Randy.randomChance(0.5f)));
+                LikeAssets.PreferenceMatches(actor, target) || Randy.randomChance(0.5f)));
             findToKiss.addBeh(new BehSetNextTask("try_kiss", pClean: false, pForce: true));
             Add(findToKiss);
 

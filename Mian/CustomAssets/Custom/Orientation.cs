@@ -20,11 +20,11 @@ public class Orientation
     private readonly string _romanticPathIcon;
     private Sprite _sexualSprite;
     private Sprite _romanticSprite;
-    public readonly Func<Actor, bool, bool> Criteria;
+    public readonly Func<Actor, LoveType, bool> Criteria;
 
     private Orientation(string orientationType, string sexualPathLocale, string romanticPathLocale, string descriptionLocale,
         string sexualPathIcon, string romanticPathIcon, bool isHomo, bool isHetero, string hexCode,
-        Func<Actor, bool, bool> criteriaCheck)
+        Func<Actor, LoveType, bool> criteriaCheck)
     {
         OrientationType = orientationType;
         SexualPathLocale = sexualPathLocale;
@@ -63,7 +63,7 @@ public class Orientation
     }
 
     public static Orientation Create(string orientation, string romanticVariant, bool isHomo, bool isHetero,
-        string hexCode, Func<Actor, bool, bool> fitsCriteria)
+        string hexCode, Func<Actor, LoveType, bool> fitsCriteria)
     {
         var sexualPathLocale = "orientations_" + orientation;
         var romanticPathLocale = "orientations_" + orientation + "_romantic";
@@ -120,21 +120,21 @@ public class Orientations
     {
         Orientation.Create("lesbian", "lesbiromantic", true, false, "#FF9A56", (actor, isSexual) =>
         {
-            if (Preferences.Dislikes(actor, isSexual))
+            if (LikeAssets.Dislikes(actor, isSexual))
                 return false;
 
-            if (!Preferences.IdentifiesAsMan(actor) && actor.isSapient())
+            if (!LikeAssets.IdentifiesAsMan(actor) && actor.isSapient())
             {
-                var preferredIdentities = Preferences.GetActorPreferencesFromType(actor, "identity", isSexual);
+                var preferredIdentities = LikeAssets.GetActorLikesFromGroup(actor, "identity", isSexual);
 
                 if (preferredIdentities.Count == 1
-                    && (Preferences.HasPreference(actor, "female", isSexual) ||
-                        Preferences.HasPreference(actor, "xenogender", isSexual)))
+                    && (LikeAssets.HasLike(actor, "female", isSexual) ||
+                        LikeAssets.HasLike(actor, "xenogender", isSexual)))
                     return true;
 
                 if (preferredIdentities.Count == 2 &&
-                    Preferences.HasPreference(actor, "female", isSexual) &&
-                    Preferences.HasPreference(actor, "xenogender", isSexual))
+                    LikeAssets.HasLike(actor, "female", isSexual) &&
+                    LikeAssets.HasLike(actor, "xenogender", isSexual))
                     return true;
             }
 
@@ -142,20 +142,20 @@ public class Orientations
         });
         Orientation.Create("gay", "gayromantic", true, false, "#26CEAA", (actor, isSexual) =>
         {
-            if (Preferences.Dislikes(actor, isSexual))
+            if (LikeAssets.Dislikes(actor, isSexual))
                 return false;
 
-            if (!Preferences.IdentifiesAsWoman(actor) && actor.isSapient())
+            if (!LikeAssets.IdentifiesAsWoman(actor) && actor.isSapient())
             {
-                var preferredIdentities = Preferences.GetActorPreferencesFromType(actor, "identity", isSexual);
+                var preferredIdentities = LikeAssets.GetActorLikesFromGroup(actor, "identity", isSexual);
 
                 if (preferredIdentities.Count == 1
-                    && (Preferences.HasPreference(actor, "male", isSexual) ||
-                        Preferences.HasPreference(actor, "xenogender", isSexual)))
+                    && (LikeAssets.HasLike(actor, "male", isSexual) ||
+                        LikeAssets.HasLike(actor, "xenogender", isSexual)))
                     return true;
 
-                if (preferredIdentities.Count == 2 && Preferences.HasPreference(actor, "male", isSexual) &&
-                    Preferences.HasPreference(actor, "xenogender", isSexual))
+                if (preferredIdentities.Count == 2 && LikeAssets.HasLike(actor, "male", isSexual) &&
+                    LikeAssets.HasLike(actor, "xenogender", isSexual))
                     return true;
             }
 
@@ -163,16 +163,15 @@ public class Orientations
         });
         Orientation.Create("straight", "straightromantic", false, true, "#FFFFFF", (actor, isSexual) =>
         {
-            if (Preferences.Dislikes(actor, isSexual))
+            if (LikeAssets.Dislikes(actor, isSexual))
                 return false;
 
             if (actor.isSapient())
             {
-                var preferredIdentities = Preferences.GetActorPreferencesFromType(actor, "identity", isSexual);
+                var preferredIdentities = LikeAssets.GetActorLikesFromGroup(actor, "identity", isSexual);
                 if (preferredIdentities.Count == 1)
                 {
-                    if (preferredIdentities.First().WithoutOrientationID !=
-                        Preferences.GetIdentity(actor))
+                    if (preferredIdentities.First().ID != LikeAssets.GetIdentity(actor))
                         return true;
                 }
             }
@@ -181,16 +180,15 @@ public class Orientations
         });
         Orientation.Create("heterosexual", "heteroromantic", false, true, "#FFFFFF", (actor, isSexual) =>
         {
-            if (Preferences.Dislikes(actor, isSexual))
+            if (LikeAssets.Dislikes(actor, isSexual))
                 return false;
 
             if (!actor.isSapient())
             {
-                var preferredIdentities = Preferences.GetActorPreferencesFromType(actor, "identity", isSexual);
+                var preferredIdentities = LikeAssets.GetActorLikesFromGroup(actor, "identity", isSexual);
                 if (preferredIdentities.Count == 1)
                 {
-                    if (preferredIdentities.First().WithoutOrientationID !=
-                        Preferences.GetIdentity(actor))
+                    if (preferredIdentities.First().ID != LikeAssets.GetIdentity(actor))
                         return true;
                 }
             }
@@ -199,23 +197,23 @@ public class Orientations
         });
         Orientation.Create("homosexual", "homoromantic", true, false, "#BB07DF", (actor, isSexual) =>
         {
-            if (Preferences.Dislikes(actor, isSexual))
+            if (LikeAssets.Dislikes(actor, isSexual))
                 return false;
             
             if (!actor.isSapient())
             {
-                var preferredIdentities = Preferences.GetActorPreferencesFromType(actor, "identity", isSexual);
+                var preferredIdentities = LikeAssets.GetActorLikesFromGroup(actor, "identity", isSexual);
 
                 if (actor.isSexFemale())
                 {
                     if (preferredIdentities.Count == 1
-                        && Preferences.HasPreference(actor, "female", isSexual))
+                        && LikeAssets.HasLike(actor, "female", isSexual))
                         return true;
                 }
                 else
                 {
                     if (preferredIdentities.Count == 1
-                        && Preferences.HasPreference(actor, "male", isSexual))
+                        && LikeAssets.HasLike(actor, "male", isSexual))
                         return true;
                 }
             }
@@ -224,24 +222,24 @@ public class Orientations
         });
         Orientation.Create("bisexual", "biromantic", true, true, "#9B4F96", (actor, isSexual) =>
         {
-            if (Preferences.Dislikes(actor, isSexual))
+            if (LikeAssets.Dislikes(actor, isSexual))
                 return false;
 
-            if (Preferences.GetActorPreferencesFromType(actor, "identity", isSexual).Count >= 2)
+            if (LikeAssets.GetActorLikesFromGroup(actor, "identity", isSexual).Count >= 2)
                 return true;
             return false;
         });
         Orientation.Create("pansexual", "panromantic", true, true, "#FFD800", (actor, isSexual) =>
         {
-            if (Preferences.Dislikes(actor, isSexual))
+            if (LikeAssets.Dislikes(actor, isSexual))
                 return false;
 
-            if (Preferences.GetActorPreferencesFromType(actor, "identity", isSexual).Count == 0)
+            if (LikeAssets.GetActorLikesFromGroup(actor, "identity", isSexual).Count == 0)
                 return true;
             return false;
         });
 
-        Orientation.Create("asexual", "aromantic", false, false, "#FFFFFF", Preferences.Dislikes);
+        Orientation.Create("asexual", "aromantic", false, false, "#FFFFFF", LikeAssets.Dislikes);
     }
 
     // homosexuals count as gay, lesbian, etc (and same goes for heterosexual)
@@ -257,26 +255,26 @@ public class Orientations
         return orientation.OrientationType.Equals(id);
     }
     
-    public static Orientation GetOrientationFromActor(Actor actor, bool sexual = false)
+    public static Orientation GetOrientationFromActor(Actor actor, LoveType loveType)
     {
         var orientations =
-            Orientation.Orientations.Values.Where(orientationType => orientationType.Criteria(actor, sexual)).ToList();
+            Orientation.Orientations.Values.Where(orientationType => orientationType.Criteria(actor, loveType)).ToList();
 
         return orientations.GetRandom(); // at the very least should be pansexual
     }
 
     public static void RollOrientationLabel(Actor actor)
     {
-        var sexualOrientation = GetOrientationFromActor(actor, true);
-        var romanticOrientation = GetOrientationFromActor(actor);
+        var sexualOrientation = GetOrientationFromActor(actor, LoveType.Sexual);
+        var romanticOrientation = GetOrientationFromActor(actor, LoveType.Romantic);
         actor.data.set("romantic_orientation", romanticOrientation.OrientationType);
         actor.data.set("sexual_orientation", sexualOrientation.OrientationType);
     }
 
-    public static void CreateOrientationBasedOnPrefChange(Actor actor, Preference newPreference)
+    public static void CreateOrientationBasedOnPrefChange(Actor actor, Like newLike)
     {
-        var orientation = GetOrientationFromActor(actor, newPreference.IsSexual);
-        if (newPreference.IsSexual)
+        var orientation = GetOrientationFromActor(actor, newLike.LoveType);
+        if (newLike.LoveType.Equals(LoveType.Sexual))
             actor.data.set("sexual_orientation", orientation.OrientationType);
         else
             actor.data.set("romantic_orientation", orientation.OrientationType);

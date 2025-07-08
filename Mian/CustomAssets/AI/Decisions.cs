@@ -94,7 +94,7 @@ public class Decisions
             path_icon = "ui/Icons/status/enjoyed_sex",
             cooldown = 15,
             action_check_launch = actor => TolUtil.CapableOfLove(actor)
-                                           && !Preferences.Dislikes(actor, true)
+                                           && !LikeAssets.Dislikes(actor, true)
                                            && !actor.isIntimacyHappinessEnough( 100f)
                                            && TolUtil.IsOrientationSystemEnabledFor(actor),
             weight_calculate_custom = actor =>
@@ -135,13 +135,13 @@ public class Decisions
                         return false;
 
                     if (TolUtil.CouldReproduce(actor, actor.lover) &&
-                        !Preferences.BothActorsPreferenceMatch(actor, actor.lover, true))
+                        !LikeAssets.BothActorsPreferenceMatch(actor, actor.lover, true))
                     {
                         return true;
                     }
 
                     if (TolUtil.CouldReproduce(actor, actor.lover) &&
-                        Preferences.BothActorsPreferenceMatch(actor, actor.lover, true))
+                        LikeAssets.BothActorsPreferenceMatch(actor, actor.lover, true))
                         return false;
                 }
 

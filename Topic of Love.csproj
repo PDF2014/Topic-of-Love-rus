@@ -37,7 +37,9 @@
         <Compile Include="Mian\CustomAssets\BaseStatAssets.cs" />
         <Compile Include="Mian\CustomAssets\CommunicationTopics.cs" />
         <Compile Include="Mian\CustomAssets\Custom\Orientation.cs" />
-        <Compile Include="Mian\CustomAssets\Custom\Preferences.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\LikeAssets.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\PreferencesOverview.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\PreferencesOverview.disabled.cs" />
         <Compile Include="Mian\CustomAssets\GodPowers.cs" />
         <Compile Include="Mian\CustomAssets\Happiness.cs" />
         <Compile Include="Mian\CustomAssets\HistoryDataAssets.cs" />

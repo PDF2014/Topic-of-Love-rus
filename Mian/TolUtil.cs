@@ -51,7 +51,7 @@ namespace Topic_of_Love.Mian
                 actor1.data.get("sex_reason", out var sexReason, "");
                 
                 // bug spotted? some actors were lovers but one of them disliked the sex for some reason
-                if ((Preferences.PreferenceMatches(actor1, actor2, true) || (actor1.lover == actor2 && Randy.randomChance(0.5f)))
+                if ((LikeAssets.PreferenceMatches(actor1, actor2, true) || (actor1.lover == actor2 && Randy.randomChance(0.5f)))
                     && (Randy.randomChance(sexReason.Equals("reproduction") ? 0.5f : 1f) || actor1.lover == actor2))
                 {
                     var normal = 0.3f;
@@ -64,7 +64,7 @@ namespace Topic_of_Love.Mian
                         normal += Math.Abs((happiness / 100) / 2);
                     }
 
-                    if (!Preferences.PreferenceMatches(actor1, actor2, true))
+                    if (!LikeAssets.PreferenceMatches(actor1, actor2, true))
                         normal -= 0.2f;
                     
                     var type = Randy.randomChance(Math.Min(1, normal)) ? "enjoyed_sex" : "okay_sex"; 
@@ -100,7 +100,7 @@ namespace Topic_of_Love.Mian
 
             if (sexReason != null && !pActor.isAdult())
                 return false;
-            if(Preferences.Dislikes(pActor, sexReason != null))
+            if(LikeAssets.Dislikes(pActor, sexReason != null))
                 return false;
             
             if (!isInit)
@@ -176,7 +176,7 @@ namespace Topic_of_Love.Mian
             actor1.addAfterglowStatus();
             actor2.addAfterglowStatus();   
             
-            if (Randy.randomChance(actor1.lover == actor2 ? 1f : Preferences.BothActorsPreferenceMatch(actor1, actor2, true) ? 0.25f : 0f))
+            if (Randy.randomChance(actor1.lover == actor2 ? 1f : LikeAssets.BothActorsPreferenceMatch(actor1, actor2, true) ? 0.25f : 0f))
             {
                 actor1.addStatusEffect("just_kissed");
                 actor2.addStatusEffect("just_kissed");
@@ -228,17 +228,17 @@ namespace Topic_of_Love.Mian
         {
             if (actor != null && CapableOfLove(actor))
             {
-                var oldPreferences = Preferences.GetActorPreferences(actor);
-                oldPreferences.AddRange(Preferences.GetActorPreferences(actor, true));
+                var oldPreferences = LikeAssets.GetActorLikes(actor);
+                oldPreferences.AddRange(LikeAssets.GetActorLikes(actor, true));
                 foreach (var preference in oldPreferences)
                 {
-                    actor.data.set(preference.id, false);
+                    actor.data.set(preference.ID, false);
                 }
                 
-                var preferences =  Preferences.GetRandomPreferences(actor);
+                var preferences =  LikeAssets.GetRandomPreferences(actor);
                 foreach (var preference in preferences)
                 {
-                    actor.data.set(preference.id, true);
+                    actor.data.set(preference.ID, true);
                 }
                 Orientations.RollOrientationLabel(actor);
             }
@@ -246,7 +246,7 @@ namespace Topic_of_Love.Mian
         public static bool CanHaveSexWithoutRepercussionsWithSomeoneElse(Actor actor, string sexReason)
         {
             return !actor.hasLover()
-                   || (actor.hasLover() && ((!Preferences.PreferenceMatches(actor, actor.lover, true)
+                   || (actor.hasLover() && ((!LikeAssets.PreferenceMatches(actor, actor.lover, true)
                                                               && actor.lover.hasCultureTrait("sexual_expectations"))
                                                               || (actor.hasSubspeciesTrait("preservation") && IsDyingOut(actor) 
                                                                   && sexReason.Equals("reproduction")
@@ -256,7 +256,7 @@ namespace Topic_of_Love.Mian
         public static bool CanHaveRomanceWithoutRepercussionsWithSomeoneElse(Actor actor)
         {
             return !actor.hasLover()
-                   || (actor.hasLover() && !Preferences.PreferenceMatches(actor, actor.lover)
+                   || (actor.hasLover() && !LikeAssets.PreferenceMatches(actor, actor.lover)
                                              && actor.lover.hasCultureTrait("sexual_expectations"));
         }
 
@@ -490,6 +490,11 @@ namespace Topic_of_Love.Mian
             TopicOfLove.LogInfo(message);
         }
 
+        public static void LogInfo(object message)
+        {
+            TopicOfLove.LogInfo(Convert.ToString(message));
+        }
+
         public static string[] GetKeywords(string word)
         {
             return word.Split(',').Where(keyword => !string.IsNullOrEmpty(keyword)).ToArray();
@@ -497,6 +502,8 @@ namespace Topic_of_Love.Mian
         
         public static void Debug(object message)
         {
+            if (message == null)
+                return;
             var config = TopicOfLove.Mod.GetConfig();
             var slowOnLog = GetKeywords((string)config["Misc"]["SlowOnLog"].GetValue());
             var stackTrace = GetKeywords((string)config["Misc"]["StackTrace"].GetValue());

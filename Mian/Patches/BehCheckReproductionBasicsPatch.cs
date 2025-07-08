@@ -15,7 +15,7 @@ public class BehCheckReproductionBasicsPatch
         var pParentB = pActor.lover;
 
         if (pActor.hasLover() &&
-            (!Preferences.BothActorsPreferenceMatch(pParentA, pParentB, true)
+            (!LikeAssets.BothActorsPreferenceMatch(pParentA, pParentB, true)
              || !TolUtil.CouldReproduce(pParentA, pParentB)
              || !BabyHelper.canMakeBabies(pParentA)))
         {

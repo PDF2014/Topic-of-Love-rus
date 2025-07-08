@@ -314,6 +314,7 @@ public class StatPatch
         var mind = ResourcesFinder.FindResource<GameObject>("content_mind");
         var mindPreferences = Object.Instantiate(mind, mind.transform.parent); // the whole menu shabang
         GameObject.Destroy(mindPreferences.GetComponent<NeuronsOverview>());
+        mindPreferences.AddComponent<PreferencesOverview>();
         mindPreferences.name = "content_mind_preferences";
         
         // not working for some reason
