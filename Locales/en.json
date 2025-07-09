@@ -178,8 +178,8 @@
   "like_male_romantic_info_2": "Marry me please!",
   "like_male_sexual_info_2": "Ten men please.",
 
-  "like_xenogender_romantic_info_2": "Loveable two digits.",
-  "like_xenogender_sexual_info_2": "I wouldn't have it any other way.",
+  "like_nonbinary_romantic_info_2": "Loveable digits outside of the binary.",
+  "like_nonbinary_sexual_info_2": "I wouldn't have them any other way.",
 
   "like_feminine_romantic_info_2": "Sweet, compassionate, and kind.",
   "like_feminine_sexual_info_2": "Slim, cute and pretty.",
@@ -194,11 +194,11 @@
   "trait_group_dislikes": "Orientation Dislikes",
 
   "culture_trait_homophobic": "Homophobic",
-  "culture_trait_homophobic_info": "Homophobia runs deep into this culture, often discriminating, harassing and keeping those who like the same sex from being involved politically, and militarily.",
+  "culture_trait_homophobic_info": "Homophobia runs deep into this culture, often discriminating, harassing and keeping those who like the same sex from being involved politically, socially, and militarily.",
   "culture_trait_homophobic_info_2": "Eugh, those homosexuals!",
 
   "culture_trait_heterophobic": "Heterophobic",
-  "culture_trait_heterophobic_info": "Heterophobia runs deep into this culture, often discriminating, harassing and keeping those who like a different sex from being involved politically, and militarily.",
+  "culture_trait_heterophobic_info": "Heterophobia runs deep into this culture, often discriminating, harassing and keeping those who like a different sex from being involved politically, socially, and militarily.",
   "culture_trait_heterophobic_info_2": "Why would you ever wanna date the other gender?",
 
   "culture_trait_incest": "Incest",
@@ -255,6 +255,7 @@
   "statistics_homosexual_romantic_description": "They like those that are of the same sex as them",
   "statistics_asexual_romantic_description": "Romantic intimacy is bleh to them",
 
+  "lonely_units": "Lonely Units",
   "statistics_lonely": "Lonely Units",
   "statistics_lonely_description": "They just want someone to care :(",
 
@@ -289,7 +290,7 @@
   "tab_title_tol": "Topic of Love",
   "tab_desc_tol": "For all your romantic and sexual needs!",
   "tab_mind_likes": "Orientation",
-  "tab_mind_likes_description": "Look into their romantic and sexual desires... who would they like to fuck?",
+  "tab_mind_likes_description": "Look into their romantic and sexual desires... who would they like to bang?",
   
   "mind_likes_regenerate_orientation": "Regen Orientation",
   "mind_likes_regenerate_orientation_description": "Rerolls the unit's orientation identities based on their active preferences",

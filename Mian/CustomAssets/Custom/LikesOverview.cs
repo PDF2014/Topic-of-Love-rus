@@ -243,7 +243,7 @@ public class LikesOverview :
 
     public void checkLikes()
     {
-        _likes = LikesManager.GetPossibleLikes();
+        _likes = LikesManager.GetValidLikesFromAssets();
     }
 
     public void updateNeuronsVisual()

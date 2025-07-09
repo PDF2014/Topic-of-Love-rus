@@ -101,7 +101,7 @@ public class StatPatch
     
     static void ShowCustomIcons<TMetaObject, TData>(StatsIconContainer __instance, TMetaObject pMetaObject) where TMetaObject : MetaObject<TData> where TData : MetaObjectData
     {
-            if (!__instance._stats_icons.ContainsKey("lesbian")) // this is how we will check if the ui was made for this menu yet
+            if (!__instance._stats_icons.ContainsKey("lonely")) // this is how we will check if the ui was made for this menu yet
             {
                 // for (int _i = 0; _i <= 1; _i++)
                 // {
@@ -244,9 +244,9 @@ public class StatPatch
     
     [HarmonyPostfix]
     [HarmonyPatch(typeof(AllianceWindow), nameof(AllianceWindow.showStatsRows))]
-    static void ShowAllianceRows(CultureWindow __instance)
+    static void ShowAllianceRows(AllianceWindow __instance)
     {
-        __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
+        __instance.showSplitPopulationByOrientation(__instance.meta_object.kingdoms_list.SelectMany(kingdom => kingdom.units).ToList(), true);
     }
     
     [HarmonyPostfix]

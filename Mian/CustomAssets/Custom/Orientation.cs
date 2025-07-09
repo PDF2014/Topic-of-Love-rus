@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using NeoModLoader.General;
 using UnityEngine;
 
@@ -227,7 +228,7 @@ public class Orientations
             if (!actor.HasAnyLikesFor("identity", loveType))
                 return false;
 
-            if (actor.GetActorLikes("identity", loveType).Count == 0)
+            if (actor.GetActorLikes("identity", loveType).Count == LikesManager.GetValidLikesFromAssets("identity", loveType).Count)
                 return true;
             return false;
         });
@@ -249,18 +250,22 @@ public class Orientations
         return orientation.OrientationType.Equals(id);
     }
     
-    public static Orientation GetOrientationFromActor(Actor actor, bool sexual)
+    public static Orientation GetOrientationFromActor(Actor actor, bool sexual, [CanBeNull] Orientation orientationBase = null)
     {
         var orientations =
             Orientation.Orientations.Values.Where(orientationType => orientationType.Criteria(actor, sexual ? LoveType.Sexual : LoveType.Romantic)).ToList();
 
+        // helps maintain consistency
+        if(orientationBase != null && orientations.Contains(orientationBase))
+            return orientationBase;
+        
         return orientations.GetRandom(); // at the very least should be pansexual
     }
 
     public static void RollOrientationLabel(Actor actor)
     {
         var sexualOrientation = GetOrientationFromActor(actor, true);
-        var romanticOrientation = GetOrientationFromActor(actor, false);
+        var romanticOrientation = GetOrientationFromActor(actor, false, sexualOrientation);
         actor.data.set("romantic_orientation", romanticOrientation.OrientationType);
         actor.data.set("sexual_orientation", sexualOrientation.OrientationType);
     }

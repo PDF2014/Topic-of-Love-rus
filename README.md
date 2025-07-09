@@ -2,6 +2,8 @@
 **..is a WorldBox mod that allows units to have intimacy and fall in love for more than just their ability to reproduce! If you want a Sims-like experience with your units, this may be the mod!**
 
 ## 📩 Installation
+The mod is not **finished** or **complete** yet. As such, any bugs you encounter are because of an unfinished product. Do not USE this unless you are willing to beta test and have a very buggy experience.
+
 If downloading through GitHub or GameBanana, download the latest release and extract the contents into a folder in "worldbox/Mods"
 
 If downloading through Steam, subscribe to the mod and you're good to go!

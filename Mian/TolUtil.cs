@@ -331,7 +331,7 @@ namespace Topic_of_Love.Mian
         {
             actor.data.get("just_lost_lover", out var justLostLover, false);
             actor.data.get("force_lover", out var isForced, false);
-            return !justLostLover && !actor.hasStatus("broke_up") && !isForced && CapableOfLove(actor);
+            return !justLostLover && !actor.hasStatus("broke_up") && (!isForced || !actor.hasLover()) && CapableOfLove(actor);
         }
 
         public static void RemoveLovers(Actor actor)
