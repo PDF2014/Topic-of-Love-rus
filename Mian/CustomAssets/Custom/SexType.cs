@@ -2,7 +2,7 @@
 
 public enum SexType
 {
+    None,
     Reproduction,
-    Casual,
-    None
+    Casual
 }
