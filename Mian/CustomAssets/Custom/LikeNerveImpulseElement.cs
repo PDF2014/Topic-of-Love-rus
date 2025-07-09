@@ -50,7 +50,7 @@ public class LikeNerveImpulseElement : MonoBehaviour
 
   public LikeNeuronElement GetNextTargetNeuron()
   {
-    return this.presynaptic_neuron.connected_neurons.Count == 0 ? (NeuronElement) null : this.presynaptic_neuron.connected_neurons.GetRandom<NeuronElement>();
+    return this.presynaptic_neuron.connected_neurons.Count == 0 ? null : this.presynaptic_neuron.connected_neurons.GetRandom();
   }
 
   public void updateImpulseColor()

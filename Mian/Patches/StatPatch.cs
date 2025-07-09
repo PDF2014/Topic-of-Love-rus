@@ -308,6 +308,9 @@ public class StatPatch
         mindPreferenceEntry.SetActive(true);
         mindPreferenceEntry.name = "MindPreferences";
 
+        var statElements = window.gameObject.transform.Find("Background/Scroll View/Viewport/Content/content_stats");
+        var container = statElements.gameObject.GetComponent<StatsRowsContainer>();
+        
         var homosexualSprite = Resources.Load<Sprite>("ui/Icons/orientations/homosexual");
         mindPreferenceEntry.transform.GetChild(0).GetComponent<Image>().sprite = homosexualSprite;
 
@@ -317,8 +320,39 @@ public class StatPatch
         
         var mind = ResourcesFinder.FindResource<GameObject>("content_mind");
         var mindPreferences = Object.Instantiate(mind, mind.transform.parent); // the whole menu shabang
+        
+        var neuronsOverview = mind.GetComponent<NeuronsOverview>();
+        NeuronsOverview.instance = neuronsOverview;
+        
         GameObject.Destroy(mindPreferences.GetComponent<NeuronsOverview>());
-        mindPreferences.AddComponent<LikesOverview>();
+        var likesOverview = mindPreferences.AddOrGetComponent<LikesOverview>();
+
+        var mindMain = mindPreferences.transform.GetChild(1).GetChild(1);
+        likesOverview._mind_main = mindMain.gameObject;
+        likesOverview._parent_axons = mindMain.GetChild(0).GetComponent<RectTransform>();
+        likesOverview._parent_nerve_impulses = mindMain.GetChild(1).GetComponent<RectTransform>();
+        likesOverview._parent_neurons = mindMain.GetChild(2).GetComponent<RectTransform>();
+        
+        var neuronObject = GameObject.Instantiate(NeuronsOverview.instance._prefab_neuron.gameObject);
+        neuronObject.name = "element_neuron_like";
+        GameObject.Destroy(neuronObject.GetComponent<NeuronElement>());
+        neuronObject.AddComponent<LikeNeuronElement>().image = neuronObject.GetComponent<Image>();
+        likesOverview._prefab_neuron = neuronObject.GetComponent<LikeNeuronElement>();
+        
+        var nerveObject = GameObject.Instantiate(NeuronsOverview.instance._prefab_nerve_impulse.gameObject);
+        nerveObject.name = "element_nerve_impulse_like";
+        GameObject.Destroy(nerveObject.GetComponent<NerveImpulseElement>());
+        nerveObject.AddComponent<LikeNerveImpulseElement>().image = nerveObject.GetComponent<Image>();
+        likesOverview._prefab_nerve_impulse = nerveObject.GetComponent<LikeNerveImpulseElement>();
+        
+        var axonObject = GameObject.Instantiate(NeuronsOverview.instance._prefab_axon.gameObject);
+        axonObject.name = "element_axon_like";
+        GameObject.Destroy(axonObject.GetComponent<AxonElement>());
+        axonObject.AddComponent<LikeAxonElement>().image = axonObject.GetComponent<Image>();
+        likesOverview._prefab_axon = axonObject.GetComponent<LikeAxonElement>();
+        
+        likesOverview.mainWindow = window;
+
         mindPreferences.name = "content_mind_preferences";
         
         // not working for some reason
@@ -331,31 +365,35 @@ public class StatPatch
         _preferenceTabEntry.tab_elements.Add(mindPreferences.transform);
         mindPreferences.transform.SetSiblingIndex(1);
 
-        var statElements = window.gameObject.transform.Find("Background/Scroll View/Viewport/Content/content_stats");
-        
         _preferenceTabEntry.tab_action.AddListener(_ =>
         {
-            var container = statElements.gameObject.GetComponent<StatsRowsContainer>();
             statElements.gameObject.SetActive(true);
             
             container.StopAllCoroutines();
-            container.OnDisable();
-            
-            var sexual = Stats[0].Value(window.actor);
-            var romantic = Stats[1].Value(window.actor);
-            sexual.TryGetValue("hex_code", out var hexCode);
-            sexual.TryGetValue("icon", out var icon);
-            window.showStatRow("sexual_orientation", sexual["value"], hexCode, pColorText: true, pIconPath: icon);
-            
-            romantic.TryGetValue("hex_code", out hexCode);
-            romantic.TryGetValue("icon", out icon);
-            window.showStatRow("romantic_orientation", romantic["value"], hexCode, pColorText: true, pIconPath: icon);
-            
-            container.StartCoroutine(container.showRows());
+            UpdateOrientationStats(window);
         });
         
         window.tabs._tabs.Add(_preferenceTabEntry);
     }
+
+    public static void UpdateOrientationStats(UnitWindow window)
+    {
+        var container = window._stats_rows_container;
+        container.OnDisable();
+            
+        var sexual = Stats[0].Value(window.actor);
+        var romantic = Stats[1].Value(window.actor);
+        sexual.TryGetValue("hex_code", out var hexCode);
+        sexual.TryGetValue("icon", out var icon);
+        window.showStatRow("sexual_orientation", sexual["value"], hexCode, pColorText: true, pIconPath: icon);
+            
+        romantic.TryGetValue("hex_code", out hexCode);
+        romantic.TryGetValue("icon", out icon);
+        window.showStatRow("romantic_orientation", romantic["value"], hexCode, pColorText: true, pIconPath: icon);
+            
+        container.StartCoroutine(container.showRows());
+    }
+    
     private static void InitializeIcons(UnitWindow window)
         {
             window

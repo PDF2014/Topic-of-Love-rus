@@ -161,7 +161,7 @@ public class Orientations
                 var preferredIdentities = actor.GetActorLikes("identity", loveType);
                 if (preferredIdentities.Count == 1)
                 {
-                    if (preferredIdentities.First().ID != actor.GetIdentity())
+                    if (!preferredIdentities.First().ID.Equals(actor.GetIdentity()))
                         return true;
                 }
             }
@@ -178,7 +178,7 @@ public class Orientations
                 var preferredIdentities = actor.GetActorLikes("identity", loveType);
                 if (preferredIdentities.Count == 1)
                 {
-                    if (preferredIdentities.First().ID != actor.GetIdentity())
+                    if (!preferredIdentities.First().ID.Equals(actor.GetIdentity()))
                         return true;
                 }
             }

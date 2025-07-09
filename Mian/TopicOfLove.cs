@@ -53,7 +53,8 @@ namespace Topic_of_Love.Mian
             StatisticAssets.Init(); // uses orientations
             HistoryDataAssets.Init();
             HistoryMetaDataAssets.Init();
-            LikeManager.Init();
+            TooltipAssets.Init();
+            LikesManager.Init();
         }
         private void Awake()
         {

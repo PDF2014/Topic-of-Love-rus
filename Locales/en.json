@@ -281,6 +281,11 @@
 
   "intimacy": "Intimacy",
   
+  "sexual": "Sexual",
+  "romantic": "Romantic",
+  "like_group": "Group",
+  "intimate": "Intimate Type",
+  
   "tab_title_tol": "Topic of Love",
   "tab_desc_tol": "For all your romantic and sexual needs!",
   "tab_mind_preference": "Preferences",
@@ -298,12 +303,4 @@
   
   "Ignore": "Ignore",
   "Ignore Description": "Ignore logs with these key words",
-
-  "CrossSpecies": "Cross Species",
-  "AllowCrossSpeciesLove": "Allow Cross Species Love",
-  "AllowCrossSpeciesLove Description": "Whether different subspecies should be able to love each other.",
-  "MustBeSmart": "Species Must Be Sapient",
-  "MustBeSmart Description": "Whether the two subspecies involved have to have all their brain functions in order to love each other.",
-  "MustBeXenophile": "Initiator Must Be Xenophile",
-  "MustBeXenophile Description": "Whether the initiating lover has to be xenophile in order to love another subspecies unlike them. The receiving lover does NOT need to be xenophile, but they cannot be xenophobic."
-}
+ }

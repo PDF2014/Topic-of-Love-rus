@@ -25,10 +25,10 @@ public class StatusEffects
                 {
                     var changeBy = 0f;
 
-                    if (LikeManager.PreferenceMatches(actor.a, partner, false))
+                    if (LikesManager.PreferenceMatches(actor.a, partner, false))
                         changeBy += 10f;
                     
-                    if (LikeManager.PreferenceMatches(actor.a, partner, true))
+                    if (LikesManager.PreferenceMatches(actor.a, partner, true))
                         changeBy += 5f;
                 
                     if (partner == actor.a.lover)

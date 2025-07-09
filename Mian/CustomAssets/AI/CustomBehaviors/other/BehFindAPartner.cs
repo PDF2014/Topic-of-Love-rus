@@ -110,15 +110,15 @@ public class BehFindAPartner : BehaviourActionActor
             if(IsForReproduction())
                 return (pActor.isSameSubspecies(target.subspecies) 
                        || (target.isSapient() && pActor.isSapient() 
-                                               && LikeManager.PreferenceMatches(target, pActor, true)))
+                                               && LikesManager.PreferenceMatches(target, pActor, true)))
                        && TolUtil.WillDoIntimacy(target, pActor, _sexReason);
 
             return TolUtil.WillDoIntimacy(target, pActor, _sexReason) &&
-                   ((_mustMatchPreference && LikeManager.PreferenceMatches(pActor, target, true)) ||
+                   ((_mustMatchPreference && LikesManager.PreferenceMatches(pActor, target, true)) ||
                     !_mustMatchPreference);
         }
         
-        if (_mustMatchPreference && !LikeManager.PreferenceMatches(pActor, target, false))
+        if (_mustMatchPreference && !LikesManager.PreferenceMatches(pActor, target, false))
         {
             return false;
         }

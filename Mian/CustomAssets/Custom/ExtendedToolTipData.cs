@@ -1,6 +1,6 @@
 ﻿namespace Topic_of_Love.Mian.CustomAssets.Custom;
 
-public class ExtendedToolTip : TooltipData
+public class ExtendedToolTipData : TooltipData
 {
     public LikeNeuronElement like_neuron;
 

@@ -51,7 +51,7 @@ namespace Topic_of_Love.Mian
                 actor1.data.get("sex_reason", out var sexReason, "");
                 
                 // bug spotted? some actors were lovers but one of them disliked the sex for some reason
-                if ((LikeManager.PreferenceMatches(actor1, actor2, true) || (actor1.lover == actor2 && Randy.randomChance(0.5f)))
+                if ((LikesManager.PreferenceMatches(actor1, actor2, true) || (actor1.lover == actor2 && Randy.randomChance(0.5f)))
                     && (Randy.randomChance(sexReason.Equals("reproduction") ? 0.5f : 1f) || actor1.lover == actor2))
                 {
                     var normal = 0.3f;
@@ -64,7 +64,7 @@ namespace Topic_of_Love.Mian
                         normal += Math.Abs((happiness / 100) / 2);
                     }
 
-                    if (!LikeManager.PreferenceMatches(actor1, actor2, true))
+                    if (!LikesManager.PreferenceMatches(actor1, actor2, true))
                         normal -= 0.2f;
                     
                     var type = Randy.randomChance(Math.Min(1, normal)) ? "enjoyed_sex" : "okay_sex"; 
@@ -176,7 +176,7 @@ namespace Topic_of_Love.Mian
             actor1.addAfterglowStatus();
             actor2.addAfterglowStatus();   
             
-            if (Randy.randomChance(actor1.lover == actor2 ? 1f : LikeManager.BothActorsPreferenceMatch(actor1, actor2, true) ? 0.25f : 0f))
+            if (Randy.randomChance(actor1.lover == actor2 ? 1f : LikesManager.BothActorsPreferenceMatch(actor1, actor2, true) ? 0.25f : 0f))
             {
                 actor1.addStatusEffect("just_kissed");
                 actor2.addStatusEffect("just_kissed");
@@ -234,7 +234,7 @@ namespace Topic_of_Love.Mian
                     actor.data.set(preference.ID, false);
                 }
                 
-                var preferences =  LikeManager.GetRandomPreferences(actor);
+                var preferences =  LikesManager.GetRandomPreferences(actor);
                 foreach (var preference in preferences)
                 {
                     actor.data.set(preference.ID, true);
@@ -245,7 +245,7 @@ namespace Topic_of_Love.Mian
         public static bool CanHaveSexWithoutRepercussionsWithSomeoneElse(Actor actor, string sexReason)
         {
             return !actor.hasLover()
-                   || (actor.hasLover() && ((!LikeManager.PreferenceMatches(actor, actor.lover, true)
+                   || (actor.hasLover() && ((!LikesManager.PreferenceMatches(actor, actor.lover, true)
                                                               && actor.lover.hasCultureTrait("sexual_expectations"))
                                                               || (actor.hasSubspeciesTrait("preservation") && IsDyingOut(actor) 
                                                                   && sexReason.Equals("reproduction")
@@ -255,7 +255,7 @@ namespace Topic_of_Love.Mian
         public static bool CanHaveRomanceWithoutRepercussionsWithSomeoneElse(Actor actor)
         {
             return !actor.hasLover()
-                   || (actor.hasLover() && !LikeManager.PreferenceMatches(actor, actor.lover)
+                   || (actor.hasLover() && !LikesManager.PreferenceMatches(actor, actor.lover)
                                              && actor.lover.hasCultureTrait("sexual_expectations"));
         }
 

@@ -116,14 +116,14 @@ public class ActorPatch
                     {
                         if (Randy.randomBool())
                         {
-                            __instance.TogglePreference(LikeManager.GetLikeFromAsset(LikeManager.RandomLikeAssetFromType("identity")), true);
+                            __instance.ToggleLike(LikesManager.GetLikeFromAsset(LikesManager.RandomLikeAssetFromType("identity")), true);
                         }
                         else
                         {
-                            var preferences = __instance.GetActorLikes("identity", LikeManager.GetRandomLoveType());
+                            var preferences = __instance.GetActorLikes("identity", LikesManager.GetRandomLoveType());
                             if (preferences.Count > 0)
                             {
-                                __instance.TogglePreference(preferences.GetRandom(), false);
+                                __instance.ToggleLike(preferences.GetRandom(), false);
                             }
                         }
                     }
@@ -135,14 +135,14 @@ public class ActorPatch
                         {
                             if (Randy.randomBool())
                             {
-                                __instance.TogglePreference(LikeManager.GetLikeFromAsset(LikeManager.RandomLikeAssetFromType("expression")), true);
+                                __instance.ToggleLike(LikesManager.GetLikeFromAsset(LikesManager.RandomLikeAssetFromType("expression")), true);
                             }
                             else
                             {
-                                var preferences = __instance.GetActorLikes("expression", LikeManager.GetRandomLoveType());
+                                var preferences = __instance.GetActorLikes("expression", LikesManager.GetRandomLoveType());
                                 if (preferences.Count > 0)
                                 {
-                                    __instance.TogglePreference(preferences.GetRandom(), false);
+                                    __instance.ToggleLike(preferences.GetRandom(), false);
                                 }
                             }
                         }
@@ -152,14 +152,14 @@ public class ActorPatch
                         {
                             if (Randy.randomBool())
                             {
-                                __instance.TogglePreference(LikeManager.GetLikeFromAsset(LikeManager.RandomLikeAssetFromType("genital")), true);
+                                __instance.ToggleLike(LikesManager.GetLikeFromAsset(LikesManager.RandomLikeAssetFromType("genital")), true);
                             }
                             else
                             {
                                 var preferences = __instance.GetActorLikes("genital", LoveType.Sexual);
                                 if (preferences.Count > 0)
                                 {
-                                    __instance.TogglePreference(preferences.GetRandom(), false);
+                                    __instance.ToggleLike(preferences.GetRandom(), false);
                                 }
                             }
                         }   
@@ -170,7 +170,7 @@ public class ActorPatch
                     __instance.a.changeIntimacyHappiness(TolUtil.HasNoOne(__instance) ? -Randy.randomFloat(13f, 18f) : -Randy.randomFloat(5f, 7f));
                 // else
                     // __instance.data.set("intimacy_happiness", 100f);
-            } else if (!__instance.isAdult() && Randy.randomChance(0.1f) && !LikeManager.HasALike(__instance))
+            } else if (!__instance.isAdult() && Randy.randomChance(0.1f) && !LikesManager.HasALike(__instance))
             {
                 TolUtil.NewPreferences(__instance);
                 __instance.changeHappiness("true_self");
@@ -395,7 +395,7 @@ public class ActorPatch
                 new CodeInstruction(OpCodes.Ldarg_0),
                 new CodeInstruction(OpCodes.Ldarg_1),
                 new CodeInstruction(OpCodes.Ldc_I4_0),
-                CodeInstruction.Call(typeof(LikeManager), nameof(LikeManager.BothActorsPreferenceMatch), new[]{typeof(Actor), typeof(Actor), typeof(bool)}),
+                CodeInstruction.Call(typeof(LikesManager), nameof(LikesManager.BothActorsPreferenceMatch), new[]{typeof(Actor), typeof(Actor), typeof(bool)}),
                 new CodeInstruction(OpCodes.Brfalse, returnFalse),
                 
                 new CodeInstruction(OpCodes.Ldarg_0).WithLabels(withinAgeBranch), // within age branch

@@ -36,12 +36,12 @@
         <Compile Include="Mian\CustomAssets\AI\Decisions.cs" />
         <Compile Include="Mian\CustomAssets\BaseStatAssets.cs" />
         <Compile Include="Mian\CustomAssets\CommunicationTopics.cs" />
-        <Compile Include="Mian\CustomAssets\Custom\ExtendedToolTip.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\ExtendedToolTipData.cs" />
         <Compile Include="Mian\CustomAssets\Custom\LikeAxonElement.cs" />
         <Compile Include="Mian\CustomAssets\Custom\LikeNerveImpulseElement.cs" />
         <Compile Include="Mian\CustomAssets\Custom\LikeNeuronElement.cs" />
         <Compile Include="Mian\CustomAssets\Custom\Orientation.cs" />
-        <Compile Include="Mian\CustomAssets\Custom\LikeManager.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\LikesManager.cs" />
         <Compile Include="Mian\CustomAssets\Custom\LikesOverview.cs" />
         <Compile Include="Mian\CustomAssets\Custom\PreferencesOverview.disabled.cs" />
         <Compile Include="Mian\CustomAssets\GodPowers.cs" />
@@ -109,6 +109,9 @@
         </Reference>
         <Reference Include="UnityEngine.ImageConversion">
             <HintPath>..\..\worldbox_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.InputLegacyModule">
+            <HintPath>..\..\worldbox_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine">
             <HintPath>..\..\worldbox_Data\Managed\UnityEngine.dll</HintPath>

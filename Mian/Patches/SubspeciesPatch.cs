@@ -26,8 +26,8 @@ public class SubspeciesPatch
                 return false;
             }
             
-            var actorGenitalia = LikeManager.GetGenitalia(pActor);
-            var targetGenitalia = LikeManager.GetGenitalia(pTarget);
+            var actorGenitalia = LikesManager.GetGenitalia(pActor);
+            var targetGenitalia = LikesManager.GetGenitalia(pTarget);
             
             if (__instance.needOppositeSexTypeForReproduction())
             {

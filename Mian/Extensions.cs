@@ -42,7 +42,7 @@ public static class Extensions
         //     return true;
         // if (TolUtil.NeedDifferentSexTypeForReproduction(pActor))
         //     return Preferences.HasVulva(pActor);
-        return LikeManager.HasVulva(pActor); // vulva required for pregnancy
+        return LikesManager.HasVulva(pActor); // vulva required for pregnancy
     }
 
     public static float getIntimacy(this Actor actor)
