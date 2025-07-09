@@ -1,4 +1,11 @@
 ﻿{
+  "Graphs": [
+    {
+      "Id": "ModGraphs",
+      "Type": "SWITCH",
+      "BoolVal": true
+    }
+  ],
   "Misc": [
     {
       "Id": "Debug",

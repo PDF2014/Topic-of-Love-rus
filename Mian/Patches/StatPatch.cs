@@ -103,25 +103,25 @@ public class StatPatch
     {
             if (!__instance._stats_icons.ContainsKey("lesbian")) // this is how we will check if the ui was made for this menu yet
             {
-                for (int _i = 0; _i <= 1; _i++)
-                {
-                    bool isSexual = _i == 0;
-                    var iconGroup = CreateNewGroup(__instance);
-                
-                    iconGroup.name = "orientation_icons_" + (isSexual ? "sexual" : "romantic");
-                    iconGroup.transform.localScale = new Vector3(1, 1, 1);     
-                    
-                    foreach (var orientation in Orientation.Orientations.Values)
-                    {
-                        var icon = CreateNewIcon(
-                            iconGroup,
-                            __instance,
-                            isSexual ? orientation.OrientationType : orientation.OrientationType + "_romantic",
-                            Resources.Load<Sprite>(orientation.GetPathIcon(true, true)));
-
-                        __instance._stats_icons.Add(icon.name, icon);
-                    }   
-                }
+                // for (int _i = 0; _i <= 1; _i++)
+                // {
+                //     bool isSexual = _i == 0;
+                //     var iconGroup = CreateNewGroup(__instance);
+                //
+                //     iconGroup.name = "orientation_icons_" + (isSexual ? "sexual" : "romantic");
+                //     iconGroup.transform.localScale = new Vector3(1, 1, 1);     
+                //     
+                //     foreach (var orientation in Orientation.Orientations.Values)
+                //     {
+                //         var icon = CreateNewIcon(
+                //             iconGroup,
+                //             __instance,
+                //             isSexual ? orientation.OrientationType : orientation.OrientationType + "_romantic",
+                //             Resources.Load<Sprite>(orientation.GetPathIcon(true, true)));
+                //
+                //         __instance._stats_icons.Add(icon.name, icon);
+                //     }   
+                // }
 
                 var mainGroup = CreateNewGroup(__instance);
                 var lonelyIcon = CreateNewIcon(
@@ -135,18 +135,25 @@ public class StatPatch
             Orientation.Orientations.Values.ForEach(orientation =>
             {
                 var orientationType = orientation.OrientationType;
-                __instance.setIconValue(orientationType, pMetaObject.countOrientation(orientationType, true));
-                __instance.setIconValue(orientationType+"_romantic", pMetaObject.countOrientation(orientationType, false));
+                // __instance.setIconValue(orientationType, pMetaObject.countOrientation(orientationType, true));
+                // __instance.setIconValue(orientationType+"_romantic", pMetaObject.countOrientation(orientationType, false));
             });
             
             __instance.setIconValue("lonely", World.world.units.Count(unit => unit.getIntimacy() < 0 && TolUtil.AffectedByIntimacy(unit)));
     }
+
+    private static readonly string[] ValidIconsList =
+    {
+        "content_more_icons",
+        "content_text_row_stats",
+        "content_stats"
+    }; 
     
     [HarmonyPostfix]
     [HarmonyPatch(typeof(SubspeciesStatsElement), nameof(SubspeciesStatsElement.showContent))]
     static void ShowSubspeciesCustomStats(SubspeciesStatsElement __instance)
     {
-        if(__instance._stats_icons != null && __instance._stats_icons.transform.name.Equals("content_more_icons"))
+        if(__instance._stats_icons != null && ValidIconsList.Contains(__instance._stats_icons.transform.name))
             ShowCustomIcons<Subspecies, SubspeciesData>(__instance._stats_icons, __instance.meta_object);
     }
     
@@ -154,7 +161,7 @@ public class StatPatch
     [HarmonyPatch(typeof(ReligionStatsElement), nameof(ReligionStatsElement.showContent))]
     static void ShowReligionCustomStats(ReligionStatsElement __instance)
     {
-        if(__instance._stats_icons != null && __instance._stats_icons.transform.name.Equals("content_more_icons"))
+        if(__instance._stats_icons != null && ValidIconsList.Contains(__instance._stats_icons.transform.name))
             ShowCustomIcons<Religion, ReligionData>(__instance._stats_icons, __instance.meta_object);
     }
     
@@ -162,7 +169,7 @@ public class StatPatch
     [HarmonyPatch(typeof(LanguageStatsElement), nameof(LanguageStatsElement.showContent))]
     static void ShowLanguageCustomStats(LanguageStatsElement __instance)
     {
-        if(__instance._stats_icons != null && __instance._stats_icons.transform.name.Equals("content_more_icons"))
+        if(__instance._stats_icons != null && ValidIconsList.Contains(__instance._stats_icons.transform.name))
             ShowCustomIcons<Language, LanguageData>(__instance._stats_icons, __instance.meta_object);
     }
     
@@ -170,7 +177,7 @@ public class StatPatch
     [HarmonyPatch(typeof(FamilyStatsElement), nameof(FamilyStatsElement.showContent))]
     static void ShowFamilyCustomStats(FamilyStatsElement __instance)
     {
-        if(__instance._stats_icons != null && __instance._stats_icons.transform.name.Equals("content_more_icons"))
+        if(__instance._stats_icons != null && ValidIconsList.Contains(__instance._stats_icons.transform.name))
             ShowCustomIcons<Family, FamilyData>(__instance._stats_icons, __instance.meta_object);
     }
     
@@ -178,7 +185,7 @@ public class StatPatch
     [HarmonyPatch(typeof(CultureStatsElement), nameof(CultureStatsElement.showContent))]
     static void ShowCultureCustomStats(CultureStatsElement __instance)
     {
-        if(__instance._stats_icons != null && __instance._stats_icons.transform.name.Equals("content_more_icons"))
+        if(__instance._stats_icons != null && ValidIconsList.Contains(__instance._stats_icons.transform.name))
             ShowCustomIcons<Culture, CultureData>(__instance._stats_icons, __instance.meta_object);
     }
     
@@ -186,7 +193,7 @@ public class StatPatch
     [HarmonyPatch(typeof(ClanStatsElement), nameof(ClanStatsElement.showContent))]
     static void ShowClanCustomStats(ClanStatsElement __instance)
     {
-        if(__instance._stats_icons != null && __instance._stats_icons.transform.name.Equals("content_more_icons"))
+        if(__instance._stats_icons != null && ValidIconsList.Contains(__instance._stats_icons.transform.name))
             ShowCustomIcons<Clan, ClanData>(__instance._stats_icons, __instance.meta_object);
     }
     
@@ -194,7 +201,7 @@ public class StatPatch
     [HarmonyPatch(typeof(AllianceStatsElement), nameof(AllianceStatsElement.showContent))]
     static void ShowAllianceCustomStats(AllianceStatsElement __instance)
     {
-        if(__instance._stats_icons != null && __instance._stats_icons.transform.name.Equals("content_more_icons"))
+        if(__instance._stats_icons != null && ValidIconsList.Contains(__instance._stats_icons.transform.name))
             ShowCustomIcons<Alliance, AllianceData>(__instance._stats_icons, __instance.meta_object);
     }
     
@@ -202,7 +209,7 @@ public class StatPatch
     [HarmonyPatch(typeof(KingdomStatsElement), nameof(KingdomStatsElement.showContent))]
     static void ShowKingdomCustomStats(KingdomStatsElement __instance)
     {
-        if(__instance._stats_icons != null && __instance._stats_icons.transform.name.Equals("content_more_icons"))
+        if(__instance._stats_icons != null && ValidIconsList.Contains(__instance._stats_icons.transform.name))
             ShowCustomIcons<Kingdom, KingdomData>(__instance._stats_icons, __instance.meta_object);
     }
     
@@ -210,7 +217,7 @@ public class StatPatch
     [HarmonyPatch(typeof(CityStatsElement), nameof(CityStatsElement.showContent))]
     static void ShowCityCustomStats(CityStatsElement __instance)
     {
-        if(__instance._stats_icons != null && __instance._stats_icons.transform.name.Equals("content_more_icons"))
+        if(__instance._stats_icons != null && ValidIconsList.Contains(__instance._stats_icons.transform.name))
             ShowCustomIcons<City, CityData>(__instance._stats_icons, __instance.meta_object);
     }
 
@@ -225,21 +232,40 @@ public class StatPatch
     [HarmonyPatch(typeof(CityWindow), nameof(CityWindow.showStatsRows))]
     static void ShowCityRows(CityWindow __instance)
     {
-        // __instance.showStatRow(
-        //     "founder_orientation",
-        //     __instance.meta_object.getFounderOrientation().OrientationType,
-        // );
-        // __instance.showStatRow(
-        //     "main_orientation",
-        //     __instance.meta_object.getMainOrientation(true).OrientationType,
-        //
-        // );
         __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
     }
     
     [HarmonyPostfix]
     [HarmonyPatch(typeof(CultureWindow), nameof(CultureWindow.showStatsRows))]
     static void ShowCultureRows(CultureWindow __instance)
+    {
+        __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
+    }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(AllianceWindow), nameof(AllianceWindow.showStatsRows))]
+    static void ShowAllianceRows(CultureWindow __instance)
+    {
+        __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
+    }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(SubspeciesWindow), nameof(SubspeciesWindow.showStatsRows))]
+    static void ShowSubspeciesRows(SubspeciesWindow __instance)
+    {
+        __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
+    }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(ClanWindow), nameof(ClanWindow.showStatsRows))]
+    static void ShowClanRows(ClanWindow __instance)
+    {
+        __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
+    }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(ReligionWindow), nameof(ReligionWindow.showStatsRows))]
+    static void ShowReligionRows(ReligionWindow __instance)
     {
         __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
     }

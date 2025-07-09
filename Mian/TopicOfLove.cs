@@ -52,7 +52,13 @@ namespace Topic_of_Love.Mian
             Orientations.Init();
             StatisticAssets.Init(); // uses orientations
             HistoryDataAssets.Init();
-            HistoryMetaDataAssets.Init();
+            
+            var config = Mod.GetConfig();
+            var statistics = (bool)config["Graphs"]["ModGraphs"].GetValue();
+            
+            if(statistics)
+                HistoryMetaDataAssets.Init();
+            
             TooltipAssets.Init();
             LikesManager.Init();
         }

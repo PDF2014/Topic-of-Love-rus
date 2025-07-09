@@ -295,6 +295,10 @@
   "mind_likes_regenerate_orientation_description": "Rerolls the unit's orientation identities based on their active preferences",
   "mind_likes_regenerate_orientation_description_2": "Is a woman lesbian or straight if they are into 0s and 1s? Or, we could let them choose!",
 
+  "Graphs": "Mod Graphs",
+  "ModGraphs": "Statistics",
+  "ModGraphs Description": "Adds custom graph statistics to the game. Turn this off and restart the game if you are experiencing a lot of freezes when using graphs.",
+  
   "Misc": "Developer Settings",
   "SlowOnLog": "Slow on Debug",
   "SlowOnLog Description": "Slows the game automatically when a specific part of a debug message is outputted. Put nothing in the text box to disable.",

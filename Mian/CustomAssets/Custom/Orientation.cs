@@ -76,6 +76,8 @@ public class Orientation
 
         LM.AddToCurrentLocale(sexualPathLocale, char.ToUpper(orientation.First()) + orientation.Substring(1));
         LM.AddToCurrentLocale(romanticPathLocale, char.ToUpper(romanticVariant.First()) + romanticVariant.Substring(1));
+        LM.AddToCurrentLocale(orientation, LM.Get(sexualPathLocale));
+        LM.AddToCurrentLocale(romanticVariant, LM.Get(romanticPathLocale));
         LM.AddToCurrentLocale("statistics_" + orientation, char.ToUpper(orientation.First()) + orientation.Substring(1) + "s");
         LM.AddToCurrentLocale("statistics_" + orientation + "_romantic", char.ToUpper(romanticVariant.First()) + romanticVariant.Substring(1) + "s");
         return orientationType;

@@ -488,7 +488,7 @@ public class HistoryMetaDataAssets
                 }
 
                 return ((IMetaObject)nano).countOrientation(orientation.OrientationType, true);
-            }), new(){"kingdom", "city", "alliance", "world", "culture"});
+            }), new(){"kingdom", "city", "world"});
         });
         
         var toUse = new Dictionary<string, Dictionary<string, Func<NanoObject, long?>>>();
