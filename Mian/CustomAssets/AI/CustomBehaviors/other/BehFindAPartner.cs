@@ -9,26 +9,23 @@ namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.other;
 public class BehFindAPartner : BehaviourActionActor
 {
     private readonly float _distance;
-    private readonly bool _mustBeLover;
-    private readonly bool _mustBeFriend;
+    private readonly PartnerType _partnerType;
     private readonly bool _mustMatchPreference;
     private readonly bool _mustBeReproduceable;
-    private readonly string _sexReason;
+    private readonly SexType _sexReason;
     private readonly Func<Actor, Actor, bool> _customValidity;
     private readonly Func<Actor, bool> _customCheck;
     public BehFindAPartner(
-        bool mustBeLover=true,
-        bool mustBeFriend=false, // if mustBeLover is false and lover is not found
+        PartnerType partnerType=PartnerType.Lover,
         bool mustMatchPreference=false, 
         bool mustBeReproduceable=false,
-        string sexReason=null, 
+        SexType sexReason=SexType.None, 
         float distance=100f,
         Func<Actor, bool> customCheck=null,
         Func<Actor, Actor, bool> customValidity=null)
     {
         _distance = distance;
-        _mustBeLover = mustBeLover;
-        _mustBeFriend = mustBeFriend;
+        _partnerType = partnerType;
         _mustMatchPreference = mustMatchPreference;
         _mustBeReproduceable = mustBeReproduceable;
         _sexReason = sexReason;
@@ -44,54 +41,68 @@ public class BehFindAPartner : BehaviourActionActor
 
         Actor target = null;
 
-        if (pActor.hasLover() 
-            && IsTargetValid(pActor, pActor.lover))
-            target = pActor.lover;
-
-        if (pActor.hasLover() && IsForReproduction() &&
-            TolUtil.CouldReproduce(pActor, pActor.lover) && target != pActor.lover)
-            return BehResult.Stop;
-        
-        if (target == null && _mustBeLover)
-            return BehResult.Stop;
-        
-        if (!TolUtil.WillDoIntimacy(pActor, target, _sexReason, true))
+        if (_partnerType.Equals(PartnerType.Lover) || _partnerType.Equals(PartnerType.BothLoverAndFriend))
         {
-            TolUtil.Debug("They decided that they will not do it.");
-            return BehResult.Stop;
-        }
-        
-        if(pActor.hasBestFriend()
-           && IsTargetValid(pActor, pActor.getBestFriend()))
-            target = pActor.getBestFriend();
-        
-        if (target == null && _mustBeFriend)
-            return BehResult.Stop;
-
-        if (target == null)
+            if (pActor.hasLover() && IsTargetValid(pActor, pActor.lover))
+                target = pActor.lover;
+        } else if (_partnerType.Equals(PartnerType.Friend) || _partnerType.Equals(PartnerType.BothLoverAndFriend))
+        {
+            if(pActor.hasBestFriend()
+               && IsTargetValid(pActor, pActor.getBestFriend()))
+                target = pActor.getBestFriend();
+        } else if (_partnerType.Equals(PartnerType.Any))
         {
             target = GetClosestPossibleMatchingActor(pActor);
-            if (target == null)
-                return BehResult.Stop;
         }
-        
+
+        if (target == null || !TolUtil.WillDoIntimacy(pActor, target, _sexReason, true))
+            return BehResult.Stop;
+        //
+        // if (pActor.hasLover() 
+        //     && IsTargetValid(pActor, pActor.lover))
+        //     target = pActor.lover;
+        //
+        // if (pActor.hasLover() && IsForReproduction() &&
+        //     TolUtil.CouldReproduce(pActor, pActor.lover) && target != pActor.lover)
+        //     return BehResult.Stop;
+        //
+        // if (target == null && _partnerType.Equals(PartnerType.Lover))
+        //     return BehResult.Stop;
+        //
+        // if (!TolUtil.WillDoIntimacy(pActor, target, _sexReason, true))
+        // {
+        //     TolUtil.Debug("They decided that they will not do it.");
+        //     return BehResult.Stop;
+        // }
+        //
+        // if(pActor.hasBestFriend()
+        //    && IsTargetValid(pActor, pActor.getBestFriend()))
+        //     target = pActor.getBestFriend();
+        //
+        // if (target == null && _partnerType.Equals(PartnerType.Friend))
+        //     return BehResult.Stop;
+        //
+        // if (target == null)
+        // {
+        //     target = GetClosestPossibleMatchingActor(pActor);
+        //     if (target == null)
+        //         return BehResult.Stop;
+        // }
+        //
         TolUtil.Debug("Lover found!");
         
         pActor.beh_actor_target = target;
         target.makeWait(_distance / 2);
 
-        if (_sexReason != null)
-        {
-            pActor.data.set("sex_reason", _sexReason);
-            target.data.set("sex_reason", _sexReason);
-        }
+        pActor.data.set("sex_reason", _sexReason.ToString());
+        target.data.set("sex_reason", _sexReason.ToString());
         
         return BehResult.Continue;
     }
 
     private bool IsForReproduction()
     {
-        return _sexReason != null && _sexReason.Equals("reproduction");
+        return _sexReason.Equals(SexType.Reproduction);
     }
     private bool IsTargetValid(Actor pActor, Actor target)
     {
@@ -102,7 +113,7 @@ public class BehFindAPartner : BehaviourActionActor
             return false;
         if (_mustBeReproduceable && (!BabyHelper.canMakeBabies(target) || !TolUtil.CouldReproduce(pActor, target)))
             return false;
-        var isSexual = _sexReason != null;
+        var isSexual = _sexReason != SexType.None;
         if (isSexual)
         {
             if (target.last_decision_id == "sexual_reproduction_try")
@@ -110,15 +121,15 @@ public class BehFindAPartner : BehaviourActionActor
             if(IsForReproduction())
                 return (pActor.isSameSubspecies(target.subspecies) 
                        || (target.isSapient() && pActor.isSapient() 
-                                               && LikesManager.PreferenceMatches(target, pActor, true)))
+                                               && LikesManager.LikeMatches(target, pActor, true)))
                        && TolUtil.WillDoIntimacy(target, pActor, _sexReason);
 
             return TolUtil.WillDoIntimacy(target, pActor, _sexReason) &&
-                   ((_mustMatchPreference && LikesManager.PreferenceMatches(pActor, target, true)) ||
+                   ((_mustMatchPreference && LikesManager.LikeMatches(pActor, target, true)) ||
                     !_mustMatchPreference);
         }
         
-        if (_mustMatchPreference && !LikesManager.PreferenceMatches(pActor, target, false))
+        if (_mustMatchPreference && !LikesManager.LikeMatches(pActor, target, false))
         {
             return false;
         }

@@ -19,7 +19,7 @@ public class BehCheckIfDateFinish : BehaviourActionActor
         var target = pActor.beh_actor_target.a;
 
         pActor.data.get("date_happiness", out var happiness, 0f);
-        if (LikesManager.BothActorsPreferenceMatch(pActor, target, false))
+        if (LikesManager.BothActorsLikesMatch(pActor, target, false))
         {
             happiness += Randy.randomFloat(15, 20f);
         }

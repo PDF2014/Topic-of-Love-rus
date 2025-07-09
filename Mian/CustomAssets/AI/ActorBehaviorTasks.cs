@@ -37,8 +37,8 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
                 locale_key = "task_find_partner",
                 path_icon = "ui/Icons/status/just_kissed"
             };
-            findToKiss.addBeh(new BehFindAPartner(false, true, true, distance: 40f, customValidity: (actor, target) => 
-                LikesManager.PreferenceMatches(actor, target) || Randy.randomChance(0.5f)));
+            findToKiss.addBeh(new BehFindAPartner(PartnerType.BothLoverAndFriend, true, distance: 40f, customValidity: (actor, target) => 
+                LikesManager.LikeMatches(actor, target) || Randy.randomChance(0.5f)));
             findToKiss.addBeh(new BehSetNextTask("try_kiss", pClean: false, pForce: true));
             Add(findToKiss);
 
@@ -59,7 +59,7 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
                 locale_key = "task_find_partner",
                 path_icon = "ui/Icons/status/went_on_date"
             };
-            findDate.addBeh(new BehFindAPartner(false, mustMatchPreference:true, distance: 40f, customValidity: (actor, actor1) => actor.canFallInLoveWith(actor1)));
+            findDate.addBeh(new BehFindAPartner(PartnerType.Any, mustMatchPreference:true, distance: 40f, customValidity: (actor, actor1) => actor.canFallInLoveWith(actor1)));
             findDate.addBeh(new BehSetNextTask("try_date", pClean: false, pForce: true));
             Add(findDate);
 
@@ -108,7 +108,7 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
                 locale_key = "task_reproduce_preservation",
                 path_icon = "ui/Icons/status/disliked_sex",
             };
-            reproduceForPreservation.addBeh(new BehFindAPartner( false, false, false, true, "reproduction", 200f));
+            reproduceForPreservation.addBeh(new BehFindAPartner(PartnerType.Any, false, true, SexType.Reproduction, 200f));
             reproduceForPreservation.addBeh(new BehGetPossibleTileForSex(false));
             Add(reproduceForPreservation);
             
@@ -118,7 +118,7 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
                 locale_key = "task_invite_for_sex",
                 path_icon = "ui/Icons/status/enjoyed_sex",
             };
-            inviteForSex.addBeh(new BehFindAPartner(false, false, true, false, "casual"));
+            inviteForSex.addBeh(new BehFindAPartner(PartnerType.Any, true, false, SexType.Casual));
             inviteForSex.addBeh(new BehGetPossibleTileForSex());
             Add(inviteForSex);
 
@@ -146,7 +146,7 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
                 locale_key = "task_find_partner",
                 path_icon = "ui/Icons/status/adopted_baby",
             };
-            findSexualIvf.addBeh(new BehFindAPartner(false, true, false, true, distance:200,
+            findSexualIvf.addBeh(new BehFindAPartner(PartnerType.BothLoverAndFriend, false, true, distance:200,
                 customCheck: pActor => pActor.hasHouse() && !pActor.hasStatus("pregnant"),
                 customValidity: (pActor, target) => !target.hasStatus("pregnant")));
             findSexualIvf.addBeh(new BehSetNextTask("try_sexual_ivf", false, true));

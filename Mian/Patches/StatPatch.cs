@@ -298,13 +298,7 @@ public class StatPatch
         var mindPreferenceEntry = Object.Instantiate(
             ResourcesFinder.FindResource<GameObject>("Mind"), 
             window._button_equipment_editor.transform.parent.transform);
-        // var resources = ResourcesFinder.FindResources<GameObject>("Tabs");
 
-        // resources.ForEach(resource => TolUtil.LogInfo(resource.name));
-        
-        // var newPos = mindPreferenceEntry.transform.position;
-        // newPos.y -= 22;
-        // mindPreferenceEntry.transform.position = newPos;
         mindPreferenceEntry.transform.SetSiblingIndex(7);
         mindPreferenceEntry.SetActive(true);
         mindPreferenceEntry.name = "MindPreferences";

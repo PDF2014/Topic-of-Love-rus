@@ -43,7 +43,9 @@
         <Compile Include="Mian\CustomAssets\Custom\Orientation.cs" />
         <Compile Include="Mian\CustomAssets\Custom\LikesManager.cs" />
         <Compile Include="Mian\CustomAssets\Custom\LikesOverview.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\PartnerType.cs" />
         <Compile Include="Mian\CustomAssets\Custom\PreferencesOverview.disabled.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\SexType.cs" />
         <Compile Include="Mian\CustomAssets\GodPowers.cs" />
         <Compile Include="Mian\CustomAssets\Happiness.cs" />
         <Compile Include="Mian\CustomAssets\HistoryDataAssets.cs" />

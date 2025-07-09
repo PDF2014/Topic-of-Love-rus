@@ -135,13 +135,13 @@ public class Decisions
                         return false;
 
                     if (TolUtil.CouldReproduce(actor, actor.lover) &&
-                        !LikesManager.BothActorsPreferenceMatch(actor, actor.lover, true))
+                        !LikesManager.BothActorsLikesMatch(actor, actor.lover, true))
                     {
                         return true;
                     }
 
                     if (TolUtil.CouldReproduce(actor, actor.lover) &&
-                        LikesManager.BothActorsPreferenceMatch(actor, actor.lover, true))
+                        LikesManager.BothActorsLikesMatch(actor, actor.lover, true))
                         return false;
                 }
 

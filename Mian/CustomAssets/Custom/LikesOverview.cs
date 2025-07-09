@@ -42,7 +42,6 @@ public class LikesOverview :
     public UnitWindow mainWindow;
 
     public UnitTextManager _text_phrases = NeuronsOverview.instance._text_phrases;
-    //
     
     public List<LikeNeuronElement> _neurons = new();
     public LikeNeuronElement _last_activated_neuron;

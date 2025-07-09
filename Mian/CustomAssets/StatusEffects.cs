@@ -25,10 +25,10 @@ public class StatusEffects
                 {
                     var changeBy = 0f;
 
-                    if (LikesManager.PreferenceMatches(actor.a, partner, false))
+                    if (LikesManager.LikeMatches(actor.a, partner, false))
                         changeBy += 10f;
                     
-                    if (LikesManager.PreferenceMatches(actor.a, partner, true))
+                    if (LikesManager.LikeMatches(actor.a, partner, true))
                         changeBy += 5f;
                 
                     if (partner == actor.a.lover)
@@ -36,7 +36,7 @@ public class StatusEffects
                 
                     actor.a.changeIntimacyHappiness(changeBy);
                     
-                    if(!TolUtil.CanHaveRomanceWithoutRepercussionsWithSomeoneElse(actor.a))
+                    if(!actor.a.CanHaveIntimacyWithoutRepercussions(SexType.None))
                         TolUtil.PotentiallyCheatedWith(actor.a, partner);
                 }
 

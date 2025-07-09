@@ -172,7 +172,7 @@ public class ActorPatch
                     // __instance.data.set("intimacy_happiness", 100f);
             } else if (!__instance.isAdult() && Randy.randomChance(0.1f) && !__instance.HasALike())
             {
-                TolUtil.NewPreferences(__instance);
+                TolUtil.NewLikes(__instance);
                 __instance.changeHappiness("true_self");
             }
             
@@ -395,7 +395,7 @@ public class ActorPatch
                 new CodeInstruction(OpCodes.Ldarg_0),
                 new CodeInstruction(OpCodes.Ldarg_1),
                 new CodeInstruction(OpCodes.Ldc_I4_0),
-                CodeInstruction.Call(typeof(LikesManager), nameof(LikesManager.BothActorsPreferenceMatch), new[]{typeof(Actor), typeof(Actor), typeof(bool)}),
+                CodeInstruction.Call(typeof(LikesManager), nameof(LikesManager.BothActorsLikesMatch), new[]{typeof(Actor), typeof(Actor), typeof(bool)}),
                 new CodeInstruction(OpCodes.Brfalse, returnFalse),
                 
                 new CodeInstruction(OpCodes.Ldarg_0).WithLabels(withinAgeBranch), // within age branch

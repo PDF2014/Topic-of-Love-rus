@@ -1,6 +1,7 @@
 ﻿using System;
 using ai.behaviours;
 using HarmonyLib;
+using Topic_of_Love.Mian.CustomAssets.Custom;
 
 namespace Topic_of_Love.Mian.Patches;
 
@@ -91,10 +92,13 @@ public class BehCFBFSRPatch
             pParentA.data.get("sex_reason", out var sexReason, "");
             pParentB.data.get("sex_reason", out var sexReason1, "");
 
+            SexType.TryParse(sexReason, out SexType type1);
+            SexType.TryParse(sexReason1, out SexType type2);
+
             var aWantsBaby = TolUtil.WantsBaby(pParentA);
             var bWantsBaby = TolUtil.WantsBaby(pParentB);
             
-            bool success = sexReason1.Equals("casual") || sexReason.Equals("casual") ? 
+            bool success = type1 == SexType.Casual || type2 == SexType.Casual ? 
                 aWantsBaby && bWantsBaby : true;
             
             if(!success)
