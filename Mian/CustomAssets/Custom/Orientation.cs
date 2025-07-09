@@ -118,6 +118,8 @@ public class Orientations
 {
     public static void Init()
     {
+        // These orientations are created with non-binary people in mind, thus they are coded as non-[gender] liking non-[gender]
+        
         Orientation.Create("lesbian", "lesbiromantic", true, false, "#FF9A56", (actor, loveType) =>
         {
             if (!actor.HasAnyLikesFor("identity", loveType))
@@ -127,15 +129,9 @@ public class Orientations
             {
                 var preferredIdentities = actor.GetActorLikes("identity", loveType);
 
-                if (preferredIdentities.Count == 1
-                    && (actor.HasLike("female", loveType) ||
-                        actor.HasLike("xenogender", loveType)))
+                if (preferredIdentities.Count == 1 && !actor.HasLike("male", loveType))
                     return true;
 
-                if (preferredIdentities.Count == 2 &&
-                    actor.HasLike("female", loveType) &&
-                    actor.HasLike("xenogender", loveType))
-                    return true;
             }
 
             return false;
@@ -148,14 +144,8 @@ public class Orientations
             if (!actor.IdentifiesAsWoman() && actor.isSapient())
             {
                 var preferredIdentities = actor.GetActorLikes("identity", loveType);
-
-                if (preferredIdentities.Count == 1
-                    && (actor.HasLike("male", loveType) ||
-                        actor.HasLike("xenogender", loveType)))
-                    return true;
-
-                if (preferredIdentities.Count == 2 && actor.HasLike("male", loveType) &&
-                    actor.HasLike("xenogender", loveType))
+                
+                if (preferredIdentities.Count == 1 && !actor.HasLike("female", loveType))
                     return true;
             }
 
@@ -204,6 +194,7 @@ public class Orientations
             {
                 var preferredIdentities = actor.GetActorLikes("identity", loveType);
 
+                // identities are technically not a sex thing so we're just working with what we have
                 if (actor.isSexFemale())
                 {
                     if (preferredIdentities.Count == 1

@@ -36,9 +36,13 @@
         <Compile Include="Mian\CustomAssets\AI\Decisions.cs" />
         <Compile Include="Mian\CustomAssets\BaseStatAssets.cs" />
         <Compile Include="Mian\CustomAssets\CommunicationTopics.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\ExtendedToolTip.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\LikeAxonElement.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\LikeNerveImpulseElement.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\LikeNeuronElement.cs" />
         <Compile Include="Mian\CustomAssets\Custom\Orientation.cs" />
         <Compile Include="Mian\CustomAssets\Custom\LikeManager.cs" />
-        <Compile Include="Mian\CustomAssets\Custom\PreferencesOverview.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\LikesOverview.cs" />
         <Compile Include="Mian\CustomAssets\Custom\PreferencesOverview.disabled.cs" />
         <Compile Include="Mian\CustomAssets\GodPowers.cs" />
         <Compile Include="Mian\CustomAssets\Happiness.cs" />
@@ -48,6 +52,7 @@
         <Compile Include="Mian\CustomAssets\StatisticAssets.cs" />
         <Compile Include="Mian\CustomAssets\StatusEffects.cs" />
         <Compile Include="Mian\CustomAssets\TabsAndButtons.cs" />
+        <Compile Include="Mian\CustomAssets\TooltipAssets.cs" />
         <Compile Include="Mian\CustomAssets\Traits\ActorTraits.cs" />
         <Compile Include="Mian\CustomAssets\Traits\BaseTraits.cs" />
         <Compile Include="Mian\CustomAssets\Traits\CultureTraits.cs" />
@@ -92,6 +97,9 @@
         </Reference>
         <Reference Include="Assembly-CSharp">
             <HintPath>..\..\worldbox_Data\StreamingAssets\mods\NML\Assembly-CSharp-Publicized.dll</HintPath>
+        </Reference>
+        <Reference Include = "DOTween">
+            <HintPath>..\..\worldbox_Data\Managed\DOTween.dll</HintPath>
         </Reference>
         <Reference Include = "SQLite">
             <HintPath>..\..\worldbox_Data\Managed\SQLite.dll</HintPath>

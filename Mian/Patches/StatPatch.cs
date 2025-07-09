@@ -10,6 +10,7 @@ using Topic_of_Love.Mian.CustomAssets;
 using Topic_of_Love.Mian.CustomAssets.Custom;
 using Topic_of_Love.Mian.CustomAssets.Traits;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
@@ -307,6 +308,9 @@ public class StatPatch
         mindPreferenceEntry.SetActive(true);
         mindPreferenceEntry.name = "MindPreferences";
 
+        var homosexualSprite = Resources.Load<Sprite>("ui/Icons/orientations/homosexual");
+        mindPreferenceEntry.transform.GetChild(0).GetComponent<Image>().sprite = homosexualSprite;
+
         var tip = mindPreferenceEntry.GetComponent<TipButton>();
         tip.textOnClick = "tab_mind_preference";
         tip.textOnClickDescription = "tab_mind_preference_description";
@@ -314,15 +318,41 @@ public class StatPatch
         var mind = ResourcesFinder.FindResource<GameObject>("content_mind");
         var mindPreferences = Object.Instantiate(mind, mind.transform.parent); // the whole menu shabang
         GameObject.Destroy(mindPreferences.GetComponent<NeuronsOverview>());
-        mindPreferences.AddComponent<PreferencesOverview>();
+        mindPreferences.AddComponent<LikesOverview>();
         mindPreferences.name = "content_mind_preferences";
         
         // not working for some reason
         mindPreferences.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "Preferences";
+        mindPreferences.transform.GetChild(0).GetChild(1).GetComponent<Image>().sprite = homosexualSprite;
+        mindPreferences.transform.GetChild(0).GetChild(2).GetComponent<Image>().sprite = homosexualSprite;
 
         _preferenceTabEntry = mindPreferenceEntry.GetComponent<WindowMetaTab>();
         _preferenceTabEntry.tab_elements.Remove(mind.transform);
         _preferenceTabEntry.tab_elements.Add(mindPreferences.transform);
+        mindPreferences.transform.SetSiblingIndex(1);
+
+        var statElements = window.gameObject.transform.Find("Background/Scroll View/Viewport/Content/content_stats");
+        
+        _preferenceTabEntry.tab_action.AddListener(_ =>
+        {
+            var container = statElements.gameObject.GetComponent<StatsRowsContainer>();
+            statElements.gameObject.SetActive(true);
+            
+            container.StopAllCoroutines();
+            container.OnDisable();
+            
+            var sexual = Stats[0].Value(window.actor);
+            var romantic = Stats[1].Value(window.actor);
+            sexual.TryGetValue("hex_code", out var hexCode);
+            sexual.TryGetValue("icon", out var icon);
+            window.showStatRow("sexual_orientation", sexual["value"], hexCode, pColorText: true, pIconPath: icon);
+            
+            romantic.TryGetValue("hex_code", out hexCode);
+            romantic.TryGetValue("icon", out icon);
+            window.showStatRow("romantic_orientation", romantic["value"], hexCode, pColorText: true, pIconPath: icon);
+            
+            container.StartCoroutine(container.showRows());
+        });
         
         window.tabs._tabs.Add(_preferenceTabEntry);
     }

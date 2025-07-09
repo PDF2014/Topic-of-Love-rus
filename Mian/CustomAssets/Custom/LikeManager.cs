@@ -41,11 +41,11 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         public readonly string ID;
         public readonly string SexualPathIcon;
         public readonly string RomanticPathIcon;
-        public readonly string LikeGroup;
+        public readonly LikeGroup LikeGroup;
 
         public LoveType ApplicableLoveType;
 
-        public LikeAsset(string id, string sexualPathIcon, string romanticPathIcon, string likeGroup, LoveType applicable)
+        public LikeAsset(string id, string sexualPathIcon, string romanticPathIcon, LikeGroup likeGroup, LoveType applicable)
         {
             ID = id;
             SexualPathIcon = sexualPathIcon;
@@ -147,21 +147,22 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             if(!LM.Has("like_group_"+groupType))
                 LM.AddToCurrentLocale("like_group_"+groupType, "Preferred " + nameWithPlural);
 
-            var preferenceTraits = new List<LikeAsset>();
+            var likeAssets = new List<LikeAsset>();
+            var likeGroup = new LikeGroup(groupType, hexColor);
             
             foreach (var likeName in preferences)
             {
                 var like = new LikeAsset
                 (
                     likeName,
-                    groupType,
                     "ui/Icons/preference_traits/sexual/" + likeName,
                     "ui/Icons/preference_traits/romantic/" + likeName,
+                    likeGroup,
                     prefType
                 );
                 // romanticTrait.group_id = type;
                 // romanticTrait.opposite_traits = new HashSet<ActorTrait>();
-                preferenceTraits.Add(like);
+                likeAssets.Add(like);
 
                 if (!LM.Has("like_" + likeName + "_romantic"))
                     LM.AddToCurrentLocale("like_" + likeName + "_romantic", 
@@ -179,8 +180,8 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 if (!LM.Has("like_" + likeName + "_sexual_info_2"))
                     LM.AddToCurrentLocale("like_" + likeName + "_sexual_info_2", "");            
             }
-            AllLikeAssets.AddRange(preferenceTraits);
-            LikeTypes.Add(new LikeGroup(groupType, hexColor), preferenceTraits);
+            AllLikeAssets.AddRange(likeAssets);
+            LikeTypes.Add(likeGroup, likeAssets);
 
             // var sexualTraits = new List<Preference>();
             // foreach (var preference in preferences)
@@ -465,7 +466,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         }
         public static List<Like> GetActorLikes(this Actor actor, string groupType, LoveType loveType)
         {
-            return GetActorLikes(actor, loveType).Where(like => like.LikeAsset.LikeGroup.Equals(groupType)).ToList();
+            return GetActorLikes(actor, loveType).Where(like => like.LikeAsset.LikeGroup.ID.Equals(groupType)).ToList();
         }
         
         public static List<Like> GetActorLikes(this Actor actor, LoveType? loveType=null)
@@ -552,7 +553,10 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         
         public static LikeAsset GetAssetFromID(string id)
         {
-            return AllLikeAssets.Find(asset => asset.ID.Equals(id));
+            var asset = AllLikeAssets.Find(asset => asset.ID.Equals(id));
+            if (asset == null)
+                throw new Exception("No asset found with ID: " + id);
+            return asset;
         }
 
         public static string GetActorTypeFromLikeGroup(this Actor actor, string type)
