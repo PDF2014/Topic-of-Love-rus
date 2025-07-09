@@ -70,7 +70,9 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         public readonly LoveType LoveType;
 
         private string SpecificLoveString => LoveType.Equals(LoveType.Sexual) ? "sexual" : "romantic";
-        public string ID => LikeAsset.ID + "_" + SpecificLoveString;
+        public string ID => LikeAsset.ID;
+
+        public string IDWithLoveType => LikeAsset.ID + "_" + SpecificLoveString;
         public string Title => LM.Get("like_"+LikeAsset.ID+"_"+SpecificLoveString);
         public string Description => LM.Get("like_"+LikeAsset.ID+"_"+SpecificLoveString+"_info");
         public string Description2 => LM.Get("like_"+LikeAsset.ID+"_"+SpecificLoveString+"_info_2");
@@ -78,13 +80,13 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         
         public Sprite GetSprite()
         {
-            LikeAsset.CachedSprites.TryGetValue(ID, out var sprite);
+            LikeAsset.CachedSprites.TryGetValue(IDWithLoveType, out var sprite);
 
             if (sprite == null)
             {
                 var location = (LoveType.Equals(LoveType.Sexual) ? "ui/Icons/likes/sexual/" : "ui/Icons/likes/romantic/") + LikeAsset.ID;
                 sprite = Resources.Load<Sprite>(location);
-                LikeAsset.CachedSprites[ID] = sprite;
+                LikeAsset.CachedSprites[IDWithLoveType] = sprite;
             }
 
             return sprite;
@@ -141,14 +143,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 LogService.LogError(groupType + " is already an added like type!");
                 return;
             }
-
-            // AssetManager.trait_groups.add(new ActorTraitGroupAsset
-            // {
-            //     id = groupType,
-            //     name = "trait_group_"+groupType,
-            //     color = hexColor
-            // });
-
+            
             var withSpaces = groupType.Replace("_", " ");
             var endCombination = withSpaces.EndsWith("y") ? "ies" : "s";
             var nameWithPlural = withSpaces.TrimEnd('y') + endCombination;
@@ -179,8 +174,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                     likeGroup,
                     prefType
                 );
-                // romanticTrait.group_id = type;
-                // romanticTrait.opposite_traits = new HashSet<ActorTrait>();
+
                 likeAssets.Add(like);
 
                 if (!LM.Has("like_" + likeName + "_romantic"))
@@ -201,34 +195,6 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             }
             AllLikeAssets.AddRange(likeAssets);
             LikeTypes.Add(likeGroup, likeAssets);
-
-            // var sexualTraits = new List<Preference>();
-            // foreach (var preference in preferences)
-            // {
-            //     var sexualTrait = new Preference
-            //     {
-            //         ID = preference + "_sexual",
-            //         GroupId = groupType,
-            //         WithoutOrientationID = preference,
-            //         SexualPathIcon = "ui/Icons/preference_traits/sexual/" + preference,
-            //         IsSexual = true
-            //     };
-            //     // sexualTrait.group_id = type;
-            //     // sexualTrait.opposite_traits = new HashSet<ActorTrait>();
-            //     sexualTraits.Add(sexualTrait);
-            //     
-            //     if (!LM.Has("trait_" + preference + "_sexual"))
-            //         LM.AddToCurrentLocale("trait_" + preference + "_sexual", 
-            //             "Prefers " + preference.Substring(0, 1).ToUpper() + preference.Substring(1) + (canBeRomantic ? " (Sexual)" : ""));
-            //     if (!LM.Has("trait_" + preference + "_sexual_info"))
-            //         LM.AddToCurrentLocale("trait_" + preference + "_sexual_info", "Sexually prefers " + preference);
-            //     if (!LM.Has("trait_" + preference + "_sexual_info_2"))
-            //         LM.AddToCurrentLocale("trait_" + preference + "_sexual_info_2", "");            
-            // }
-            // AllPreferences.AddRange(sexualTraits);
-            // preferenceTraits.AddRange(sexualTraits);
-            //
-            // PreferenceTypes.Add(groupType, preferenceTraits);
         }
         private static void AddMatchingSets()
         {
@@ -237,51 +203,18 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         }
         private static void Finish()
         {
-            // AssetManager.trait_groups.add(new ActorTraitGroupAsset
-            // {
-            //     id = "dislikes",
-            //     name = "trait_group_dislikes",
-            //     color = "#8B0000"
-            // });
-            // var dislikeSex = CreateBaseTrait();
-            // dislikeSex.id = "dislike_sex";
-            // dislikeSex.group_id = "dislikes";
-            // dislikeSex.path_icon = "ui/Icons/orientations/asexual";
-            // dislikeSex.IsSexual = true;
-            // dislikeSex.base_stats = new();
-            // dislikeSex.base_stats["multiplier_intimacy_happiness"] = 0.5f;
-            // dislikeSex.opposite_traits = new HashSet<ActorTrait>();
-            //
-            // var dislikeRomance = CreateBaseTrait();
-            // dislikeRomance.id = "dislike_romance";
-            // dislikeRomance.group_id = "dislikes";
-            // dislikeRomance.path_icon = "ui/Icons/orientations/aromantic";
-            // dislikeRomance.base_stats = new();
-            // dislikeRomance.base_stats["multiplier_intimacy_happiness"] = 0.5f;
-            // dislikeRomance.opposite_traits = new HashSet<ActorTrait>();
-            //
-            // AllPreferences.Add(dislikeRomance);
-            // AllPreferences.Add(dislikeSex);
-            //
-            // foreach (var trait in AllPreferences)
-            // {
-            //     AssetManager.traits.add(trait);
-            //
-            //     if (trait != dislikeSex && trait != dislikeRomance)
-            //     {
-            //         if (trait.IsSexual)
-            //         {
-            //             dislikeSex.opposite_traits.Add(trait);
-            //             trait.opposite_traits.Add(dislikeSex);
-            //         }
-            //         else
-            //         {
-            //             dislikeRomance.opposite_traits.Add(trait);
-            //             trait.opposite_traits.Add(dislikeRomance);
-            //         }
-            //     }
-            // }
             LM.ApplyLocale("en");
+        }
+
+        public static string GetHexCodeForLoveType(LoveType loveType)
+        {
+            return loveType switch
+            {
+                LoveType.Sexual => "#e934a2",
+                LoveType.Romantic => "#34dee9",
+                LoveType.Both => "#e934e6",
+                _ => "#ffffff"
+            };
         }
 
         public static LoveType GetRandomLoveType()
@@ -304,7 +237,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             if (pActor.hasCultureTrait("orientationless"))
                 return true;
 
-            var list = GetActorLikes(pActor, type, sexual ? LoveType.Sexual : LoveType.Romantic).Select(like => like.ID).ToList();
+            var list = GetActorLikes(pActor, type, sexual ? LoveType.Sexual : LoveType.Romantic).Select(like => like.IDWithLoveType).ToList();
             var targetType = GetActorTypeFromLikeGroup(pTarget, type);
 
             if (targetType != null && list.Count > 0 && !list.Contains(targetType))
@@ -468,7 +401,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         
         public static bool HasLike(this Actor actor, Like like)
         {
-            actor.data.get(like.ID, out var result, false);
+            actor.data.get(like.IDWithLoveType, out var result, false);
             return result;
             // foreach (var list in PreferenceTypes.Values)
             // {
@@ -537,12 +470,24 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
 
             return likes;
         }
+
+        // Are the likes locked?
+        public static bool LikesLocked(this Actor actor)
+        {
+            actor.data.get("likes_locked", out var result, false);
+            return result;
+        }
+
+        public static void LockLikes(this Actor actor, bool lockLikes)
+        {
+            actor.data.set("likes_locked", lockLikes);
+        }
         
         public static void ToggleLike(this Actor actor, Like like, bool? value=null)
         {
-            actor.data.get(like.ID, out bool result);
+            actor.data.get(like.IDWithLoveType, out bool result);
             var opposite = !result;
-            actor.data.set(like.ID, value.HasValue ? value.Value : opposite);
+            actor.data.set(like.IDWithLoveType, value.HasValue ? value.Value : opposite);
             
             Orientations.CreateOrientationBasedOnPrefChange(actor, like);
         }

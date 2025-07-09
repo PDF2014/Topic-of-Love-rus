@@ -169,27 +169,27 @@
   "trait_dislike_romance_info": "They do not desire love unlike most",
   "trait_dislike_romance_info_2": "It's not because they have not found the right person, they just feel this way",
 
-  "trait_phallus_sexual_info_2": "Stick it in already!",
-  "trait_vulva_sexual_info_2": "When there's a hole, there's a goal.",
+  "like_phallus_sexual_info_2": "Stick it in already!",
+  "like_vulva_sexual_info_2": "When there's a hole, there's a goal.",
 
-  "trait_female_romantic_info_2": "What are some things a girl likes?",
-  "trait_female_sexual_info_2": "That body's 70% water and they are thirsty for it.",
+  "like_female_romantic_info_2": "What are some things a girl likes?",
+  "like_female_sexual_info_2": "That body's 70% water and they are thirsty for it.",
 
-  "trait_male_romantic_info_2": "Marry me please!",
-  "trait_male_sexual_info_2": "Ten men please.",
+  "like_male_romantic_info_2": "Marry me please!",
+  "like_male_sexual_info_2": "Ten men please.",
 
-  "trait_xenogender_romantic_info_2": "Loveable two digits.",
-  "trait_xenogender_sexual_info_2": "I wouldn't have it any other way.",
+  "like_xenogender_romantic_info_2": "Loveable two digits.",
+  "like_xenogender_sexual_info_2": "I wouldn't have it any other way.",
 
-  "trait_feminine_romantic_info_2": "Sweet, compassionate, and kind.",
-  "trait_feminine_sexual_info_2": "Slim, cute and pretty.",
+  "like_feminine_romantic_info_2": "Sweet, compassionate, and kind.",
+  "like_feminine_sexual_info_2": "Slim, cute and pretty.",
 
-  "trait_masculine_romantic_info_2": "Confident, bold, and powerful.",
-  "trait_masculine_sexual_info_2": "Big, dominant and strong.",
+  "like_masculine_romantic_info_2": "Confident, bold, and powerful.",
+  "like_masculine_sexual_info_2": "Big, dominant and strong.",
   
-  "trait_unfluid": "Unfluid",
-  "trait_unfluid_info": "Their romantic and sexual preferences will never change",
-  "trait_unfluid_info_2": "Sometimes preferences aren't fluid.",
+  "like_unfluid": "Unfluid",
+  "like_unfluid_info": "Their romantic and sexual preferences will never change",
+  "like_unfluid_info_2": "Sometimes preferences aren't fluid.",
 
   "trait_group_dislikes": "Orientation Dislikes",
 
@@ -288,9 +288,13 @@
   
   "tab_title_tol": "Topic of Love",
   "tab_desc_tol": "For all your romantic and sexual needs!",
-  "tab_mind_preference": "Preferences",
-  "tab_mind_preference_description": "Look into their romantic and sexual desires... who would they like to fuck?",
+  "tab_mind_likes": "Orientation",
+  "tab_mind_likes_description": "Look into their romantic and sexual desires... who would they like to fuck?",
   
+  "mind_likes_regenerate_orientation": "Regen Orientation",
+  "mind_likes_regenerate_orientation_description": "Rerolls the unit's orientation identities based on their active preferences",
+  "mind_likes_regenerate_orientation_description_2": "Is a woman lesbian or straight if they are into 0s and 1s? Or, we could let them choose!",
+
   "Misc": "Developer Settings",
   "SlowOnLog": "Slow on Debug",
   "SlowOnLog Description": "Slows the game automatically when a specific part of a debug message is outputted. Put nothing in the text box to disable.",
@@ -302,5 +306,5 @@
   "Debug Description": "Enables debug logs. Only turn this on if requested by someone to do so.",
   
   "Ignore": "Ignore",
-  "Ignore Description": "Ignore logs with these key words",
+  "Ignore Description": "Ignore logs with these key words"
  }

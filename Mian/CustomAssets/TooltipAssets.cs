@@ -28,16 +28,16 @@ public class TooltipAssets
         Like like = neuron.like;
         Actor actor = neuron.actor;
 
-        pTooltip.clearTextRows();
+        pTooltip.clearTextRows();   
         pTooltip.setTitle(like.Title, "neuron", like.LikeAsset.LikeGroup.HexCode);
 
         pTooltip.setDescription(like.Description);
-        pTooltip.setBottomDescription(like.Description2);
         bool flag = actor.HasLike(like);
         pTooltip.addLineText("neuron_state", flag ? LocalizedTextManager.getText("neuron_active") : LocalizedTextManager.getText("neuron_silenced"), flag ? "#43FF43" : "#FB2C21");
         pTooltip.addLineBreak();
         pTooltip.addLineText("like_group", like.LikeAsset.LikeGroup.Title, like.LikeAsset.LikeGroup.HexCode);
-        pTooltip.addLineText("intimate", LM.Get(like.LoveType.ToString().ToLower()));
+        pTooltip.addLineText("intimate", LM.Get(like.LoveType.ToString().ToLower()), LikesManager.GetHexCodeForLoveType(like.LoveType));
+        pTooltip.setBottomDescription(like.Description2);
     }
 
 }

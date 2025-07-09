@@ -231,13 +231,13 @@ namespace Topic_of_Love.Mian
                 var oldPreferences = actor.GetActorLikes();
                 foreach (var preference in oldPreferences)
                 {
-                    actor.data.set(preference.ID, false);
+                    actor.data.set(preference.IDWithLoveType, false);
                 }
                 
                 var preferences =  LikesManager.GetRandomPreferences(actor);
                 foreach (var preference in preferences)
                 {
-                    actor.data.set(preference.ID, true);
+                    actor.data.set(preference.IDWithLoveType, true);
                 }
                 Orientations.RollOrientationLabel(actor);
             }

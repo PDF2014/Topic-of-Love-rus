@@ -170,7 +170,7 @@ public class ActorPatch
                     __instance.a.changeIntimacyHappiness(TolUtil.HasNoOne(__instance) ? -Randy.randomFloat(13f, 18f) : -Randy.randomFloat(5f, 7f));
                 // else
                     // __instance.data.set("intimacy_happiness", 100f);
-            } else if (!__instance.isAdult() && Randy.randomChance(0.1f) && !LikesManager.HasALike(__instance))
+            } else if (!__instance.isAdult() && Randy.randomChance(0.1f) && !__instance.HasALike())
             {
                 TolUtil.NewPreferences(__instance);
                 __instance.changeHappiness("true_self");

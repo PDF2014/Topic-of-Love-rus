@@ -564,7 +564,7 @@ public class LikesOverview :
         _all_state = !isAnyEnabled() || (!isAllEnabled() && !_all_state);
         foreach (var neuron in _neurons)
             if (neuron.hasLike())
-                actor.data.set(neuron.like.ID, _all_state);
+                actor.data.set(neuron.like.IDWithLoveType, _all_state);
         fireImpulsesEverywhere();
         Orientations.RollOrientationLabel(actor);
         StatPatch.UpdateOrientationStats(mainWindow);

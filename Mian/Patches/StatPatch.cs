@@ -265,6 +265,7 @@ public class StatPatch
     }
 
     private static WindowMetaTab _preferenceTabEntry;
+    private static Image _imageRegenComponent;
     
     private static bool _initializedUnitWindow;
     [HarmonyPostfix]
@@ -277,7 +278,7 @@ public class StatPatch
         if (!_initializedUnitWindow)
         {
             _initializedUnitWindow = true;
-            InitializePreferenceMind(__instance);
+            InitializeLikesMind(__instance);
             InitializeIcons(__instance);
         }
         
@@ -292,7 +293,7 @@ public class StatPatch
             _preferenceTabEntry.toggleActive(false);
     }
     
-    private static void InitializePreferenceMind(UnitWindow window)
+    private static void InitializeLikesMind(UnitWindow window)
     {
         var mindPreferenceEntry = Object.Instantiate(
             ResourcesFinder.FindResource<GameObject>("Mind"), 
@@ -315,8 +316,8 @@ public class StatPatch
         mindPreferenceEntry.transform.GetChild(0).GetComponent<Image>().sprite = homosexualSprite;
 
         var tip = mindPreferenceEntry.GetComponent<TipButton>();
-        tip.textOnClick = "tab_mind_preference";
-        tip.textOnClickDescription = "tab_mind_preference_description";
+        tip.textOnClick = "tab_mind_likes";
+        tip.textOnClickDescription = "tab_mind_likes_description";
         
         var mind = ResourcesFinder.FindResource<GameObject>("content_mind");
         var mindPreferences = Object.Instantiate(mind, mind.transform.parent); // the whole menu shabang
@@ -355,8 +356,9 @@ public class StatPatch
 
         mindPreferences.name = "content_mind_preferences";
         
-        // not working for some reason
-        mindPreferences.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "Preferences";
+        var localized = mindPreferences.transform.GetChild(0).GetChild(0).GetComponent<LocalizedText>();
+        localized.setKeyAndUpdate("tab_mind_likes");
+
         mindPreferences.transform.GetChild(0).GetChild(1).GetComponent<Image>().sprite = homosexualSprite;
         mindPreferences.transform.GetChild(0).GetChild(2).GetComponent<Image>().sprite = homosexualSprite;
 
@@ -373,6 +375,36 @@ public class StatPatch
             UpdateOrientationStats(window);
         });
         
+        var reforge = ResourcesFinder.FindResource<GameObject>("content_reforge");
+        // var cursedItem = ResourcesFinder.FindResource<GameObject>("Item Cursed");
+        var orientationButtons = GameObject.Instantiate(reforge, mind.transform.parent);
+        orientationButtons.name = "content_orientations";
+        var regenerate = orientationButtons.transform.GetChild(0);
+        regenerate.name = "regenerate_orientation";
+        localized = regenerate.GetChild(1).GetComponent<LocalizedText>();
+        localized.setKeyAndUpdate("mind_likes_regenerate_orientation");
+
+        tip = regenerate.GetComponent<TipButton>();
+        tip.textOnClick = "mind_likes_regenerate_orientation";
+        tip.textOnClickDescription = "mind_likes_regenerate_orientation_description";
+        tip.text_description_2 = "mind_likes_regenerate_orientation_description_2";
+
+        _imageRegenComponent = regenerate.GetChild(0).GetComponent<Image>();
+        
+        var button = regenerate.GetComponent<Button>();
+        regenerate.localPosition = Vector3.zero;
+        button.onClick = new Button.ButtonClickedEvent();
+        button.onClick.AddListener(() =>
+        {
+            Orientations.RollOrientationLabel(window.actor);
+            UpdateOrientationStats(window);
+        });
+        
+        GameObject.Destroy(orientationButtons.transform.GetChild(1).gameObject);
+        // var lockButton = GameObject.Instantiate(cursedItem, orientationButtons.transform);
+        
+        _preferenceTabEntry.tab_elements.Add(orientationButtons.transform);
+        
         window.tabs._tabs.Add(_preferenceTabEntry);
     }
 
@@ -386,7 +418,9 @@ public class StatPatch
         sexual.TryGetValue("hex_code", out var hexCode);
         sexual.TryGetValue("icon", out var icon);
         window.showStatRow("sexual_orientation", sexual["value"], hexCode, pColorText: true, pIconPath: icon);
-            
+
+        _imageRegenComponent.sprite = SpriteTextureLoader.getSprite("ui/Icons/" + icon);
+        
         romantic.TryGetValue("hex_code", out hexCode);
         romantic.TryGetValue("icon", out icon);
         window.showStatRow("romantic_orientation", romantic["value"], hexCode, pColorText: true, pIconPath: icon);
