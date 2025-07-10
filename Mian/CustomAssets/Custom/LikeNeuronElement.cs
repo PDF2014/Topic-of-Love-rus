@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Topic_of_Love.Mian.Patches;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -20,6 +21,7 @@ public class LikeNeuronElement :
     public const float SCALE_RECEIVE_IMPULSE_INCREASE = 0.1f;
     public const float SCALE_NORMAL = 1f;
     public Image image;
+    [NotNull] public Image secondaryImage;
     public float render_depth;
     public bool highlighted;
     public List<LikeNeuronElement> connected_neurons = new();
@@ -104,7 +106,20 @@ public class LikeNeuronElement :
     {
         like = pLike;
         actor = pActor;
-        image.sprite = like.GetSprite();
+        
+        var icon = like.GetIcon();
+        image.sprite = icon.GetComponent<Image>().sprite;
+        var secondaryHolder = icon.transform.GetChild(0);
+
+        var localPosition = secondaryHolder.localPosition;
+        var localScale =  secondaryHolder.localScale;
+        secondaryHolder.SetParent(transform);
+        secondaryHolder.localPosition = localPosition;
+        secondaryHolder.localScale = localScale;
+        secondaryImage = secondaryHolder.GetComponent<Image>();
+        
+        Destroy(icon);
+        
         _spawn_interval = Randy.randomFloat(3f, 15f);
         _spawn_timer = Randy.randomFloat(0.0f, _spawn_interval);
     }
@@ -191,9 +206,21 @@ public class LikeNeuronElement :
     {
         _neurons_overview.switchAllNeurons();
         if (_neurons_overview.getAllState())
+        {
             image.color = Toolbox.color_clear;
+            if (secondaryImage != null)
+            {
+                secondaryImage.color = Toolbox.color_clear;
+            }
+        }
         else
+        {
             image.color = Toolbox.color_white;
+            if (secondaryImage != null)
+            {
+                secondaryImage.color = Toolbox.color_white;
+            }
+        }
     }
 
     public void receiveImpulse()
@@ -224,6 +251,10 @@ public class LikeNeuronElement :
     public void setColor(Color pColor)
     {
         image.color = pColor;
+        if (secondaryImage != null)
+        {
+            secondaryImage.color = pColor;
+        }
     }
 
     public bool hasLike()

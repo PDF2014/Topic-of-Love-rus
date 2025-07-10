@@ -5,8 +5,10 @@ using System.Text;
 using JetBrains.Annotations;
 using NCMS.Extensions;
 using NeoModLoader.General;
+using NeoModLoader.General.Game.extensions;
 using NeoModLoader.services;
 using UnityEngine;
+using UnityEngine.UI;
 #if TOPICOFIDENTITY
 using Topic_of_Identity.Mian;
 #endif
@@ -41,19 +43,17 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
     public class LikeAsset
     {
         public readonly string ID;
-        public readonly string SexualPathIcon;
-        public readonly string RomanticPathIcon;
         public readonly LikeGroup LikeGroup;
+        public readonly string CustomSpriteLocation;
 
         public LoveType ApplicableLoveType;
-
-        public readonly Dictionary<string, Sprite> CachedSprites = new();
-
-        public LikeAsset(string id, LikeGroup likeGroup, LoveType applicable)
+        
+        public LikeAsset(string id, LikeGroup likeGroup, LoveType applicable, string customSpriteLocation = null)
         {
             ID = id;
             LikeGroup = likeGroup;
             ApplicableLoveType = applicable;
+            CustomSpriteLocation = customSpriteLocation;
         }
         
         public override bool Equals(object obj)
@@ -77,20 +77,45 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         public string Description => LM.Get("like_"+LikeAsset.ID+"_"+SpecificLoveString+"_info");
         public string Description2 => LM.Get("like_"+LikeAsset.ID+"_"+SpecificLoveString+"_info_2");
 
-        
-        public Sprite GetSprite()
+        public GameObject GetIcon()
         {
-            LikeAsset.CachedSprites.TryGetValue(IDWithLoveType, out var sprite);
+            var sprite = SpriteTextureLoader.getSprite("ui/Icons/likes/" + ID);
+            var sprite2 = SpriteTextureLoader.getSprite("ui/Icons/likes/" + (LoveType == LoveType.Sexual ? "sexual" : "romantic"));
 
-            if (sprite == null)
-            {
-                var location = (LoveType.Equals(LoveType.Sexual) ? "ui/Icons/likes/sexual/" : "ui/Icons/likes/romantic/") + LikeAsset.ID;
-                sprite = Resources.Load<Sprite>(location);
-                LikeAsset.CachedSprites[IDWithLoveType] = sprite;
-            }
-
-            return sprite;
+            var mainHolder = new GameObject();
+            mainHolder.AddOrGetComponent<RectTransform>();
+            mainHolder.AddOrGetComponent<Image>().sprite = sprite;
+            mainHolder.name = "LikeIconHolder";
+            
+            var secondaryHolder = new GameObject();
+            secondaryHolder.transform.SetParent(mainHolder.transform);
+            secondaryHolder.AddOrGetComponent<RectTransform>();
+            secondaryHolder.AddComponent<Image>();
+            if (LikeAsset.ApplicableLoveType == LoveType.Both)
+                secondaryHolder.GetComponent<Image>().sprite = sprite2;
+            else
+                secondaryHolder.GetComponent<Image>().enabled = false;
+            secondaryHolder.transform.localPosition = new Vector3(2.5f, -3);
+            secondaryHolder.transform.localScale =  new Vector3(0.1f, 0.1f);
+            secondaryHolder.name = "LoveTypeHolder";
+            
+            return mainHolder;
         }
+        // public Sprite GetSprite()
+        // {
+        //     LikeAsset.CachedSprites.TryGetValue(IDWithLoveType, out var sprite);
+        //
+        //     if (sprite == null)
+        //     {
+        //         var location = LikeAsset.CustomSpriteLocation != null ? "ui/Icons/" + LikeAsset.CustomSpriteLocation 
+        //             : (LoveType.Equals(LoveType.Sexual) ? "ui/Icons/likes/sexual/" : "ui/Icons/likes/romantic/") + LikeAsset.ID;
+        //         sprite = Resources.Load<Sprite>(location);
+        //
+        //         LikeAsset.CachedSprites[IDWithLoveType] = sprite;
+        //     }
+        //
+        //     return sprite;
+        // }
 
         public Like(LikeAsset asset, LoveType type)
         {
@@ -124,6 +149,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 identities.Add("nonbinary");
             
             AddLikeType("identity", "#B57EDC", identities, LoveType.Both);
+            AddLikeType("subspecies", "#34e965", new List<string>(), LoveType.Both);
             
             if(TolUtil.IsTOIInstalled())
                 AddLikeType("expression", "#C900FF", List.Of("feminine", "masculine"), LoveType.Both);
@@ -134,6 +160,88 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             AddMatchingSets();
             
             Finish();
+        }
+
+        public static void RemoveDynamicLikeAsset(string likeName)
+        {
+            TolUtil.Debug("Removed dynamic like asset: " + likeName);
+
+            var likeAsset = GetAssetFromID(likeName);
+            AllLikeAssets.Remove(likeAsset);
+            
+            var data = MapBox.instance.map_stats.custom_data;
+            data.removeString(likeName);
+            data.removeString(likeName + "_love_type");
+            data.removeString(likeName + "_custom_sprite");
+        }
+        public static LikeAsset AddDynamicLikeAsset(string likeName, string groupId, string customSpriteLocation, LoveType loveType)
+        {
+            TolUtil.Debug("Created dynamic like asset: " + likeName + ", " + groupId + ", " + loveType);
+            
+            var likeGroup = GetLikeGroup(groupId);
+            var like = new LikeAsset
+            (
+                likeName,
+                likeGroup,
+                loveType,
+                customSpriteLocation
+            );
+
+            AllLikeAssets.Add(like);
+            
+            AddLocalesForLikeAsset(like);
+
+            var data = MapBox.instance.map_stats.custom_data;
+            data.set("custom_like_" + likeName, likeName);
+            data.set(likeName, groupId);
+            data.set(likeName + "_love_type", loveType.ToString());
+            data.set(likeName + "_custom_sprite", customSpriteLocation);
+            
+            LM.ApplyLocale();
+            return like;
+        }
+
+        // called when the world loads
+        private static void LoadDynamicLikeAssets()
+        {
+            TolUtil.Debug("Loading dynamic like assets...");
+            
+            var data = MapBox.instance.map_stats.custom_data;
+            var search = "custom_like_";
+            foreach (var key in data.custom_data_string.Keys)
+            {
+                if (key.StartsWith(search))
+                {
+                    var likeKey = key.Substring(key.IndexOf(search, StringComparison.OrdinalIgnoreCase) + search.Length);
+                    data.get(likeKey, out string groupId);
+                    data.get(likeKey + "_love_type", out string loveType);
+                    LoveType.TryParse(loveType, out LoveType _loveType);
+                    data.get(likeKey + "_custom_sprite", out string customSpriteLocation);
+
+                    AddDynamicLikeAsset(likeKey, groupId, customSpriteLocation, _loveType);
+                }
+            }
+        }
+
+        private static void AddLocalesForLikeAsset(LikeAsset asset)
+        {
+            var likeName = asset.ID;
+            
+            if (!LM.Has("like_" + likeName + "_romantic"))
+                LM.AddToCurrentLocale("like_" + likeName + "_romantic", 
+                    "Likes " + likeName.Substring(0, 1).ToUpper() + likeName.Substring(1));
+            if (!LM.Has("like_" + likeName + "_romantic_info"))
+                LM.AddToCurrentLocale("like_" + likeName + "_romantic_info", "Romantically likes " + likeName);
+            if (!LM.Has("like_" + likeName + "_romantic_info_2"))
+                LM.AddToCurrentLocale("like_" + likeName + "_romantic_info_2", "");        
+            
+            if (!LM.Has("like_" + likeName + "_sexual"))
+                LM.AddToCurrentLocale("like_" + likeName + "_sexual", 
+                    "Likes " + likeName.Substring(0, 1).ToUpper() + likeName.Substring(1));
+            if (!LM.Has("like_" + likeName + "_sexual_info"))
+                LM.AddToCurrentLocale("like_" + likeName + "_sexual_info", "Sexually likes " + likeName);
+            if (!LM.Has("like_" + likeName + "_sexual_info_2"))
+                LM.AddToCurrentLocale("like_" + likeName + "_sexual_info_2", "");
         }
         
         // if all preferences of a preference type is added, remove them all (no reason for preferences if all are included?)
@@ -177,22 +285,8 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 );
 
                 likeAssets.Add(like);
-
-                if (!LM.Has("like_" + likeName + "_romantic"))
-                    LM.AddToCurrentLocale("like_" + likeName + "_romantic", 
-                        "Likes " + likeName.Substring(0, 1).ToUpper() + likeName.Substring(1));
-                if (!LM.Has("like_" + likeName + "_romantic_info"))
-                    LM.AddToCurrentLocale("like_" + likeName + "_romantic_info", "Romantically likes " + likeName);
-                if (!LM.Has("like_" + likeName + "_romantic_info_2"))
-                    LM.AddToCurrentLocale("like_" + likeName + "_romantic_info_2", "");
-                    
-                if (!LM.Has("like_" + likeName + "_sexual"))
-                    LM.AddToCurrentLocale("like_" + likeName + "_sexual", 
-                        "Likes " + likeName.Substring(0, 1).ToUpper() + likeName.Substring(1));
-                if (!LM.Has("like_" + likeName + "_sexual_info"))
-                    LM.AddToCurrentLocale("like_" + likeName + "_sexual_info", "Sexually likes " + likeName);
-                if (!LM.Has("like_" + likeName + "_sexual_info_2"))
-                    LM.AddToCurrentLocale("like_" + likeName + "_sexual_info_2", "");            
+                
+                AddLocalesForLikeAsset(like);
             }
             AllLikeAssets.AddRange(likeAssets);
             LikeTypes.Add(likeGroup, likeAssets);
@@ -228,6 +322,8 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         private static LikeGroup GetLikeGroup(string id)
         {
             LikeGroups.TryGetValue(id, out var group);
+            if (group == null)
+                throw new Exception(id + " is an invalid like group!");
             return group;
         }
         
@@ -245,7 +341,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             var list = GetActorLikes(pActor, type, sexual ? LoveType.Sexual : LoveType.Romantic).Select(like => like.ID).ToList();
             var targetTypes = GetActorTypeFromLikeGroup(pTarget, type);
 
-            if (targetTypes.Length == 0 || !targetTypes.Any(element => list.Contains(element)))
+            if (targetTypes.Length == 0 || !targetTypes.Intersect(list).Any())
                 return false;
             
             return true;

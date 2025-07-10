@@ -327,17 +327,17 @@ public class ActorPatch
                 new CodeInstruction(OpCodes.Brfalse, returnFalse)
             );
 
-            codeMatcher.InsertAndAdvance(
-                new CodeInstruction(OpCodes.Ldarg_0),
-                CodeInstruction.Call(typeof(Actor), nameof(Actor.hasXenophobic)),
-                new CodeInstruction(OpCodes.Brtrue, returnFalse)
-            );
-            
-            codeMatcher.InsertAndAdvance(
-                new CodeInstruction(OpCodes.Ldarg_1),
-                CodeInstruction.Call(typeof(Actor), nameof(Actor.hasXenophobic)),
-                new CodeInstruction(OpCodes.Brtrue, returnFalse)
-            );
+            // codeMatcher.InsertAndAdvance(
+            //     new CodeInstruction(OpCodes.Ldarg_0),
+            //     CodeInstruction.Call(typeof(Actor), nameof(Actor.hasXenophobic)),
+            //     new CodeInstruction(OpCodes.Brtrue, returnFalse)
+            // );
+            //
+            // codeMatcher.InsertAndAdvance(
+            //     new CodeInstruction(OpCodes.Ldarg_1),
+            //     CodeInstruction.Call(typeof(Actor), nameof(Actor.hasXenophobic)),
+            //     new CodeInstruction(OpCodes.Brtrue, returnFalse)
+            // );
             
             // codeMatcher.MatchEndForward(new CodeMatch(OpCodes.Call,
             //         AccessTools.Method(typeof(Actor),
