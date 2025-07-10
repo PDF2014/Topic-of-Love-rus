@@ -132,7 +132,7 @@ public class StatPatch
                 __instance._stats_icons.Add(lonelyIcon.name, lonelyIcon);
             }
             
-            Orientation.Orientations.Values.ForEach(orientation =>
+            Orientation.RegisteredOrientations.Values.ForEach(orientation =>
             {
                 var orientationType = orientation.OrientationType;
                 // __instance.setIconValue(orientationType, pMetaObject.countOrientation(orientationType, true));

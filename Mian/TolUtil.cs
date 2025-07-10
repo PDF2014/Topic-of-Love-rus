@@ -364,7 +364,7 @@ namespace Topic_of_Love.Mian
                 || (pActor.hasCity() && pActor.city.getUnitsTotal() >= pActor.city.getPopulationMaximum())) return false;
             var limit = (int)pActor.subspecies.base_stats_meta["limit_population"];
             return pActor.subspecies.countCurrentFamilies() <= 10 
-                   || (pActor.hasCity() && pActor.city.getAge() < 100)
+                   || (pActor.hasCity() && (pActor.city.getAge() < 100 || (float) pActor.city.getUnitsTotal() / pActor.city.getPopulationMaximum() < 0.7))
         || (limit != 0 ? pActor.subspecies.countUnits() <= limit / 3 : pActor.subspecies.countUnits() <= 100);
         }
         

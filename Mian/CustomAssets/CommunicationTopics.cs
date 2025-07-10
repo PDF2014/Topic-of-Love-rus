@@ -14,7 +14,7 @@ namespace Topic_of_Love.Mian.CustomAssets
                 check = pActor => !pActor.hasCultureTrait("orientationless") && (pActor.hasCultureTrait("homophobic") || pActor.hasCultureTrait("heterophobic")),
                 pot_fill = (actor, sprites) =>
                 {
-                    var unfitPreferences = Orientation.Orientations.Values.Where(orientation =>
+                    var unfitPreferences = Orientation.RegisteredOrientations.Values.Where(orientation =>
                     {
                         if (actor.hasCultureTrait("homophobic"))
                             return orientation.IsHomo;

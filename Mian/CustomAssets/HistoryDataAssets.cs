@@ -51,7 +51,7 @@ public class HistoryDataAssets
         for (int i = 0; i <= 1; i++)
         {
             var isSexual = i == 0;
-            Orientation.Orientations.Values.ForEach(orientation =>
+            Orientation.RegisteredOrientations.Values.ForEach(orientation =>
             {
                 Add(new HistoryDataAsset
                 {

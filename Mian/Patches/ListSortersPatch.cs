@@ -21,12 +21,12 @@ public class ListSortersPatch
 
             if (homophobic)
             {
-                topOrientations = Orientation.Orientations.Values.Where(orientation => 
+                topOrientations = Orientation.RegisteredOrientations.Values.Where(orientation => 
                     orientation.IsHetero && !orientation.IsHomo && !nonSapientList.Contains(orientation.OrientationType)).ToList();
             }
             else
             {
-                topOrientations = Orientation.Orientations.Values
+                topOrientations = Orientation.RegisteredOrientations.Values
                     .Where(orientation => orientation.IsHomo && !orientation.IsHetero && !nonSapientList.Contains(orientation.OrientationType))
                     .ToList();
 

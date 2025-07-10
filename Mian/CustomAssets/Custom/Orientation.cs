@@ -9,7 +9,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom;
 
 public class Orientation
 {
-    public static readonly Dictionary<string, Orientation> Orientations = new();
+    public static readonly Dictionary<string, Orientation> RegisteredOrientations = new();
     public readonly string OrientationType;
     public readonly string SexualPathLocale;
     public readonly string RomanticPathLocale;
@@ -73,7 +73,7 @@ public class Orientation
         var romanticPathIcon = "orientations/" + romanticVariant;
         var orientationType = new Orientation(orientation, sexualPathLocale, romanticPathLocale, descriptionLocale, sexualPathIcon,
             romanticPathIcon, isHomo, isHetero, hexCode, fitsCriteria);
-        Orientations.Add(orientationType.OrientationType, orientationType);
+        RegisteredOrientations.Add(orientationType.OrientationType, orientationType);
 
         LM.AddToCurrentLocale(sexualPathLocale, char.ToUpper(orientation.First()) + orientation.Substring(1));
         LM.AddToCurrentLocale(romanticPathLocale, char.ToUpper(romanticVariant.First()) + romanticVariant.Substring(1));
@@ -86,7 +86,10 @@ public class Orientation
 
     public static Orientation GetOrientation(string orientation)
     {
-        return Orientations[orientation];
+        RegisteredOrientations.TryGetValue(orientation, out var orientationType);
+        if(orientationType == null)
+            throw new Exception(orientation + " is not a valid orientation type!");
+        return orientationType;
     }
 
     public static Orientation GetOrientation(Actor actor, bool sexual)
@@ -95,11 +98,9 @@ public class Orientation
         var text = sexual ? "sexual_orientation" : "romantic_orientation";
         while (orientation == null)
         {
-            actor.data.get(text, out orientation, "");
+            actor.data.get(text, out orientation);
             if (orientation == null)
-            {
-                Custom.Orientations.RollOrientationLabel(actor);
-            }
+                Orientations.RollOrientationLabel(actor);
         }
         return GetOrientation(orientation);
     }
@@ -261,7 +262,7 @@ public class Orientations
     public static Orientation GetOrientationForActorBasedOnCriteria(Actor actor, bool sexual, [CanBeNull] Orientation orientationBase = null)
     {
         var orientations =
-            Orientation.Orientations.Values.Where(orientationType => orientationType.Criteria(actor, sexual ? LoveType.Sexual : LoveType.Romantic)).ToList();
+            Orientation.RegisteredOrientations.Values.Where(orientationType => orientationType.Criteria(actor, sexual ? LoveType.Sexual : LoveType.Romantic)).ToList();
 
         // helps maintain consistency
         if(orientationBase != null && orientations.Contains(orientationBase))

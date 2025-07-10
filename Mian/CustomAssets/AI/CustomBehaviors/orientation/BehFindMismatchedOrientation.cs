@@ -20,7 +20,7 @@ public class BehFindMismatchedOrientation : BehaviourActionActor
         {
             using (ListPool<Actor> pCollection = new ListPool<Actor>(4))
             {
-                var unfitPreferences = Orientation.Orientations.Values.Where(orientation =>
+                var unfitPreferences = Orientation.RegisteredOrientations.Values.Where(orientation =>
                 {
                     if (pActor.hasCultureTrait("homophobic"))
                         return orientation.IsHomo;

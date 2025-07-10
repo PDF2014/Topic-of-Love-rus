@@ -48,7 +48,7 @@ public class StatisticAssets
         for (int i = 0; i <= 1; i++)
         {
             var isSexual = i == 0;
-            foreach (var orientation in Orientation.Orientations.Values)
+            foreach (var orientation in Orientation.RegisteredOrientations.Values)
             {
                 Add(new StatisticsAsset
                 {

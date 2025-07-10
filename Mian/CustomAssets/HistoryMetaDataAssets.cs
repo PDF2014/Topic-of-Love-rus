@@ -477,7 +477,7 @@ public class HistoryMetaDataAssets
         // }), new(){"kingdom", "city", "world"});
         //
 
-        Orientation.Orientations.Values.ForEach(orientation =>
+        Orientation.RegisteredOrientations.Values.ForEach(orientation =>
         {
             var id = orientation.OrientationType;
             toAdd.Add(new(id, nano =>
