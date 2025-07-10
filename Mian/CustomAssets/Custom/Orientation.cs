@@ -91,8 +91,16 @@ public class Orientation
 
     public static Orientation GetOrientation(Actor actor, bool sexual)
     {
+        string orientation = null;
         var text = sexual ? "sexual_orientation" : "romantic_orientation";
-        actor.data.get(text, out var orientation, "");
+        while (orientation == null)
+        {
+            actor.data.get(text, out orientation, "");
+            if (orientation == null)
+            {
+                Custom.Orientations.RollOrientationLabel(actor);
+            }
+        }
         return GetOrientation(orientation);
     }
 
@@ -241,7 +249,7 @@ public class Orientations
     // bisexuals do not count as homosexuals or heterosexuals
     public static bool HasOrientation(Actor actor, string id, bool sexual)
     {
-        var orientation = GetOrientationFromActor(actor, sexual);
+        var orientation = GetOrientationForActorBasedOnCriteria(actor, sexual);
         if (id.Equals("homosexual"))
             return orientation.IsHomo && !orientation.IsHetero;
         if(id.Equals("heterosexual"))
@@ -250,7 +258,7 @@ public class Orientations
         return orientation.OrientationType.Equals(id);
     }
     
-    public static Orientation GetOrientationFromActor(Actor actor, bool sexual, [CanBeNull] Orientation orientationBase = null)
+    public static Orientation GetOrientationForActorBasedOnCriteria(Actor actor, bool sexual, [CanBeNull] Orientation orientationBase = null)
     {
         var orientations =
             Orientation.Orientations.Values.Where(orientationType => orientationType.Criteria(actor, sexual ? LoveType.Sexual : LoveType.Romantic)).ToList();
@@ -264,15 +272,15 @@ public class Orientations
 
     public static void RollOrientationLabel(Actor actor)
     {
-        var sexualOrientation = GetOrientationFromActor(actor, true);
-        var romanticOrientation = GetOrientationFromActor(actor, false, sexualOrientation);
+        var sexualOrientation = GetOrientationForActorBasedOnCriteria(actor, true);
+        var romanticOrientation = GetOrientationForActorBasedOnCriteria(actor, false, sexualOrientation);
         actor.data.set("romantic_orientation", romanticOrientation.OrientationType);
         actor.data.set("sexual_orientation", sexualOrientation.OrientationType);
     }
 
-    public static void CreateOrientationBasedOnPrefChange(Actor actor, Like newLike)
+    public static void CreateOrientationBasedOnLikeChange(Actor actor, Like newLike)
     {
-        var orientation = GetOrientationFromActor(actor, newLike.LoveType.Equals(LoveType.Sexual));
+        var orientation = GetOrientationForActorBasedOnCriteria(actor, newLike.LoveType.Equals(LoveType.Sexual));
         if (newLike.LoveType.Equals(LoveType.Sexual))
             actor.data.set("sexual_orientation", orientation.OrientationType);
         else

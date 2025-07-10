@@ -31,7 +31,7 @@ public static class Extensions
     }
     
     // this method may be a bit confusing but it's to determine if actors can get pregnant based on their genitalia and if they have eggs
-    public static bool isAbleToBecomePregnant(this Actor pActor)
+    public static bool IsAbleToBecomePregnant(this Actor pActor)
     {
         if (TolUtil.IsTOIInstalled())
         {
@@ -42,7 +42,7 @@ public static class Extensions
         //     return true;
         // if (TolUtil.NeedDifferentSexTypeForReproduction(pActor))
         //     return Preferences.HasVulva(pActor);
-        return LikesManager.HasVulva(pActor); // vulva required for pregnancy
+        return pActor.HasVulva(); // vulva required for pregnancy
     }
 
     public static float getIntimacy(this Actor actor)
@@ -166,7 +166,7 @@ public static class Extensions
         var unitsCount = pListWithUnits.Count;
         foreach (Actor pListWithUnit in pListWithUnits)
         {
-            var orientation = Orientations.GetOrientationFromActor(pListWithUnit, sexual);
+            var orientation = Orientations.GetOrientationForActorBasedOnCriteria(pListWithUnit, sexual);
             if (!dictionary.ContainsKey(orientation))
                 dictionary.Add(orientation, 0);
             dictionary[orientation]++;

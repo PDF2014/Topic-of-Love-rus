@@ -43,6 +43,12 @@ namespace Topic_of_Love.Mian
         {
             return pActor.subspecies.isPartnerSuitableForReproduction(pActor, pTarget);
         }
+
+        public static bool ReproducesSexually(this Actor pActor)
+        {
+            return pActor.NeedDifferentSexTypeForReproduction() || pActor.NeedSameSexTypeForReproduction() ||
+                   pActor.CanDoAnySexType();
+        }
         
         private static string OpinionOnSex(Actor actor1, Actor actor2)
         {
@@ -526,16 +532,16 @@ namespace Topic_of_Love.Mian
             LogInfo(stringMsg);
         }
         
-        public static bool NeedSameSexTypeForReproduction(Actor pActor)
+        public static bool NeedSameSexTypeForReproduction(this Actor pActor)
         {
             return pActor.hasSubspeciesTrait("reproduction_same_sex");
         }
-        public static bool CanDoAnySexType(Actor pActor)
+        public static bool CanDoAnySexType(this Actor pActor)
         {
             return pActor.hasSubspeciesTrait("reproduction_hermaphroditic");
         }
         
-        public static bool NeedDifferentSexTypeForReproduction(Actor pActor)
+        public static bool NeedDifferentSexTypeForReproduction(this Actor pActor)
         {
             return pActor.hasSubspeciesTrait("reproduction_sexual");
         }
@@ -559,8 +565,8 @@ namespace Topic_of_Love.Mian
         // orientations earlier in the list are prioritized
         public static int SortUnitsByOrientations(Actor pActor1, Actor pActor2, List<Orientation> orientations, bool sexual)
         {
-            var orientation1 = Orientations.GetOrientationFromActor(pActor1, sexual);
-            var orientation2 = Orientations.GetOrientationFromActor(pActor2, sexual);
+            var orientation1 = Orientations.GetOrientationForActorBasedOnCriteria(pActor1, sexual);
+            var orientation2 = Orientations.GetOrientationForActorBasedOnCriteria(pActor2, sexual);
 
             if (orientations.Contains(orientation1) && orientations.Contains(orientation2))
             {

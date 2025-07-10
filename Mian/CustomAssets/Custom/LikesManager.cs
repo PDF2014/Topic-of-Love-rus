@@ -243,9 +243,9 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 return true;
 
             var list = GetActorLikes(pActor, type, sexual ? LoveType.Sexual : LoveType.Romantic).Select(like => like.ID).ToList();
-            var targetType = GetActorTypeFromLikeGroup(pTarget, type);
+            var targetTypes = GetActorTypeFromLikeGroup(pTarget, type);
 
-            if (targetType != null && !list.Contains(targetType))
+            if (targetTypes.Length == 0 || !targetTypes.Any(element => list.Contains(element)))
                 return false;
             
             return true;
@@ -458,7 +458,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             var opposite = !result;
             actor.data.set(like.IDWithLoveType, value.HasValue ? value.Value : opposite);
             
-            Orientations.CreateOrientationBasedOnPrefChange(actor, like);
+            Orientations.CreateOrientationBasedOnLikeChange(actor, like);
         }
         public static List<LikeAsset> GetRegisteredAssetsFromType(string type)
         {
@@ -528,12 +528,12 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             return asset;
         }
 
-        public static string GetActorTypeFromLikeGroup(this Actor actor, string type)
+        public static string[] GetActorTypeFromLikeGroup(this Actor actor, string type)
         {
             if (type.Equals("identity"))
-                return GetIdentity(actor);
+                return new []{GetIdentity(actor)};
             if (type.Equals("expression"))
-                return GetExpression(actor);
+                return new[]{GetExpression(actor)};
             if (type.Equals("genital"))
                 return GetGenitalia(actor);
             return null;
@@ -562,14 +562,18 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
 
             return actor.isSexFemale() ? "feminine" : "masculine";
         }
-        public static string GetGenitalia(this Actor actor)
+        public static string[] GetGenitalia(this Actor actor)
         {
             if (TolUtil.IsTOIInstalled())
             {
                 // some code;
             }
 
-            return actor.isSexFemale() ? "vulva" : "phallus";
+            if (actor.NeedSameSexTypeForReproduction() || actor.CanDoAnySexType())
+                return new[]{"vulva", "phallus"};
+            if (actor.NeedDifferentSexTypeForReproduction())
+                return actor.isSexFemale() ? new[] { "vulva" } : new[] { "phallus" };
+            return new string[]{};
         }
         public static bool IsMasculine(this Actor actor)
         {
@@ -584,11 +588,11 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         // we will later intervene with Topic of Identity to replace these methods
         public static bool HasVulva(this Actor actor)
         {
-            return GetGenitalia(actor).Equals("vulva");
+            return GetGenitalia(actor).Contains("vulva");
         }
         public static bool HasPenis(this Actor actor)
         {
-            return GetGenitalia(actor).Equals("phallus");
+            return GetGenitalia(actor).Contains("phallus");
         }
         
         

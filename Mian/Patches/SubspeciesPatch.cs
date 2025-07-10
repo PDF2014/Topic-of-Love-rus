@@ -20,29 +20,38 @@ public class SubspeciesPatch
                 return false;
             }
 
-            if (TolUtil.CanDoAnySexType(pActor))
+            if (!pActor.ReproducesSexually() || !pTarget.ReproducesSexually())
+            {
+                __result = false;
+                return false;
+            }
+
+            // if ((pActor.HasVulva() && pTarget.HasPenis()) || (pActor.HasPenis() && pTarget.HasVulva()))
+            // {
+            //     __result = true;
+            //     return false;
+            // }
+
+            if (pActor.CanDoAnySexType() || pTarget.CanDoAnySexType())
             {
                 __result = true;
                 return false;
             }
             
-            var actorGenitalia = LikesManager.GetGenitalia(pActor);
-            var targetGenitalia = LikesManager.GetGenitalia(pTarget);
+            var actorGenitalia = pActor.GetGenitalia();
+            var targetGenitalia = pTarget.GetGenitalia();
             
-            if (__instance.needOppositeSexTypeForReproduction())
+            if (pTarget.GetBiologicalSex().Equals(pActor.GetBiologicalSex()) &&
+                pActor.NeedSameSexTypeForReproduction() && pTarget.NeedSameSexTypeForReproduction())
             {
-                if ((!actorGenitalia.Equals(targetGenitalia) && pTarget.subspecies.isReproductionSexual()) || TolUtil.CanDoAnySexType(pTarget))
-                {
-                    __result = true;
-                    return false;
-                }
-            } else if (TolUtil.NeedSameSexTypeForReproduction(pActor))
+                __result = true;
+                return false;
+            }
+            if (!pTarget.GetBiologicalSex().Equals(pActor.GetBiologicalSex()) && pActor.NeedDifferentSexTypeForReproduction() &&
+                                                                   pTarget.NeedDifferentSexTypeForReproduction())
             {
-                if ((actorGenitalia.Equals(targetGenitalia) && TolUtil.NeedSameSexTypeForReproduction(pTarget)) || TolUtil.CanDoAnySexType(pTarget))
-                {
-                    __result = true;
-                    return false;
-                }
+                __result = true;
+                return false;
             }
 
             __result = false;

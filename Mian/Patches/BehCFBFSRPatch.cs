@@ -73,8 +73,8 @@ public class BehCFBFSRPatch
             if (pParentA.subspecies.hasReachedPopulationLimit() || pParentB.subspecies.hasReachedPopulationLimit())
                 return false;
 
-            var aCanBePregnant = pParentA.isAbleToBecomePregnant();
-            var bCanBePregnant = pParentB.isAbleToBecomePregnant();
+            var aCanBePregnant = pParentA.IsAbleToBecomePregnant();
+            var bCanBePregnant = pParentB.IsAbleToBecomePregnant();
             Actor pregnantActor;
             if (aCanBePregnant && bCanBePregnant)
                 pregnantActor = Randy.randomBool() ? pParentA : pParentB;

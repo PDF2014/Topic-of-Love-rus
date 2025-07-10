@@ -187,9 +187,9 @@
   "like_masculine_romantic_info_2": "Confident, bold, and powerful.",
   "like_masculine_sexual_info_2": "Big, dominant and strong.",
   
-  "like_unfluid": "Unfluid",
-  "like_unfluid_info": "Their romantic and sexual preferences will never change",
-  "like_unfluid_info_2": "Sometimes preferences aren't fluid.",
+  "trait_unfluid": "Unfluid",
+  "trait_unfluid_info": "Their romantic and sexual preferences will never change",
+  "trait_unfluid_info_2": "Sometimes preferences aren't fluid.",
 
   "trait_group_dislikes": "Orientation Dislikes",
 
