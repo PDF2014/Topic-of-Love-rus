@@ -1,5 +1,8 @@
-﻿using NeoModLoader.General;
+﻿using System.Drawing;
+using NeoModLoader.General;
 using Topic_of_Love.Mian.CustomAssets.Custom;
+using UnityEngine;
+using Image = UnityEngine.UI.Image;
 
 namespace Topic_of_Love.Mian.CustomAssets;
 
@@ -38,6 +41,22 @@ public class TooltipAssets
         pTooltip.addLineText("like_group", like.LikeAsset.LikeGroup.Title, like.LikeAsset.LikeGroup.HexCode);
         pTooltip.addLineText("intimate", LM.Get(like.LoveType.ToString().ToLower()), LikesManager.GetHexCodeForLoveType(like.LoveType));
         pTooltip.setBottomDescription(like.Description2);
+
+        var species = pTooltip.transform.FindRecursive("IconSpecies");
+        if (species == null)
+        {
+            var IconSpecies = new GameObject();
+            IconSpecies.transform.SetParent(pTooltip._headline.transform);
+            IconSpecies.name = "IconSpecies";
+            IconSpecies.AddComponent<Image>();
+            IconSpecies.transform.localPosition = new Vector3(-45, -11);
+            IconSpecies.transform.localScale = new Vector3(0.2f, 0.2f);
+        }
+        else
+        {
+            species.transform.localPosition = new Vector3(-45, -11);
+        }
+        pTooltip.setSpeciesIcon(neuron.like.GetSprite());
     }
 
 }

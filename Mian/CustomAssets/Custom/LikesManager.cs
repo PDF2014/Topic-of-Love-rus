@@ -26,11 +26,15 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
     {
         public readonly string ID;
         public readonly string HexCode;
+        public readonly Func<LikeAsset, GameObject> GetDynamicIcon; // for dynamic assets
+        public readonly Func<LikeAsset, Sprite> GetDynamicSprite;
 
-        public LikeGroup(string id, string hexCode)
+        public LikeGroup(string id, string hexCode, Func<LikeAsset, GameObject> getDynamicIcon, Func<LikeAsset, Sprite> getDynamicSprite)
         {
             ID = id.ToLower();
             HexCode = hexCode;
+            GetDynamicIcon = getDynamicIcon;
+            GetDynamicSprite = getDynamicSprite;
         }
 
         public string Title => LM.Get("like_group_" + ID);
@@ -45,17 +49,15 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
     {
         public readonly string ID;
         public readonly LikeGroup LikeGroup;
-        public readonly string CustomSpriteLocation;
         public readonly bool IsDynamic;
 
         public LoveType ApplicableLoveType;
         
-        public LikeAsset(string id, LikeGroup likeGroup, LoveType applicable, string customSpriteLocation = null, bool isDynamic = false)
+        public LikeAsset(string id, LikeGroup likeGroup, LoveType applicable, bool isDynamic = false)
         {
             ID = id;
             LikeGroup = likeGroup;
             ApplicableLoveType = applicable;
-            CustomSpriteLocation = customSpriteLocation;
             IsDynamic = isDynamic;
         }
         
@@ -80,16 +82,31 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         public string Description => LM.Get("like_"+LikeAsset.ID+"_"+SpecificLoveString+"_info");
         public string Description2 => LM.Get("like_"+LikeAsset.ID+"_"+SpecificLoveString+"_info_2");
 
+        public Sprite GetSprite()
+        {
+            return LikeAsset.LikeGroup.GetDynamicSprite != null ? LikeAsset.LikeGroup.GetDynamicSprite(LikeAsset) : SpriteTextureLoader.getSprite("ui/Icons/likes/" + ID);
+        }
+
         public GameObject GetIcon()
         {
-            var sprite = LikeAsset.CustomSpriteLocation != null ? SpriteTextureLoader.getSprite("ui/Icons/" + LikeAsset.CustomSpriteLocation) 
-                : SpriteTextureLoader.getSprite("ui/Icons/likes/" + ID);
-            var sprite2 = SpriteTextureLoader.getSprite("ui/Icons/likes/" + (LoveType == LoveType.Sexual ? "sexual" : "romantic"));
+            GameObject mainHolder;
 
-            var mainHolder = new GameObject();
-            mainHolder.AddOrGetComponent<RectTransform>();
-            mainHolder.AddOrGetComponent<Image>().sprite = sprite;
-            mainHolder.name = "LikeIconHolder";
+            if (LikeAsset.LikeGroup.GetDynamicIcon != null)
+            {
+                mainHolder = LikeAsset.LikeGroup.GetDynamicIcon(LikeAsset);
+            }
+            else
+            {
+                var sprite = GetSprite();
+
+                mainHolder = new GameObject();
+                mainHolder.transform.localScale = new Vector3(0, 0);
+                mainHolder.AddOrGetComponent<RectTransform>();
+                mainHolder.AddOrGetComponent<Image>().sprite = sprite;
+            }
+            mainHolder.name = "LikeIconHolder";   
+            
+            var sprite2 = SpriteTextureLoader.getSprite("ui/Icons/likes/" + (LoveType == LoveType.Sexual ? "sexual" : "romantic"));
             
             var secondaryHolder = new GameObject();
             secondaryHolder.transform.SetParent(mainHolder.transform);
@@ -99,8 +116,8 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 secondaryHolder.GetComponent<Image>().sprite = sprite2;
             else
                 secondaryHolder.GetComponent<Image>().enabled = false;
-            secondaryHolder.transform.localPosition = new Vector3(2.5f, -3);
-            secondaryHolder.transform.localScale =  new Vector3(0.1f, 0.1f);
+            secondaryHolder.transform.localPosition = new Vector3(25, -30);
+            secondaryHolder.transform.localScale =  new Vector3(1f, 1f);
             secondaryHolder.name = "LoveTypeHolder";
             
             return mainHolder;
@@ -129,6 +146,51 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         private static readonly List<LikeAsset> AllLikeAssets = new();
         public static readonly Dictionary<LikeGroup, List<LikeAsset>> LikeTypes = new();
         private static readonly Dictionary<string, List<string>> MatchingSets = new();
+
+        private static readonly Func<LikeAsset, Sprite> GetSubspeciesSprite = asset =>
+        {
+            var subspecies = MapBox.instance.subspecies.get(long.Parse(asset.ID));
+            return subspecies.getSpriteIcon();
+        };
+
+        private static readonly Func<LikeAsset, GameObject> GetSubspeciesIcon = asset =>
+        {
+            var subspeciesBanner = GameObject.Find("Canvas Container Main/Canvas - Windows/windows/unit/Background/Scroll View/Viewport/Content/content_meta/Meta Elements/PrefabBannerSubspecies");
+            var actualObject = GameObject.Instantiate(subspeciesBanner.transform.GetChild(0));
+            GameObject.Destroy(actualObject.GetComponent<RotateOnHover>());
+            
+            var subspecies = MapBox.instance.subspecies.get(long.Parse(asset.ID));
+            
+            actualObject.GetChild(0).GetComponent<Image>().sprite = subspecies.getSpriteBackground();
+            actualObject.GetChild(5).GetComponent<Image>().color = subspecies.getColor().getColorMain2();
+            actualObject.GetChild(6).GetComponent<Image>().color = subspecies.getColor().getColor32Main();
+            
+            ActorAsset tAsset = subspecies.getActorAsset();
+            SubspeciesTrait tMutationAsset = null;
+            ActorTextureSubAsset tTextureAsset;
+            if (subspecies.has_mutation_reskin)
+            {
+                tMutationAsset = subspecies.mutation_skin_asset;
+                tTextureAsset = tMutationAsset.texture_asset;
+            }
+            else
+            {
+                tTextureAsset = tAsset.texture_asset;
+            }
+            AnimationContainerUnit tContainerAdult = DynamicActorSpriteCreatorUI.getContainerForUI(tAsset, true, tTextureAsset, tMutationAsset, false, null, null);
+            ColorAsset tKingdomColor = AssetManager.kingdoms.get(tAsset.kingdom_id_wild).default_kingdom_color;
+            int tPhenotypeIndex = subspecies.getMainPhenotypeIndexForBanner();
+            int tPhenotypeShade = 0;
+            Sprite tSprite = DynamicActorSpriteCreatorUI.getUnitSpriteForUI(tAsset, tContainerAdult.walking.frames[0], tContainerAdult, true, ActorSex.Male, tPhenotypeIndex, tPhenotypeShade, tKingdomColor, null, false);
+            
+            actualObject.GetChild(4).GetComponent<Image>().sprite = tSprite;
+            actualObject.transform.localScale = new Vector3(0.09f, 0.09f);
+
+            // GameObject.Destroy(actualObject.GetChild(2).GetComponent<Image>());
+            GameObject.DestroyImmediate(actualObject.GetChild(2).gameObject);
+            
+            return actualObject.gameObject;
+        };
         
         public static void Init()
         {
@@ -138,7 +200,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 identities.Add("nonbinary");
             
             AddLikeType("identity", "#B57EDC", identities, LoveType.Both);
-            AddLikeType("subspecies", "#34e965", new List<string>(), LoveType.Both);
+            AddLikeType("subspecies", "#34e965", new List<string>(), LoveType.Both, GetSubspeciesIcon, GetSubspeciesSprite);
             
             if(TolUtil.IsTOIInstalled())
                 AddLikeType("expression", "#C900FF", List.Of("feminine", "masculine"), LoveType.Both);
@@ -167,7 +229,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             data.removeString(id + "_love_type");
             data.removeString(id + "_custom_sprite");
         }
-        public static LikeAsset AddDynamicLikeAsset(long id, string likeName, string groupId, string customSpriteLocation, LoveType loveType, bool save = true)
+        public static LikeAsset AddDynamicLikeAsset(long id, string likeName, string groupId, LoveType loveType, bool save = true)
         {
             TolUtil.Debug("Created dynamic like asset: " + likeName + ", " + groupId + ", " + loveType);
             
@@ -177,7 +239,6 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 id.ToString(),
                 likeGroup,
                 loveType,
-                customSpriteLocation,
                 true
             );
 
@@ -191,10 +252,13 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 data.set("custom_like_" + id, likeName);
                 data.set(id.ToString(), groupId);
                 data.set(id + "_love_type", loveType.ToString());
-                data.set(id + "_custom_sprite", customSpriteLocation);   
             }
             
-            LM.ApplyLocale();
+            LM.ApplyLocale(false);
+            // quiet update
+            foreach (LocalizedText text in LocalizedTextManager.instance.texts)
+                text.updateText();
+            
             return like;
         }
 
@@ -218,9 +282,8 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                     data.get(likeID, out string groupId);
                     data.get(likeID + "_love_type", out string loveType);
                     LoveType.TryParse(loveType, out LoveType _loveType);
-                    data.get(likeID + "_custom_sprite", out string customSpriteLocation);
 
-                    AddDynamicLikeAsset(long.Parse(likeID), likeName, groupId, customSpriteLocation, _loveType, false);
+                    AddDynamicLikeAsset(long.Parse(likeID), likeName, groupId, _loveType, false);
                 }
             }
         }
@@ -233,7 +296,10 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             LM.AddToCurrentLocale("like_" + asset.ID + "_romantic_info", "Romantically likes " + name);
             LM.AddToCurrentLocale("like_" + asset.ID + "_sexual_info", "Sexually likes " + name);
 
-            LM.ApplyLocale();
+            LM.ApplyLocale(false);
+            // quiet update
+            foreach (LocalizedText text in LocalizedTextManager.instance.texts)
+                text.updateText();
         }
         
         private static void AddLocalesForLikeAsset(LikeAsset asset, [CanBeNull] string forcedName=null)
@@ -257,7 +323,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         }
         
         // if all preferences of a preference type is added, remove them all (no reason for preferences if all are included?)
-        private static void AddLikeType(string groupType, string hexColor, List<string> preferences, LoveType prefType)
+        private static void AddLikeType(string groupType, string hexColor, List<string> preferences, LoveType prefType, Func<LikeAsset, GameObject> getIcon=null, Func<LikeAsset, Sprite> getSprite=null)
         {
             if (LikeTypes.Any(type => type.Key.ID.Equals(groupType)))
             {
@@ -285,7 +351,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 LM.AddToCurrentLocale("like_group_"+groupType, nameWithPlural);
 
             var likeAssets = new List<LikeAsset>();
-            var likeGroup = new LikeGroup(groupType, hexColor);
+            var likeGroup = new LikeGroup(groupType, hexColor, getIcon, getSprite);
             
             foreach (var likeName in preferences)
             {

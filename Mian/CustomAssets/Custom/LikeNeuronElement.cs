@@ -20,11 +20,10 @@ public class LikeNeuronElement :
     public const float SCALE_SPAWN_IMPULSE = 1.5f;
     public const float SCALE_RECEIVE_IMPULSE_INCREASE = 0.1f;
     public const float SCALE_NORMAL = 1f;
-    public Image image;
-    [NotNull] public Image secondaryImage;
     public float render_depth;
     public bool highlighted;
     public List<LikeNeuronElement> connected_neurons = new();
+    public Image[] images = Array.Empty<Image>();
     public float scale_mod_spawn = 1f;
     public float bonus_scale = 1f;
     public List<LikeAxonElement> _axons = new();
@@ -102,23 +101,30 @@ public class LikeNeuronElement :
         }
     }
 
+    public void clearImages()
+    {
+        images = Array.Empty<Image>();
+        
+        for (var i = 0; i < transform.childCount; i++)
+        {
+            DestroyImmediate(transform.GetChild(i).gameObject);
+        }
+    }
+
     public void setupLikeAndActor(Like pLike, Actor pActor)
     {
         like = pLike;
         actor = pActor;
+
+        clearImages();
         
         var icon = like.GetIcon();
-        image.sprite = icon.GetComponent<Image>().sprite;
-        var secondaryHolder = icon.transform.GetChild(0);
 
-        var localPosition = secondaryHolder.localPosition;
-        var localScale =  secondaryHolder.localScale;
-        secondaryHolder.SetParent(transform);
-        secondaryHolder.localPosition = localPosition;
-        secondaryHolder.localScale = localScale;
-        secondaryImage = secondaryHolder.GetComponent<Image>();
+        var localScale = icon.transform.localScale;
+        icon.transform.SetParent(transform, false);
+        icon.transform.localScale = new Vector3(localScale.x + 0.1325f, localScale.y + 0.1325f);
         
-        Destroy(icon);
+        images = transform.GetComponentsInChildren<Image>();
         
         _spawn_interval = Randy.randomFloat(3f, 15f);
         _spawn_timer = Randy.randomFloat(0.0f, _spawn_interval);
@@ -207,18 +213,16 @@ public class LikeNeuronElement :
         _neurons_overview.switchAllNeurons();
         if (_neurons_overview.getAllState())
         {
-            image.color = Toolbox.color_clear;
-            if (secondaryImage != null)
+            foreach (var image in images)
             {
-                secondaryImage.color = Toolbox.color_clear;
+                image.color = Toolbox.color_clear;
             }
         }
         else
         {
-            image.color = Toolbox.color_white;
-            if (secondaryImage != null)
+            foreach (var image in images)
             {
-                secondaryImage.color = Toolbox.color_white;
+                image.color = Toolbox.color_white;
             }
         }
     }
@@ -250,10 +254,9 @@ public class LikeNeuronElement :
 
     public void setColor(Color pColor)
     {
-        image.color = pColor;
-        if (secondaryImage != null)
+        foreach (var image in images)
         {
-            secondaryImage.color = pColor;
+            image.color = pColor;
         }
     }
 

@@ -482,7 +482,13 @@ public class LikesOverview :
         
         _last_activated_neuron = _pool_neurons.getNext();
         _last_activated_neuron.transform.localPosition = Vector3.zero;
-        _last_activated_neuron.image.sprite = SpriteTextureLoader.getSprite("ui/icons/iconBrain");
+        _last_activated_neuron.clearImages();
+        var gameObj = new GameObject();
+        gameObj.name = "brain";
+        gameObj.AddOrGetComponent<Image>().sprite = SpriteTextureLoader.getSprite("ui/icons/iconBrain");
+        gameObj.transform.SetParent(_last_activated_neuron.transform, false);
+        gameObj.transform.localScale = new Vector3(0.1f, 0.1f);
+        
         _last_activated_neuron.bonus_scale = 1.5f;
         _last_activated_neuron.setCenter(true);
         _last_activated_neuron.actor = actor;

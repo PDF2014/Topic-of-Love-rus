@@ -357,7 +357,10 @@ public class StatPatch
         var neuronObject = GameObject.Instantiate(NeuronsOverview.instance._prefab_neuron.gameObject);
         neuronObject.name = "element_neuron_like";
         GameObject.Destroy(neuronObject.GetComponent<NeuronElement>());
-        neuronObject.AddComponent<LikeNeuronElement>().image = neuronObject.GetComponent<Image>();
+        // neuronObject.AddComponent<LikeNeuronElement>().image = neuronObject.GetComponent<Image>();
+        neuronObject.AddComponent<LikeNeuronElement>();
+        GameObject.Destroy(neuronObject.GetComponent<Image>());
+        
         likesOverview._prefab_neuron = neuronObject.GetComponent<LikeNeuronElement>();
         
         var nerveObject = GameObject.Instantiate(NeuronsOverview.instance._prefab_nerve_impulse.gameObject);

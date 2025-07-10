@@ -22,6 +22,9 @@ public class SubspeciesPatch
             {
                 var name = __instance.meta_object.name;
                 var id = __instance.meta_object.id.ToString();
+                MapBox.instance.map_stats.custom_data.get("custom_like_"+id, out string oldName);
+                if (oldName.Equals(name))
+                    return;
                 MapBox.instance.map_stats.custom_data.set("custom_like_" + id, name);
                 LikesManager.RenameLikeAssetLocale(LikesManager.GetAssetFromID(id),
                     name);
@@ -33,7 +36,7 @@ public class SubspeciesPatch
     [HarmonyPatch(nameof(Subspecies.newSpecies))]
     static void SpeciesPatch(Subspecies __instance)
     {
-        LikesManager.AddDynamicLikeAsset(__instance.id, __instance.name, "subspecies", __instance._species_asset.icon, LoveType.Both);
+        LikesManager.AddDynamicLikeAsset(__instance.id, __instance.name, "subspecies", LoveType.Both);
         
         __instance.action_death += (obj, _) =>
         {

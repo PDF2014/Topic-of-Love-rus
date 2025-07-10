@@ -79,7 +79,6 @@
         <Compile Include="Mian\Patches\SpriteTextureLoaderPatch.cs" />
         <Compile Include="Mian\Patches\SubspeciesPatch.cs" />
         <Compile Include="Mian\Patches\StatPatch.cs" />
-        <Compile Include="Mian\Patches\WorldMigratePatch.cs" />
         <Compile Include="Mian\TopicOfLove.cs" />
         <Compile Include="Mian\TolUtil.cs" />
     </ItemGroup>
