@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System.Reflection;
+using HarmonyLib;
 using Topic_of_Love.Mian.CustomAssets;
 using Topic_of_Love.Mian.CustomAssets.Custom;
 
@@ -7,6 +8,40 @@ namespace Topic_of_Love.Mian.Patches;
 [HarmonyPatch(typeof(Subspecies))]
 public class SubspeciesPatch
 {
+    [HarmonyPatch]
+    static class WindowInputPatch
+    {
+        static MethodBase TargetMethod()
+        {
+            return AccessTools.Method(typeof(WindowMetaGeneric<Subspecies, SubspeciesData>), nameof(WindowMetaGeneric<Subspecies, SubspeciesData>.applyInputName));
+        }
+
+        static void Postfix(WindowMetaGeneric<Subspecies, SubspeciesData> __instance)
+        {
+            if (__instance.meta_object.GetType() == typeof(Subspecies))
+            {
+                var name = __instance.meta_object.name;
+                var id = __instance.meta_object.id.ToString();
+                MapBox.instance.map_stats.custom_data.set("custom_like_" + id, name);
+                LikesManager.RenameLikeAssetLocale(LikesManager.GetAssetFromID(id),
+                    name);
+            }
+        }
+    }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(Subspecies.newSpecies))]
+    static void SpeciesPatch(Subspecies __instance)
+    {
+        LikesManager.AddDynamicLikeAsset(__instance.id, __instance.name, "subspecies", __instance._species_asset.icon, LoveType.Both);
+        
+        __instance.action_death += (obj, _) =>
+        {
+            LikesManager.RemoveDynamicLikeAsset(obj.getID());
+            return true;
+        };
+    }
+    
     // I don't bother to use a transpiler for this since we pretty much rewrite the entire method
     [HarmonyPatch(nameof(Subspecies.isPartnerSuitableForReproduction))]
     [HarmonyPrefix]

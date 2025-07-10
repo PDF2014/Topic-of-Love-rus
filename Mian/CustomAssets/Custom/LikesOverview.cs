@@ -243,7 +243,23 @@ public class LikesOverview :
 
     public void checkLikes()
     {
-        _likes = LikesManager.GetValidLikesFromAssets();
+        _likes = LikesManager.GetValidLikesFromAssets()
+            .Where(like =>
+            {
+                var isSubspecies = like.LikeAsset.LikeGroup.ID.Equals("subspecies");
+                if (!isSubspecies)
+                    return true;
+                var id = long.Parse(like.LikeAsset.ID);
+                var subspecies = MapBox.instance.subspecies.get(id);
+                if (subspecies == null)
+                    return false;
+                if (subspecies.id == actor.subspecies.id)
+                    return true;
+                if (!subspecies.isSapient() || !actor.isSapient())
+                    return false;
+
+                return true;
+            }).ToList();
     }
 
     public void updateNeuronsVisual()
