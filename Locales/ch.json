@@ -262,7 +262,6 @@
   "world_law_fluid_sexuality_description": "單位的性取向可能隨時間推移而改變",
   "world_law_fluid_sexuality_description_2": "性可以流動!",
   
-  
   "lesbian": "女同性取向",
   "gay": "男同性取向",
   "straight": "傳統異性取向",
@@ -279,7 +278,6 @@
   "heterosexual_romantic": "異性戀愛取向",
   "homosexual_romantic": "同性戀愛取向",
   "asexual_romantic": "無性戀者取向",
-  
   
   "statistics_lesbian_description": "據統計，她們比異性戀男人更能吸引女人",
   "statistics_gay_description": "據統計，他們吸引的男人比異性戀女人多",
@@ -328,8 +326,11 @@
   
   "sexual": "性",
   "romantic": "戀愛",
-  "like_group": "組",
+  "like_group": "分組",
   "intimate": "親密型",
+  "identities": "性別",
+  "expressions": "表現",
+  "genitals": "生殖",
   
   "tab_title_tol": "愛的主旋律",
   "tab_desc_tol": "包含所有性和戀愛取向!",
