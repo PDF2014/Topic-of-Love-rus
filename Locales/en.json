@@ -169,7 +169,7 @@
   "trait_dislike_romance_info": "They do not desire love unlike most",
   "trait_dislike_romance_info_2": "It's not because they have not found the right person, they just feel this way",
 
-  "like_phallus_sexual_info_2": "You place it in the goal.",
+  "like_phallus_sexual_info_2": "Stick it in already!",
   "like_vulva_sexual_info_2": "When there's a hole, there's a goal.",
 
   "like_female_romantic_info_2": "What are some things a girl likes?",
@@ -236,6 +236,23 @@
   "world_law_fluid_sexuality_title": "Fluid Preferences",
   "world_law_fluid_sexuality_description": "Unit preferences may change overtime even when already established",
   "world_law_fluid_sexuality_description_2": "Sexuality can be fluid!",
+  
+  "lesbian": "Lesbian",
+  "gay": "Gay",
+  "straight": "Straight",
+  "bisexual": "Bisexual",
+  "pansexual": "Pansexual",
+  "heterosexual": "Heterosexual",
+  "homosexual": "Homosexual",
+  "asexual": "Asexual",
+  "lesbian_romantic": "Lesbian Romantic",
+  "gay_romantic": "Gay Romantic",
+  "straight_romantic": "Straight Romantic",
+  "bisexual_romantic": "Bisexual Romantic",
+  "pansexual_romantic": "Pansexual Romantic",
+  "heterosexual_romantic": "Heterosexual Romantic",
+  "homosexual_romantic": "Homosexual Romantic",
+  "asexual_romantic": "Asexual Romantic",
   
   "statistics_lesbian_description": "They statistically pull more women than straight men ever could",
   "statistics_gay_description": "They statistically pull more men than straight woman ever could",
