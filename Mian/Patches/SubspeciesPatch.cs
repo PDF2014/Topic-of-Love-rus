@@ -18,7 +18,7 @@ public class SubspeciesPatch
 
         static void Postfix(WindowMetaGeneric<Subspecies, SubspeciesData> __instance)
         {
-            if (__instance.meta_object.GetType() == typeof(Subspecies))
+            if (__instance.meta_object.GetType() == typeof(Subspecies) && __instance.meta_object.isSapient())
             {
                 var name = __instance.meta_object.name;
                 var id = __instance.meta_object.id.ToString();
@@ -36,13 +36,18 @@ public class SubspeciesPatch
     [HarmonyPatch(nameof(Subspecies.newSpecies))]
     static void SpeciesPatch(Subspecies __instance)
     {
-        LikesManager.AddDynamicLikeAsset(__instance.id, __instance.name, "subspecies", LoveType.Both);
-        
-        __instance.action_death += (obj, _) =>
+        if (__instance.isSapient())
         {
-            LikesManager.RemoveDynamicLikeAsset(obj.getID());
-            return true;
-        };
+            LikesManager.AddDynamicLikeAsset(__instance.id, __instance.name, "subspecies", LoveType.Both);
+        }
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(SubspeciesManager), nameof(SubspeciesManager.removeObject))]
+    static void OnRemoveSpecies(Subspecies pObject)
+    {
+        if(pObject.isSapient())
+            LikesManager.RemoveDynamicLikeAsset(pObject.getID());
     }
     
     // I don't bother to use a transpiler for this since we pretty much rewrite the entire method

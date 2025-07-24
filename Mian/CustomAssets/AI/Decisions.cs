@@ -48,14 +48,14 @@ public class Decisions
             id = "find_date",
             priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/status/went_on_date",
-            cooldown = 30,
+            cooldown = 50,
             action_check_launch = actor => TolUtil.CapableOfLove(actor)
-                                           && !actor.isIntimacyHappinessEnough( 100f)
+                                           && !actor.isIntimacyHappinessEnough(100f)
                                            && TolUtil.IsOrientationSystemEnabledFor(actor)
                                            && !actor.hasStatus("went_on_date"),
-            weight_calculate_custom = actor => !actor.hasLover() ? 1.5f : actor.isIntimacyHappinessEnough( 75f) ? 0.5f: 
-                actor.isIntimacyHappinessEnough( 50f) ? 0.6f : actor.isIntimacyHappinessEnough( 0) ? .8f : 
-                actor.isIntimacyHappinessEnough( -50) ? 1f : actor.isIntimacyHappinessEnough( -100f) ? 1.5f : 1.25f,
+            weight_calculate_custom = actor => !actor.hasLover() ? 1f : actor.isIntimacyHappinessEnough( 75f) ? 0.05f: 
+                actor.isIntimacyHappinessEnough( 50f) ? 0.1f : actor.isIntimacyHappinessEnough( 0) ? .12f : 
+                actor.isIntimacyHappinessEnough( -50) ? 0.2f : actor.isIntimacyHappinessEnough( -100f) ? 0.35f : 0.5f,
             only_safe = true,
             cooldown_on_launch_failure = true
         });
@@ -154,6 +154,8 @@ public class Decisions
             only_safe = true,
             only_adult = true
         });
+        AssetManager.decisions_library.get("find_lover").action_check_launch = pActor => !pActor.hasLover() && pActor.isBreedingAge() && 
+            (!pActor.isSapient() || pActor.hasSubspeciesTrait("orientationless"));
         Finish();
     }
     

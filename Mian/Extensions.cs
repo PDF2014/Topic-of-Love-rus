@@ -8,27 +8,6 @@ namespace Topic_of_Love.Mian;
 
 public static class Extensions
 {
-    public static IBaseSystemData AsBaseSystemData<TData>(this CoreSystemObject<TData> systemObject) where TData : BaseSystemData
-    {
-        return new BaseSystemDataHolder<TData>(systemObject);
-    }
-    
-    public interface IBaseSystemData
-    {
-        public BaseSystemData GetData();
-    }
-    private class BaseSystemDataHolder<TData> : IBaseSystemData where TData : BaseSystemData
-    {
-        private readonly CoreSystemObject<TData> _coreObject; 
-        public BaseSystemDataHolder(CoreSystemObject<TData> coreObject)
-        {
-            _coreObject = coreObject;
-        }
-        public BaseSystemData GetData()
-        {
-            return _coreObject.data;
-        }
-    }
     
     // this method may be a bit confusing but it's to determine if actors can get pregnant based on their genitalia and if they have eggs
     public static bool IsAbleToBecomePregnant(this Actor pActor)

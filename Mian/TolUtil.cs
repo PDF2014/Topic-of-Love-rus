@@ -239,7 +239,7 @@ namespace Topic_of_Love.Mian
                 var oldPreferences = actor.GetActorLikes();
                 foreach (var preference in oldPreferences)
                 {
-                    actor.data.set(preference.IDWithLoveType, false);
+                    actor.data.removeBool(preference.IDWithLoveType);
                 }
                 
                 var preferences =  LikesManager.GetRandomLikes(actor);
@@ -514,15 +514,15 @@ namespace Topic_of_Love.Mian
             if (message == null)
                 return;
             var config = TopicOfLove.Mod.GetConfig();
+            var debug = (bool)config["Misc"]["Debug"].GetValue();
+            
+            var stringMsg = message.ToString();
+            
+            if (!debug)
+                return;
             var slowOnLog = GetKeywords((string)config["Misc"]["SlowOnLog"].GetValue());
             var stackTrace = GetKeywords((string)config["Misc"]["StackTrace"].GetValue());
             var ignore = GetKeywords((string)config["Misc"]["Ignore"].GetValue());
-            var debug = (bool)config["Misc"]["Debug"].GetValue();
-
-            var stringMsg = message.ToString();
-
-            if (!debug)
-                return;
             if (ignore.Length > 0 && ignore.Any(keyword => stringMsg.Contains(keyword)))
                 return;
             if(stackTrace.Length > 0 && stackTrace.Any(keyword => stringMsg.Contains(keyword)))

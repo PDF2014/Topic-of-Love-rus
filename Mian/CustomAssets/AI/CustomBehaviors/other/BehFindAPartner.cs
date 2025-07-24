@@ -57,38 +57,7 @@ public class BehFindAPartner : BehaviourActionActor
 
         if (target == null || !TolUtil.WillDoIntimacy(pActor, target, _sexReason, true))
             return BehResult.Stop;
-        //
-        // if (pActor.hasLover() 
-        //     && IsTargetValid(pActor, pActor.lover))
-        //     target = pActor.lover;
-        //
-        // if (pActor.hasLover() && IsForReproduction() &&
-        //     TolUtil.CouldReproduce(pActor, pActor.lover) && target != pActor.lover)
-        //     return BehResult.Stop;
-        //
-        // if (target == null && _partnerType.Equals(PartnerType.Lover))
-        //     return BehResult.Stop;
-        //
-        // if (!TolUtil.WillDoIntimacy(pActor, target, _sexReason, true))
-        // {
-        //     TolUtil.Debug("They decided that they will not do it.");
-        //     return BehResult.Stop;
-        // }
-        //
-        // if(pActor.hasBestFriend()
-        //    && IsTargetValid(pActor, pActor.getBestFriend()))
-        //     target = pActor.getBestFriend();
-        //
-        // if (target == null && _partnerType.Equals(PartnerType.Friend))
-        //     return BehResult.Stop;
-        //
-        // if (target == null)
-        // {
-        //     target = GetClosestPossibleMatchingActor(pActor);
-        //     if (target == null)
-        //         return BehResult.Stop;
-        // }
-        //
+
         TolUtil.Debug("Lover found!");
         
         pActor.beh_actor_target = target;
@@ -140,18 +109,18 @@ public class BehFindAPartner : BehaviourActionActor
     {
         var chunkRadius = IsForReproduction() ? 4 : 2;
         var isRandom = !IsForReproduction();
-        
-        using (ListPool<Actor> pCollection = new ListPool<Actor>(5))
-        {
-            foreach (var pTarget in Finder.getUnitsFromChunk(pActor.current_tile, chunkRadius, pRandom: isRandom))
-            {
-                if (pTarget != pActor && IsTargetValid(pActor, pTarget))
-                {
-                    pCollection.Add(pTarget);
-                }
-            }
 
-            return Toolbox.getClosestActor(pCollection, pActor.current_tile);
+        using var pCollection = new ListPool<Actor>(5);
+        
+        foreach (var pTarget in Finder.getUnitsFromChunk(pActor.current_tile, chunkRadius, pRandom: isRandom))
+        {
+            if (pTarget != pActor && IsTargetValid(pActor, pTarget))
+            {
+                pCollection.Add(pTarget);
+            }
         }
+
+        return Toolbox.getClosestActor(pCollection, pActor.current_tile);
+        
     }
 }

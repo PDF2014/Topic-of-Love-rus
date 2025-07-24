@@ -430,18 +430,28 @@ public class HistoryMetaDataAssets
         }
     };
 
+    // public class WorldCollector : WorldYearly1
+    // {
+    //     [Column("lonely")]
+    //     public long? lonely { get; set; }
+    // }
+
     public static void Init()
     {
-        Dictionary<KeyValuePair<string, Func<NanoObject, long?>>, List<string>> toAdd = new();
-        toAdd.Add(new ("lonely", nano =>
-        {
-            if (nano.getMetaType().Equals(MetaType.World))
-            {
-                return StatsHelper.getStat("statistics_lonely");
-            }
-
-            return ((IMetaObject)nano).countLonely();
-        }), new(){"kingdom", "city", "world"});
+        // AssetManager.history_meta_data_library.get("kingdom").collector += (nano) => new WorldCollector
+        // {
+        //     lonely = ((IMetaObject) nano).countLonely()
+        // };
+        // Dictionary<KeyValuePair<string, Func<NanoObject, long?>>, List<string>> toAdd = new();
+        // toAdd.Add(new ("lonely", nano =>
+        // {
+        //     if (nano.getMetaType().Equals(MetaType.World))
+        //     {
+        //         return StatsHelper.getStat("statistics_lonely");
+        //     }
+        //
+        //     return ((IMetaObject)nano).countLonely();
+        // }), new(){"kingdom", "city", "world"});
         
         // toAdd.Add(new ("cheated_on", nano =>
         // {
@@ -476,44 +486,44 @@ public class HistoryMetaDataAssets
         //     return coreObject.countAdoptedBaby();
         // }), new(){"kingdom", "city", "world"});
         //
-
-        Orientation.RegisteredOrientations.Values.ForEach(orientation =>
-        {
-            var id = orientation.OrientationType;
-            toAdd.Add(new(id, nano =>
-            {
-                if (nano.getMetaType().Equals(MetaType.World))
-                {
-                    return StatsHelper.getStat("statistics_" + id);
-                }
-
-                return ((IMetaObject)nano).countOrientation(orientation.OrientationType, true);
-            }), new(){"kingdom", "city", "world"});
-        });
-        
-        var toUse = new Dictionary<string, Dictionary<string, Func<NanoObject, long?>>>();
-        
-        foreach (var pair in toAdd)
-        {
-            var statisticInfo = pair.Key;
-            var statId = statisticInfo.Key;
-            var statCollector = statisticInfo.Value;
-
-            foreach (var metaAsset in pair.Value)
-            {
-                if(!toUse.ContainsKey(metaAsset))
-                    toUse.Add(metaAsset, new());
-                
-                toUse[metaAsset][statId] = statCollector;
-            }
-        }
-
-        foreach (var asset in toUse)
-        {
-            AddStatisticsToMetaAsset(asset.Key, asset.Value);
-        }
-        
-        Finish();
+        //
+        // Orientation.RegisteredOrientations.Values.ForEach(orientation =>
+        // {
+        //     var id = orientation.OrientationType;
+        //     toAdd.Add(new(id, nano =>
+        //     {
+        //         if (nano.getMetaType().Equals(MetaType.World))
+        //         {
+        //             return StatsHelper.getStat("statistics_" + id);
+        //         }
+        //
+        //         return ((IMetaObject)nano).countOrientation(orientation.OrientationType, true);
+        //     }), new(){"kingdom", "city", "world"});
+        // });
+        //
+        // var toUse = new Dictionary<string, Dictionary<string, Func<NanoObject, long?>>>();
+        //
+        // foreach (var pair in toAdd)
+        // {
+        //     var statisticInfo = pair.Key;
+        //     var statId = statisticInfo.Key;
+        //     var statCollector = statisticInfo.Value;
+        //
+        //     foreach (var metaAsset in pair.Value)
+        //     {
+        //         if(!toUse.ContainsKey(metaAsset))
+        //             toUse.Add(metaAsset, new());
+        //         
+        //         toUse[metaAsset][statId] = statCollector;
+        //     }
+        // }
+        //
+        // foreach (var asset in toUse)
+        // {
+        //     AddStatisticsToMetaAsset(asset.Key, asset.Value);
+        // }
+        //
+        // Finish();
     }
 
     public static void AddStatisticsToMetaAsset(string id, Dictionary<string, Func<NanoObject, long?>> collector)

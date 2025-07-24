@@ -121,7 +121,7 @@ public class ActorPatch
                         else
                         {
                             var preferences = __instance.GetActorLikes("identity", LikesManager.GetRandomLoveType());
-                            if (preferences.Count > 0)
+                            if (preferences.Any())
                             {
                                 __instance.ToggleLike(preferences.GetRandom(), false);
                             }
@@ -140,7 +140,7 @@ public class ActorPatch
                             else
                             {
                                 var preferences = __instance.GetActorLikes("expression", LikesManager.GetRandomLoveType());
-                                if (preferences.Count > 0)
+                                if (preferences.Any())
                                 {
                                     __instance.ToggleLike(preferences.GetRandom(), false);
                                 }
@@ -157,7 +157,7 @@ public class ActorPatch
                             else
                             {
                                 var preferences = __instance.GetActorLikes("genital", LoveType.Sexual);
-                                if (preferences.Count > 0)
+                                if (preferences.Any())
                                 {
                                     __instance.ToggleLike(preferences.GetRandom(), false);
                                 }
