@@ -36,7 +36,7 @@ public static class Extensions
         return compare >= happiness;
     }
         
-    public static void changeIntimacyHappiness(this Actor actor, float happiness)
+    public static void changeIntimacyHappinessBy(this Actor actor, float happiness)
     {
         actor.data.get("intimacy_happiness", out float init);
         actor.data.set("intimacy_happiness", Math.Max(-100, Math.Min(happiness + init, 100)));

@@ -167,7 +167,7 @@ public class ActorPatch
                 }
                 
                 if(__instance.HasAnyLikesFor("identity", LoveType.Both) && TolUtil.IsOrientationSystemEnabledFor(__instance))
-                    __instance.a.changeIntimacyHappiness(TolUtil.HasNoOne(__instance) ? -Randy.randomFloat(13f, 18f) : -Randy.randomFloat(5f, 7f));
+                    __instance.a.changeIntimacyHappinessBy(TolUtil.HasNoOne(__instance) ? -Randy.randomFloat(6f, 9f) : -Randy.randomFloat(2f, 5f));
                 // else
                     // __instance.data.set("intimacy_happiness", 100f);
             } else if (!__instance.isAdult() && Randy.randomChance(0.1f) && !__instance.HasALike())
@@ -246,8 +246,8 @@ public class ActorPatch
         TolUtil.Debug($"{__instance.getName()} fell in love {pTarget.getName()}!");
         
         // falling in love is fucking amazing cherish it mate
-        pTarget.changeIntimacyHappiness(100);
-        __instance.changeIntimacyHappiness(100);
+        pTarget.changeIntimacyHappinessBy(100);
+        __instance.changeIntimacyHappinessBy(100);
     }
         
     // This is where we handle the beef of our code for having cross species and non-same reproduction method ppl fall in love
@@ -363,6 +363,16 @@ public class ActorPatch
                 new CodeInstruction(OpCodes.Ceq),
                 new CodeInstruction(OpCodes.Brfalse, returnFalse)
             );
+            
+            // can they both fall in love at all?
+            codeMatcher.InsertAndAdvance(
+                new CodeInstruction(OpCodes.Ldarg_0),
+                CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.CanFallInLove)),
+                new CodeInstruction(OpCodes.Brfalse, returnFalse),
+
+                new CodeInstruction(OpCodes.Ldarg_1),
+                CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.CanFallInLove)),
+                new CodeInstruction(OpCodes.Brfalse, returnFalse));
 
             var orientationSystemInvolved = generator.DeclareLocal(typeof(bool));
             var skipOrientationChecks = generator.DefineLabel();
@@ -417,16 +427,6 @@ public class ActorPatch
                 new CodeInstruction(OpCodes.Ldarg_0), // instance
                 new CodeInstruction(OpCodes.Callvirt, AccessTools.Method(typeof(Actor), nameof(Actor.areFoes))),
                 new CodeInstruction(OpCodes.Brtrue, returnFalse));
-
-            // can they both fall in love at all?
-            codeMatcher.InsertAndAdvance(
-                new CodeInstruction(OpCodes.Ldarg_0),
-                CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.CanFallInLove)),
-                new CodeInstruction(OpCodes.Brfalse, returnFalse),
-
-                new CodeInstruction(OpCodes.Ldarg_1),
-                CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.CanFallInLove)),
-                new CodeInstruction(OpCodes.Brfalse, returnFalse));
             
             return codeMatcher.InstructionEnumeration();
         }

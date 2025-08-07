@@ -57,7 +57,7 @@ public class BehFinishTalkPatch
         if(Randy.randomChance(pActor.getBestFriend() == pTarget ? 0.2f : 0.05f))
             ActorTool.checkFallInLove(pActor, pTarget);
         
-        pActor.changeIntimacyHappiness(45);
-        pTarget.changeIntimacyHappiness(45);
+        pActor.changeIntimacyHappinessBy(45);
+        pTarget.changeIntimacyHappinessBy(45);
     }
 }

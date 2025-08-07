@@ -194,12 +194,12 @@ namespace Topic_of_Love.Mian
 
             if (actor1.hasLover() && actor1.lover != actor2)
             {
-                actor1.lover.changeIntimacyHappiness(-25f);
+                actor1.lover.changeIntimacyHappinessBy(-25f);
             }
 
             if (actor2.hasLover() && actor2.lover != actor1)
             {
-                actor2.lover.changeIntimacyHappiness(-25f);
+                actor2.lover.changeIntimacyHappinessBy(-25f);
             }
             
             if (actor1.lover != actor2)

@@ -139,7 +139,7 @@ public class StatPatch
                 // __instance.setIconValue(orientationType+"_romantic", pMetaObject.countOrientation(orientationType, false));
             });
             
-            __instance.setIconValue("lonely", World.world.units.Count(unit => unit.getIntimacy() < 0 && TolUtil.AffectedByIntimacy(unit)));
+            __instance.setIconValue("lonely", pMetaObject.countLonely());
     }
 
     private static readonly string[] ValidIconsList =

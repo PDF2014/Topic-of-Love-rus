@@ -464,16 +464,16 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             if (identityTypes.Length == 0)
                 return false;
             
-            var expressionTypes = GetActorTypeFromLikeGroup(pTarget, "expression");
-            if (expressionTypes.Length == 0)
+            var expressionTypes = TolUtil.IsTOIInstalled() ? GetActorTypeFromLikeGroup(pTarget, "expression") : null;
+            if (expressionTypes != null && expressionTypes.Length == 0)
+                return false;
+            
+            var genitalTypes = TolUtil.IsTOIInstalled() ? GetActorTypeFromLikeGroup(pTarget, "genital") : null;
+            if (genitalTypes != null && genitalTypes.Length == 0)
                 return false;
             
             var subspeciesTypes = GetActorTypeFromLikeGroup(pTarget, "subspecies");
             if (subspeciesTypes.Length == 0)
-                return false;
-            
-            var genitalTypes = GetActorTypeFromLikeGroup(pTarget, "genital");
-            if (genitalTypes.Length == 0)
                 return false;
 
             var foundIdentity = false;
@@ -485,11 +485,11 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             {
                 if(identityTypes.Contains(like.ID))
                     foundIdentity = true;
-                if(expressionTypes.Contains(like.ID))
+                if(!TolUtil.IsTOIInstalled() || expressionTypes.Contains(like.ID))
                     foundExpression = true;
                 if(subspeciesTypes.Contains(like.ID))
                     foundSubspecies = true;
-                if(expressionTypes.Contains(like.ID))
+                if(!TolUtil.IsTOIInstalled() || expressionTypes.Contains(like.ID))
                     foundGenital = true;
 
                 if (foundExpression && foundIdentity && foundSubspecies && foundGenital)

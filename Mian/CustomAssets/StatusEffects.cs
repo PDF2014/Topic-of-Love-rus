@@ -34,7 +34,7 @@ public class StatusEffects
                     if (partner == actor.a.lover)
                         changeBy += 10f;
                 
-                    actor.a.changeIntimacyHappiness(changeBy);
+                    actor.a.changeIntimacyHappinessBy(changeBy);
                     
                     if(!actor.a.CanHaveIntimacyWithoutRepercussions(SexType.None))
                         TolUtil.PotentiallyCheatedWith(actor.a, partner);
@@ -64,7 +64,7 @@ public class StatusEffects
                     changeBy += Math.Abs(happiness / 3);
                 }
                 
-                actor.a.changeIntimacyHappiness(changeBy);
+                actor.a.changeIntimacyHappinessBy(changeBy);
                 
                 actor.a.changeHappiness("enjoyed_sex");
                 actor.a.finishStatusEffect("disliked_sex");
@@ -86,7 +86,7 @@ public class StatusEffects
                     changeBy += happiness / 3; // become more deprived if the sex was bad
                 }
 
-                actor.a.changeIntimacyHappiness(changeBy);
+                actor.a.changeIntimacyHappinessBy(changeBy);
                 actor.a.changeHappiness("disliked_sex");
                 actor.a.finishStatusEffect("enjoyed_sex");
                 actor.a.finishStatusEffect("okay_sex");
@@ -106,7 +106,7 @@ public class StatusEffects
                 if (sexPartner != null && sexPartner == actor.a.lover)
                     changeBy += 5f; // okay sex but add extra if with lover at least
                 
-                actor.a.changeIntimacyHappiness(changeBy);
+                actor.a.changeIntimacyHappinessBy(changeBy);
                 actor.a.changeHappiness("okay_sex");
                 actor.a.finishStatusEffect("enjoyed_sex");
                 actor.a.finishStatusEffect("disliked_sex");
@@ -133,7 +133,7 @@ public class StatusEffects
                 actor.a.changeHappiness("broke_up");
                 
                 // depression :(
-                actor.a.changeIntimacyHappiness(-50);
+                actor.a.changeIntimacyHappinessBy(-50);
                 return true;
             }
         });
@@ -173,7 +173,7 @@ public class StatusEffects
                 }
                 
                 // that's a fucking mood killer
-                cheatedActor.a.changeIntimacyHappiness(-100);
+                cheatedActor.a.changeIntimacyHappinessBy(-100);
                 cheatedActor.a.changeHappiness("cheated_on");
                 cheatedActor.a.data.set("cheated_" +lover.getID(),true);
                 

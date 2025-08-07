@@ -37,19 +37,26 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             reproductionSameSex.addDecision("find_lover");
             
             reproductionSameSex.base_stats_meta = new BaseStats();
+            reproductionSameSex.base_stats_meta.addTag("reproduction_same_sex");
             reproductionSameSex.base_stats_meta.addTag("needs_mate");
-            
+
+            var sexual = AssetManager.subspecies_traits.get("reproduction_sexual");
             reproductionSameSex.addOpposites(new[]{"reproduction_sexual"});
-            reproductionSameSex.addOpposites(AssetManager.subspecies_traits.get("reproduction_sexual").opposite_list);
-            foreach (var opposite in AssetManager.subspecies_traits.get("reproduction_sexual").opposite_list)
+            reproductionSameSex.addOpposites(sexual.opposite_list);
+            foreach (var opposite in sexual.opposite_list)
             {
                 AssetManager.subspecies_traits.get(opposite).opposite_traits.Add(reproductionSameSex);
             }
             
-            AssetManager.subspecies_traits.get("reproduction_sexual").opposite_traits.Add(reproductionSameSex);
+            sexual.opposite_traits.Add(reproductionSameSex);
+
+            var unicorn = AssetManager.actor_library.get("unicorn");
+            Add(reproductionSameSex, new[]{"unicorn"});
+            sexual.default_for_actor_assets
+                .Remove(unicorn);
+            unicorn.default_subspecies_traits.Remove("reproduction_sexual");
             
-            Add(reproductionSameSex, new[]{"skeleton"});
-            AssetManager.actor_library.get("skeleton").addSubspeciesTrait("reproduction_strategy_viviparity");
+            // AssetManager.actor_library.get("skeleton").addSubspeciesTrait("reproduction_strategy_viviparity");
             
             Finish();
         }

@@ -49,8 +49,8 @@ public class BehCheckIfDateFinish : BehaviourActionActor
         pActor.addStatusEffect("went_on_date");
         target.addStatusEffect("went_on_date");
         
-        pActor.changeIntimacyHappiness(happiness);
-        target.changeIntimacyHappiness(happiness);
+        pActor.changeIntimacyHappinessBy(happiness);
+        target.changeIntimacyHappinessBy(happiness);
         
         pActor.data.removeFloat("date_happiness");
         
