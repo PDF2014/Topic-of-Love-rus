@@ -590,6 +590,7 @@ public class LikesOverview :
                     actor.data.removeBool(neuron.like.IDWithLoveType);
         fireImpulsesEverywhere();
         Orientations.RollOrientationLabel(actor);
+        actor.removeAllCachedLikes();
         StatPatch.UpdateOrientationStats(mainWindow);
     }
 

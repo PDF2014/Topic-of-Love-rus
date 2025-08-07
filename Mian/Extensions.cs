@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using NCMS.Extensions;
 using Topic_of_Love.Mian.CustomAssets.Custom;
 
 namespace Topic_of_Love.Mian;
@@ -22,6 +23,16 @@ public static class Extensions
         // if (TolUtil.NeedDifferentSexTypeForReproduction(pActor))
         //     return Preferences.HasVulva(pActor);
         return pActor.HasVulva(); // vulva required for pregnancy
+    }
+
+    public static void removeAllCachedLikes(this Actor pActor)
+    {
+        MapBox.instance.units.dict.ForEach((pair =>
+        {
+            var target = pair.Value;
+            LikesManager.SetMatchingIDForActors(pActor, target, false, -1);
+            LikesManager.SetMatchingIDForActors(pActor, target, true, -1);
+        }));
     }
 
     public static float getIntimacy(this Actor actor)
