@@ -10,7 +10,7 @@ public class ActorManagerPatch
 {
     public static void NewUnit(Actor actor)
     {
-        TolUtil.NewLikes(actor);
+        actor.NewLikes();
     }
     
     [HarmonyPostfix]

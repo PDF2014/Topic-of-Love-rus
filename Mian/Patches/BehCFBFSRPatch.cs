@@ -66,7 +66,7 @@ public class BehCFBFSRPatch
         {
             TolUtil.Debug($"\nAble to make a baby?\n{pParentA.getName()}: "+(BabyHelper.canMakeBabies(pParentA)+$"\n${pParentB.getName()}: "+(BabyHelper.canMakeBabies(pParentB))));
 
-            if (!BabyHelper.canMakeBabies(pParentA) || !BabyHelper.canMakeBabies(pParentB) || !TolUtil.CouldReproduce(pParentA, pParentB))
+            if (!BabyHelper.canMakeBabies(pParentA) || !BabyHelper.canMakeBabies(pParentB) || !pParentA.HaveAppropriatePartsForReproduction(pParentB))
                 return false;
 
             // ensures that both subspecies HAVE not reached population limit
@@ -95,8 +95,8 @@ public class BehCFBFSRPatch
             SexType.TryParse(sexReason, out SexType type1);
             SexType.TryParse(sexReason1, out SexType type2);
 
-            var aWantsBaby = TolUtil.WantsBaby(pParentA);
-            var bWantsBaby = TolUtil.WantsBaby(pParentB);
+            var aWantsBaby = pParentA.WantsBaby();
+            var bWantsBaby = pParentB.WantsBaby();
             
             bool success = type1 == SexType.Casual || type2 == SexType.Casual ? 
                 aWantsBaby && bWantsBaby : true;

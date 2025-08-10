@@ -16,9 +16,9 @@ public class ActorToolPatch
         if (!pActor.canFallInLoveWith(pTarget))
             return false;
         if(pActor.hasLover() && Randy.randomBool())
-            TolUtil.BreakUp(pActor, false);
+            pActor.BreakUp(false);
         if(pTarget.hasLover() && Randy.randomBool())
-            TolUtil.BreakUp(pTarget, false);
+            pTarget.BreakUp(false);
         pActor.becomeLoversWith(pTarget);
         return false;
     }

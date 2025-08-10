@@ -69,35 +69,7 @@ public class SubspeciesPatch
                 return false;
             }
 
-            // if ((pActor.HasVulva() && pTarget.HasPenis()) || (pActor.HasPenis() && pTarget.HasVulva()))
-            // {
-            //     __result = true;
-            //     return false;
-            // }
-
-            if (pActor.CanDoAnySexType() || pTarget.CanDoAnySexType())
-            {
-                __result = true;
-                return false;
-            }
-            
-            var actorGenitalia = pActor.GetGenitalia();
-            var targetGenitalia = pTarget.GetGenitalia();
-            
-            if (pTarget.GetBiologicalSex().Equals(pActor.GetBiologicalSex()) &&
-                pActor.NeedSameSexTypeForReproduction() && pTarget.NeedSameSexTypeForReproduction())
-            {
-                __result = true;
-                return false;
-            }
-            if (!pTarget.GetBiologicalSex().Equals(pActor.GetBiologicalSex()) && pActor.NeedDifferentSexTypeForReproduction() &&
-                                                                   pTarget.NeedDifferentSexTypeForReproduction())
-            {
-                __result = true;
-                return false;
-            }
-
-            __result = false;
+            __result = pActor.HasPenis() ? pTarget.HasUterus() : pActor.HasUterus() && pTarget.HasPenis();
             return false;
         }
 }

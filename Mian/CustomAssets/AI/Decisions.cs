@@ -18,7 +18,7 @@ public class Decisions
             priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/culture_traits/orientationless",
             cooldown = 30,
-            action_check_launch = actor => (actor.hasCultureTrait("homophobic") || actor.hasCultureTrait("heterophobic")) && TolUtil.IsOrientationSystemEnabledFor(actor),
+            action_check_launch = actor => (actor.hasCultureTrait("homophobic") || actor.hasCultureTrait("heterophobic")) && actor.IsOrientationSystemEnabled(),
             weight = 0.5f,
             list_civ = true,
             only_safe = true
@@ -31,10 +31,10 @@ public class Decisions
             priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/status/just_kissed",
             cooldown = 15,
-            action_check_launch = actor => TolUtil.CapableOfLove(actor)
+            action_check_launch = actor => actor.CapableOfLove()
                                            && (actor.hasLover() || actor.hasBestFriend())
                                            && !actor.isIntimacyHappinessEnough(100f)
-                                           && TolUtil.IsOrientationSystemEnabledFor(actor)
+                                           && actor.IsOrientationSystemEnabled()
                                            && !actor.hasStatus("just_kissed"),
             weight_calculate_custom = actor => actor.isIntimacyHappinessEnough(75f) ? 0.5f: 
                 actor.isIntimacyHappinessEnough( 50f) ? 0.6f : actor.isIntimacyHappinessEnough( 0) ? .8f : 
@@ -46,14 +46,14 @@ public class Decisions
         Add(new DecisionAsset
         {
             id = "find_date",
-            priority = NeuroLayer.Layer_2_Moderate,
+            priority = NeuroLayer.Layer_3_High,
             path_icon = "ui/Icons/status/went_on_date",
-            cooldown = 50,
-            action_check_launch = actor => TolUtil.CapableOfLove(actor)
+            cooldown = 15,
+            action_check_launch = actor => actor.CapableOfLove()
                                            && !actor.isIntimacyHappinessEnough(100f)
-                                           && TolUtil.IsOrientationSystemEnabledFor(actor)
+                                           && actor.IsOrientationSystemEnabled()
                                            && !actor.hasStatus("went_on_date"),
-            weight_calculate_custom = actor => !actor.hasLover() ? 1f : actor.isIntimacyHappinessEnough( 75f) ? 0.05f: 
+            weight_calculate_custom = actor => !actor.hasLover() ? 2f : actor.isIntimacyHappinessEnough( 75f) ? 0.05f: 
                 actor.isIntimacyHappinessEnough( 50f) ? 0.1f : actor.isIntimacyHappinessEnough( 0) ? .12f : 
                 actor.isIntimacyHappinessEnough( -50) ? 0.2f : actor.isIntimacyHappinessEnough( -100f) ? 0.35f : 0.5f,
             only_safe = true,
@@ -68,9 +68,10 @@ public class Decisions
             cooldown = 15,
             action_check_launch = actor =>
             {
-                if (TolUtil.IsDyingOut(actor)
-                    && actor.hasSubspeciesTrait("preservation")
-                    && TolUtil.IsOrientationSystemEnabledFor(actor))
+                if (actor.IsDyingOut()
+                    && actor.ReproducesSexually()
+                    && actor.hasSubspeciesTrait("reproduce_preservation")
+                    && actor.IsOrientationSystemEnabled())
                 {
                     actor.subspecies.countReproductionNeuron();
                     return true;
@@ -83,20 +84,17 @@ public class Decisions
             only_safe = true
         });
         // will force all units to make babies regardless of orientation if they have preservation
-        AssetManager.subspecies_traits.get("reproduction_sexual").addDecision("reproduce_preservation");
-        AssetManager.subspecies_traits.get("reproduction_same_sex").addDecision("reproduce_preservation");
-        AssetManager.subspecies_traits.get("reproduction_hermaphroditic").addDecision("reproduce_preservation");
         
         Add(new DecisionAsset
         {
             id = "invite_for_sex",
-            priority = NeuroLayer.Layer_3_High,
+            priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/status/enjoyed_sex",
             cooldown = 15,
-            action_check_launch = actor => TolUtil.CapableOfLove(actor)
+            action_check_launch = actor => actor.CapableOfLove()
                                            && !actor.HasAnyLikesFor("identity", LoveType.Sexual)
                                            && !actor.isIntimacyHappinessEnough( 100f)
-                                           && TolUtil.IsOrientationSystemEnabledFor(actor),
+                                           && actor.IsOrientationSystemEnabled(),
             weight_calculate_custom = actor =>
             {
                 var weight = actor.isIntimacyHappinessEnough( 75f) ? 0.75f :
@@ -119,43 +117,41 @@ public class Decisions
         Add(new DecisionAsset
         {
             id = "find_sexual_ivf",
-            priority = NeuroLayer.Layer_2_Moderate,
+            priority = NeuroLayer.Layer_3_High,
             path_icon = "ui/Icons/status/adopted_baby",
             cooldown = 10,
             action_check_launch = actor =>
             {
-                if (!actor.isSapient() || !TolUtil.WantsBaby(actor, false))
+                if (!actor.isSapient() || !actor.WantsBaby(false))
                     return false;
                     
                 var bestFriend = actor.getBestFriend();
 
                 if (actor.hasLover())
                 {
-                    if (!TolUtil.WantsBaby(actor.lover, false))
+                    if (!actor.lover.WantsBaby(false))
                         return false;
 
-                    if (TolUtil.CouldReproduce(actor, actor.lover) &&
+                    if (actor.HaveAppropriatePartsForReproduction(actor.lover) &&
                         !LikesManager.BothActorsLikesMatch(actor, actor.lover, true))
                     {
                         return true;
                     }
 
-                    if (TolUtil.CouldReproduce(actor, actor.lover) &&
+                    if (actor.HaveAppropriatePartsForReproduction(actor.lover) &&
                         LikesManager.BothActorsLikesMatch(actor, actor.lover, true))
                         return false;
                 }
 
-                bool success = bestFriend != null && TolUtil.CouldReproduce(actor, bestFriend) &&
+                bool success = bestFriend != null && actor.HaveAppropriatePartsForReproduction(bestFriend) &&
                                !bestFriend.hasStatus("pregnant");
                 return success;
             },
             list_civ = true,
-            weight = 1.5f,
+            weight_calculate_custom = actor => actor.WantsBaby(false) ? actor.hasLover() ? actor.HaveAppropriatePartsForReproduction(actor.lover) ? 0 : 2 : 2 : 0,
             only_safe = true,
             only_adult = true
         });
-        AssetManager.decisions_library.get("find_lover").action_check_launch = pActor => !pActor.hasLover() && pActor.isBreedingAge() && 
-            (!pActor.isSapient() || pActor.hasSubspeciesTrait("orientationless"));
         Finish();
     }
     

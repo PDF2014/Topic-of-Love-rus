@@ -16,7 +16,7 @@ public class BehCheckReproductionBasicsPatch
 
         if (pActor.hasLover() &&
             (!LikesManager.BothActorsLikesMatch(pParentA, pParentB, true)
-             || !TolUtil.CouldReproduce(pParentA, pParentB)
+             || !pParentA.HaveAppropriatePartsForReproduction(pParentB)
              || !BabyHelper.canMakeBabies(pParentA)))
         {
             __result = BehResult.Stop;

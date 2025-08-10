@@ -37,7 +37,7 @@ public class StatusEffects
                     actor.a.changeIntimacyHappinessBy(changeBy);
                     
                     if(!actor.a.CanHaveIntimacyWithoutRepercussions(SexType.None))
-                        TolUtil.PotentiallyCheatedWith(actor.a, partner);
+                        actor.a.PotentiallyCheatedWith(partner);
                 }
 
                 actor.a.changeHappiness("just_kissed");
@@ -144,13 +144,13 @@ public class StatusEffects
             duration = 60f,
             action_on_receive = (cheatedActor, _) =>
             {
-                if (!TolUtil.CanStopBeingLovers(cheatedActor.a))
+                if (!cheatedActor.a.CanStopBeingLovers())
                     return false;
                 
                 var lover = cheatedActor.a.lover;
                 if (lover == null)
                     return false;
-                TolUtil.RemoveLovers(cheatedActor.a);
+                cheatedActor.a.RemoveLovers();
                 if (Randy.randomChance(0.5f) || !(cheatedActor.a.warfare > 10)) // only ppl with warfare above 10 will consider fighting
                 {
                     cheatedActor.a.addStatusEffect("crying");
@@ -178,7 +178,7 @@ public class StatusEffects
                 cheatedActor.a.data.set("cheated_" +lover.getID(),true);
                 
                 // DateableManager.Manager.AddOrRemoveUndateable(cheatedActor.a, lover);
-                TolUtil.AddOrRemoveUndateableActor(cheatedActor.a, lover);
+                cheatedActor.a.AddOrRemoveUndateableActor(lover);
 
                 TolUtil.Debug(lover.getName() + " just cheated on "+cheatedActor.a.getName());
                 return true;

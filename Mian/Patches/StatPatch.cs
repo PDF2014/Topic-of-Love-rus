@@ -38,10 +38,10 @@ public class StatPatch
         }
     }
     private static readonly Stat<int>[] Icons = {
-        new ("intimacy_happiness", TolUtil.CapableOfLove, actor => (int) actor.stats["intimacy_happiness"], "ui/Icons/god_powers/force_lover"),
+        new ("intimacy_happiness", Extensions.CapableOfLove, actor => (int) actor.stats["intimacy_happiness"], "ui/Icons/god_powers/force_lover"),
     };
     private static readonly Stat<Dictionary<string, string>>[] Stats = {
-        new ("sexual_orientation", TolUtil.CapableOfLove, actor =>
+        new ("sexual_orientation", Extensions.CapableOfLove, actor =>
         {
             var orientationType = Orientation.GetOrientation(actor, true);
             if (orientationType != null)
@@ -56,7 +56,7 @@ public class StatPatch
             }
             return null;
         }),
-        new ("romantic_orientation", TolUtil.CapableOfLove, actor =>
+        new ("romantic_orientation", Extensions.CapableOfLove, actor =>
         {
             var orientationType = Orientation.GetOrientation(actor, false);
             if (orientationType != null)

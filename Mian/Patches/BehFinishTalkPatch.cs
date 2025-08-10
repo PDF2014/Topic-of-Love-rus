@@ -8,16 +8,16 @@ namespace Topic_of_Love.Mian.Patches;
 [HarmonyPatch(typeof(BehFinishTalk))]
 public class BehFinishTalkPatch
 {
-    [HarmonyTranspiler]
-    [HarmonyPatch(nameof(BehFinishTalk.finishTalk))]
-    static IEnumerable<CodeInstruction> BehFinishTalkTranspiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
-    {
-        var codeMatcher = new CodeMatcher(instructions, generator);
-
-        codeMatcher.MatchStartForward(new CodeMatch(OpCodes.Call,
-            AccessTools.Method(typeof(ActorTool), nameof(ActorTool.checkFallInLove), new[]{typeof(Actor), typeof(Actor)})))
-            .ThrowIfInvalid("Could not find checkFallInLove.. damn game update :(")
-            .RemoveInstructionsInRange(codeMatcher.Pos - 4, codeMatcher.Pos);
+//     [HarmonyTranspiler]
+//     [HarmonyPatch(nameof(BehFinishTalk.finishTalk))]
+//     static IEnumerable<CodeInstruction> BehFinishTalkTranspiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+//     {
+        // var codeMatcher = new CodeMatcher(instructions, generator);
+        //
+        // codeMatcher.MatchStartForward(new CodeMatch(OpCodes.Call,
+        //     AccessTools.Method(typeof(ActorTool), nameof(ActorTool.checkFallInLove), new[]{typeof(Actor), typeof(Actor)})))
+        //     .ThrowIfInvalid("Could not find checkFallInLove.. damn game update :(")
+        //     .RemoveInstructionsInRange(codeMatcher.Pos - 4, codeMatcher.Pos);
         //
         // var goPastLove = (Label) codeMatcher.Instruction.operand;
         //
@@ -46,18 +46,18 @@ public class BehFinishTalkPatch
         //     new CodeInstruction(OpCodes.Brfalse, goPastLove)
         // );
         //
-        return codeMatcher.InstructionEnumeration();
-    }
+        // return codeMatcher.InstructionEnumeration();
+    // }
     
     [HarmonyPrefix]
     [HarmonyPriority(Priority.VeryLow)] // dugga doo dugga doo dugga dugag dugga doo
     [HarmonyPatch(nameof(BehFinishTalk.finishTalk))]
     static void FinishTalkPatch(Actor pActor, Actor pTarget)
     {
-        if(Randy.randomChance(pActor.getBestFriend() == pTarget ? 0.2f : 0.05f))
-            ActorTool.checkFallInLove(pActor, pTarget);
+        // if(Randy.randomChance(pActor.getBestFriend() == pTarget ? 0.35f : 0.1f))
+        //     ActorTool.checkFallInLove(pActor, pTarget);
         
-        pActor.changeIntimacyHappinessBy(45);
-        pTarget.changeIntimacyHappinessBy(45);
+        pActor.changeIntimacyHappinessBy(25);
+        pTarget.changeIntimacyHappinessBy(25);
     }
 }

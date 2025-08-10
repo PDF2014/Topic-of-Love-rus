@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using HarmonyLib;
 using JetBrains.Annotations;
 using NCMS.Extensions;
 using NeoModLoader.General;
@@ -216,7 +217,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 AddLikeType("expression", "#C900FF", List.Of("feminine", "masculine"), LoveType.Both, actor => new []{GetExpression(actor)});
             
             if(TolUtil.IsTOIInstalled())
-                AddLikeType("genital", "#B77E7E", List.Of("phallus", "vulva"), LoveType.Sexual, actor => actor.GetGenitalia());
+                AddLikeType("genital", "#B77E7E", List.Of("phallus", "vulva"), LoveType.Sexual, actor => actor.GetExternalGenitalia());
 
             AddMatchingSets();
             
@@ -228,7 +229,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             var data = MapBox.instance.map_stats.custom_data;
             data.get("custom_like_"+id, out string likeID);
             if (likeID == null)
-                throw new Exception("Invalid id, cannot remove: " + id);
+                return;
             
             TolUtil.Debug("Removed dynamic like asset: " + likeID);
             
@@ -635,7 +636,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             // }
             
             // if (Randy.randomChance(0.25f) || preferredSets.Count <= 0)
-            if (Randy.randomChance(0.85f))
+            if (Randy.randomChance(0.99f))
             {
                 using var excludeAssets = new ListPool<string>(likes.Count);
                 for (var i = 0; i < likes.Count; i++)
@@ -877,7 +878,8 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         {
             if (TolUtil.IsTOIInstalled())
             {
-                // some code;
+                actor.data.get("identity", out string identity);
+                return identity;
             }
 
             return actor.isSexFemale() ? "female" : "male";
@@ -887,19 +889,27 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         {
             if (TolUtil.IsTOIInstalled())
             {
-                // some code;
+                actor.data.get("expression", out string expression);
+                return expression;            
             }
 
             return actor.isSexFemale() ? "feminine" : "masculine";
         }
-        public static string[] GetGenitalia(this Actor actor)
+        public static string[] GetExternalGenitalia(this Actor actor)
         {
             if (TolUtil.IsTOIInstalled())
             {
-                // some code;
+                var list = new string[2];
+                actor.data.get("vulva", out bool hasVulva);
+                actor.data.get("phallus", out bool hasPhallus);
+                if (hasVulva)
+                    list.AddItem("phallus");
+                if (hasPhallus)
+                    list.AddItem("phallus");
+                return list;
             }
 
-            if (actor.NeedSameSexTypeForReproduction() || actor.CanDoAnySexType())
+            if (actor.CanDoAnySexType())
                 return new[]{"vulva", "phallus"};
             if (actor.NeedDifferentSexTypeForReproduction())
                 return actor.isSexFemale() ? new[] { "vulva" } : new[] { "phallus" };
@@ -913,23 +923,21 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         {
             return GetExpression(actor).Equals("feminine");
         }
-        
-        // uterus is more correct, vulva is only needed for external pregnancies
-        // we will later intervene with Topic of Identity to replace these methods
+
+        public static bool HasUterus(this Actor actor)
+        {
+            actor.data.get("uterus", out bool result);
+            return TolUtil.IsTOIInstalled() ? result : actor.isSexFemale();
+        }
         public static bool HasVulva(this Actor actor)
         {
-            return GetGenitalia(actor).Contains("vulva");
+            return GetExternalGenitalia(actor).Contains("vulva");
         }
         public static bool HasPenis(this Actor actor)
         {
-            return GetGenitalia(actor).Contains("phallus");
+            return GetExternalGenitalia(actor).Contains("phallus");
         }
         
-        
-        public static string GetBiologicalSex(this Actor actor)
-        {
-            return actor.isSexFemale() ? "female" : "male";
-        }
         public static bool IsEnby(this Actor actor)
         {
             return GetIdentity(actor).Equals("nonbinary");

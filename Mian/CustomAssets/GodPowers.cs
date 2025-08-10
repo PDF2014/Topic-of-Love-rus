@@ -59,8 +59,8 @@ namespace Topic_of_Love.Mian.CustomAssets
                     TolUtil.ShowWhisperTipWithTime("love_successful", 18f);
                     
                     _selectedActorB = pActor;
-                    TolUtil.RemoveLovers(_selectedActorA);
-                    TolUtil.RemoveLovers(_selectedActorB);
+                    _selectedActorA.RemoveLovers();
+                    _selectedActorB.RemoveLovers();
                     _selectedActorB.data.set("force_lover", true);
                     _selectedActorA.data.set("force_lover", true);
                     _selectedActorA.becomeLoversWith(_selectedActorB);
@@ -101,7 +101,7 @@ namespace Topic_of_Love.Mian.CustomAssets
                     }
           
                     ActionLibrary.showWhisperTip("breakup_successful");
-                    TolUtil.BreakUp(pActor);
+                    pActor.BreakUp();
                     return true;
                 },
             });
@@ -287,7 +287,7 @@ namespace Topic_of_Love.Mian.CustomAssets
                         return false;
                     }
 
-                    if (!TolUtil.CouldReproduce(_selectedActorA, _selectedActorB))
+                    if (!_selectedActorA.HaveAppropriatePartsForReproduction(_selectedActorB))
                     {
                         ActionLibrary.showWhisperTip("sexualivf_incapable_reproduce");
                         _selectedActorA = null;

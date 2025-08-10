@@ -16,45 +16,6 @@ namespace Topic_of_Love.Mian.Patches;
 [HarmonyPatch(typeof(Actor))]
 public class ActorPatch
 {
-    // [HarmonyPostfix]
-    // [HarmonyPatch(nameof(Actor.removeTrait), typeof(ActorTrait))]
-    // static void ClearTraitPatch(ActorTrait pTrait, Actor __instance)
-    // {
-    //     if (pTrait is PreferenceTrait preferenceTrait)
-    //     {
-    //         Orientations.CreateOrientationBasedOnPrefChange(__instance, preferenceTrait);
-    //     }
-    // }
-    
-    // [HarmonyPostfix]
-    // [HarmonyPatch(nameof(Actor.addTrait), typeof(ActorTrait), typeof(bool))]
-    // static void AddTraitPatch(ActorTrait pTrait, Actor __instance)
-    // {
-    //     // removes preference traits if they are all added for some reason 
-    //     foreach (var type in Preferences.PreferenceTypes.Keys)
-    //     {
-    //         // Romantic
-    //         
-    //         var list = Preferences.GetActorPreferencesFromType(__instance, type);
-    //         var toCompare = Preferences.GetRegisteredPreferencesFromType(type);
-    //
-    //         if (list.Count == toCompare.Count)
-    //             __instance.removeTraits(list);
-    //         
-    //         // Sexual
-    //         
-    //         list = Preferences.GetActorPreferencesFromType(__instance, type, true);
-    //         toCompare = Preferences.GetRegisteredPreferencesFromType(type, true);
-    //
-    //         if (list.Count == toCompare.Count)
-    //             __instance.removeTraits(list);
-    //     }
-    //
-    //     if (pTrait is PreferenceTrait preferenceTrait)
-    //     {
-    //         Orientations.CreateOrientationBasedOnPrefChange(__instance, preferenceTrait);
-    //     }
-    // }
     
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Actor.buildCityAndStartCivilization))]
@@ -166,13 +127,13 @@ public class ActorPatch
                     }
                 }
                 
-                if(__instance.HasAnyLikesFor("identity", LoveType.Both) && TolUtil.IsOrientationSystemEnabledFor(__instance))
-                    __instance.a.changeIntimacyHappinessBy(TolUtil.HasNoOne(__instance) ? -Randy.randomFloat(6f, 9f) : -Randy.randomFloat(2f, 5f));
+                if(__instance.HasAnyLikesFor("identity", LoveType.Both) && __instance.IsOrientationSystemEnabled())
+                    __instance.a.changeIntimacyHappinessBy(__instance.HasNoOne() ? -Randy.randomFloat(6f, 9f) : -Randy.randomFloat(2f, 5f));
                 // else
                     // __instance.data.set("intimacy_happiness", 100f);
             } else if (!__instance.isAdult() && Randy.randomChance(0.1f) && !__instance.HasALike())
             {
-                TolUtil.NewLikes(__instance);
+                __instance.NewLikes();
                 __instance.changeHappiness("true_self");
             }
             
@@ -186,7 +147,7 @@ public class ActorPatch
                     if (Randy.randomChance(0.05f))
                     {
                         TolUtil.Debug(__instance.getName() + " has forgived " + actor.getName());
-                        TolUtil.AddOrRemoveUndateableActor(__instance, actor); 
+                        __instance.AddOrRemoveUndateableActor(actor); 
                     }   
                 }
             }
@@ -202,7 +163,7 @@ public class ActorPatch
             {
                 var breakingUpChance = 0.005f;
 
-                if (TolUtil.AffectedByIntimacy(__instance))
+                if (__instance.AffectedByIntimacy())
                 {
                     if (intimacy < 0)
                     {
@@ -216,18 +177,18 @@ public class ActorPatch
                 //     breakingUpChance += 0.05f;
                 var wantsToBreakUp = Randy.randomChance(breakingUpChance);
                                 
-                if(TolUtil.CanStopBeingLovers(__instance) &&
-                    ( (TolUtil.IsOrientationSystemEnabledFor(__instance) && wantsToBreakUp) 
-                     || (!TolUtil.IsOrientationSystemEnabledFor(__instance) && !TolUtil.CouldReproduce(__instance, __instance.lover))))
+                if(__instance.CanStopBeingLovers() &&
+                   ( (__instance.IsOrientationSystemEnabled() && wantsToBreakUp) 
+                     || (!__instance.IsOrientationSystemEnabled() && !__instance.HaveAppropriatePartsForReproduction(__instance.lover))))
                 {
                     if (!__instance.hasCultureTrait("committed") || !__instance.lover.hasCultureTrait("committed"))
                     {
-                        TolUtil.BreakUp(__instance, false);   
+                        __instance.BreakUp(false);   
                     }   
                 }
             }
 
-            if (intimacy < 0 && TolUtil.AffectedByIntimacy(__instance))
+            if (intimacy < 0 && __instance.AffectedByIntimacy())
             {
                 var feelsLonely = Randy.randomChance(Math.Abs(intimacy));
                 if (feelsLonely && __instance._last_happiness_history.Count(asset => asset.index == Happiness.FeelsLonely.index) < 5)
@@ -240,8 +201,8 @@ public class ActorPatch
     static void BecomeLoversWith(Actor pTarget, Actor __instance)
     {
         // if they become new lovers with someone, the others were cheated on
-        TolUtil.PotentiallyCheatedWith(__instance, pTarget);
-        TolUtil.PotentiallyCheatedWith(pTarget, __instance);
+        __instance.PotentiallyCheatedWith(pTarget);
+        pTarget.PotentiallyCheatedWith(__instance);
         
         TolUtil.Debug($"{__instance.getName()} fell in love {pTarget.getName()}!");
         
@@ -357,9 +318,9 @@ public class ActorPatch
             // do they both have orientation system
             codeMatcher.InsertAndAdvance(
                 new CodeInstruction(OpCodes.Ldarg_0),
-                CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.IsOrientationSystemEnabledFor)),
+                CodeInstruction.Call(typeof(Extensions), nameof(Extensions.IsOrientationSystemEnabled)),
                 new CodeInstruction(OpCodes.Ldarg_1),
-                CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.IsOrientationSystemEnabledFor)),
+                CodeInstruction.Call(typeof(Extensions), nameof(Extensions.IsOrientationSystemEnabled)),
                 new CodeInstruction(OpCodes.Ceq),
                 new CodeInstruction(OpCodes.Brfalse, returnFalse)
             );
@@ -367,11 +328,11 @@ public class ActorPatch
             // can they both fall in love at all?
             codeMatcher.InsertAndAdvance(
                 new CodeInstruction(OpCodes.Ldarg_0),
-                CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.CanFallInLove)),
+                CodeInstruction.Call(typeof(Extensions), nameof(Extensions.CanFallInLove)),
                 new CodeInstruction(OpCodes.Brfalse, returnFalse),
 
                 new CodeInstruction(OpCodes.Ldarg_1),
-                CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.CanFallInLove)),
+                CodeInstruction.Call(typeof(Extensions), nameof(Extensions.CanFallInLove)),
                 new CodeInstruction(OpCodes.Brfalse, returnFalse));
 
             var orientationSystemInvolved = generator.DeclareLocal(typeof(bool));
@@ -380,7 +341,7 @@ public class ActorPatch
             // has lover with orientation system checks
             codeMatcher.InsertAndAdvance(
                 new CodeInstruction(OpCodes.Ldarg_0),
-                CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.IsOrientationSystemEnabledFor)),
+                CodeInstruction.Call(typeof(Extensions), nameof(Extensions.IsOrientationSystemEnabled)),
                 new CodeInstruction(OpCodes.Stloc, orientationSystemInvolved.LocalIndex),
                 new CodeInstruction(OpCodes.Ldloc, orientationSystemInvolved.LocalIndex),
                 new CodeInstruction(OpCodes.Brtrue, skipOrientationChecks), // skip the next checks if true
@@ -416,7 +377,7 @@ public class ActorPatch
                 
                 new CodeInstruction(OpCodes.Ldarg_0).WithLabels(reproductionBranch),
                 new CodeInstruction(OpCodes.Ldarg_1),
-                CodeInstruction.Call(typeof(TolUtil), nameof(TolUtil.CouldReproduce)),
+                CodeInstruction.Call(typeof(Extensions), nameof(Extensions.HaveAppropriatePartsForReproduction)),
                 new CodeInstruction(OpCodes.Brfalse, returnFalse),
                 new CodeInstruction(OpCodes.Br, withinAgeBranch)
             );
