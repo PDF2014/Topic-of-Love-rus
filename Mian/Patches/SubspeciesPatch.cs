@@ -49,27 +49,4 @@ public class SubspeciesPatch
         if(pObject.isSapient())
             LikesManager.RemoveDynamicLikeAsset(pObject.getID());
     }
-    
-    // I don't bother to use a transpiler for this since we pretty much rewrite the entire method
-    [HarmonyPatch(nameof(Subspecies.isPartnerSuitableForReproduction))]
-    [HarmonyPrefix]
-    [HarmonyPriority(Priority.Last)] // allows other mods to patch without us breaking the method for them.. hopefully they don't err do wonky things
-    [HarmonyAfter("netdot.mian.topicofidentity")]
-        static bool SuitableReproductionPatch(Actor pActor, Actor pTarget, Subspecies __instance, ref bool __result)
-        {
-            if (!pActor.hasSubspecies() || !pTarget.hasSubspecies())
-            {
-                __result = false;
-                return false;
-            }
-
-            if (!pActor.ReproducesSexually() || !pTarget.ReproducesSexually())
-            {
-                __result = false;
-                return false;
-            }
-
-            __result = pActor.HasPenis() ? pTarget.HasUterus() : pActor.HasUterus() && pTarget.HasPenis();
-            return false;
-        }
 }

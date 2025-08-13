@@ -34,6 +34,10 @@ public class BabyMakerPatch
     [HarmonyPatch(typeof(BabyMaker), nameof(BabyMaker.makeBaby))]
     class MakeBabyPatch
     {
+        static void Postfix(Actor __result)
+        {
+            ActorManagerPatch.NewUnit(__result); // generate preferences
+        }
         static bool Prefix(
             Actor pParent1,
             Actor pParent2,
@@ -206,7 +210,6 @@ public class BabyMakerPatch
                 
                 pParent1.data.removeLong("familyParentA");
                 pParent1.data.removeLong("familyParentB");
-                ActorManagerPatch.NewUnit(actorFromData); // generate preferences
                 return false;
             }
         }

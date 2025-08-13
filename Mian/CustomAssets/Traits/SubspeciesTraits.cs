@@ -5,6 +5,34 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
 {
     public class SubspeciesTraits : BaseTraits<SubspeciesTrait, SubspeciesTraitLibrary>
     {
+        public static void AddDecisions(string subspeciesID, string[] decisionIDs)
+        {
+            var subspeciesTrait = AssetManager.subspecies_traits.get(subspeciesID);
+            foreach (var decisionID in decisionIDs)
+            {
+                subspeciesTrait.addDecision(decisionID);
+            }
+            RecreateDecisionAssets(subspeciesID);
+        }
+        public static void RemoveDecisions(string subspeciesID, string[] decisionIDs)
+        {
+            var subspeciesTrait = AssetManager.subspecies_traits.get(subspeciesID);
+            subspeciesTrait.decision_ids =
+                subspeciesTrait.decision_ids.Where(decision => !decisionIDs.Contains(decision)).ToList();
+            RecreateDecisionAssets(subspeciesID);
+        }
+        private static void RecreateDecisionAssets(string subspeciesID)
+        {
+            var subspeciesTrait = AssetManager.subspecies_traits.get(subspeciesID);
+            
+            subspeciesTrait.decisions_assets = new DecisionAsset[subspeciesTrait.decision_ids.Count];
+            for (int i = 0; i < subspeciesTrait.decision_ids.Count; i++)
+            {
+                string tDecisionID = subspeciesTrait.decision_ids[i];
+                DecisionAsset tDecisionAsset = AssetManager.decisions_library.get(tDecisionID);
+                subspeciesTrait.decisions_assets[i] = tDecisionAsset;
+            }
+        }
         public void Init()
         {
             Init("subspecies");

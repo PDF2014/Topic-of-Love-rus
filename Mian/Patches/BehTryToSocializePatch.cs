@@ -9,7 +9,40 @@ namespace Topic_of_Love.Mian.Patches;
 [HarmonyPatch(typeof(BehTryToSocialize))]
 public class BehTryToSocializePatch
 {
+    [HarmonyTranspiler]
+    [HarmonyPatch(nameof(BehTryToSocialize.execute))]
+    static IEnumerable<CodeInstruction> SocializePatch(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    {
+        var codeMatcher = new CodeMatcher(instructions, generator);
+    
+        try
+        {
+            codeMatcher = codeMatcher
+                .MatchStartForward(new CodeMatch(OpCodes.Callvirt,
+                    AccessTools.Method(typeof(Actor), nameof(Actor.canFallInLoveWith), new[] { typeof(Actor) })))
+                .ThrowIfInvalid("Could not find canFallInLoveWith call!")
+                .Advance(1);
+        }
+        catch (InvalidOperationException e)
+        {
+            TolUtil.LogInfo("Failed to find canFallInLoveWith call! Perhaps another mod already removed it\n"+e.Message);
+        }
 
+        var operand = codeMatcher.Instruction.operand;
+
+        codeMatcher.Advance(1);
+        codeMatcher.InsertAndAdvance(
+            new CodeInstruction(OpCodes.Ldarg_1),
+            CodeInstruction.Call(typeof(Actor), nameof(Actor.hasLover)),
+            new CodeInstruction(OpCodes.Brtrue_S, operand),
+            
+            new CodeInstruction(OpCodes.Ldloc_0),
+            CodeInstruction.Call(typeof(Actor), nameof(Actor.hasLover)),
+            new CodeInstruction(OpCodes.Brtrue_S, operand)
+        );
+        
+        return codeMatcher.InstructionEnumeration();
+    }
     // [HarmonyTranspiler]
     // [HarmonyPatch(nameof(BehTryToSocialize.execute))]
     // static IEnumerable<CodeInstruction> SocializePatch(IEnumerable<CodeInstruction> instructions, ILGenerator generator)

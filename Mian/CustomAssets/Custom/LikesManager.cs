@@ -557,6 +557,11 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         {
             return LikeMatches(actor1, actor2, sexual) && LikeMatches(actor2, actor1, sexual);
         }
+
+        public static bool AreCompatible(this Actor actor1, Actor actor2, bool sexual)
+        {
+            return BothActorsLikesMatch(actor1, actor2, sexual);
+        }
         
         // Performance heavy
         public static bool BothActorsLikesMatch(Actor actor1, Actor actor2)
@@ -798,7 +803,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 actor.data.removeBool(like.IDWithLoveType);
             
             Orientations.CreateOrientationBasedOnLikeChange(actor, like);
-            actor.removeAllCachedLikes();
+            actor.RemoveAllCachedLikes();
         }
         public static List<LikeAsset> GetRegisteredAssetsFromType(string type)
         {
@@ -938,7 +943,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             return GetExternalGenitalia(actor).Contains("phallus");
         }
         
-        public static bool IsEnby(this Actor actor)
+        public static bool IdentifiesAsEnby(this Actor actor)
         {
             return GetIdentity(actor).Equals("nonbinary");
         }

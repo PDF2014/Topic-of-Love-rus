@@ -66,7 +66,7 @@ public class BehCFBFSRPatch
         {
             TolUtil.Debug($"\nAble to make a baby?\n{pParentA.getName()}: "+(BabyHelper.canMakeBabies(pParentA)+$"\n${pParentB.getName()}: "+(BabyHelper.canMakeBabies(pParentB))));
 
-            if (!BabyHelper.canMakeBabies(pParentA) || !BabyHelper.canMakeBabies(pParentB) || !pParentA.HaveAppropriatePartsForReproduction(pParentB))
+            if (!BabyHelper.canMakeBabies(pParentA) || !BabyHelper.canMakeBabies(pParentB) || !pParentA.CanReproduce(pParentB))
                 return false;
 
             // ensures that both subspecies HAVE not reached population limit
@@ -89,8 +89,8 @@ public class BehCFBFSRPatch
             
             var maturationTimeSeconds = pregnantActor.getMaturationTimeSeconds();
             
-            pParentA.data.get("sex_reason", out var sexReason, "");
-            pParentB.data.get("sex_reason", out var sexReason1, "");
+            pParentA.data.get("sex_reason", out var sexReason, "reproduction");
+            pParentB.data.get("sex_reason", out var sexReason1, "reproduction");
 
             SexType.TryParse(sexReason, out SexType type1);
             SexType.TryParse(sexReason1, out SexType type2);

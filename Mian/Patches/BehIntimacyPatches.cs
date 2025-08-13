@@ -3,6 +3,7 @@ using HarmonyLib;
 
 namespace Topic_of_Love.Mian.Patches;
 
+[HarmonyPatch]
 public class BehIntimacyPatches
 {
     [HarmonyPatch(typeof(BehChildFindRandomFamilyParent), nameof(BehChildFindRandomFamilyParent.execute))]
@@ -11,7 +12,7 @@ public class BehIntimacyPatches
         static void Postfix(Actor pBabyActor, BehResult __result)
         {
             if(__result == BehResult.Continue)
-                pBabyActor.changeIntimacyHappinessBy(20);
+                pBabyActor.changeIntimacyHappinessBy(10);
         }
     }
 
@@ -21,7 +22,7 @@ public class BehIntimacyPatches
         static void Postfix(Actor pActor, BehResult __result)
         {
             if(__result == BehResult.Continue)
-                pActor.changeIntimacyHappinessBy(20);
+                pActor.changeIntimacyHappinessBy(10);
         }
     }
     
@@ -31,7 +32,7 @@ public class BehIntimacyPatches
         static void Postfix(Actor pActor, BehResult __result)
         {
             if(__result == BehResult.Continue && pActor.hasFamily())
-                pActor.changeIntimacyHappinessBy(50);
+                pActor.changeIntimacyHappinessBy(25);
         }
     }
 

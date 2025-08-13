@@ -6,6 +6,7 @@ using Topic_of_Love.Mian.CustomAssets.Traits;
 namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.other;
 
 // includes lover and other non-lovers (can be considered cheating)
+//TODO: look into reworking distance and waits
 public class BehFindAPartner : BehaviourActionActor
 {
     private readonly float _distance;
@@ -80,7 +81,7 @@ public class BehFindAPartner : BehaviourActionActor
         
         if (!pActor.isOnSameIsland(target) || target.isLying() || pActor.distanceToActorTile(target) > _distance)
             return false;
-        if (_mustBeReproduceable && (!BabyHelper.canMakeBabies(target) || !pActor.HaveAppropriatePartsForReproduction(target)))
+        if (_mustBeReproduceable && (!BabyHelper.canMakeBabies(target) || !pActor.CanReproduce(target)))
             return false;
         var isSexual = _sexReason != SexType.None;
         if (isSexual)

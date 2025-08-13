@@ -287,7 +287,7 @@ namespace Topic_of_Love.Mian.CustomAssets
                         return false;
                     }
 
-                    if (!_selectedActorA.HaveAppropriatePartsForReproduction(_selectedActorB))
+                    if (!_selectedActorA.CanReproduce(_selectedActorB))
                     {
                         ActionLibrary.showWhisperTip("sexualivf_incapable_reproduce");
                         _selectedActorA = null;

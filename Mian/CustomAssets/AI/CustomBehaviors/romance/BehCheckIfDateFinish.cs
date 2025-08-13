@@ -56,9 +56,9 @@ public class BehCheckIfDateFinish : BehaviourActionActor
         
         TolUtil.Debug("The date for "+pActor.getName()+" and "+target.getName() + " has finalized! Total happiness: "+happiness);
         
-        if (happiness >= (pActor.getBestFriend() == target ? 10f : 25f))
+        if (happiness >= (pActor.getBestFriend() == target ? 10f : 25f) && pActor.canFallInLoveWith(target))
         {
-            ActorTool.checkFallInLove(pActor, target);
+            pActor.becomeLoversWith(target);
         }
         
         return BehResult.Continue;

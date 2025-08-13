@@ -116,8 +116,8 @@ namespace Topic_of_Love.Mian
             if (actor1.lover != actor2)
             {
                 actor1.data.get("sex_reason", out var sexReason, "reproduction");
-                SexType.TryParse(sexReason, out SexType sexType);
-                TolUtil.Debug("Sex Reason: "+sexReason);
+                SexType.TryParse(sexReason, true, out SexType sexType);
+                TolUtil.Debug("Sex Reason: "+sexType);
                 if (!actor1.CanHaveIntimacyWithoutRepercussions(sexType))
                 {
                     actor1.PotentiallyCheatedWith(actor2);
@@ -154,65 +154,61 @@ namespace Topic_of_Love.Mian
         // can this actor date the other actor?
         public static bool CannotDate(Actor actor, Actor actor2)
         {
-            return actor.IsActorUndateable(actor2) || actor2.IsActorUndateable(actor);
+            return actor.IsActorUndateable(actor2) || actor2.IsActorUndateable(actor) || actor.IsOrientationSystemEnabled() != actor2.IsOrientationSystemEnabled()
+                || !actor.hasSubspeciesTrait("advanced_hippocampus") || !actor2.hasSubspeciesTrait("advanced_hippocampus");
         }
 
-        public static bool SocializedLoveCheck(BehaviourActionActor __instance, Actor pActor, Actor target, bool noBoringLove=false)
-        {
-            if (pActor.IsOrientationSystemEnabled() && target.IsOrientationSystemEnabled())
-            {
-                if (Randy.randomBool())
-                {
-                    if (pActor.lover != target)
-                    {
-                        if (pActor.WillDoIntimacy(target, SexType.None, true)
-                             && target.WillDoIntimacy(pActor))
-                        {
-                            // does date instead
-                            __instance.forceTask(pActor, "try_date", false);
-                            return true;
-                        }   
-                    }
-                    else if (pActor.WillDoIntimacy(target, SexType.Casual,  true)
-                             && target.WillDoIntimacy(pActor, SexType.Casual))
-                    {
-                        pActor.cancelAllBeh();
-                        target.cancelAllBeh();
-                        pActor.beh_actor_target = target;
-                        new BehGetPossibleTileForSex().execute(pActor);
-                        return true;
-                    }
-                    else if(pActor.WillDoIntimacy(target, SexType.None, true) 
-                            && target.WillDoIntimacy(pActor))
-                    {
-                        pActor.cancelAllBeh();
-                        target.cancelAllBeh();
-                        pActor.beh_actor_target = target;
-                        __instance.forceTask(pActor, "try_kiss", false);
-                        return true;
-                    }
-                } else if ((!noBoringLove || !pActor.isSapient()) && !pActor.hasLover() && !target.hasLover())
-                {
-                    pActor.becomeLoversWith(target);
-                    return true;
-                }
-            }
-            else
-            {
-                ActorTool.checkFallInLove(pActor, target);
-            }
-
-            return false;
-        }
+        // public static bool SocializedLoveCheck(BehaviourActionActor __instance, Actor pActor, Actor target, bool noBoringLove=false)
+        // {
+        //     if (pActor.IsOrientationSystemEnabled() && target.IsOrientationSystemEnabled())
+        //     {
+        //         if (Randy.randomBool())
+        //         {
+        //             if (pActor.lover != target)
+        //             {
+        //                 if (pActor.WillDoIntimacy(target, SexType.None, true)
+        //                      && target.WillDoIntimacy(pActor))
+        //                 {
+        //                     // does date instead
+        //                     __instance.forceTask(pActor, "try_date", false);
+        //                     return true;
+        //                 }   
+        //             }
+        //             else if (pActor.WillDoIntimacy(target, SexType.Casual,  true)
+        //                      && target.WillDoIntimacy(pActor, SexType.Casual))
+        //             {
+        //                 pActor.cancelAllBeh();
+        //                 target.cancelAllBeh();
+        //                 pActor.beh_actor_target = target;
+        //                 new BehGetPossibleTileForSex().execute(pActor);
+        //                 return true;
+        //             }
+        //             else if(pActor.WillDoIntimacy(target, SexType.None, true) 
+        //                     && target.WillDoIntimacy(pActor))
+        //             {
+        //                 pActor.cancelAllBeh();
+        //                 target.cancelAllBeh();
+        //                 pActor.beh_actor_target = target;
+        //                 __instance.forceTask(pActor, "try_kiss", false);
+        //                 return true;
+        //             }
+        //         } else if ((!noBoringLove || !pActor.isSapient()) && !pActor.hasLover() && !target.hasLover())
+        //         {
+        //             pActor.becomeLoversWith(target);
+        //             return true;
+        //         }
+        //     }
+        //     else
+        //     {
+        //         ActorTool.checkFallInLove(pActor, target);
+        //     }
+        //
+        //     return false;
+        // }
 
         public static void LogInfo(string message)
         {
             TopicOfLove.LogInfo(message);
-        }
-
-        public static void LogInfo(object message)
-        {
-            TopicOfLove.LogInfo(Convert.ToString(message));
         }
 
         public static string[] GetKeywords(string word)

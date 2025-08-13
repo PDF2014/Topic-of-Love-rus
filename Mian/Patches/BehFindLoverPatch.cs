@@ -27,18 +27,14 @@ public class BehFindLoverPatch
     //     return false;
     // }
     //
-    // [HarmonyPrefix]
+    [HarmonyPostfix]
     // [HarmonyPriority(Priority.Last)]
-    // [HarmonyPatch(nameof(BehFindLover.checkIfPossibleLover))]
-    // static bool IsPossibleLover(Actor pActor, Actor pTarget, ref bool __result)
-    // {
-    //     // since canFallInLover allows for actors to fall in love even if they have lovers already since they have orientation system
-    //     if (pTarget.hasLover())
-    //     {
-    //         __result = false;
-    //         return false;
-    //     }
-    //
-    //     return true;
-    // }
+    [HarmonyPatch(nameof(BehFindLover.checkIfPossibleLover))]
+    static void IsPossibleLover(Actor pActor, Actor pTarget, ref bool __result)
+    {
+        if (pTarget.hasLover() || pActor.hasLover())
+        {
+            __result = false;
+        }
+    }
 }

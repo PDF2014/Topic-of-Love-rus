@@ -66,7 +66,7 @@ namespace Topic_of_Love.Mian
         {
             Harmony.DEBUG = true;
             
-            var harmony = new Harmony("netdot.mian.topicofloving");
+            var harmony = new Harmony("netdot.mian.topicoflove");
             harmony.PatchAll();
         }
     }

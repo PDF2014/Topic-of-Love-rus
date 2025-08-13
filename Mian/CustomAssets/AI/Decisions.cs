@@ -23,14 +23,13 @@ public class Decisions
             list_civ = true,
             only_safe = true
         });
-        AssetManager.subspecies_traits.get("wernicke_area").addDecision("insult_orientation_try");
 
         Add(new DecisionAsset
         {
             id = "find_kiss",
             priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/status/just_kissed",
-            cooldown = 15,
+            cooldown = 25,
             action_check_launch = actor => actor.CapableOfLove()
                                            && (actor.hasLover() || actor.hasBestFriend())
                                            && !actor.isIntimacyHappinessEnough(100f)
@@ -43,46 +42,46 @@ public class Decisions
             cooldown_on_launch_failure = true
         });
         
-        Add(new DecisionAsset
-        {
-            id = "find_date",
-            priority = NeuroLayer.Layer_3_High,
-            path_icon = "ui/Icons/status/went_on_date",
-            cooldown = 15,
-            action_check_launch = actor => actor.CapableOfLove()
-                                           && !actor.isIntimacyHappinessEnough(100f)
-                                           && actor.IsOrientationSystemEnabled()
-                                           && !actor.hasStatus("went_on_date"),
-            weight_calculate_custom = actor => !actor.hasLover() ? 2f : actor.isIntimacyHappinessEnough( 75f) ? 0.05f: 
-                actor.isIntimacyHappinessEnough( 50f) ? 0.1f : actor.isIntimacyHappinessEnough( 0) ? .12f : 
-                actor.isIntimacyHappinessEnough( -50) ? 0.2f : actor.isIntimacyHappinessEnough( -100f) ? 0.35f : 0.5f,
-            only_safe = true,
-            cooldown_on_launch_failure = true
-        });
+        // Add(new DecisionAsset
+        // {
+        //     id = "find_date",
+        //     priority = NeuroLayer.Layer_2_Moderate,
+        //     path_icon = "ui/Icons/status/went_on_date",
+        //     cooldown = 25,
+        //     action_check_launch = actor => actor.CapableOfLove()
+        //                                    && !actor.isIntimacyHappinessEnough(100f)
+        //                                    && actor.IsOrientationSystemEnabled()
+        //                                    && !actor.hasStatus("went_on_date"),
+        //     weight_calculate_custom = actor => !actor.hasLover() ? 1f : actor.isIntimacyHappinessEnough( 75f) ? 0.05f: 
+        //         actor.isIntimacyHappinessEnough( 50f) ? 0.1f : actor.isIntimacyHappinessEnough( 0) ? .12f : 
+        //         actor.isIntimacyHappinessEnough( -50) ? 0.2f : actor.isIntimacyHappinessEnough( -100f) ? 0.35f : 0.5f,
+        //     only_safe = true,
+        //     cooldown_on_launch_failure = true
+        // });
         
-        Add(new DecisionAsset
-        {
-            id = "reproduce_preservation",
-            priority = NeuroLayer.Layer_4_Critical,
-            path_icon = "ui/Icons/status/disliked_sex",
-            cooldown = 15,
-            action_check_launch = actor =>
-            {
-                if (actor.IsDyingOut()
-                    && actor.ReproducesSexually()
-                    && actor.hasSubspeciesTrait("reproduce_preservation")
-                    && actor.IsOrientationSystemEnabled())
-                {
-                    actor.subspecies.countReproductionNeuron();
-                    return true;
-                }
-
-                return false;
-            },
-            weight = 2.5f,
-            only_adult = true,
-            only_safe = true
-        });
+        // Add(new DecisionAsset
+        // {
+        //     id = "reproduce_preservation",
+        //     priority = NeuroLayer.Layer_4_Critical,
+        //     path_icon = "ui/Icons/status/disliked_sex",
+        //     cooldown = 15,
+        //     action_check_launch = actor =>
+        //     {
+        //         if (actor.IsDyingOut()
+        //             && actor.ReproducesSexually()
+        //             && actor.hasSubspeciesTrait("reproduce_preservation")
+        //             && actor.IsOrientationSystemEnabled())
+        //         {
+        //             actor.subspecies.countReproductionNeuron();
+        //             return true;
+        //         }
+        //
+        //         return false;
+        //     },
+        //     weight = 2.5f,
+        //     only_adult = true,
+        //     only_safe = true
+        // });
         // will force all units to make babies regardless of orientation if they have preservation
         
         Add(new DecisionAsset
@@ -90,7 +89,7 @@ public class Decisions
             id = "invite_for_sex",
             priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/status/enjoyed_sex",
-            cooldown = 15,
+            cooldown = 25,
             action_check_launch = actor => actor.CapableOfLove()
                                            && !actor.HasAnyLikesFor("identity", LoveType.Sexual)
                                            && !actor.isIntimacyHappinessEnough( 100f)
@@ -102,7 +101,7 @@ public class Decisions
                     actor.isIntimacyHappinessEnough( 0) ? 1.25f :
                     actor.isIntimacyHappinessEnough( -50) ? 1.5f :
                     actor.isIntimacyHappinessEnough( -100f) ? 2f : 1.75f;
-
+        
                 if (actor.hasLover() && actor.distanceToActorTile(actor) <= 50)
                 {
                     weight += 0.5f;
@@ -114,48 +113,61 @@ public class Decisions
             only_safe = true
         });
 
-        Add(new DecisionAsset
-        {
-            id = "find_sexual_ivf",
-            priority = NeuroLayer.Layer_3_High,
-            path_icon = "ui/Icons/status/adopted_baby",
-            cooldown = 10,
-            action_check_launch = actor =>
-            {
-                if (!actor.isSapient() || !actor.WantsBaby(false))
-                    return false;
-                    
-                var bestFriend = actor.getBestFriend();
-
-                if (actor.hasLover())
-                {
-                    if (!actor.lover.WantsBaby(false))
-                        return false;
-
-                    if (actor.HaveAppropriatePartsForReproduction(actor.lover) &&
-                        !LikesManager.BothActorsLikesMatch(actor, actor.lover, true))
-                    {
-                        return true;
-                    }
-
-                    if (actor.HaveAppropriatePartsForReproduction(actor.lover) &&
-                        LikesManager.BothActorsLikesMatch(actor, actor.lover, true))
-                        return false;
-                }
-
-                bool success = bestFriend != null && actor.HaveAppropriatePartsForReproduction(bestFriend) &&
-                               !bestFriend.hasStatus("pregnant");
-                return success;
-            },
-            list_civ = true,
-            weight_calculate_custom = actor => actor.WantsBaby(false) ? actor.hasLover() ? actor.HaveAppropriatePartsForReproduction(actor.lover) ? 0 : 2 : 2 : 0,
-            only_safe = true,
-            only_adult = true
-        });
+        // Add(new DecisionAsset
+        // {
+        //     id = "find_sexual_ivf",
+        //     priority = NeuroLayer.Layer_3_High,
+        //     path_icon = "ui/Icons/status/adopted_baby",
+        //     cooldown = 25,
+        //     action_check_launch = actor =>
+        //     {
+        //         if (!actor.isSapient() || !actor.WantsBaby(false))
+        //             return false;
+        //             
+        //         var bestFriend = actor.getBestFriend();
+        //
+        //         if (actor.hasLover())
+        //         {
+        //             if (!actor.lover.WantsBaby(false))
+        //                 return false;
+        //
+        //             if (actor.CanReproduce(actor.lover) &&
+        //                 !LikesManager.BothActorsLikesMatch(actor, actor.lover, true))
+        //             {
+        //                 return true;
+        //             }
+        //
+        //             if (actor.CanReproduce(actor.lover) &&
+        //                 LikesManager.BothActorsLikesMatch(actor, actor.lover, true))
+        //                 return false;
+        //         }
+        //
+        //         bool success = bestFriend != null && actor.CanReproduce(bestFriend) &&
+        //                        !bestFriend.hasStatus("pregnant");
+        //         return success;
+        //     },
+        //     list_civ = true,
+        //     weight_calculate_custom = actor => actor.WantsBaby(false) ? actor.hasLover() ? actor.CanReproduce(actor.lover) ? 0 : 2 : 2 : 0,
+        //     only_safe = true,
+        //     only_adult = true
+        // });
         Finish();
+
+        SubspeciesTraits.AddDecisions("advanced_hippocampus", new []{"find_lover", "insult_orientation_try"});
+        SubspeciesTraits.RemoveDecisions("reproduction_hermaphroditic", new []{"find_lover"});
+        SubspeciesTraits.RemoveDecisions("reproduction_sexual", new []{"find_lover"});
+        
+        AssetManager.decisions_library.get("sexual_reproduction_try").action_check_launch = 
+            (pActor =>
+            {
+                if (!pActor.canBreed() || pActor.isHungry())
+                    return false;
+                pActor.subspecies.countReproductionNeuron();
+                return true;
+            });
     }
     
-            private static void Finish()
+        private static void Finish()
         {
             for(int i = 0; i < _decisionAssets.Count; i++)
             {

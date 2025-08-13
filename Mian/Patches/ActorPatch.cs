@@ -51,7 +51,7 @@ public class ActorPatch
     [HarmonyPatch(nameof(Actor.create))]
         static void ActorCreatePatch(Actor __instance)
         {
-            __instance.asset.addDecision("find_lover");
+            // __instance.asset.addDecision("find_lover");
             __instance.data.set("intimacy_happiness", 10f);
         }
 
@@ -128,7 +128,7 @@ public class ActorPatch
                 }
                 
                 if(__instance.HasAnyLikesFor("identity", LoveType.Both) && __instance.IsOrientationSystemEnabled())
-                    __instance.a.changeIntimacyHappinessBy(__instance.HasNoOne() ? -Randy.randomFloat(6f, 9f) : -Randy.randomFloat(2f, 5f));
+                    __instance.a.changeIntimacyHappinessBy(__instance.HasNoOne() ? -Randy.randomFloat(14f, 18f) : -Randy.randomFloat(10f, 12f));
                 // else
                     // __instance.data.set("intimacy_happiness", 100f);
             } else if (!__instance.isAdult() && Randy.randomChance(0.1f) && !__instance.HasALike())
@@ -161,13 +161,13 @@ public class ActorPatch
 
             if (__instance.hasLover())
             {
-                var breakingUpChance = 0.005f;
+                var breakingUpChance = 0f;
 
                 if (__instance.AffectedByIntimacy())
                 {
                     if (intimacy < 0)
                     {
-                        breakingUpChance += Math.Abs(intimacy / 8);
+                        breakingUpChance += Math.Abs(intimacy / 20);
                     }
                 }
                 
@@ -179,7 +179,7 @@ public class ActorPatch
                                 
                 if(__instance.CanStopBeingLovers() &&
                    ( (__instance.IsOrientationSystemEnabled() && wantsToBreakUp) 
-                     || (!__instance.IsOrientationSystemEnabled() && !__instance.HaveAppropriatePartsForReproduction(__instance.lover))))
+                     || (!__instance.IsOrientationSystemEnabled() && !__instance.CanReproduce(__instance.lover))))
                 {
                     if (!__instance.hasCultureTrait("committed") || !__instance.lover.hasCultureTrait("committed"))
                     {
@@ -377,7 +377,7 @@ public class ActorPatch
                 
                 new CodeInstruction(OpCodes.Ldarg_0).WithLabels(reproductionBranch),
                 new CodeInstruction(OpCodes.Ldarg_1),
-                CodeInstruction.Call(typeof(Extensions), nameof(Extensions.HaveAppropriatePartsForReproduction)),
+                CodeInstruction.Call(typeof(Extensions), nameof(Extensions.CanReproduce)),
                 new CodeInstruction(OpCodes.Brfalse, returnFalse),
                 new CodeInstruction(OpCodes.Br, withinAgeBranch)
             );

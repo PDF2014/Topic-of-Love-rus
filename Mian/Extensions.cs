@@ -205,7 +205,7 @@ public static class Extensions
                                              && actor.lover.hasCultureTrait("sexual_expectations"))
                                             || (actor.hasSubspeciesTrait("preservation") && IsDyingOut(actor) 
                                                 && sexType == SexType.Reproduction
-                                                && (!BabyHelper.canMakeBabies(actor.lover) || !HaveAppropriatePartsForReproduction(actor, actor.lover)))));
+                                                && (!BabyHelper.canMakeBabies(actor.lover) || !CanReproduce(actor, actor.lover)))));
         }
     }
 
@@ -310,7 +310,7 @@ public static class Extensions
         return pActor.NeedDifferentSexTypeForReproduction() ||
                pActor.CanDoAnySexType();
     }
-    public static bool HaveAppropriatePartsForReproduction(this Actor pActor, Actor pTarget)
+    public static bool CanReproduce(this Actor pActor, Actor pTarget)
     {
         return pActor.subspecies.isPartnerSuitableForReproduction(pActor, pTarget);
     }
@@ -319,7 +319,7 @@ public static class Extensions
         return pActor.HasUterus();
     }
 
-    public static void removeAllCachedLikes(this Actor pActor)
+    public static void RemoveAllCachedLikes(this Actor pActor)
     {
         MapBox.instance.units.dict.ForEach((pair =>
         {
