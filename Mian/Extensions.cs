@@ -203,9 +203,7 @@ public static class Extensions
             return !actor.hasLover()
                    || (actor.hasLover() && ((!LikesManager.LikeMatches(actor, actor.lover, true)
                                              && actor.lover.hasCultureTrait("sexual_expectations"))
-                                            || (actor.hasSubspeciesTrait("preservation") && IsDyingOut(actor) 
-                                                && sexType == SexType.Reproduction
-                                                && (!BabyHelper.canMakeBabies(actor.lover) || !CanReproduce(actor, actor.lover)))));
+                                            || (actor.hasCultureTrait("sex_for_reproduction") && sexType == SexType.Reproduction)));
         }
     }
 
@@ -238,6 +236,9 @@ public static class Extensions
                 TolUtil.Debug(pActor.getName() + " is being requested to do intimacy. Sexual happiness: "+d + ". With lover: "+withLover);
             TolUtil.Debug("\n"+sexReason);
 
+            if (!sexReason.Equals(SexType.Reproduction) && (pActor.hasCultureTrait("sex_for_reproduction_only") ||
+                                                            pTarget.hasCultureTrait("sex_for_reproduction_only")))
+                return false;
             if (!sexReason.Equals(SexType.None) && !pActor.isAdult())
                 return false;
             if (!sexReason.Equals(SexType.Reproduction) && !LikesManager.LikeMatches(pActor, pTarget, "identity",

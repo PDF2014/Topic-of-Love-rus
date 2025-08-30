@@ -183,7 +183,7 @@ public class ActorPatch
                 {
                     if (!__instance.hasCultureTrait("committed") || !__instance.lover.hasCultureTrait("committed"))
                     {
-                        __instance.BreakUp(false);   
+                        __instance.BreakUp();   
                     }   
                 }
             }

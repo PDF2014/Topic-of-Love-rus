@@ -118,14 +118,18 @@ namespace Topic_of_Love.Mian
                 actor1.data.get("sex_reason", out var sexReason, "reproduction");
                 SexType.TryParse(sexReason, true, out SexType sexType);
                 TolUtil.Debug("Sex Reason: "+sexType);
-                if (!actor1.CanHaveIntimacyWithoutRepercussions(sexType))
+                
+                if (sexType != SexType.Reproduction)
                 {
-                    actor1.PotentiallyCheatedWith(actor2);
-                }
+                    if (!actor1.CanHaveIntimacyWithoutRepercussions(sexType))
+                    {
+                        actor1.PotentiallyCheatedWith(actor2);
+                    }
 
-                if (!actor2.CanHaveIntimacyWithoutRepercussions(sexType))
-                {
-                    actor2.PotentiallyCheatedWith(actor1);
+                    if (!actor2.CanHaveIntimacyWithoutRepercussions(sexType))
+                    {
+                        actor2.PotentiallyCheatedWith(actor1);
+                    }   
                 }
 
                 // did you really fucking enjoy it?

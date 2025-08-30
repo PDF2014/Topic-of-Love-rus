@@ -38,16 +38,16 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             Init("subspecies");
             
             // preservation is a mustttttttt for preventing population collapse
-            Add(new SubspeciesTrait
-            {
-                id="preservation",
-                group_id = "mind",
-                rarity = Rarity.R0_Normal,
-                spawn_random_trait_allowed = false,
-                in_mutation_pot_add = true,
-                in_mutation_pot_remove = true,
-                remove_for_zombies = true
-            }, AssetManager.actor_library.list.Select(asset => asset.id));
+            // Add(new SubspeciesTrait
+            // {
+            //     id="preservation",
+            //     group_id = "mind",
+            //     rarity = Rarity.R0_Normal,
+            //     spawn_random_trait_allowed = false,
+            //     in_mutation_pot_add = true,
+            //     in_mutation_pot_remove = true,
+            //     remove_for_zombies = true
+            // }, AssetManager.actor_library.list.Select(asset => asset.id));
 
             // SubspeciesTrait reproductionSameSex = new SubspeciesTrait
             // {
