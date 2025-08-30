@@ -91,6 +91,7 @@ public class Decisions
             path_icon = "ui/Icons/status/enjoyed_sex",
             cooldown = 25,
             action_check_launch = actor => actor.CapableOfLove()
+                                           && !actor.hasCultureTrait("sex_for_reproduction_only")
                                            && !actor.HasAnyLikesFor("identity", LoveType.Sexual)
                                            && !actor.isIntimacyHappinessEnough( 100f)
                                            && actor.IsOrientationSystemEnabled(),
