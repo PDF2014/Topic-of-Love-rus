@@ -7,7 +7,6 @@ using HarmonyLib;
 using JetBrains.Annotations;
 using NCMS.Extensions;
 using NeoModLoader.General;
-using NeoModLoader.General.Game.extensions;
 using NeoModLoader.services;
 using UnityEngine;
 using UnityEngine.UI;
@@ -152,50 +151,50 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         private static readonly Dictionary<LoveType, List<Like>> CachedLikeLists = new();
         private static readonly Dictionary<(string, LoveType), List<Like>> CachedLikeListsWithGroup = new();
 
-        private static readonly Func<LikeAsset, Sprite> GetSubspeciesSprite = asset =>
-        {
-            var subspecies = MapBox.instance.subspecies.get(long.Parse(asset.ID));
-            return subspecies.getSpriteIcon();
-        };
-
-        private static readonly Func<LikeAsset, GameObject> GetSubspeciesIcon = asset =>
-        {
-            var subspeciesBanner = GameObject.Find("Canvas Container Main/Canvas - Windows/windows/unit/Background/Scroll View/Viewport/Content/content_meta/Meta Elements/PrefabBannerSubspecies");
-            var actualObject = GameObject.Instantiate(subspeciesBanner.transform.GetChild(0));
-            GameObject.Destroy(actualObject.GetComponent<RotateOnHover>());
-            
-            var subspecies = MapBox.instance.subspecies.get(long.Parse(asset.ID));
-            
-            actualObject.GetChild(0).GetComponent<Image>().sprite = subspecies.getSpriteBackground();
-            actualObject.GetChild(5).GetComponent<Image>().color = subspecies.getColor().getColorMain2();
-            actualObject.GetChild(6).GetComponent<Image>().color = subspecies.getColor().getColor32Main();
-            
-            ActorAsset tAsset = subspecies.getActorAsset();
-            SubspeciesTrait tMutationAsset = null;
-            ActorTextureSubAsset tTextureAsset;
-            if (subspecies.has_mutation_reskin)
-            {
-                tMutationAsset = subspecies.mutation_skin_asset;
-                tTextureAsset = tMutationAsset.texture_asset;
-            }
-            else
-            {
-                tTextureAsset = tAsset.texture_asset;
-            }
-            AnimationContainerUnit tContainerAdult = DynamicActorSpriteCreatorUI.getContainerForUI(tAsset, true, tTextureAsset, tMutationAsset, false, null, null);
-            ColorAsset tKingdomColor = AssetManager.kingdoms.get(tAsset.kingdom_id_wild).default_kingdom_color;
-            int tPhenotypeIndex = subspecies.getMainPhenotypeIndexForBanner();
-            int tPhenotypeShade = 0;
-            Sprite tSprite = DynamicActorSpriteCreatorUI.getUnitSpriteForUI(tAsset, tContainerAdult.walking.frames[0], tContainerAdult, true, ActorSex.Male, tPhenotypeIndex, tPhenotypeShade, tKingdomColor, null, false);
-            
-            actualObject.GetChild(4).GetComponent<Image>().sprite = tSprite;
-            actualObject.transform.localScale = new Vector3(0.09f, 0.09f);
-
-            // GameObject.Destroy(actualObject.GetChild(2).GetComponent<Image>());
-            GameObject.DestroyImmediate(actualObject.GetChild(2).gameObject);
-            
-            return actualObject.gameObject;
-        };
+        // private static readonly Func<LikeAsset, Sprite> GetSubspeciesSprite = asset =>
+        // {
+        //     var subspecies = MapBox.instance.subspecies.get(long.Parse(asset.ID));
+        //     return subspecies.getSpriteIcon();
+        // };
+        //
+        // private static readonly Func<LikeAsset, GameObject> GetSubspeciesIcon = asset =>
+        // {
+        //     var subspeciesBanner = GameObject.Find("Canvas Container Main/Canvas - Windows/windows/unit/Background/Scroll View/Viewport/Content/content_meta/Meta Elements/PrefabBannerSubspecies");
+        //     var actualObject = GameObject.Instantiate(subspeciesBanner.transform.GetChild(0));
+        //     GameObject.Destroy(actualObject.GetComponent<RotateOnHover>());
+        //     
+        //     var subspecies = MapBox.instance.subspecies.get(long.Parse(asset.ID));
+        //     
+        //     actualObject.GetChild(0).GetComponent<Image>().sprite = subspecies.getSpriteBackground();
+        //     actualObject.GetChild(5).GetComponent<Image>().color = subspecies.getColor().getColorMain2();
+        //     actualObject.GetChild(6).GetComponent<Image>().color = subspecies.getColor().getColor32Main();
+        //     
+        //     ActorAsset tAsset = subspecies.getActorAsset();
+        //     SubspeciesTrait tMutationAsset = null;
+        //     ActorTextureSubAsset tTextureAsset;
+        //     if (subspecies.has_mutation_reskin)
+        //     {
+        //         tMutationAsset = subspecies.mutation_skin_asset;
+        //         tTextureAsset = tMutationAsset.texture_asset;
+        //     }
+        //     else
+        //     {
+        //         tTextureAsset = tAsset.texture_asset;
+        //     }
+        //     AnimationContainerUnit tContainerAdult = DynamicActorSpriteCreatorUI.getContainerForUI(tAsset, true, tTextureAsset, tMutationAsset, false, null, null);
+        //     ColorAsset tKingdomColor = AssetManager.kingdoms.get(tAsset.kingdom_id_wild).default_kingdom_color;
+        //     int tPhenotypeIndex = subspecies.getMainPhenotypeIndexForBanner();
+        //     int tPhenotypeShade = 0;
+        //     Sprite tSprite = DynamicActorSpriteCreatorUI.getUnitSpriteForUI(tAsset, tContainerAdult.walking.frames[0], tContainerAdult, true, ActorSex.Male, tPhenotypeIndex, tPhenotypeShade, tKingdomColor, null, false);
+        //     
+        //     actualObject.GetChild(4).GetComponent<Image>().sprite = tSprite;
+        //     actualObject.transform.localScale = new Vector3(0.09f, 0.09f);
+        //
+        //     // GameObject.Destroy(actualObject.GetChild(2).GetComponent<Image>());
+        //     GameObject.DestroyImmediate(actualObject.GetChild(2).gameObject);
+        //     
+        //     return actualObject.gameObject;
+        // };
         
         public static void Init()
         {
@@ -205,13 +204,13 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 identities.Add("nonbinary");
             
             AddLikeType("identity", "#B57EDC", identities, LoveType.Both, actor => new []{GetIdentity(actor)});
-            AddLikeType("subspecies", "#34e965", new List<string>(), LoveType.Both, actor =>
-            {
-                if (!actor.hasSubspecies())
-                    return Array.Empty<string>();
-                
-                return new[] { actor.subspecies.id.ToString() };
-            }, GetSubspeciesIcon, GetSubspeciesSprite);
+            // AddLikeType("subspecies", "#34e965", new List<string>(), LoveType.Both, actor =>
+            // {
+            //     if (!actor.hasSubspecies())
+            //         return Array.Empty<string>();
+            //     
+            //     return new[] { actor.subspecies.id.ToString() };
+            // }, GetSubspeciesIcon, GetSubspeciesSprite);
             
             if(TolUtil.IsTOIInstalled())
                 AddLikeType("expression", "#C900FF", List.Of("feminine", "masculine"), LoveType.Both, actor => new []{GetExpression(actor)});
@@ -512,13 +511,13 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             if (genitalTypes != null && genitalTypes.Length == 0)
                 return false;
             
-            var subspeciesTypes = GetActorTypeFromLikeGroup(pTarget, "subspecies");
-            if (subspeciesTypes.Length == 0)
-                return false;
+            // var subspeciesTypes = GetActorTypeFromLikeGroup(pTarget, "subspecies");
+            // if (subspeciesTypes.Length == 0)
+            //     return false;
 
             var foundIdentity = false;
             var foundExpression = false;
-            var foundSubspecies = pActor.hasSubspecies() && pTarget.isSameSubspecies(pActor.subspecies) && !pActor.isSapient();
+            // var foundSubspecies = pActor.hasSubspecies() && pTarget.isSameSubspecies(pActor.subspecies) && !pActor.isSapient();
             var foundGenital = !sexual;
 
             foreach (var like in list)
@@ -527,17 +526,17 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                     foundIdentity = true;
                 if(!TolUtil.IsTOIInstalled() || expressionTypes.Contains(like.ID))
                     foundExpression = true;
-                if(subspeciesTypes.Contains(like.ID))
-                    foundSubspecies = true;
+                // if(subspeciesTypes.Contains(like.ID))
+                //     foundSubspecies = true;
                 if(!TolUtil.IsTOIInstalled() || expressionTypes.Contains(like.ID))
                     foundGenital = true;
 
-                if (foundExpression && foundIdentity && foundSubspecies && foundGenital)
+                if (foundExpression && foundIdentity && foundGenital)
                     break;
             }
 
 
-            if (foundExpression && foundIdentity && foundSubspecies && foundGenital)
+            if (foundExpression && foundIdentity && foundGenital)
             {
                 SetMatchingIDForActors(pActor, pTarget, sexual, 1);
                 return true;
@@ -586,20 +585,20 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
 
             var likes = new List<Like>();
             
-            if (Randy.randomChance(0.99f) && actor.isSapient())
-            {
-
-                var id = actor.subspecies.id.ToString();
-
-                if (!AllLikeAssets.Any(asset => asset.ID.Equals(id)))
-                {
-                    var subspecies = actor.subspecies;
-                    AddDynamicLikeAsset(subspecies.id, subspecies.name, "subspecies", LoveType.Both);
-                }
-                
-                likes.Add(GetLikeFromID(id, LoveType.Sexual));
-                likes.Add(GetLikeFromID(id, LoveType.Romantic));
-            }
+            // if (Randy.randomChance(0.99f) && actor.isSapient())
+            // {
+            //
+            //     var id = actor.subspecies.id.ToString();
+            //
+            //     if (!AllLikeAssets.Any(asset => asset.ID.Equals(id)))
+            //     {
+            //         var subspecies = actor.subspecies;
+            //         AddDynamicLikeAsset(subspecies.id, subspecies.name, "subspecies", LoveType.Both);
+            //     }
+            //     
+            //     likes.Add(GetLikeFromID(id, LoveType.Sexual));
+            //     likes.Add(GetLikeFromID(id, LoveType.Romantic));
+            // }
 
             // if (preferredSets.Count > 0)
             // {

@@ -205,7 +205,7 @@ public class LikeNeuronElement :
         _neurons_overview.startNewWhat();
         actor.updateStats();
         GetComponentInParent<StatsWindow>().updateStats();
-        AchievementLibrary.achievementMindlessHusk.check(pActor: actor);
+        AchievementLibrary.mindless_husk.check(actor);
     }
 
     public void centerBrainClick()

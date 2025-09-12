@@ -88,7 +88,7 @@ public class BabyMakerPatch
                 WorldTile pTile1 = pTile == null
                     ? ((ICollection)list).Count != 0 ? list.GetRandom<WorldTile>() : dominantParent.current_tile
                     : pTile;
-                Actor actorFromData = World.world.units.createActorFromData(pData, pTile1, pCity);
+                Actor actorFromData = World.world.units.createBabyActorFromData(pData, pTile1, pCity);
 
                 pParent1.data.get("familyParentA", out var familyParentAid, 0L);
                 pParent1.data.get("familyParentB", out var familyParentBid, 0L);

@@ -112,7 +112,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 can_be_given = true,
                 can_be_in_book = true,
                 can_be_removed = true
-            });
+            }, List.Of("elf"));
             
             Add(new CultureTrait
             {
@@ -123,7 +123,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 can_be_given = true,
                 can_be_in_book = true,
                 can_be_removed = true
-            });
+            }, List.Of("orc"));
             
             Finish();
         }

@@ -86,7 +86,7 @@ public class BehFindAPartner : BehaviourActionActor
         var isSexual = _sexReason != SexType.None;
         if (isSexual)
         {
-            if (target.last_decision_id == "sexual_reproduction_try")
+            if (target._last_decision_id == "sexual_reproduction_try")
                 return false;
             if(IsForReproduction())
                 return (pActor.isSameSubspecies(target.subspecies) 

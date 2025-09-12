@@ -64,7 +64,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                     AssetManager.traits.pot_traits_birth.Add(trait);
                 for (int index = 0; index < trait.rate_acquire_grow_up; ++index)
                     AssetManager.traits.pot_traits_growup.Add(trait);
-                if (trait.combat)
+                if (trait.in_training_dummy_combat_pot)
                     AssetManager.traits.pot_traits_combat.Add(trait);   
             }
             base.Finish();

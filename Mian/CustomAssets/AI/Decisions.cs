@@ -58,31 +58,7 @@ public class Decisions
         //     only_safe = true,
         //     cooldown_on_launch_failure = true
         // });
-        
-        // Add(new DecisionAsset
-        // {
-        //     id = "reproduce_preservation",
-        //     priority = NeuroLayer.Layer_4_Critical,
-        //     path_icon = "ui/Icons/status/disliked_sex",
-        //     cooldown = 15,
-        //     action_check_launch = actor =>
-        //     {
-        //         if (actor.IsDyingOut()
-        //             && actor.ReproducesSexually()
-        //             && actor.hasSubspeciesTrait("reproduce_preservation")
-        //             && actor.IsOrientationSystemEnabled())
-        //         {
-        //             actor.subspecies.countReproductionNeuron();
-        //             return true;
-        //         }
-        //
-        //         return false;
-        //     },
-        //     weight = 2.5f,
-        //     only_adult = true,
-        //     only_safe = true
-        // });
-        // will force all units to make babies regardless of orientation if they have preservation
+
         
         Add(new DecisionAsset
         {
