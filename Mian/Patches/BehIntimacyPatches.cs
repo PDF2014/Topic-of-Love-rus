@@ -3,6 +3,7 @@ using HarmonyLib;
 
 namespace Topic_of_Love.Mian.Patches;
 
+[HarmonyPatch]
 public class BehIntimacyPatches
 {
     [HarmonyPatch(typeof(BehChildFindRandomFamilyParent), nameof(BehChildFindRandomFamilyParent.execute))]
@@ -11,7 +12,7 @@ public class BehIntimacyPatches
         static void Postfix(Actor pBabyActor, BehResult __result)
         {
             if(__result == BehResult.Continue)
-                pBabyActor.changeIntimacyHappiness(20);
+                pBabyActor.changeIntimacyHappinessBy(10);
         }
     }
 
@@ -21,7 +22,7 @@ public class BehIntimacyPatches
         static void Postfix(Actor pActor, BehResult __result)
         {
             if(__result == BehResult.Continue)
-                pActor.changeIntimacyHappiness(20);
+                pActor.changeIntimacyHappinessBy(10);
         }
     }
     
@@ -31,7 +32,7 @@ public class BehIntimacyPatches
         static void Postfix(Actor pActor, BehResult __result)
         {
             if(__result == BehResult.Continue && pActor.hasFamily())
-                pActor.changeIntimacyHappiness(50);
+                pActor.changeIntimacyHappinessBy(25);
         }
     }
 
@@ -44,21 +45,21 @@ public class BehIntimacyPatches
             {
                 var lover = __instance.lover;
                 if(lover != null)
-                    lover.changeIntimacyHappiness(-30);
+                    lover.changeIntimacyHappinessBy(-30);
                 var bestFriend = __instance.getBestFriend();
                 if(bestFriend != null)
-                    bestFriend.changeIntimacyHappiness(-15);
+                    bestFriend.changeIntimacyHappinessBy(-15);
                 var parents = __instance.getParents();
                 foreach(var parent in parents)
                 {
-                    parent.changeIntimacyHappiness(-10);
+                    parent.changeIntimacyHappinessBy(-10);
                 }
 
                 var family = __instance.family;
                 if (family != null)
                 {
                     foreach(var unit in family.getUnits())
-                        unit.changeIntimacyHappiness(-5);
+                        unit.changeIntimacyHappinessBy(-5);
                 }
             }
         }

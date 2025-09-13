@@ -6,6 +6,7 @@ using Topic_of_Love.Mian.CustomAssets.Traits;
 namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.other;
 
 // includes lover and other non-lovers (can be considered cheating)
+//TODO: look into reworking distance and waits
 public class BehFindAPartner : BehaviourActionActor
 {
     private readonly float _distance;
@@ -55,40 +56,9 @@ public class BehFindAPartner : BehaviourActionActor
             target = GetClosestPossibleMatchingActor(pActor);
         }
 
-        if (target == null || !TolUtil.WillDoIntimacy(pActor, target, _sexReason, true))
+        if (target == null || !pActor.WillDoIntimacy(target, _sexReason, true))
             return BehResult.Stop;
-        //
-        // if (pActor.hasLover() 
-        //     && IsTargetValid(pActor, pActor.lover))
-        //     target = pActor.lover;
-        //
-        // if (pActor.hasLover() && IsForReproduction() &&
-        //     TolUtil.CouldReproduce(pActor, pActor.lover) && target != pActor.lover)
-        //     return BehResult.Stop;
-        //
-        // if (target == null && _partnerType.Equals(PartnerType.Lover))
-        //     return BehResult.Stop;
-        //
-        // if (!TolUtil.WillDoIntimacy(pActor, target, _sexReason, true))
-        // {
-        //     TolUtil.Debug("They decided that they will not do it.");
-        //     return BehResult.Stop;
-        // }
-        //
-        // if(pActor.hasBestFriend()
-        //    && IsTargetValid(pActor, pActor.getBestFriend()))
-        //     target = pActor.getBestFriend();
-        //
-        // if (target == null && _partnerType.Equals(PartnerType.Friend))
-        //     return BehResult.Stop;
-        //
-        // if (target == null)
-        // {
-        //     target = GetClosestPossibleMatchingActor(pActor);
-        //     if (target == null)
-        //         return BehResult.Stop;
-        // }
-        //
+
         TolUtil.Debug("Lover found!");
         
         pActor.beh_actor_target = target;
@@ -111,20 +81,20 @@ public class BehFindAPartner : BehaviourActionActor
         
         if (!pActor.isOnSameIsland(target) || target.isLying() || pActor.distanceToActorTile(target) > _distance)
             return false;
-        if (_mustBeReproduceable && (!BabyHelper.canMakeBabies(target) || !TolUtil.CouldReproduce(pActor, target)))
+        if (_mustBeReproduceable && (!BabyHelper.canMakeBabies(target) || !pActor.CanReproduce(target)))
             return false;
         var isSexual = _sexReason != SexType.None;
         if (isSexual)
         {
-            if (target.last_decision_id == "sexual_reproduction_try")
+            if (target._last_decision_id == "sexual_reproduction_try")
                 return false;
             if(IsForReproduction())
                 return (pActor.isSameSubspecies(target.subspecies) 
                        || (target.isSapient() && pActor.isSapient() 
                                                && LikesManager.LikeMatches(target, pActor, true)))
-                       && TolUtil.WillDoIntimacy(target, pActor, _sexReason);
+                       && target.WillDoIntimacy(pActor, _sexReason);
 
-            return TolUtil.WillDoIntimacy(target, pActor, _sexReason) &&
+            return target.WillDoIntimacy(pActor, _sexReason) &&
                    ((_mustMatchPreference && LikesManager.LikeMatches(pActor, target, true)) ||
                     !_mustMatchPreference);
         }
@@ -138,20 +108,21 @@ public class BehFindAPartner : BehaviourActionActor
     }
     private Actor GetClosestPossibleMatchingActor(Actor pActor)
     {
-        var chunkRadius = IsForReproduction() ? 4 : 2;
+        var chunkRadius = IsForReproduction() ? 2 : 1;
         var isRandom = !IsForReproduction();
-        
-        using (ListPool<Actor> pCollection = new ListPool<Actor>(5))
-        {
-            foreach (var pTarget in Finder.getUnitsFromChunk(pActor.current_tile, chunkRadius, pRandom: isRandom))
-            {
-                if (pTarget != pActor && IsTargetValid(pActor, pTarget))
-                {
-                    pCollection.Add(pTarget);
-                }
-            }
 
-            return Toolbox.getClosestActor(pCollection, pActor.current_tile);
+        Actor toReturn = null;
+        
+        foreach (var pTarget in Finder.getUnitsFromChunk(pActor.current_tile, chunkRadius, pRandom: isRandom))
+        {
+            if (pTarget != pActor && IsTargetValid(pActor, pTarget))
+            {
+                toReturn = pActor;
+                break;
+            }
         }
+
+        return toReturn;
+        
     }
 }

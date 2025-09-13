@@ -34,6 +34,10 @@ public class BabyMakerPatch
     [HarmonyPatch(typeof(BabyMaker), nameof(BabyMaker.makeBaby))]
     class MakeBabyPatch
     {
+        static void Postfix(Actor __result)
+        {
+            ActorManagerPatch.NewUnit(__result); // generate preferences
+        }
         static bool Prefix(
             Actor pParent1,
             Actor pParent2,
@@ -84,7 +88,7 @@ public class BabyMakerPatch
                 WorldTile pTile1 = pTile == null
                     ? ((ICollection)list).Count != 0 ? list.GetRandom<WorldTile>() : dominantParent.current_tile
                     : pTile;
-                Actor actorFromData = World.world.units.createActorFromData(pData, pTile1, pCity);
+                Actor actorFromData = World.world.units.createBabyActorFromData(pData, pTile1, pCity);
 
                 pParent1.data.get("familyParentA", out var familyParentAid, 0L);
                 pParent1.data.get("familyParentB", out var familyParentBid, 0L);
@@ -206,7 +210,6 @@ public class BabyMakerPatch
                 
                 pParent1.data.removeLong("familyParentA");
                 pParent1.data.removeLong("familyParentB");
-                ActorManagerPatch.NewUnit(actorFromData); // generate preferences
                 return false;
             }
         }

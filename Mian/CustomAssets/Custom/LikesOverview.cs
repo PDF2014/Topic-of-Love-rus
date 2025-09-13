@@ -60,7 +60,7 @@ public class LikesOverview :
     public Vector2 _last_mouse_delta;
     public float _offset_x;
     public float _offset_y;
-    public List<Like> _likes;
+    public IEnumerable<Like> _likes;
     public LikeNeuronElement _active_neuron;
     public LikeNeuronElement _latest_touched_neuron;
     public bool _all_state = true;
@@ -249,17 +249,15 @@ public class LikesOverview :
                 var isSubspecies = like.LikeAsset.LikeGroup.ID.Equals("subspecies");
                 if (!isSubspecies)
                     return true;
+                if (!actor.isSapient())
+                    return false;
                 var id = long.Parse(like.LikeAsset.ID);
                 var subspecies = MapBox.instance.subspecies.get(id);
                 if (subspecies == null)
                     return false;
-                if (subspecies.id == actor.subspecies.id)
-                    return true;
-                if (!subspecies.isSapient() || !actor.isSapient())
-                    return false;
 
                 return true;
-            }).ToList();
+            });
     }
 
     public void updateNeuronsVisual()
@@ -456,14 +454,15 @@ public class LikesOverview :
 
     public void initStartPositions()
     {
-        for (var pNeuronIndex = 0; pNeuronIndex < _likes.Count; ++pNeuronIndex)
+        var pNeuronIndex = 0;
+        foreach (var like in _likes)
         {
-            var decisionAsset = _likes[pNeuronIndex];
             var next = _pool_neurons.getNext();
-            next.setupLikeAndActor(decisionAsset, actor);
-            var positionOnSphere = getPositionOnSphere(pNeuronIndex, _likes.Count);
+            next.setupLikeAndActor(like, actor);
+            var positionOnSphere = getPositionOnSphere(pNeuronIndex, _likes.Count());
             next.transform.localPosition = positionOnSphere;
             _neurons.Add(next);
+            pNeuronIndex++;
         }
 
         updateNeuronsVisual();
@@ -561,7 +560,7 @@ public class LikesOverview :
         pTool.setText("is_dragging:", _is_dragging);
         pTool.setText("last_mouse_delta:", _last_mouse_delta);
         pTool.setSeparator();
-        pTool.setText("likes:", _likes.Count);
+        pTool.setText("likes:", _likes.Count());
         pTool.setSeparator();
         pTool.setText("neuron selected:", _active_neuron);
     }
@@ -585,9 +584,13 @@ public class LikesOverview :
         _all_state = !isAnyEnabled() || (!isAllEnabled() && !_all_state);
         foreach (var neuron in _neurons)
             if (neuron.hasLike())
-                actor.data.set(neuron.like.IDWithLoveType, _all_state);
+                if(_all_state)
+                    actor.data.set(neuron.like.IDWithLoveType, _all_state);
+                else
+                    actor.data.removeBool(neuron.like.IDWithLoveType);
         fireImpulsesEverywhere();
         Orientations.RollOrientationLabel(actor);
+        actor.RemoveAllCachedLikes();
         StatPatch.UpdateOrientationStats(mainWindow);
     }
 

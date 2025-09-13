@@ -7,22 +7,22 @@ namespace Topic_of_Love.Mian.Patches;
 [HarmonyPatch(typeof(BehCheckReproductionBasics))]
 public class BehCheckReproductionBasicsPatch
 {
-    [HarmonyPrefix]
-    [HarmonyPatch(nameof(BehCheckReproductionBasics.execute))]
-    static bool CheckBasicsPatch(Actor pActor, ref BehResult __result)
-    {
-        var pParentA = pActor;
-        var pParentB = pActor.lover;
-
-        if (pActor.hasLover() &&
-            (!LikesManager.BothActorsLikesMatch(pParentA, pParentB, true)
-             || !TolUtil.CouldReproduce(pParentA, pParentB)
-             || !BabyHelper.canMakeBabies(pParentA)))
-        {
-            __result = BehResult.Stop;
-            return false;
-        }
-
-        return true;
-    }
+    // [HarmonyPrefix]
+    // [HarmonyPatch(nameof(BehCheckReproductionBasics.execute))]
+    // static bool CheckBasicsPatch(Actor pActor, ref BehResult __result)
+    // {
+    //     var pParentA = pActor;
+    //     var pParentB = pActor.lover;
+    //
+    //     if (pActor.hasLover() &&
+    //         (!LikesManager.BothActorsLikesMatch(pParentA, pParentB, true)
+    //          || !pParentA.CanReproduce(pParentB)
+    //          || !BabyHelper.canMakeBabies(pParentA)))
+    //     {
+    //         __result = BehResult.Stop;
+    //         return false;
+    //     }
+    //
+    //     return true;
+    // }
 }

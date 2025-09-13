@@ -56,8 +56,8 @@ namespace Topic_of_Love.Mian
             var config = Mod.GetConfig();
             var statistics = (bool)config["Graphs"]["ModGraphs"].GetValue();
             
-            if(statistics)
-                HistoryMetaDataAssets.Init();
+            // if(statistics)
+                // HistoryMetaDataAssets.Init();
             
             TooltipAssets.Init();
             LikesManager.Init();
@@ -66,7 +66,7 @@ namespace Topic_of_Love.Mian
         {
             Harmony.DEBUG = true;
             
-            var harmony = new Harmony("netdot.mian.topicofloving");
+            var harmony = new Harmony("netdot.mian.topicoflove");
             harmony.PatchAll();
         }
     }

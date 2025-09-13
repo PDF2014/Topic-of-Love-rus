@@ -49,16 +49,16 @@ public class BehCheckIfDateFinish : BehaviourActionActor
         pActor.addStatusEffect("went_on_date");
         target.addStatusEffect("went_on_date");
         
-        pActor.changeIntimacyHappiness(happiness);
-        target.changeIntimacyHappiness(happiness);
+        pActor.changeIntimacyHappinessBy(happiness);
+        target.changeIntimacyHappinessBy(happiness);
         
         pActor.data.removeFloat("date_happiness");
         
         TolUtil.Debug("The date for "+pActor.getName()+" and "+target.getName() + " has finalized! Total happiness: "+happiness);
         
-        if (happiness >= (pActor.getBestFriend() == target ? 10f : 25f))
+        if (happiness >= (pActor.getBestFriend() == target ? 10f : 25f) && pActor.canFallInLoveWith(target))
         {
-            ActorTool.checkFallInLove(pActor, target);
+            pActor.becomeLoversWith(target);
         }
         
         return BehResult.Continue;

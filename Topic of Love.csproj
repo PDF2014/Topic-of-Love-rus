@@ -67,6 +67,7 @@
         <Compile Include="Mian\Patches\BabyMakerPatch.cs" />
         <Compile Include="Mian\Patches\BehCFBFSRPatch.cs" />
         <Compile Include="Mian\Patches\BehCheckReproductionBasicsPatch.cs" />
+        <Compile Include="Mian\Patches\BehSexualReproductionPatches.cs" />
         <Compile Include="Mian\Patches\BehFindLoverPatch.cs" />
         <Compile Include="Mian\Patches\BehFinishTalkPatch.cs" />
         <Compile Include="Mian\Patches\BehIntimacyPatches.cs" />
@@ -84,6 +85,7 @@
     </ItemGroup>
     <ItemGroup>
       <Content Include="default_config.json" />
+      <Folder Include="GameResources\ui\Icons\subspecies_traits\" />
       <Folder Include="Locales\" />
       <Content Include="mod.json" />
       <Folder Include="Properties\" />

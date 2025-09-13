@@ -44,14 +44,12 @@ public class Orientation
         if (sexual)
         {
             if (_sexualSprite == null)
-                _sexualSprite = SpriteTextureLoader.getSprite(_sexualPathIcon);
-                // _sexualSprite = Resources.Load<Sprite>("ui/Icons/" + SexualPathIcon);
+                _sexualSprite = SpriteTextureLoader.getSprite(GetPathIcon(true, true));
             return _sexualSprite;
         }
 
         if (_romanticSprite == null)
-            _romanticSprite = SpriteTextureLoader.getSprite(_romanticPathIcon);
-            // _romanticSprite = Resources.Load<Sprite>("ui/Icons/" + RomanticPathIcon);
+            _romanticSprite = SpriteTextureLoader.getSprite(GetPathIcon(false, true));
         return _romanticSprite;
     }
 
@@ -141,7 +139,7 @@ public class Orientations
             {
                 var preferredIdentities = actor.GetActorLikes("identity", loveType);
 
-                if (preferredIdentities.Count == 1 && !actor.HasLike("male", loveType))
+                if (preferredIdentities.Count() == 1 && !actor.HasLike("male", loveType))
                     return true;
 
             }
@@ -157,7 +155,7 @@ public class Orientations
             {
                 var preferredIdentities = actor.GetActorLikes("identity", loveType);
                 
-                if (preferredIdentities.Count == 1 && !actor.HasLike("female", loveType))
+                if (preferredIdentities.Count() == 1 && !actor.HasLike("female", loveType))
                     return true;
             }
 
@@ -171,7 +169,7 @@ public class Orientations
             if (actor.isSapient())
             {
                 var preferredIdentities = actor.GetActorLikes("identity", loveType);
-                if (preferredIdentities.Count == 1)
+                if (preferredIdentities.Count() == 1)
                 {
                     if (!preferredIdentities.First().ID.Equals(actor.GetIdentity()))
                         return true;
@@ -188,7 +186,7 @@ public class Orientations
             if (!actor.isSapient())
             {
                 var preferredIdentities = actor.GetActorLikes("identity", loveType);
-                if (preferredIdentities.Count == 1)
+                if (preferredIdentities.Count() == 1)
                 {
                     if (!preferredIdentities.First().ID.Equals(actor.GetIdentity()))
                         return true;
@@ -209,13 +207,13 @@ public class Orientations
                 // identities are technically not a sex thing so we're just working with what we have
                 if (actor.isSexFemale())
                 {
-                    if (preferredIdentities.Count == 1
+                    if (preferredIdentities.Count() == 1
                         && actor.HasLike("female", loveType))
                         return true;
                 }
                 else
                 {
-                    if (preferredIdentities.Count == 1
+                    if (preferredIdentities.Count() == 1
                         && actor.HasLike("male", loveType))
                         return true;
                 }
@@ -228,7 +226,7 @@ public class Orientations
             if (!actor.HasAnyLikesFor("identity", loveType))
                 return false;
 
-            if (actor.GetActorLikes("identity", loveType).Count >= 2)
+            if (actor.GetActorLikes("identity", loveType).Count() >= 2)
                 return true;
             return false;
         });
@@ -237,7 +235,7 @@ public class Orientations
             if (!actor.HasAnyLikesFor("identity", loveType))
                 return false;
 
-            if (actor.GetActorLikes("identity", loveType).Count == LikesManager.GetValidLikesFromAssets("identity", loveType).Count)
+            if (actor.GetActorLikes("identity", loveType).Count() == LikesManager.GetValidLikesFromAssets("identity", loveType).Count())
                 return true;
             return false;
         });

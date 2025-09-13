@@ -40,6 +40,18 @@ public class BaseTraits<T, TR>
                     pObject.opposite_traits.Add(oppositeTrait);
                 }
             }
+            
+
+            if (pObject.decision_ids != null)
+            {
+                pObject.decisions_assets = new DecisionAsset[pObject.decision_ids.Count];
+                for (int index = 0; index < pObject.decision_ids.Count; ++index)
+                {
+                    string decisionId = pObject.decision_ids[index];
+                    DecisionAsset decisionAsset = AssetManager.decisions_library.get(decisionId);
+                    pObject.decisions_assets[index] = decisionAsset;
+                }
+            }
         }   
     }
     

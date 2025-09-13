@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using HarmonyLib;
 using JetBrains.Annotations;
 using NCMS.Extensions;
 using NeoModLoader.General;
-using NeoModLoader.General.Game.extensions;
 using NeoModLoader.services;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,13 +28,15 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         public readonly string HexCode;
         public readonly Func<LikeAsset, GameObject> GetDynamicIcon; // for dynamic assets
         public readonly Func<LikeAsset, Sprite> GetDynamicSprite;
+        public readonly Func<Actor, string[]> ActorType;
 
-        public LikeGroup(string id, string hexCode, Func<LikeAsset, GameObject> getDynamicIcon, Func<LikeAsset, Sprite> getDynamicSprite)
+        public LikeGroup(string id, string hexCode, Func<Actor, string[]> actorType, Func<LikeAsset, GameObject> getDynamicIcon, Func<LikeAsset, Sprite> getDynamicSprite)
         {
             ID = id.ToLower();
             HexCode = hexCode;
             GetDynamicIcon = getDynamicIcon;
             GetDynamicSprite = getDynamicSprite;
+            ActorType = actorType;
         }
 
         public string Title => LM.Get("like_group_" + ID);
@@ -146,51 +148,53 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         private static readonly List<LikeAsset> AllLikeAssets = new();
         public static readonly Dictionary<LikeGroup, List<LikeAsset>> LikeTypes = new();
         private static readonly Dictionary<string, List<string>> MatchingSets = new();
+        private static readonly Dictionary<LoveType, List<Like>> CachedLikeLists = new();
+        private static readonly Dictionary<(string, LoveType), List<Like>> CachedLikeListsWithGroup = new();
 
-        private static readonly Func<LikeAsset, Sprite> GetSubspeciesSprite = asset =>
-        {
-            var subspecies = MapBox.instance.subspecies.get(long.Parse(asset.ID));
-            return subspecies.getSpriteIcon();
-        };
-
-        private static readonly Func<LikeAsset, GameObject> GetSubspeciesIcon = asset =>
-        {
-            var subspeciesBanner = GameObject.Find("Canvas Container Main/Canvas - Windows/windows/unit/Background/Scroll View/Viewport/Content/content_meta/Meta Elements/PrefabBannerSubspecies");
-            var actualObject = GameObject.Instantiate(subspeciesBanner.transform.GetChild(0));
-            GameObject.Destroy(actualObject.GetComponent<RotateOnHover>());
-            
-            var subspecies = MapBox.instance.subspecies.get(long.Parse(asset.ID));
-            
-            actualObject.GetChild(0).GetComponent<Image>().sprite = subspecies.getSpriteBackground();
-            actualObject.GetChild(5).GetComponent<Image>().color = subspecies.getColor().getColorMain2();
-            actualObject.GetChild(6).GetComponent<Image>().color = subspecies.getColor().getColor32Main();
-            
-            ActorAsset tAsset = subspecies.getActorAsset();
-            SubspeciesTrait tMutationAsset = null;
-            ActorTextureSubAsset tTextureAsset;
-            if (subspecies.has_mutation_reskin)
-            {
-                tMutationAsset = subspecies.mutation_skin_asset;
-                tTextureAsset = tMutationAsset.texture_asset;
-            }
-            else
-            {
-                tTextureAsset = tAsset.texture_asset;
-            }
-            AnimationContainerUnit tContainerAdult = DynamicActorSpriteCreatorUI.getContainerForUI(tAsset, true, tTextureAsset, tMutationAsset, false, null, null);
-            ColorAsset tKingdomColor = AssetManager.kingdoms.get(tAsset.kingdom_id_wild).default_kingdom_color;
-            int tPhenotypeIndex = subspecies.getMainPhenotypeIndexForBanner();
-            int tPhenotypeShade = 0;
-            Sprite tSprite = DynamicActorSpriteCreatorUI.getUnitSpriteForUI(tAsset, tContainerAdult.walking.frames[0], tContainerAdult, true, ActorSex.Male, tPhenotypeIndex, tPhenotypeShade, tKingdomColor, null, false);
-            
-            actualObject.GetChild(4).GetComponent<Image>().sprite = tSprite;
-            actualObject.transform.localScale = new Vector3(0.09f, 0.09f);
-
-            // GameObject.Destroy(actualObject.GetChild(2).GetComponent<Image>());
-            GameObject.DestroyImmediate(actualObject.GetChild(2).gameObject);
-            
-            return actualObject.gameObject;
-        };
+        // private static readonly Func<LikeAsset, Sprite> GetSubspeciesSprite = asset =>
+        // {
+        //     var subspecies = MapBox.instance.subspecies.get(long.Parse(asset.ID));
+        //     return subspecies.getSpriteIcon();
+        // };
+        //
+        // private static readonly Func<LikeAsset, GameObject> GetSubspeciesIcon = asset =>
+        // {
+        //     var subspeciesBanner = GameObject.Find("Canvas Container Main/Canvas - Windows/windows/unit/Background/Scroll View/Viewport/Content/content_meta/Meta Elements/PrefabBannerSubspecies");
+        //     var actualObject = GameObject.Instantiate(subspeciesBanner.transform.GetChild(0));
+        //     GameObject.Destroy(actualObject.GetComponent<RotateOnHover>());
+        //     
+        //     var subspecies = MapBox.instance.subspecies.get(long.Parse(asset.ID));
+        //     
+        //     actualObject.GetChild(0).GetComponent<Image>().sprite = subspecies.getSpriteBackground();
+        //     actualObject.GetChild(5).GetComponent<Image>().color = subspecies.getColor().getColorMain2();
+        //     actualObject.GetChild(6).GetComponent<Image>().color = subspecies.getColor().getColor32Main();
+        //     
+        //     ActorAsset tAsset = subspecies.getActorAsset();
+        //     SubspeciesTrait tMutationAsset = null;
+        //     ActorTextureSubAsset tTextureAsset;
+        //     if (subspecies.has_mutation_reskin)
+        //     {
+        //         tMutationAsset = subspecies.mutation_skin_asset;
+        //         tTextureAsset = tMutationAsset.texture_asset;
+        //     }
+        //     else
+        //     {
+        //         tTextureAsset = tAsset.texture_asset;
+        //     }
+        //     AnimationContainerUnit tContainerAdult = DynamicActorSpriteCreatorUI.getContainerForUI(tAsset, true, tTextureAsset, tMutationAsset, false, null, null);
+        //     ColorAsset tKingdomColor = AssetManager.kingdoms.get(tAsset.kingdom_id_wild).default_kingdom_color;
+        //     int tPhenotypeIndex = subspecies.getMainPhenotypeIndexForBanner();
+        //     int tPhenotypeShade = 0;
+        //     Sprite tSprite = DynamicActorSpriteCreatorUI.getUnitSpriteForUI(tAsset, tContainerAdult.walking.frames[0], tContainerAdult, true, ActorSex.Male, tPhenotypeIndex, tPhenotypeShade, tKingdomColor, null, false);
+        //     
+        //     actualObject.GetChild(4).GetComponent<Image>().sprite = tSprite;
+        //     actualObject.transform.localScale = new Vector3(0.09f, 0.09f);
+        //
+        //     // GameObject.Destroy(actualObject.GetChild(2).GetComponent<Image>());
+        //     GameObject.DestroyImmediate(actualObject.GetChild(2).gameObject);
+        //     
+        //     return actualObject.gameObject;
+        // };
         
         public static void Init()
         {
@@ -199,14 +203,20 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             if (TolUtil.IsTOIInstalled())
                 identities.Add("nonbinary");
             
-            AddLikeType("identity", "#B57EDC", identities, LoveType.Both);
-            AddLikeType("subspecies", "#34e965", new List<string>(), LoveType.Both, GetSubspeciesIcon, GetSubspeciesSprite);
+            AddLikeType("identity", "#B57EDC", identities, LoveType.Both, actor => new []{GetIdentity(actor)});
+            // AddLikeType("subspecies", "#34e965", new List<string>(), LoveType.Both, actor =>
+            // {
+            //     if (!actor.hasSubspecies())
+            //         return Array.Empty<string>();
+            //     
+            //     return new[] { actor.subspecies.id.ToString() };
+            // }, GetSubspeciesIcon, GetSubspeciesSprite);
             
             if(TolUtil.IsTOIInstalled())
-                AddLikeType("expression", "#C900FF", List.Of("feminine", "masculine"), LoveType.Both);
+                AddLikeType("expression", "#C900FF", List.Of("feminine", "masculine"), LoveType.Both, actor => new []{GetExpression(actor)});
             
             if(TolUtil.IsTOIInstalled())
-                AddLikeType("genital", "#B77E7E", List.Of("phallus", "vulva"), LoveType.Sexual);
+                AddLikeType("genital", "#B77E7E", List.Of("phallus", "vulva"), LoveType.Sexual, actor => actor.GetExternalGenitalia());
 
             AddMatchingSets();
             
@@ -218,34 +228,40 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             var data = MapBox.instance.map_stats.custom_data;
             data.get("custom_like_"+id, out string likeID);
             if (likeID == null)
-                throw new Exception("Invalid id, cannot remove: " + id);
+                return;
             
             TolUtil.Debug("Removed dynamic like asset: " + likeID);
             
-            var likeAsset = GetAssetFromID(likeID);
+            var likeAsset = GetAssetFromID(id.ToString());
             AllLikeAssets.Remove(likeAsset);
             
             data.removeString("custom_like_"+id);
             data.removeString(id + "_love_type");
-            data.removeString(id + "_custom_sprite");
+            
+            CachedLikeLists.Clear();
+            CachedLikeListsWithGroup.Clear();
         }
         public static LikeAsset AddDynamicLikeAsset(long id, string likeName, string groupId, LoveType loveType, bool save = true)
         {
+            var like = AllLikeAssets.Find(asset => asset.ID.Equals(id.ToString()));
+            if (like != null)
+                return like;
+            
             TolUtil.Debug("Created dynamic like asset: " + likeName + ", " + groupId + ", " + loveType);
             
             var likeGroup = GetLikeGroup(groupId);
-            var like = new LikeAsset
+            like = new LikeAsset
             (
                 id.ToString(),
                 likeGroup,
                 loveType,
                 true
             );
-
+            
             AllLikeAssets.Add(like);
             
             AddLocalesForLikeAsset(like, likeName);
-
+            
             if (save)
             {
                 var data = MapBox.instance.map_stats.custom_data;
@@ -258,6 +274,8 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             // quiet update
             foreach (LocalizedText text in LocalizedTextManager.instance.texts)
                 text.updateText();
+            CachedLikeLists.Clear();
+            CachedLikeListsWithGroup.Clear();
             
             return like;
         }
@@ -323,7 +341,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         }
         
         // if all preferences of a preference type is added, remove them all (no reason for preferences if all are included?)
-        private static void AddLikeType(string groupType, string hexColor, List<string> preferences, LoveType prefType, Func<LikeAsset, GameObject> getIcon=null, Func<LikeAsset, Sprite> getSprite=null)
+        private static void AddLikeType(string groupType, string hexColor, List<string> preferences, LoveType prefType, Func<Actor, string[]> actorType, Func<LikeAsset, GameObject> getIcon=null, Func<LikeAsset, Sprite> getSprite=null)
         {
             if (LikeTypes.Any(type => type.Key.ID.Equals(groupType)))
             {
@@ -351,7 +369,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 LM.AddToCurrentLocale("like_group_"+groupType, nameWithPlural);
 
             var likeAssets = new List<LikeAsset>();
-            var likeGroup = new LikeGroup(groupType, hexColor, getIcon, getSprite);
+            var likeGroup = new LikeGroup(groupType, hexColor, actorType, getIcon, getSprite);
             
             foreach (var likeName in preferences)
             {
@@ -406,33 +424,126 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
                 throw new Exception(id + " is an invalid like group!");
             return group;
         }
+
+        public static Actor GetPriorityActor(Actor pActor, Actor pTarget)
+        {
+            var id0 = pActor.getID();
+            var id1 = pTarget.getID();
+            return id0 > id1 ? pActor : pTarget;
+        }
+        public static string GetIDForActors(Actor pActor, Actor pTarget, bool sexual)
+        {
+            var priority = GetPriorityActor(pActor, pTarget);
+            var other = priority == pActor ? pTarget : pActor;
+            return priority.getID().ToString() + other.getID().ToString() + sexual.ToString();
+        }
+
+        public static int GetMatchingIDForActors(Actor pActor, Actor pTarget, bool sexual)
+        {
+            var id = GetIDForActors(pActor, pTarget, sexual);
+            var priority = GetPriorityActor(pActor, pTarget);
+            priority.data.get(id, out var match, -1);
+            return match;
+        }
+
+        public static void SetMatchingIDForActors(Actor pActor, Actor pTarget, bool sexual, int matching)
+        {
+            var id = GetIDForActors(pActor, pTarget, sexual);
+            var priority = GetPriorityActor(pActor, pTarget);
+            priority.data.set(id, matching);
+        }
         
         // checks for one actor based on a type, if you are checking for multiple types or multiple actors, then use the other methods
         public static bool LikeMatches(Actor pActor, Actor pTarget, string type, bool sexual)
         {
             if (pActor == null || pTarget == null) return false;
+            var matches = GetMatchingIDForActors(pActor, pTarget, sexual);
             
             // preferences do not matter
-            if (pActor.hasCultureTrait("orientationless"))
+            if (pActor.hasCultureTrait("orientationless") || matches == 1)
                 return true;
+            if (matches == 0)
+                return false;
             if (GetLikeGroup(type) == null) // the like group is invalid, this may happen when optional dependencies aren't installed
                 return true;
 
-            var list = GetActorLikes(pActor, type, sexual ? LoveType.Sexual : LoveType.Romantic).Select(like => like.ID).ToList();
-            var targetTypes = GetActorTypeFromLikeGroup(pTarget, type);
-
-            if (targetTypes.Length == 0 || !targetTypes.Intersect(list).Any())
-                return false;
+            using var list = new ListPool<Like>(GetActorLikes(pActor, type,
+                sexual ? LoveType.Sexual : LoveType.Romantic));
             
-            return true;
+            var targetTypes = GetActorTypeFromLikeGroup(pTarget, type);
+            if (targetTypes.Length == 0)
+                return false;
+                
+            var found = false;
+            foreach (var like in list)
+            {
+                if (targetTypes.Contains(like.ID))
+                {
+                    found = true;
+                    break;
+                }
+            }
+                
+            return found;
         }
         
         // checks for one actor, if you are checking for both, use the other methods
         public static bool LikeMatches(Actor pActor, Actor pTarget, bool sexual)
         {
-            return LikeMatches(pActor, pTarget, "identity", sexual)
-             && LikeMatches(pActor, pTarget, "expression", sexual)
-             && (!sexual || LikeMatches(pActor, pTarget, "genital", true));
+            var matches = GetMatchingIDForActors(pActor, pTarget, sexual);
+            
+            if (pActor.hasCultureTrait("orientationless") || matches == 1)
+                return true;
+            if (matches == 0)
+                return false;
+            
+            using var list = new ListPool<Like>(GetActorLikes(pActor, sexual ? LoveType.Sexual : LoveType.Romantic));
+            
+            var identityTypes = GetActorTypeFromLikeGroup(pTarget, "identity");
+            if (identityTypes.Length == 0)
+                return false;
+            
+            var expressionTypes = TolUtil.IsTOIInstalled() ? GetActorTypeFromLikeGroup(pTarget, "expression") : null;
+            if (expressionTypes != null && expressionTypes.Length == 0)
+                return false;
+            
+            var genitalTypes = TolUtil.IsTOIInstalled() ? GetActorTypeFromLikeGroup(pTarget, "genital") : null;
+            if (genitalTypes != null && genitalTypes.Length == 0)
+                return false;
+            
+            // var subspeciesTypes = GetActorTypeFromLikeGroup(pTarget, "subspecies");
+            // if (subspeciesTypes.Length == 0)
+            //     return false;
+
+            var foundIdentity = false;
+            var foundExpression = false;
+            // var foundSubspecies = pActor.hasSubspecies() && pTarget.isSameSubspecies(pActor.subspecies) && !pActor.isSapient();
+            var foundGenital = !sexual;
+
+            foreach (var like in list)
+            {
+                if(identityTypes.Contains(like.ID))
+                    foundIdentity = true;
+                if(!TolUtil.IsTOIInstalled() || expressionTypes.Contains(like.ID))
+                    foundExpression = true;
+                // if(subspeciesTypes.Contains(like.ID))
+                //     foundSubspecies = true;
+                if(!TolUtil.IsTOIInstalled() || expressionTypes.Contains(like.ID))
+                    foundGenital = true;
+
+                if (foundExpression && foundIdentity && foundGenital)
+                    break;
+            }
+
+
+            if (foundExpression && foundIdentity && foundGenital)
+            {
+                SetMatchingIDForActors(pActor, pTarget, sexual, 1);
+                return true;
+            }
+
+            SetMatchingIDForActors(pActor, pTarget, sexual, 0);
+            return false;
         }
 
         public static bool LikeMatches(Actor actor1, Actor actor2)
@@ -440,11 +551,18 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             return LikeMatches(actor1, actor2, false) && LikeMatches(actor1, actor2, true);
         }
 
+        // Performance heavy
         public static bool BothActorsLikesMatch(Actor actor1, Actor actor2, bool sexual)
         {
             return LikeMatches(actor1, actor2, sexual) && LikeMatches(actor2, actor1, sexual);
         }
+
+        public static bool AreCompatible(this Actor actor1, Actor actor2, bool sexual)
+        {
+            return BothActorsLikesMatch(actor1, actor2, sexual);
+        }
         
+        // Performance heavy
         public static bool BothActorsLikesMatch(Actor actor1, Actor actor2)
         {
             return BothActorsLikesMatch(actor1, actor2, false)
@@ -453,80 +571,103 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
 
         public static List<Like> GetRandomLikes(Actor actor)
         {
-            var bio = GetBiologicalSex(actor);
-            var preferredSets = new Dictionary<string, List<string>>();
-            
-            if (TolUtil.NeedDifferentSexTypeForReproduction(actor))
-            {
-                var oppositeSex = bio.Equals("female") ? "male" : "female";
-                preferredSets.Add(oppositeSex, MatchingSets[oppositeSex]);
-            } else if (TolUtil.NeedSameSexTypeForReproduction(actor))
-            {
-                preferredSets.Add(bio, MatchingSets[bio]);
-            }
+            // var bio = GetBiologicalSex(actor);
+            // var preferredSets = new Dictionary<string, List<string>>();
+            //
+            // if (TolUtil.NeedDifferentSexTypeForReproduction(actor))
+            // {
+            //     var oppositeSex = bio.Equals("female") ? "male" : "female";
+            //     preferredSets.Add(oppositeSex, MatchingSets[oppositeSex]);
+            // } else if (TolUtil.NeedSameSexTypeForReproduction(actor))
+            // {
+            //     preferredSets.Add(bio, MatchingSets[bio]);
+            // }
 
             var likes = new List<Like>();
-
-            if (Randy.randomChance(0.99f) || !actor.isSapient())
-            {
-                var id = actor.subspecies.id.ToString();
-                likes.Add(GetLikeFromID(id, LoveType.Sexual));
-                likes.Add(GetLikeFromID(id, LoveType.Romantic));
-            }
-
-            if (preferredSets.Count > 0)
-            {
-                // if actors have preferred likes
-                var keys = preferredSets.Keys.ToList();
-                string randomKey;
-
-                if (Randy.randomChance(0.95f))
-                {
-                    randomKey = keys.GetRandom();
-                    
-                    var likeIdentitySexual = GetLikeFromAsset(Randy.randomChance(0.75f) ? 
-                        GetAssetFromID(randomKey) : RandomLikeAssetFromType("identity", new[]{randomKey}), LoveType.Sexual);
-                    var likeIdentityRomantic = GetLikeFromAsset(Randy.randomChance(0.95f) ?
-                        likeIdentitySexual.LikeAsset : RandomLikeAssetFromType("identity", new[]{likeIdentitySexual.LikeAsset.ID}), LoveType.Romantic);
-
-                    likes.Add(likeIdentitySexual);
-                    likes.Add(likeIdentityRomantic);
-                }
-                
-                // expressions and genitals must be added or else people won't be able to date
-                if (TolUtil.IsTOIInstalled())
-                {
-                    randomKey = keys.GetRandom();
-
-                    var likeExpressionSexual = GetLikeFromAsset(Randy.randomChance(0.75f) ? 
-                        GetAssetFromID(preferredSets[randomKey][0]) : RandomLikeAssetFromType("expression"), LoveType.Sexual);
-                    var likeExpressionRomantic = GetLikeFromAsset(Randy.randomChance(0.95f) ?
-                        likeExpressionSexual.LikeAsset : RandomLikeAssetFromType("expression"), LoveType.Romantic);   
-                    likes.Add(likeExpressionSexual);
-                    likes.Add(likeExpressionRomantic);
-                        
-                    randomKey = keys.GetRandom();
-                    var likeGenital = GetLikeFromAsset(Randy.randomChance(0.95f) ? 
-                        GetAssetFromID(preferredSets[randomKey][1]) : RandomLikeAssetFromType("genital"), LoveType.Sexual);
-                    
-                    likes.Add(likeGenital);
-                }   
-            }
             
-            if (Randy.randomChance(0.25f) || preferredSets.Count <= 0)
+            // if (Randy.randomChance(0.99f) && actor.isSapient())
+            // {
+            //
+            //     var id = actor.subspecies.id.ToString();
+            //
+            //     if (!AllLikeAssets.Any(asset => asset.ID.Equals(id)))
+            //     {
+            //         var subspecies = actor.subspecies;
+            //         AddDynamicLikeAsset(subspecies.id, subspecies.name, "subspecies", LoveType.Both);
+            //     }
+            //     
+            //     likes.Add(GetLikeFromID(id, LoveType.Sexual));
+            //     likes.Add(GetLikeFromID(id, LoveType.Romantic));
+            // }
+
+            // if (preferredSets.Count > 0)
+            // {
+            //     // if actors have preferred likes
+            //     var keys = preferredSets.Keys.ToList();
+            //     string randomKey;
+            //
+            //     if (Randy.randomChance(0.95f))
+            //     {
+            //         randomKey = keys.GetRandom();
+            //         
+            //         var likeIdentitySexual = GetLikeFromAsset(Randy.randomChance(0.75f) ? 
+            //             GetAssetFromID(randomKey) : RandomLikeAssetFromType("identity", new[]{randomKey}), LoveType.Sexual);
+            //         var likeIdentityRomantic = GetLikeFromAsset(Randy.randomChance(0.95f) ?
+            //             likeIdentitySexual.LikeAsset : RandomLikeAssetFromType("identity", new[]{likeIdentitySexual.LikeAsset.ID}), LoveType.Romantic);
+            //
+            //         likes.Add(likeIdentitySexual);
+            //         likes.Add(likeIdentityRomantic);
+            //     }
+            //     
+            //     // expressions and genitals must be added or else people won't be able to date
+            //     if (TolUtil.IsTOIInstalled())
+            //     {
+            //         randomKey = keys.GetRandom();
+            //
+            //         var likeExpressionSexual = GetLikeFromAsset(Randy.randomChance(0.75f) ? 
+            //             GetAssetFromID(preferredSets[randomKey][0]) : RandomLikeAssetFromType("expression"), LoveType.Sexual);
+            //         var likeExpressionRomantic = GetLikeFromAsset(Randy.randomChance(0.95f) ?
+            //             likeExpressionSexual.LikeAsset : RandomLikeAssetFromType("expression"), LoveType.Romantic);   
+            //         likes.Add(likeExpressionSexual);
+            //         likes.Add(likeExpressionRomantic);
+            //             
+            //         randomKey = keys.GetRandom();
+            //         var likeGenital = GetLikeFromAsset(Randy.randomChance(0.95f) ? 
+            //             GetAssetFromID(preferredSets[randomKey][1]) : RandomLikeAssetFromType("genital"), LoveType.Sexual);
+            //         
+            //         likes.Add(likeGenital);
+            //     }   
+            // }
+            
+            // if (Randy.randomChance(0.25f) || preferredSets.Count <= 0)
+            if (Randy.randomChance(0.99f))
             {
-                var excludeAssets = likes
-                    .Select(like => like.LikeAsset)
-                    .GroupBy(asset => asset)
-                    .Where(group => 
-                        (group.Key.ApplicableLoveType == LoveType.Both && group.Count() == 2) 
-                        || (group.Key.ApplicableLoveType != LoveType.Both && group.Count() == 1))
-                    .Select(group => group.Key.ID).ToList();
-                
+                using var excludeAssets = new ListPool<string>(likes.Count);
+                for (var i = 0; i < likes.Count; i++)
+                {
+                    var likeAsset = likes[i].LikeAsset;
+                    if (likeAsset.ApplicableLoveType != LoveType.Both)
+                    {
+                        excludeAssets.Add(likeAsset.ID);
+                    }
+                    else
+                    {
+                        for (var _i = i + 1; _i < likes.Count; _i++)
+                        {
+                            var likeAsset2 = likes[_i].LikeAsset;
+                            if (likeAsset.Equals(likeAsset2))
+                            {
+                                excludeAssets.Add(likeAsset.ID);
+                                break;
+                            }
+                        }   
+                    }
+                }
+
                 var current = 0;
-                var max = Randy.randomInt(1, (GetAllRegisteredAssets().Count - excludeAssets.Count) * 2);
+                var max = Randy.randomInt(1, (GetAllRegisteredAssets().Count - excludeAssets.Count()) * 2);
                 
-                while (current < max && excludeAssets.Count < GetAllRegisteredAssets().Count)
+                while (current < max && excludeAssets.Count() < GetAllRegisteredAssets().Count)
                 {
                     current++;
 
@@ -572,83 +713,100 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             return result;
         }
 
-        public static bool HasALike(this Actor actor, LoveType? loveType = null)
+        public static bool HasALike(this Actor actor, LoveType loveType=LoveType.Both)
         {
-            return GetActorLikes(actor, loveType).Count > 0;
+            return GetActorLikes(actor, loveType).Count() > 0;
         }
-        public static List<Like> GetActorLikes(this Actor actor, string groupType, LoveType? loveType=null)
+        public static List<Like> GetActorLikes(this Actor actor, string groupType, LoveType loveType=LoveType.Both)
         {
-            return GetActorLikes(actor, loveType).Where(like => like.LikeAsset.LikeGroup.ID.Equals(groupType.ToLower())).ToList();
+            var list = GetActorLikes(actor, loveType);
+
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                var like = list[i];
+                if (!like.LikeAsset.LikeGroup.ID.Equals(groupType))
+                    list.RemoveAt(i);
+            }
+            
+            return list;
         }
         
-        public static List<Like> GetActorLikes(this Actor actor, LoveType? loveType=null)
+        public static List<Like> GetActorLikes(this Actor actor, LoveType loveType=LoveType.Both)
         {
-            return GetValidLikesFromAssets(loveType).Where(actor.HasLike).ToList();
+            var list = new List<Like>();
+            var likes = GetValidLikesFromAssets(loveType);
+            for(var i = 0; i < likes.Count; i++)
+            {
+                var like = likes[i];
+                if(actor.HasLike(like))
+                    list.Add(like);
+            }
+            return list;
         }
 
-        public static List<Like> GetValidLikesFromAssets(string groupType, LoveType? loveType=null)
+        public static List<Like> GetValidLikesFromAssets(string groupType, LoveType loveType=LoveType.Both)
         {
-            return GetValidLikesFromAssets(loveType).Where(like => like.LikeAsset.LikeGroup.ID.Equals(groupType.ToLower()))
-                .ToList();
+            CachedLikeListsWithGroup.TryGetValue((groupType, loveType), out var cachedList);
+            if (cachedList != null)
+            {
+                return cachedList;
+            }
+
+            var list = GetValidLikesFromAssets(loveType).Where(like => like.LikeAsset.LikeGroup.ID.Equals(groupType)).ToList();
+
+            CachedLikeListsWithGroup.Add((groupType, loveType), list);
+            return list;
         }
         
-        public static List<Like> GetValidLikesFromAssets(LoveType? loveType=null)
+        public static List<Like> GetValidLikesFromAssets(LoveType loveType=LoveType.Both)
         {
-            var likes = new List<Like>();
+            CachedLikeLists.TryGetValue(loveType, out var cachedList);
+            if (cachedList != null)
+            {
+                return cachedList;
+            }
+
+            var list = new List<Like>();
             foreach (var asset in AllLikeAssets)
             {
-                if (loveType.GetValueOrDefault() == LoveType.Both)
+                if (loveType == LoveType.Both)
                 {
                     if (asset.ApplicableLoveType == LoveType.Both)
                     {
-                        var likeRomantic = GetLikeFromAsset(asset, LoveType.Romantic);
-                        likes.Add(likeRomantic);
-                        
-                        var likeSexual = GetLikeFromAsset(asset, LoveType.Sexual);
-                        likes.Add(likeSexual);   
+                        list.Add(GetLikeFromAsset(asset, LoveType.Romantic));
+                        list.Add(GetLikeFromAsset(asset, LoveType.Sexual));
                     }
                     else
                     {
-                        var like = GetLikeFromAsset(asset, asset.ApplicableLoveType);
-                        likes.Add(like);
+                        list.Add(GetLikeFromAsset(asset, asset.ApplicableLoveType));
                     }
                 }
-                else if (asset.ApplicableLoveType == loveType.GetValueOrDefault() || asset.ApplicableLoveType == LoveType.Both)
+                else if (asset.ApplicableLoveType == loveType || asset.ApplicableLoveType == LoveType.Both)
                 {
-                    var like = GetLikeFromAsset(asset, loveType);
-                    likes.Add(like);
+                    list.Add(GetLikeFromAsset(asset, loveType));
                 }
             }
 
-            return likes;
-        }
-
-        // Are the likes locked?
-        public static bool LikesLocked(this Actor actor)
-        {
-            actor.data.get("likes_locked", out var result, false);
-            return result;
-        }
-
-        public static void LockLikes(this Actor actor, bool lockLikes)
-        {
-            actor.data.set("likes_locked", lockLikes);
+            CachedLikeLists.Add(loveType, list);
+            return list;
         }
         
         public static void ToggleLike(this Actor actor, Like like, bool? value=null)
         {
             actor.data.get(like.IDWithLoveType, out bool result);
             var opposite = !result;
-            actor.data.set(like.IDWithLoveType, value.HasValue ? value.Value : opposite);
+            var finalValue = value.HasValue ? value.Value : opposite;
+            if(finalValue)
+                actor.data.set(like.IDWithLoveType, finalValue);
+            else
+                actor.data.removeBool(like.IDWithLoveType);
             
             Orientations.CreateOrientationBasedOnLikeChange(actor, like);
+            actor.RemoveAllCachedLikes();
         }
         public static List<LikeAsset> GetRegisteredAssetsFromType(string type)
         {
             return LikeTypes[GetLikeGroup(type)];
-            // return LikeTypes[GetLikeType(type)].Where(
-            //     trait => trait.ApplicableLoveType.Equals(loveType) || trait.ApplicableLoveType.Equals(LoveType.Both) || loveType.Equals(LoveType.Both)
-            // ).ToList();
         }
         public static List<LikeAsset> GetAllRegisteredAssets()
         {
@@ -658,7 +816,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         }
         public static LikeAsset RandomLikeAssetFromType(string type, string[] exclude=null)
         {
-            return GetRegisteredAssetsFromType(type).Where(preference => exclude == null || !exclude.Contains(preference.ID)).ToList().GetRandom();
+            return GetRegisteredAssetsFromType(type).Where(preference => exclude == null || !exclude.Contains(preference.ID)).ToArray().GetRandom();
         }
         
         public static LikeAsset RandomLikeAsset(string[] exclude = null)
@@ -667,7 +825,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             List<LikeAsset> preferences = null;
             while ((preferences == null || preferences.Count == 0) && excludeTypes.Count < LikeTypes.Keys.Count)
             {
-                var likeGroup = LikeTypes.Keys.Where(key => !excludeTypes.Contains(key.ID)).ToList().GetRandom();
+                var likeGroup = LikeTypes.Keys.Where(key => !excludeTypes.Contains(key.ID)).ToArray().GetRandom();
                 preferences = GetRegisteredAssetsFromType(likeGroup.ID).Where(asset => exclude == null || !exclude.Contains(asset.ID)).ToList();
                 if(preferences.Count == 0 && !excludeTypes.Contains(likeGroup.ID))
                     excludeTypes.Add(likeGroup.ID);
@@ -713,16 +871,8 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
 
         public static string[] GetActorTypeFromLikeGroup(this Actor actor, string type)
         {
-            if (type.Equals("identity"))
-                return new []{GetIdentity(actor)};
-            if (type.Equals("expression"))
-                return new[]{GetExpression(actor)};
-            if (type.Equals("genital"))
-                return GetGenitalia(actor);
-            if (type.Equals("subspecies"))
-                return new []{actor.subspecies.id.ToString()};
-            return null;
-        }
+            return LikeGroups[type].ActorType(actor);
+    }
 
         // randomizes if multiple orientations fit the criteria
 
@@ -732,7 +882,8 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         {
             if (TolUtil.IsTOIInstalled())
             {
-                // some code;
+                actor.data.get("identity", out string identity);
+                return identity;
             }
 
             return actor.isSexFemale() ? "female" : "male";
@@ -742,19 +893,27 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         {
             if (TolUtil.IsTOIInstalled())
             {
-                // some code;
+                actor.data.get("expression", out string expression);
+                return expression;            
             }
 
             return actor.isSexFemale() ? "feminine" : "masculine";
         }
-        public static string[] GetGenitalia(this Actor actor)
+        public static string[] GetExternalGenitalia(this Actor actor)
         {
             if (TolUtil.IsTOIInstalled())
             {
-                // some code;
+                var list = new string[2];
+                actor.data.get("vulva", out bool hasVulva);
+                actor.data.get("phallus", out bool hasPhallus);
+                if (hasVulva)
+                    list.AddItem("phallus");
+                if (hasPhallus)
+                    list.AddItem("phallus");
+                return list;
             }
 
-            if (actor.NeedSameSexTypeForReproduction() || actor.CanDoAnySexType())
+            if (actor.CanDoAnySexType())
                 return new[]{"vulva", "phallus"};
             if (actor.NeedDifferentSexTypeForReproduction())
                 return actor.isSexFemale() ? new[] { "vulva" } : new[] { "phallus" };
@@ -768,24 +927,22 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         {
             return GetExpression(actor).Equals("feminine");
         }
-        
-        // uterus is more correct, vulva is only needed for external pregnancies
-        // we will later intervene with Topic of Identity to replace these methods
+
+        public static bool HasUterus(this Actor actor)
+        {
+            actor.data.get("uterus", out bool result);
+            return TolUtil.IsTOIInstalled() ? result : actor.isSexFemale();
+        }
         public static bool HasVulva(this Actor actor)
         {
-            return GetGenitalia(actor).Contains("vulva");
+            return GetExternalGenitalia(actor).Contains("vulva");
         }
         public static bool HasPenis(this Actor actor)
         {
-            return GetGenitalia(actor).Contains("phallus");
+            return GetExternalGenitalia(actor).Contains("phallus");
         }
         
-        
-        public static string GetBiologicalSex(this Actor actor)
-        {
-            return actor.isSexFemale() ? "female" : "male";
-        }
-        public static bool IsEnby(this Actor actor)
+        public static bool IdentifiesAsEnby(this Actor actor)
         {
             return GetIdentity(actor).Equals("nonbinary");
         }
@@ -798,13 +955,9 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
             return GetIdentity(actor).Equals("male");
         }
 
-        public static bool HasAnyLikesFor(this Actor actor, string groupType, LoveType? loveType=null)
+        public static bool HasAnyLikesFor(this Actor actor, string groupType, LoveType loveType=LoveType.Both)
         {
-            return actor.GetActorLikes(groupType, loveType).Count > 0;
+            return actor.GetActorLikes(groupType, loveType).Count() > 0;
         }
-        // public static bool Dislikes(this Actor actor, bool sexual = false)
-        // {
-        //     return sexual ? actor.hasTrait("dislike_sex") : actor.hasTrait("dislike_romance");
-        // }
     }
 }

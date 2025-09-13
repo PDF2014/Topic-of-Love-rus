@@ -38,10 +38,10 @@ public class StatPatch
         }
     }
     private static readonly Stat<int>[] Icons = {
-        new ("intimacy_happiness", TolUtil.CapableOfLove, actor => (int) actor.stats["intimacy_happiness"], "ui/Icons/god_powers/force_lover"),
+        new ("intimacy_happiness", Extensions.CapableOfLove, actor => (int) actor.stats["intimacy_happiness"], "ui/Icons/god_powers/force_lover"),
     };
     private static readonly Stat<Dictionary<string, string>>[] Stats = {
-        new ("sexual_orientation", TolUtil.CapableOfLove, actor =>
+        new ("sexual_orientation", Extensions.CapableOfLove, actor =>
         {
             var orientationType = Orientation.GetOrientation(actor, true);
             if (orientationType != null)
@@ -56,7 +56,7 @@ public class StatPatch
             }
             return null;
         }),
-        new ("romantic_orientation", TolUtil.CapableOfLove, actor =>
+        new ("romantic_orientation", Extensions.CapableOfLove, actor =>
         {
             var orientationType = Orientation.GetOrientation(actor, false);
             if (orientationType != null)
@@ -139,7 +139,7 @@ public class StatPatch
                 // __instance.setIconValue(orientationType+"_romantic", pMetaObject.countOrientation(orientationType, false));
             });
             
-            __instance.setIconValue("lonely", World.world.units.Count(unit => unit.getIntimacy() < 0 && TolUtil.AffectedByIntimacy(unit)));
+            __instance.setIconValue("lonely", pMetaObject.countLonely());
     }
 
     private static readonly string[] ValidIconsList =
@@ -221,54 +221,54 @@ public class StatPatch
             ShowCustomIcons<City, CityData>(__instance._stats_icons, __instance.meta_object);
     }
 
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(KingdomWindow), nameof(KingdomWindow.showStatsRows))]
-    static void ShowKingdomRows(KingdomWindow __instance)
-    {
-        __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
-    }
-    
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(CityWindow), nameof(CityWindow.showStatsRows))]
-    static void ShowCityRows(CityWindow __instance)
-    {
-        __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
-    }
-    
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(CultureWindow), nameof(CultureWindow.showStatsRows))]
-    static void ShowCultureRows(CultureWindow __instance)
-    {
-        __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
-    }
-    
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(AllianceWindow), nameof(AllianceWindow.showStatsRows))]
-    static void ShowAllianceRows(AllianceWindow __instance)
-    {
-        __instance.showSplitPopulationByOrientation(__instance.meta_object.kingdoms_list.SelectMany(kingdom => kingdom.units).ToList(), true);
-    }
-    
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(SubspeciesWindow), nameof(SubspeciesWindow.showStatsRows))]
-    static void ShowSubspeciesRows(SubspeciesWindow __instance)
-    {
-        __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
-    }
-    
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(ClanWindow), nameof(ClanWindow.showStatsRows))]
-    static void ShowClanRows(ClanWindow __instance)
-    {
-        __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
-    }
-    
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(ReligionWindow), nameof(ReligionWindow.showStatsRows))]
-    static void ShowReligionRows(ReligionWindow __instance)
-    {
-        __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
-    }
+    // [HarmonyPostfix]
+    // [HarmonyPatch(typeof(KingdomWindow), nameof(KingdomWindow.showStatsRows))]
+    // static void ShowKingdomRows(KingdomWindow __instance)
+    // {
+    //     __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
+    // }
+    //
+    // [HarmonyPostfix]
+    // [HarmonyPatch(typeof(CityWindow), nameof(CityWindow.showStatsRows))]
+    // static void ShowCityRows(CityWindow __instance)
+    // {
+    //     __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
+    // }
+    //
+    // [HarmonyPostfix]
+    // [HarmonyPatch(typeof(CultureWindow), nameof(CultureWindow.showStatsRows))]
+    // static void ShowCultureRows(CultureWindow __instance)
+    // {
+    //     __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
+    // }
+    //
+    // [HarmonyPostfix]
+    // [HarmonyPatch(typeof(AllianceWindow), nameof(AllianceWindow.showStatsRows))]
+    // static void ShowAllianceRows(AllianceWindow __instance)
+    // {
+    //     __instance.showSplitPopulationByOrientation(__instance.meta_object.kingdoms_list.SelectMany(kingdom => kingdom.units).ToList(), true);
+    // }
+    //
+    // [HarmonyPostfix]
+    // [HarmonyPatch(typeof(SubspeciesWindow), nameof(SubspeciesWindow.showStatsRows))]
+    // static void ShowSubspeciesRows(SubspeciesWindow __instance)
+    // {
+    //     __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
+    // }
+    //
+    // [HarmonyPostfix]
+    // [HarmonyPatch(typeof(ClanWindow), nameof(ClanWindow.showStatsRows))]
+    // static void ShowClanRows(ClanWindow __instance)
+    // {
+    //     __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
+    // }
+    //
+    // [HarmonyPostfix]
+    // [HarmonyPatch(typeof(ReligionWindow), nameof(ReligionWindow.showStatsRows))]
+    // static void ShowReligionRows(ReligionWindow __instance)
+    // {
+    //     __instance.showSplitPopulationByOrientation(__instance.meta_object.units, true);
+    // }
 
     [HarmonyPatch(typeof(UnitStatsElement))]
     public class UnitStatsElementClass

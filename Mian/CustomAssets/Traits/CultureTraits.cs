@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.Linq;
 using NeoModLoader.General.Game.extensions;
 
 namespace Topic_of_Love.Mian.CustomAssets.Traits
@@ -101,6 +102,29 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 can_be_removed = true,
                 can_be_given = true
             }, List.Of("elf"), List.Of("biome_maple"));
+            
+            Add(new CultureTrait
+            {
+                id="sex_for_reproduction",
+                group_id = "miscellaneous",
+                rarity = Rarity.R0_Normal,
+                needs_to_be_explored = true,
+                can_be_given = true,
+                can_be_in_book = true,
+                can_be_removed = true
+            }, List.Of("elf"));
+            
+            Add(new CultureTrait
+            {
+                id="sex_for_reproduction_only",
+                group_id = "miscellaneous",
+                rarity = Rarity.R0_Normal,
+                needs_to_be_explored = true,
+                can_be_given = true,
+                can_be_in_book = true,
+                can_be_removed = true
+            }, List.Of("orc"));
+            
             Finish();
         }
     }
