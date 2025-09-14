@@ -20,7 +20,7 @@ public class BehFindMismatchedOrientation : BehaviourActionActor
         {
             using (ListPool<Actor> pCollection = new ListPool<Actor>(4))
             {
-                var unfitPreferences = Orientation.RegisteredOrientations.Values.Where(orientation =>
+                var unfitPreferences = _Orientation.RegisteredOrientations.Values.Where(orientation =>
                 {
                     if (pActor.hasCultureTrait("homophobic"))
                         return orientation.IsHomo;
@@ -29,8 +29,8 @@ public class BehFindMismatchedOrientation : BehaviourActionActor
                     return false;
                 });
 
-                var sexualPreference = Orientation.GetOrientation(pActor, true);
-                var romanticPreference = Orientation.GetOrientation(pActor, false);
+                var sexualPreference = _Orientation.GetOrientation(pActor, true);
+                var romanticPreference = _Orientation.GetOrientation(pActor, false);
 
                 if (unfitPreferences.Contains(sexualPreference) ||
                     unfitPreferences.Contains(romanticPreference)) return null;
@@ -43,8 +43,8 @@ public class BehFindMismatchedOrientation : BehaviourActionActor
                 {
                     if (pTarget != pActor && pActor.isSameIslandAs(pTarget))
                     { 
-                        sexualPreference = Orientation.GetOrientation(pTarget, true);
-                        romanticPreference = Orientation.GetOrientation(pTarget, false);
+                        sexualPreference = _Orientation.GetOrientation(pTarget, true);
+                        romanticPreference = _Orientation.GetOrientation(pTarget, false);
 
                         if (unfitPreferences.Contains(romanticPreference) || unfitPreferences.Contains(sexualPreference))
                         {

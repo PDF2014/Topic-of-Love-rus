@@ -16,7 +16,7 @@ public class Opinions
             calc = (pMain, pTarget) =>
             {
                 var requirement = pTarget.getUnits().Count() / 2;
-                var homoUnits = pTarget.getUnits().Count(Orientation.IsAHomo);
+                var homoUnits = pTarget.getUnits().Count(_Orientation.IsAHomo);
                 
                 if (pMain.hasCulture() && pMain.culture.hasTrait("homophobic"))
                 {
@@ -35,14 +35,14 @@ public class Opinions
                     {
                         
                         requirement = pMain.getUnits().Count() / 2;
-                        homoUnits = pMain.getUnits().Count(Orientation.IsAHomo);
+                        homoUnits = pMain.getUnits().Count(_Orientation.IsAHomo);
                         if (homoUnits > requirement)
                             return 20;
                     }   
                 } else if (pTarget.hasCulture() && pTarget.culture.hasTrait("homophobic"))
                 {
                     requirement = pMain.getUnits().Count() / 2;
-                    homoUnits = pMain.getUnits().Count(Orientation.IsAHomo);
+                    homoUnits = pMain.getUnits().Count(_Orientation.IsAHomo);
                     if (homoUnits > requirement)
                         return -50;
                 }
@@ -58,7 +58,7 @@ public class Opinions
             calc = (pMain, pTarget) =>
             {
                 var requirement = pTarget.getUnits().Count() / 2;
-                var heteroUnits = pTarget.getUnits().Count(Orientation.IsAHetero);
+                var heteroUnits = pTarget.getUnits().Count(_Orientation.IsAHetero);
                 
                 if (pMain.hasCulture() && pMain.culture.hasTrait("heterophobic"))
                 {
@@ -76,14 +76,14 @@ public class Opinions
                     if(heteroUnits > requirement)
                     {
                         requirement = pMain.getUnits().Count() / 2;
-                        heteroUnits = pMain.getUnits().Count(Orientation.IsAHetero);
+                        heteroUnits = pMain.getUnits().Count(_Orientation.IsAHetero);
                         if (heteroUnits > requirement)
                             return 20;
                     }
                 }else if (pTarget.hasCulture() && pTarget.culture.hasTrait("heterophobic"))
                 {
                     requirement = pMain.getUnits().Count() / 2;
-                    heteroUnits = pMain.getUnits().Count(Orientation.IsAHetero);
+                    heteroUnits = pMain.getUnits().Count(_Orientation.IsAHetero);
                     if (heteroUnits > requirement)
                         return -50;
                 }

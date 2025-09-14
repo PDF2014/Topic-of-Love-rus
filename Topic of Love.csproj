@@ -40,7 +40,14 @@
         <Compile Include="Mian\CustomAssets\Custom\LikeAxonElement.cs" />
         <Compile Include="Mian\CustomAssets\Custom\LikeNerveImpulseElement.cs" />
         <Compile Include="Mian\CustomAssets\Custom\LikeNeuronElement.cs" />
-        <Compile Include="Mian\CustomAssets\Custom\Orientation.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\meta\MetaManagers.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\meta\MetaTypes.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\meta\orientations\Orientation.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\meta\orientations\OrientationData.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\meta\orientations\OrientationElement.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\meta\orientations\OrientationManager.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\meta\TOLSelectedMetas.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\_Orientation.cs" />
         <Compile Include="Mian\CustomAssets\Custom\LikesManager.cs" />
         <Compile Include="Mian\CustomAssets\Custom\LikesOverview.cs" />
         <Compile Include="Mian\CustomAssets\Custom\PartnerType.cs" />
@@ -76,6 +83,7 @@
         <Compile Include="Mian\Patches\BaseSimObjectPatch.cs" />
         <Compile Include="Mian\Patches\CustomDataPatch.cs" />
         <Compile Include="Mian\Patches\ListSortersPatch.cs" />
+        <Compile Include="Mian\Patches\MetaTypeExtensionsPatch.cs" />
         <Compile Include="Mian\Patches\MilitaryPatch.cs" />
         <Compile Include="Mian\Patches\SpriteTextureLoaderPatch.cs" />
         <Compile Include="Mian\Patches\SubspeciesPatch.cs" />

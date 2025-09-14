@@ -6,10 +6,6 @@ using ai.behaviours;
 using Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.sex;
 using Topic_of_Love.Mian.CustomAssets.Custom;
 
-#if TOPICOFIDENTITY
-using Topic_of_Identity;
-#endif
-
 namespace Topic_of_Love.Mian
 {
     public static class TolUtil
@@ -249,7 +245,7 @@ namespace Topic_of_Love.Mian
         // }
         
         // orientations earlier in the list are prioritized
-        public static int SortUnitsByOrientations(Actor pActor1, Actor pActor2, List<Orientation> orientations, bool sexual)
+        public static int SortUnitsByOrientations(Actor pActor1, Actor pActor2, List<_Orientation> orientations, bool sexual)
         {
             var orientation1 = Orientations.GetOrientationForActorBasedOnCriteria(pActor1, sexual);
             var orientation2 = Orientations.GetOrientationForActorBasedOnCriteria(pActor2, sexual);

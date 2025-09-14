@@ -17,16 +17,16 @@ public class ListSortersPatch
 
         if (homophobic || heterophobic)
         {
-            List<Orientation> topOrientations;
+            List<_Orientation> topOrientations;
 
             if (homophobic)
             {
-                topOrientations = Orientation.RegisteredOrientations.Values.Where(orientation => 
+                topOrientations = _Orientation.RegisteredOrientations.Values.Where(orientation => 
                     orientation.IsHetero && !orientation.IsHomo && !nonSapientList.Contains(orientation.OrientationType)).ToList();
             }
             else
             {
-                topOrientations = Orientation.RegisteredOrientations.Values
+                topOrientations = _Orientation.RegisteredOrientations.Values
                     .Where(orientation => orientation.IsHomo && !orientation.IsHetero && !nonSapientList.Contains(orientation.OrientationType))
                     .ToList();
 

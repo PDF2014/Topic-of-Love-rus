@@ -43,7 +43,7 @@ public class StatPatch
     private static readonly Stat<Dictionary<string, string>>[] Stats = {
         new ("sexual_orientation", Extensions.CapableOfLove, actor =>
         {
-            var orientationType = Orientation.GetOrientation(actor, true);
+            var orientationType = _Orientation.GetOrientation(actor, true);
             if (orientationType != null)
             {
 
@@ -58,7 +58,7 @@ public class StatPatch
         }),
         new ("romantic_orientation", Extensions.CapableOfLove, actor =>
         {
-            var orientationType = Orientation.GetOrientation(actor, false);
+            var orientationType = _Orientation.GetOrientation(actor, false);
             if (orientationType != null)
             {
                 Dictionary<string, string> dict = new();
@@ -132,12 +132,12 @@ public class StatPatch
                 __instance._stats_icons.Add(lonelyIcon.name, lonelyIcon);
             }
             
-            Orientation.RegisteredOrientations.Values.ForEach(orientation =>
-            {
-                var orientationType = orientation.OrientationType;
+            // Orientation.RegisteredOrientations.Values.ForEach(orientation =>
+            // {
+                // var orientationType = orientation.OrientationType;
                 // __instance.setIconValue(orientationType, pMetaObject.countOrientation(orientationType, true));
                 // __instance.setIconValue(orientationType+"_romantic", pMetaObject.countOrientation(orientationType, false));
-            });
+            // });
             
             __instance.setIconValue("lonely", pMetaObject.countLonely());
     }

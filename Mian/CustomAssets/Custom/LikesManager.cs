@@ -10,9 +10,6 @@ using NeoModLoader.General;
 using NeoModLoader.services;
 using UnityEngine;
 using UnityEngine.UI;
-#if TOPICOFIDENTITY
-using Topic_of_Identity.Mian;
-#endif
 
 namespace Topic_of_Love.Mian.CustomAssets.Custom
 {

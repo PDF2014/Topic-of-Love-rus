@@ -7,9 +7,10 @@ using UnityEngine;
 
 namespace Topic_of_Love.Mian.CustomAssets.Custom;
 
-public class Orientation
+// soon to be replaced as a META OBJECT :O
+public class _Orientation
 {
-    public static readonly Dictionary<string, Orientation> RegisteredOrientations = new();
+    public static readonly Dictionary<string, _Orientation> RegisteredOrientations = new();
     public readonly string OrientationType;
     public readonly string SexualPathLocale;
     public readonly string RomanticPathLocale;
@@ -23,7 +24,7 @@ public class Orientation
     private Sprite _romanticSprite;
     public readonly Func<Actor, LoveType, bool> Criteria;
 
-    private Orientation(string orientationType, string sexualPathLocale, string romanticPathLocale, string descriptionLocale,
+    private _Orientation(string orientationType, string sexualPathLocale, string romanticPathLocale, string descriptionLocale,
         string sexualPathIcon, string romanticPathIcon, bool isHomo, bool isHetero, string hexCode,
         Func<Actor, LoveType, bool> criteriaCheck)
     {
@@ -61,7 +62,7 @@ public class Orientation
         return path;
     }
 
-    public static Orientation Create(string orientation, string romanticVariant, bool isHomo, bool isHetero,
+    public static _Orientation Create(string orientation, string romanticVariant, bool isHomo, bool isHetero,
         string hexCode, Func<Actor, LoveType, bool> fitsCriteria)
     {
         var sexualPathLocale = "orientations_" + orientation;
@@ -69,7 +70,7 @@ public class Orientation
         var descriptionLocale = sexualPathLocale + "_description";
         var sexualPathIcon = "orientations/" + orientation;
         var romanticPathIcon = "orientations/" + romanticVariant;
-        var orientationType = new Orientation(orientation, sexualPathLocale, romanticPathLocale, descriptionLocale, sexualPathIcon,
+        var orientationType = new _Orientation(orientation, sexualPathLocale, romanticPathLocale, descriptionLocale, sexualPathIcon,
             romanticPathIcon, isHomo, isHetero, hexCode, fitsCriteria);
         RegisteredOrientations.Add(orientationType.OrientationType, orientationType);
 
@@ -82,7 +83,7 @@ public class Orientation
         return orientationType;
     }
 
-    public static Orientation GetOrientation(string orientation)
+    public static _Orientation GetOrientation(string orientation)
     {
         RegisteredOrientations.TryGetValue(orientation, out var orientationType);
         if(orientationType == null)
@@ -90,7 +91,7 @@ public class Orientation
         return orientationType;
     }
 
-    public static Orientation GetOrientation(Actor actor, bool sexual)
+    public static _Orientation GetOrientation(Actor actor, bool sexual)
     {
         string orientation = null;
         var text = sexual ? "sexual_orientation" : "romantic_orientation";
@@ -130,7 +131,7 @@ public class Orientations
     {
         // These orientations are created with non-binary people in mind, thus they are coded as non-[gender] liking non-[gender]
         
-        Orientation.Create("lesbian", "lesbiromantic", true, false, "#FF9A56", (actor, loveType) =>
+        _Orientation.Create("lesbian", "lesbiromantic", true, false, "#FF9A56", (actor, loveType) =>
         {
             if (!actor.HasAnyLikesFor("identity", loveType))
                 return false;
@@ -146,7 +147,7 @@ public class Orientations
 
             return false;
         });
-        Orientation.Create("gay", "gayromantic", true, false, "#26CEAA", (actor, loveType) =>
+        _Orientation.Create("gay", "gayromantic", true, false, "#26CEAA", (actor, loveType) =>
         {
             if (!actor.HasAnyLikesFor("identity", loveType))
                 return false;
@@ -161,7 +162,7 @@ public class Orientations
 
             return false;
         });
-        Orientation.Create("straight", "straightromantic", false, true, "#FFFFFF", (actor, loveType) =>
+        _Orientation.Create("straight", "straightromantic", false, true, "#FFFFFF", (actor, loveType) =>
         {
             if (!actor.HasAnyLikesFor("identity", loveType))
                 return false;
@@ -178,7 +179,7 @@ public class Orientations
 
             return false;
         });
-        Orientation.Create("heterosexual", "heteroromantic", false, true, "#FFFFFF", (actor, loveType) =>
+        _Orientation.Create("heterosexual", "heteroromantic", false, true, "#FFFFFF", (actor, loveType) =>
         {
             if (!actor.HasAnyLikesFor("identity", loveType))
                 return false;
@@ -195,7 +196,7 @@ public class Orientations
 
             return false;
         });
-        Orientation.Create("homosexual", "homoromantic", true, false, "#BB07DF", (actor, loveType) =>
+        _Orientation.Create("homosexual", "homoromantic", true, false, "#BB07DF", (actor, loveType) =>
         {
             if (!actor.HasAnyLikesFor("identity", loveType))
                 return false;
@@ -221,7 +222,7 @@ public class Orientations
 
             return false;
         });
-        Orientation.Create("bisexual", "biromantic", true, true, "#9B4F96", (actor, loveType) =>
+        _Orientation.Create("bisexual", "biromantic", true, true, "#9B4F96", (actor, loveType) =>
         {
             if (!actor.HasAnyLikesFor("identity", loveType))
                 return false;
@@ -230,7 +231,7 @@ public class Orientations
                 return true;
             return false;
         });
-        Orientation.Create("pansexual", "panromantic", true, true, "#FFD800", (actor, loveType) =>
+        _Orientation.Create("pansexual", "panromantic", true, true, "#FFD800", (actor, loveType) =>
         {
             if (!actor.HasAnyLikesFor("identity", loveType))
                 return false;
@@ -240,7 +241,7 @@ public class Orientations
             return false;
         });
 
-        Orientation.Create("asexual", "aromantic", false, false, "#FFFFFF", (actor, loveType) => 
+        _Orientation.Create("asexual", "aromantic", false, false, "#FFFFFF", (actor, loveType) => 
             !actor.HasAnyLikesFor("identity", loveType));
     }
 
@@ -257,10 +258,10 @@ public class Orientations
         return orientation.OrientationType.Equals(id);
     }
     
-    public static Orientation GetOrientationForActorBasedOnCriteria(Actor actor, bool sexual, [CanBeNull] Orientation orientationBase = null)
+    public static _Orientation GetOrientationForActorBasedOnCriteria(Actor actor, bool sexual, [CanBeNull] _Orientation orientationBase = null)
     {
         var orientations =
-            Orientation.RegisteredOrientations.Values.Where(orientationType => orientationType.Criteria(actor, sexual ? LoveType.Sexual : LoveType.Romantic)).ToList();
+            _Orientation.RegisteredOrientations.Values.Where(orientationType => orientationType.Criteria(actor, sexual ? LoveType.Sexual : LoveType.Romantic)).ToList();
 
         // helps maintain consistency
         if(orientationBase != null && orientations.Contains(orientationBase))

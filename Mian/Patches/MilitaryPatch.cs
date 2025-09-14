@@ -12,11 +12,11 @@ public class MilitaryPatch
     {
         if (__instance.hasCulture())
         {
-            if (__instance.culture.hasTrait("homophobic") && Orientation.IsAHomo(pActor))
+            if (__instance.culture.hasTrait("homophobic") && _Orientation.IsAHomo(pActor))
             {
                 __result = false;
             }
-            if (__instance.culture.hasTrait("heterophobic") && Orientation.IsAHetero(pActor))
+            if (__instance.culture.hasTrait("heterophobic") && _Orientation.IsAHetero(pActor))
             {
                 __result = false;
             }

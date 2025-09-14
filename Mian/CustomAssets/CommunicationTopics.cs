@@ -14,7 +14,7 @@ namespace Topic_of_Love.Mian.CustomAssets
                 check = pActor => !pActor.hasCultureTrait("orientationless") && (pActor.hasCultureTrait("homophobic") || pActor.hasCultureTrait("heterophobic")),
                 pot_fill = (actor, sprites) =>
                 {
-                    var unfitPreferences = Orientation.RegisteredOrientations.Values.Where(orientation =>
+                    var unfitPreferences = _Orientation.RegisteredOrientations.Values.Where(orientation =>
                     {
                         if (actor.hasCultureTrait("homophobic"))
                             return orientation.IsHomo;
@@ -23,8 +23,8 @@ namespace Topic_of_Love.Mian.CustomAssets
                         return false;
                     });
 
-                    var sexualPreference = Orientation.GetOrientation(actor, true);
-                    var romanticPreference = Orientation.GetOrientation(actor, false);
+                    var sexualPreference = _Orientation.GetOrientation(actor, true);
+                    var romanticPreference = _Orientation.GetOrientation(actor, false);
 
                     sprites.Add(sexualPreference.GetSprite(true));
                     sprites.Add(romanticPreference.GetSprite(false));
