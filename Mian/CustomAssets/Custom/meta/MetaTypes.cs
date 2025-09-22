@@ -26,7 +26,7 @@ public class MetaTypes
             get_selected = (MetaSelectedGetter) (() => (NanoObject) TOLSelectedMetas.selected_orientation),
             set_selected = (MetaSelectedSetter) (pElement => TOLSelectedMetas.selected_orientation = pElement as Orientation),
             get = (MetaGetter) (pId => (NanoObject) MetaManagers.orientations.get(pId)),
-            map_mode = Orientation.OrientationMetaType,
+            map_mode = Orientation.MetaType,
             option_id = "map_orientation_layer",
             power_option_zone_id = "orientation_layer",
             has_dynamic_zones = true,

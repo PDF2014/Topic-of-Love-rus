@@ -2,8 +2,8 @@
 
 public class Orientation : MetaObject<OrientationData>
 {
-    public const MetaType OrientationMetaType = (MetaType) 295;
-    public override MetaType meta_type => OrientationMetaType;
+    public const MetaType MetaType = (MetaType) 295;
+    public override MetaType meta_type => MetaType;
 
     private Culture _culture;
 

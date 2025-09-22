@@ -454,13 +454,15 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         public static bool LikeMatches(Actor pActor, Actor pTarget, string type, bool sexual)
         {
             if (pActor == null || pTarget == null) return false;
-            var matches = GetMatchingIDForActors(pActor, pTarget, sexual);
+            // var matches = GetMatchingIDForActors(pActor, pTarget, sexual);
             
             // preferences do not matter
-            if (pActor.hasCultureTrait("orientationless") || matches == 1)
+            if (pActor.hasCultureTrait("orientationless"))
                 return true;
-            if (matches == 0)
-                return false;
+            // if (pActor.hasCultureTrait("orientationless") || matches == 1)
+            //     return true;
+            // if (matches == 0)
+            //     return false;
             if (GetLikeGroup(type) == null) // the like group is invalid, this may happen when optional dependencies aren't installed
                 return true;
 
@@ -487,12 +489,14 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
         // checks for one actor, if you are checking for both, use the other methods
         public static bool LikeMatches(Actor pActor, Actor pTarget, bool sexual)
         {
-            var matches = GetMatchingIDForActors(pActor, pTarget, sexual);
-            
-            if (pActor.hasCultureTrait("orientationless") || matches == 1)
+            // var matches = GetMatchingIDForActors(pActor, pTarget, sexual);
+            //
+            // if (pActor.hasCultureTrait("orientationless") || matches == 1)
+            //     return true;
+            if (pActor.hasCultureTrait("orientationless"))
                 return true;
-            if (matches == 0)
-                return false;
+            // if (matches == 0)
+            //     return false;
             
             using var list = new ListPool<Like>(GetActorLikes(pActor, sexual ? LoveType.Sexual : LoveType.Romantic));
             
@@ -535,11 +539,11 @@ namespace Topic_of_Love.Mian.CustomAssets.Custom
 
             if (foundExpression && foundIdentity && foundGenital)
             {
-                SetMatchingIDForActors(pActor, pTarget, sexual, 1);
+                // SetMatchingIDForActors(pActor, pTarget, sexual, 1);
                 return true;
             }
 
-            SetMatchingIDForActors(pActor, pTarget, sexual, 0);
+            // SetMatchingIDForActors(pActor, pTarget, sexual, 0);
             return false;
         }
 

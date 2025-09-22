@@ -6,6 +6,7 @@ using NeoModLoader.api;
 using HarmonyLib;
 using NeoModLoader.General;
 using Topic_of_Love.Mian.CustomAssets.Custom;
+using Topic_of_Love.Mian.CustomAssets.Custom.meta;
 
 namespace Topic_of_Love.Mian
 {
@@ -52,6 +53,9 @@ namespace Topic_of_Love.Mian
             Orientations.Init();
             StatisticAssets.Init(); // uses orientations
             HistoryDataAssets.Init();
+            
+            // MetaTypes.Init();
+            
             
             var config = Mod.GetConfig();
             var statistics = (bool)config["Graphs"]["ModGraphs"].GetValue();

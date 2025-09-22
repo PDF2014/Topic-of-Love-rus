@@ -4,7 +4,7 @@ public class OrientationManager : MetaSystemManager<Orientation, OrientationData
 {
     public OrientationManager()
     {
-        this.type_id = Orientation.OrientationMetaType.AsString();
+        this.type_id = Orientation.MetaType.AsString();
     }
 
     public Orientation newOrientation(Culture pCulture)
@@ -14,6 +14,7 @@ public class OrientationManager : MetaSystemManager<Orientation, OrientationData
         return orientation;
     }
 
+    // have to hook into MapBox somehow
     public override void update(float pElapsed)
     {
         base.update(pElapsed);

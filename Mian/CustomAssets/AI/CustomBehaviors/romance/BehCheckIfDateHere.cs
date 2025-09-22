@@ -19,7 +19,7 @@ public class BehCheckIfDateHere : BehaviourActionActor
             return BehResult.Stop;
         }
         
-        if (follower.is_moving)
+        if (follower.is_moving || follower.beh_tile_target != pActor.beh_tile_target)
         {
             return BehResult.StepBack;
         }

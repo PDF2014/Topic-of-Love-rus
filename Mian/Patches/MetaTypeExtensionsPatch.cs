@@ -9,7 +9,7 @@ public class MetaTypeExtensionsPatch
     [HarmonyPrefix]
     public static bool AsString(MetaType pType, ref string __result)
     {
-        if (pType == Orientation.OrientationMetaType)
+        if (pType == Orientation.MetaType)
         {
             __result = "orientation";
             return false;

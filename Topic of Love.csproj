@@ -43,9 +43,14 @@
         <Compile Include="Mian\CustomAssets\Custom\meta\MetaManagers.cs" />
         <Compile Include="Mian\CustomAssets\Custom\meta\MetaTypes.cs" />
         <Compile Include="Mian\CustomAssets\Custom\meta\orientations\Orientation.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\meta\orientations\OrientationBanner.cs" />
         <Compile Include="Mian\CustomAssets\Custom\meta\orientations\OrientationData.cs" />
         <Compile Include="Mian\CustomAssets\Custom\meta\orientations\OrientationElement.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\meta\orientations\OrientationListComponent.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\meta\orientations\OrientationListElement.cs" />
         <Compile Include="Mian\CustomAssets\Custom\meta\orientations\OrientationManager.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\meta\orientations\OrientationStatsElement.cs" />
+        <Compile Include="Mian\CustomAssets\Custom\meta\orientations\OrientationWindow.cs" />
         <Compile Include="Mian\CustomAssets\Custom\meta\TOLSelectedMetas.cs" />
         <Compile Include="Mian\CustomAssets\Custom\_Orientation.cs" />
         <Compile Include="Mian\CustomAssets\Custom\LikesManager.cs" />

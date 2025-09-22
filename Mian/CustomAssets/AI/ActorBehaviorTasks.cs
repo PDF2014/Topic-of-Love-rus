@@ -93,7 +93,7 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
                 locale_key = "task_follow_action_date",
                 path_icon = "ui/Icons/status/went_on_date"
             };
-            followActionDate.addBeh(new BehWait(0.2f));
+            // followActionDate.addBeh(new BehWait(0.2f));
             followActionDate.addBeh(new BehFollowDate());
 
             Add(followActionDate);

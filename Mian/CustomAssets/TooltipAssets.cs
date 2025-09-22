@@ -8,6 +8,7 @@ namespace Topic_of_Love.Mian.CustomAssets;
 
 public class TooltipAssets
 {
+    private static TooltipLibrary library = AssetManager.tooltips;
     public static void Init()
     {
         Add(new ()
@@ -15,6 +16,13 @@ public class TooltipAssets
             id = "like_neuron",
             callback = ShowLikeNeuron,
             callback_text_animated = ShowLikeNeuron
+        });
+        
+        Add(new ()
+        {
+            id = "orientation",
+            prefab_id = "tooltips/tooltip_army",
+            callback = new TooltipShowAction(library.showArmy)
         });
     }
 

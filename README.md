@@ -1,18 +1,22 @@
 ﻿# Topic of Love
 **..is a WorldBox mod that allows units to have intimacy and fall in love for more than just their ability to reproduce! If you want a Sims-like experience with your units, this may be the mod!**
 
+[![Athena Award Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Faward.athena.hackclub.com%2Fapi%2Fbadge)](https://award.athena.hackclub.com?utm_source=readme)
+
 ## 📩 Installation
-The mod is not **finished** or **complete** yet. As such, any bugs you encounter are because of an unfinished product. Do not USE this unless you are willing to beta test and have a very buggy experience.
+The mod is not technically **finished** or **complete** yet according to my roadmap. As such, more bugs may show up than intended!  It is, however, completed and bug free enough to the point where it can be used as expected :)
+
+Make sure to have NML installed! Their instructions can be found [here](https://github.com/WorldBoxOpenMods/ModLoader/blob/master/README.md).
 
 If downloading through GitHub or GameBanana, download the latest release and extract the contents into a folder in "worldbox/Mods"
 
-If downloading through Steam, subscribe to the mod and you're good to go!
+~~If downloading through Steam, subscribe to the mod and you're good to go!~~
 
 When enabling or disabling the mod, restarting the game is a must otherwise you will run into issues extremely quickly.
 
 ## ➕ Main Features
 ### New Behaviors
-- Units no longer instantly fall in love with the first person they see. Rather, they socialize, which can lead to dates, copulating, and then can possibly lead to falling in love!
+- Some units no longer instantly fall in love with the first person they see. Rather, they socialize, which can lead to dates, copulating, and then can possibly lead to falling in love!
 
 <img src=https://i.imgur.com/SabJUUU.gif>
 
@@ -20,7 +24,7 @@ When enabling or disabling the mod, restarting the game is a must otherwise you 
 
 - Units have preferences! Some women prefer women, men, or don't even like romance and copulating! Sometimes these preferences change over time too!
 
-<img src=https://i.imgur.com/AqrumRO.png>
+<img src=https://i.imgur.com/HZyVpcR.gif>
 
 <img src=https://i.imgur.com/eAdVeL8.png>
 
@@ -52,17 +56,12 @@ How romance and sexual actions are decided is based on these factors:
 More over.. not all units will enjoy every copulating. The enjoyment of a unit's copulating is based on random chance and their sexual preferences. If they dislike it, their intimacy levels may decrease! If they love it, their intimacy levels skyrocket! See on how this can be result in more cheating and so on and so forth?
 
 ### New Traits
-#### Subspecies Traits
-- Preservation : Units will reproduce sexually whenever possible if their subspecies is close to dying out even if it goes against orientation, culture or lover expectations.
-- Same Sex Reproduction : Don't ask how the biology works
-
-<img src=https://i.imgur.com/sas4nVh.png>
-
 #### Culture Traits
+- Preservation : Sexual reproduction is never considered cheating by any means!
+- Sacred Copulating : Copulating is only for making babies! What, you don't copulate just to make babies? Ewwww, you're disgusting! /j 
 - Procreationist : These units believe that love is only to reproduce. Thus, preferences do not matter and instead whether they can reproduce with their partner is what matters most!
 - Homophobic : This culture despises units who are homosexual in any way.
 - Heterophobic : This culture despises units who are heterosexual in any way.
-- Committed : This culture believes that no matter how bad a relationship gets, lovers will stick together till their deaths.
 - Mature Dating : It is despicable for units to fall in love with someone much younger or older than them.
 - Sexual Expectations : A lover expectation that if both lovers do not prefer each other sexually, then they are allowed to copulate with others that do fit their preferences without it being considered cheating.
 
@@ -92,13 +91,6 @@ More over.. not all units will enjoy every copulating. The enjoyment of a unit's
 - Units may discuss how they feel about their preferences in their culture.
 - Units may insult one another for their preferences and orientations depending on if the culture is hetero or homophobic!
 - A world law that allows you to completely disable fluid preferences.
-- Special compatibility with Topic of Identity (alongside bonus features with it!)
-
-<img src=https://i.imgur.com/yx7HlMJ.png>
-
-- New graph statistics!
-
-<img src=https://i.imgur.com/1cTIM0i.png>
 
 - More goodies that I've probably forgotten..
 
@@ -107,6 +99,10 @@ More over.. not all units will enjoy every copulating. The enjoyment of a unit's
   - First of, I just wanted to say thank you for taking the time to help out the mod. That means a lot to me as a developer! [You can find the link here](https://github.com/MianReplicate/Topic-of-Love/issues)
 - When two different species are involved in a pregnancy, will the baby's species be a mix of both?
   - At the moment, a baby will inherit one random species from their parents. This may change in the future.
+- Why did you make this mod?
+  - As someone who was eager to play the new WorldBox update, I was excited to find that a new lover system was implemented! I.. however.. was not excited to find out that two different species could not fall in love, and that two people could not fall in love if they could not make babies together! My love for the Lumity ship from The Owl House is so strong that I made this mod <3. Oh, and queer representation is always nice.
+- How was the process of making this mod?
+  - This is my first modding WorldBox and a Unity game, sooo it was tough at first, but I got through it using documentation and help from the WorldBox discord <3. There are times where certain features were tough to add due to the game's codebase, but I was able to walk around them with some methods (at the cost of efficiency but shhh!). Due to making this mod, I've gotten much better at using tools such as dnSpy, Harmony (a patcher that modifies methods), C# as a whole, and well.. modding Unity games!
 
 ## 👏 Credits
 - Rimworld mods such as, Edges of Acceptance, Way Better Romance, Romance on the Rim and Intimacy - A Lovin' Expansion. Thanks to them for inspiring me to make this mod
