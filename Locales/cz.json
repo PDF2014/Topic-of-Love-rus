@@ -1,0 +1,360 @@
+﻿{
+  "Topic of Love_cz": "爱的主旋律",
+  "A mod that allows units to have intimacy and fall in love for more than just their ability to reproduce!_cz": "一个允许单位有亲密度和恋爱的模组！",
+  
+  "status_title_went_on_date": "约会",
+  "status_description_went_on_date": "享受二人世界",
+  
+  "status_title_just_kissed": "亲吻",
+  "status_description_just_kissed": "多热烈的一对",
+  
+  "status_title_disliked_sex": "难哄",
+  "status_description_disliked_sex": "没能满足性取向的交配",
+
+  "status_title_enjoyed_sex": "享受",
+  "status_description_enjoyed_sex": "满足了性取向的交配",
+
+  "status_title_okay_sex": "舒适",
+  "status_description_okay_sex": "只满足了一部分性取向，但可接受",
+
+  "status_title_cheated_on": "心痛",
+  "status_description_cheated_on": "对象……或者说前任出轨了",
+  
+  "status_title_broke_up": "分手",
+  "status_description_broke_up": "分手难以体面",
+
+  "happiness_went_on_date": "一次甜蜜的约会",
+  "happiness_dialog_went_on_date_0": "那是一场美好的约会!",
+  "happiness_dialog_went_on_date_1": "我如此爱你..",
+  "happiness_dialog_went_on_date_2": "幸福感冲昏了头!",
+  "happiness_dialog_went_on_date_3": "我想你的眼在夜里是否仍闪闪发亮..",
+  "happiness_dialog_went_on_date_4": "我一定是去钓鱼了……才钓到你这完美的猎物",
+
+  "happiness_adopted_baby": "收养了一小婴儿",
+  "happiness_dialog_adopted_baby_0": "有孩子的感觉真好",
+  "happiness_dialog_adopted_baby_1": "终于!我的孩子",
+  "happiness_dialog_adopted_baby_2": "一生中最快乐的一天！",
+  "happiness_dialog_adopted_baby_3": "等不及要抚养你长大",
+
+  "happiness_did_not_want_baby": "遗弃了一小婴儿",
+  "happiness_dialog_did_not_want_baby_0": "可恶!我还得引导一个孩子蹒跚学步..",
+  "happiness_dialog_did_not_want_baby_1": "不想一辈子照顾一个小孩",
+  "happiness_dialog_did_not_want_baby_2": "开什么玩笑?为什么还有孩子?",
+  "happiness_dialog_did_not_want_baby_3": "孩子?!快说这不是真的",
+
+  "happiness_okay_sex": "舒适一次",
+  "happiness_dialog_okay_sex_0": "还舒服，但没完全感觉爽",
+  "happiness_dialog_okay_sex_1": "尚可接受，仍然美妙",
+  
+  "happiness_enjoyed_sex": "享受一次",
+  "happiness_dialog_enjoyed_sex_0": "真舒爽！还想再来一次",
+  "happiness_dialog_enjoyed_sex_1": "完美，这就是我想要的体验",
+
+  "happiness_disliked_sex": "难哄一次",
+  "happiness_dialog_disliked_sex_0": "这次一点都不喜欢",
+  "happiness_dialog_disliked_sex_1": "太遭了，都后悔这么做了",
+
+  "happiness_feels_lonely": "感到孤身一人",
+  "happiness_dialog_feels_lonely_0": "没人爱我是我的错吗?",
+  "happiness_dialog_feels_lonely_1": "我想能感受到更多体验..",
+  "happiness_dialog_feels_lonely_2": "我如此渴望肢体接触..",
+  "happiness_dialog_feels_lonely_3": "没有人要我吗?",
+  
+  "happiness_cheated_on": "因出轨心痛",
+  "happiness_dialog_cheated_on_0": "为什么这种事会发生在我身上..?",
+  "happiness_dialog_cheated_on_1": "是我的错吗?",
+  "happiness_dialog_cheated_on_2": "做错了什么我才遭此罪啊?",
+  "happiness_dialog_cheated_on_3": "到底哪一步出了问题?",
+
+  "happiness_broke_up": "和爱人分手",
+  "happiness_dialog_broke_up_0": "我还期待着白头偕老..",
+  "happiness_dialog_broke_up_1": "至少没遭遇出轨..",
+  "happiness_dialog_broke_up_2": "我如此爱着....",
+  "happiness_dialog_broke_up_3": "很抱歉，这场旅程没能陪下去",
+  
+  "happiness_true_self": "发现自己性取向与众不同",
+  "happiness_dialog_true_self_0": "认识到自己的感觉真好",
+  "happiness_dialog_true_self_1": "性取向是造就我的一重大要素，这就是我.",
+  "happiness_dialog_true_self_2": "我要把握自己，我不会再隐藏!",
+  "happiness_dialog_true_self_3": "我没有别的办法",
+
+  "happiness_orientation_fits": "性取向不该被批判",
+  "happiness_dialog_orientation_fits_0": "我可以谈论我的性取向而不被斥责，这很好",
+  "happiness_dialog_orientation_fits_1": "我很高兴能受到大众认可",
+
+  "happiness_orientation_does_not_fit": "性取向被轻视",
+  "happiness_dialog_orientation_does_not_fit_0": "为什么我生来如此?",
+  "happiness_dialog_orientation_does_not_fit_1": "为什么我被憎恨?",
+
+  "happiness_insulted_for_orientation": "因性取向被侮辱",
+  "happiness_dialog_insulted_for_orientation_0": "他们为什么要在乎我和谁做爱或者约会?!",
+  "happiness_dialog_insulted_for_orientation_1": "什么鬼!他们到底什么毛病",
+  
+  "task_insult_orientation": "辱骂性取向",
+  "task_invite_for_sex": "参加做爱",
+  "task_invite_for_reproduction": "参加生育",
+  "task_try_kiss": "尝试亲吻",
+  "task_have_sex_go": "去做爱",
+  "task_reproduce_preservation": "维系繁殖",
+  "task_try_sexual_ivf": "尝试试管受精",
+  "task_go_sexual_ivf": "进行试管受精",
+  "task_go_and_wait_sexual_ivf": "等待试管受精",
+  "task_action_sexual_ivf": "开始试管受精",
+  "task_wait_sexual_ivf": "等待试管受精",
+  "task_try_date": "尝试约会",
+  "task_action_date": "约会",
+  "task_follow_action_date": "约会相伴",
+  "task_find_partner": "寻找配偶",
+
+  "not_same_island": "操作失败!单位并不在同一个岛上!",
+  "unit_selected": "选择两个单位让其相爱",
+  "unit_selected_first": "已选好单位，现在选择下一位",
+  "lover_selected": "选择的单位已有爱人",
+  "no_lover": "此单位还没有爱人!",
+  "unit_too_far": "操作失败!单位必须足够接近!",
+
+  "love_cancelled": "已取消强制恋爱!",
+  "love_successful": "爱神之箭已发射!除非你干预，否则不会分手",
+  "force_lover": "爱神之箭",
+  "force_lover_description": "强制让单位与另一单位成为恋人",
+
+  "sex_cancelled": "已取向强制交配!",
+  "sex_successful": "即将开始交配!会将尽快尝试，不过外力可能会打断",
+  "force_sex": "强制交配",
+  "force_sex_description": "强制单位与另一单位交配",
+  
+  "breakup_successful": "成功然后一对恋人分手!",
+  "force_breakup": "爱神铅箭",
+  "force_breakup_description": "强制一对恋人分手",
+
+  "kiss_cancelled": "已取消强制亲吻!",
+  "kiss_successful": "即将开始亲吻!会将尽快尝试，不过外力可能会打断",
+  "force_kiss": "强制亲吻",
+  "force_kiss_description": "强制单位去亲吻别人",
+
+  "sexualivf_successful": "试管受精即将开始!会将尽快尝试，不过外力可能会打断",
+  "sexualivf_invalid_unit": "操作取消!当前单位已有身孕或无家可归",
+  "sexualivf_cancelled": "已取消试管受精!",
+  "sexualivf_incapable_reproduce": "他们不能一起繁殖!",
+  "force_sexual_i_v_f": "试管受精",
+  "force_sexual_i_v_f_description": "强制单位通过试管受精生育",
+
+  "date_cancelled": "已取向强制约会!",
+  "date_successful": "约会即将开始!会将尽快尝试，不过外力可能会打断",
+  "force_date": "强制约会",
+  "force_date_description": "强制单位发起约会",
+
+  "trait_intimacy_averse": "疏远亲密",
+  "trait_intimacy_averse_info": "亲密不影响这个单位，因此不会分手或感到孤独",
+  "trait_intimacy_averse_info_2": "独自一人也不会介意",
+
+  "trait_faithful": "忠贞",
+  "trait_faithful_info": "绝不会背叛伴侣，即使恋爱取向不再匹配他们的伴侣的性别",
+  "trait_faithful_info_2": "只做对的事",
+
+  "trait_unfaithful": "放荡",
+  "trait_unfaithful_info": "就算承诺关系，也只是口头的",
+  "trait_unfaithful_info_2": "都很爱嘛",
+
+  "trait_abroromantic": "恋情",
+  "trait_abroromantic_info": "恋爱取向可能会随时间推移而改变",
+  "trait_abroromantic_info_2": "这个承诺有点难",
+
+  "trait_abrosexual": "性情",
+  "trait_abrosexual_info": "性取向可能会随时间推移而改变",
+  "trait_abrosexual_info_2": "大脑真复杂",
+
+  "trait_dislike_sex": "无欲",
+  "trait_dislike_sex_info": "不像大多数人那样渴望交配",
+  "trait_dislike_sex_info_2": "交配真奇怪，费时费力还惹一身骚",
+
+  "trait_dislike_romance": "冷淡",
+  "trait_dislike_romance_info": "不像大多数人渴望爱情",
+  "trait_dislike_romance_info_2": "并不是因为没有找到合适的人，只是有这种感觉",
+
+  "like_phallus_sexual": "劲霸面包",
+  "like_phallus_sexual_info_2": "怼进去!",
+  "like_vulva_sexual": "甜甜圈",
+  "like_vulva_sexual_info_2": "把球杆对准洞",
+
+  "like_female_romantic": "恋爱取向：女性",
+  "like_female_romantic_info": "在感情方面更喜欢女性",
+  "like_female_romantic_info_2": "女孩会喜欢什么呢?",
+  "like_female_sexual": "性取向：女性",
+  "like_female_sexual_info": "在交配方面更喜欢女性",
+  "like_female_sexual_info_2": "女人如水，所以他们渴望得到",
+
+  "like_male_romantic": "恋爱取向：男性",
+  "like_male_romantic_info": "在感情方面更喜欢男性",
+  "like_male_romantic_info_2": "嫁给我吧!",
+  "like_male_sexual": "性取向：男性",
+  "like_male_sexual_info": "在交配方面更喜欢男性",
+  "like_male_sexual_info_2": "来点男人",
+
+  "like_nonbinary_romantic": "恋爱取向：非二元",
+  "like_nonbinary_romantic_info": "在感情方面更喜欢非二元性别的",
+  "like_nonbinary_romantic_info_2": "二元性外还有其他",
+  "like_nonbinary_sexual": "性取向：非二元",
+  "like_nonbinary_sexual_info": "在交配方面更喜欢非二元性别的",
+  "like_nonbinary_sexual_info_2": "不会有其他办法",
+
+  "like_feminine_romantic": "恋爱取向：女性化",
+  "like_feminine_romantic_info": "在感情方面更喜欢具备女性特征的",
+  "like_feminine_romantic_info_2": "有趣、有同情心、善良",
+  "like_feminine_sexual": "性取向：女性化",
+  "like_feminine_sexual_info": "在交配方面更喜欢具备女性特征的",
+  "like_feminine_sexual_info_2": "苗条、可爱、漂亮",
+
+  "like_masculine_romantic": "恋爱取向：男性化",
+  "like_masculine_romantic_info": "在感情方面更喜欢具备男性特征的",
+  "like_masculine_romantic_info_2": "自信、大胆、有力",
+  "like_masculine_sexual": "性取向：男性化",
+  "like_masculine_sexual_info_2": "在交配方面更喜欢具备男性特征的",
+  "like_masculine_sexual_info_2": "大、强势、强壮",
+  
+  "trait_unfluid": "固取向",
+  "trait_unfluid_info": "恋爱取向和性取向永远不会改变",
+  "trait_unfluid_info_2": "有时候取向并不会流动",
+
+  "trait_group_dislikes": "性取向-厌恶",
+
+  "culture_trait_homophobic": "抗拒同性",
+  "culture_trait_homophobic_info": "同性恐惧症根深蒂固，经常歧视、骚扰和阻止那些喜欢同性的人参与政治、社会和军事",
+  "culture_trait_homophobic_info_2": "呦，那些同性恋!",
+
+  "culture_trait_heterophobic": "抗拒异性",
+  "culture_trait_heterophobic_info": "异性恐惧症根深蒂固，经常歧视、骚扰和阻止那些喜欢不同性别的人参与政治、社会和军事",
+  "culture_trait_heterophobic_info_2": "你为什么要和异性约会?",
+
+  "culture_trait_incest": "近亲结婚",
+  "culture_trait_incest_info": "有血缘关系的成员可能坠入爱河并交配",
+  "culture_trait_incest_info_2": "令人尴尬!",
+
+  "culture_trait_orientationless": "生育至上",
+  "culture_trait_orientationless_info": "性取向的概念不存在。只需要找到可以繁殖的爱人",
+  "culture_trait_orientationless_info_2": "为什么在意性取向，奇怪的思维!",
+
+  "culture_trait_committed": "忠贞不渝",
+  "culture_trait_committed_info": "致力于维持关系，永远不会出轨或分手，无论事情变得多么糟糕",
+  "culture_trait_committed_info_2": "忠于感情最重要!",
+
+  "culture_trait_mature_dating": "同龄约会",
+  "culture_trait_mature_dating_info": "只与其他同龄人约会",
+  "culture_trait_mature_dating_info_2": "不再有老牛吃嫩草!",
+
+  "culture_trait_sexual_expectations": "性的期望",
+  "culture_trait_sexual_expectations_info": "可以和任何人解决性欲，不会有任何后果",
+  "culture_trait_sexual_expectations_info_2": "性可以表达!",
+
+  "culture_trait_scar_of_incest": "近亲之痕",
+  "culture_trait_scar_of_incest_info": "文明认为近亲结婚是他们文化的重要组成部分，永远不会消除它",
+  "culture_trait_scar_of_incest_info_2": "维持血脉纯度!",
+
+  "subspecies_trait_preservation": "维系繁殖",
+  "subspecies_trait_preservation_info": "只要亚种单位数低于最大值,，就会开始寻找可以繁殖的单位，无视文明和取向",
+  "subspecies_trait_preservation_info_2": "事情已经很严峻了，不得不保留火种",
+
+  "subspecies_trait_reproduction_same_sex": "同性繁殖",
+  "subspecies_trait_reproduction_same_sex_info": "两个同性的生物之间可以进行繁殖",
+  "subspecies_trait_reproduction_same_sex_info_2": "两个变成更多",
+  
+  "world_law_fluid_sexuality_title": "变化的性取向",
+  "world_law_fluid_sexuality_description": "单位的性取向可能随时间推移而改变",
+  "world_law_fluid_sexuality_description_2": "性可以流动!",
+  
+  "lesbian": "女同性取向",
+  "gay": "男同性取向",
+  "straight": "传统异性取向",
+  "bisexual": "双性性取向",
+  "pansexual": "泛性性取向",
+  "heterosexual": "异性性取向",
+  "homosexual": "同性性取向",
+  "asexual": "无性取向",
+  "lesbian_romantic": "女同性恋爱取向",
+  "gay_romantic": "男同性恋爱取向",
+  "straight_romantic": "传统异性恋爱取向",
+  "bisexual_romantic": "双性恋爱取向",
+  "pansexual_romantic": "泛性恋爱取向",
+  "heterosexual_romantic": "异性恋爱取向",
+  "homosexual_romantic": "同性恋爱取向",
+  "asexual_romantic": "无性恋者取向",
+  
+  "statistics_lesbian_description": "据统计，她们比异性恋男人更能吸引女人",
+  "statistics_gay_description": "据统计，他们吸引的男人比异性恋女人多",
+  "statistics_straight_description": "统计起来如此单调",
+  "statistics_bisexual_description": "只欣赏美",
+  "statistics_pansexual_description": "但可能不喜欢简单蓝调",
+  "statistics_heterosexual_description": "喜欢不同性别",
+  "statistics_homosexual_description": "喜欢同性的",
+  "statistics_asexual_description": "浪漫的亲密对其不起作用",
+
+  "statistics_lesbian_romantic_description": "据统计，她们比异性恋男人更能吸引女人",
+  "statistics_gay_romantic_description": "据统计，他们吸引的男人比异性恋女人多",
+  "statistics_straight_romantic_description": "统计起来如此单调",
+  "statistics_bisexual_romantic_description": "只欣赏美",
+  "statistics_pansexual_romantic_description": "但可能不喜欢平底锅",
+  "statistics_heterosexual_romantic_description": "喜欢不同性别",
+  "statistics_homosexual_romantic_description": "喜欢同性的",
+  "statistics_asexual_romantic_description": "浪漫的亲密对其不起作用",
+
+  "lonely_units": "单身",
+  "statistics_lonely": "单身",
+  "statistics_lonely_description": "只是想有人关心:(",
+
+  "statistics_broke_up": "分手数",
+  "statistics_broke_up_description": "那么多承诺被时间遗忘",
+
+  "statistics_cheated_on": "出轨数",
+  "statistics_cheated_on_description": "心爱的回忆，现在粉碎在地板上",
+
+  "statistics_adopted_baby": "收养婴儿",
+  "statistics_adopted_baby_description": "这么多!",
+  
+  "main_orientation": "主要取向",
+  "founder_orientation": "创立者取向",
+  
+  "opinion_homosexual": "同性恋",
+  "opinion_heterosexual": "异性恋",
+  "opinion_king_lovers": "一对恩爱国王",
+  
+  "intimacy_happiness": "亲密度",
+  "stats_icon_intimacy_happiness": "亲密度",
+  "romantic_orientation": "恋爱取向",
+  "sexual_orientation": "性取向",
+
+  "intimacy": "亲密度",
+  
+  "sexual": "性",
+  "romantic": "恋爱",
+  "like_group": "分组",
+  "intimate": "亲密型",
+  "identities": "性别",
+  "expressions": "表现",
+  "genitals": "生殖",
+  
+  "tab_title_tol": "爱的主旋律",
+  "tab_desc_tol": "包含所有性和恋爱取向!",
+  "tab_mind_likes": "取向",
+  "tab_mind_likes_description": "看看他们的恋爱取向和性欲……想和谁上床?",
+  
+  "mind_likes_regenerate_orientation": "再造取向",
+  "mind_likes_regenerate_orientation_description": "根据单位的活跃取向重新变更对应标识",
+  "mind_likes_regenerate_orientation_description_2": "让单位自己选择!",
+
+  "Graphs": "模组图表",
+  "ModGraphs": "统计",
+  "ModGraphs Description": "将此模组的图形统计添加到游戏中，如果你在使用图表时遇到了暂停情况，关闭此选项并重启游戏",
+  
+  "Misc": "开发设置",
+  "SlowOnLog": "调试慢速",
+  "SlowOnLog Description": "当特定的调试信息输出时，自动减慢游戏速度\n输入框内容为空时禁用",
+
+  "StackTrace": "堆栈跟踪",
+  "StackTrace Description": "当特定调试信息输出时，打印出堆栈跟踪\n输入框内容为空时禁用",
+
+  "Debug": "调试日志",
+  "Debug Description": "启用调试日志",
+  
+  "Ignore": "忽略名单",
+  "Ignore Description": "忽略下列关键词的日志"
+ }

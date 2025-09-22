@@ -1,0 +1,360 @@
+{
+  "Topic of Love_ch": "愛的主旋律",
+  "A mod that allows units to have intimacy and fall in love for more than just their ability to reproduce!_ch": "一個允許單位有親密度和戀愛的模組！",
+  
+  "status_title_went_on_date": "約會",
+  "status_description_went_on_date": "享受二人世界",
+  
+  "status_title_just_kissed": "親吻",
+  "status_description_just_kissed": "多熱烈的一對",
+  
+  "status_title_disliked_sex": "難哄",
+  "status_description_disliked_sex": "沒能滿足性取向的交配",
+
+  "status_title_enjoyed_sex": "享受",
+  "status_description_enjoyed_sex": "滿足了性取向的交配",
+
+  "status_title_okay_sex": "舒適",
+  "status_description_okay_sex": "只滿足了一部分性取向，但可接受",
+
+  "status_title_cheated_on": "心痛",
+  "status_description_cheated_on": "對象……或者説前任出軌了",
+  
+  "status_title_broke_up": "分手",
+  "status_description_broke_up": "分手難以體面",
+
+  "happiness_went_on_date": "一次甜蜜的約會",
+  "happiness_dialog_went_on_date_0": "那是一場美好的約會!",
+  "happiness_dialog_went_on_date_1": "我如此愛你..",
+  "happiness_dialog_went_on_date_2": "幸福感衝昏了頭!",
+  "happiness_dialog_went_on_date_3": "我想你的眼在夜裏是否仍閃閃發亮..",
+  "happiness_dialog_went_on_date_4": "我一定是去釣魚了……才釣到你這完美的獵物",
+
+  "happiness_adopted_baby": "收養了一小嬰兒",
+  "happiness_dialog_adopted_baby_0": "有孩子的感覺真好",
+  "happiness_dialog_adopted_baby_1": "終於!我的孩子",
+  "happiness_dialog_adopted_baby_2": "一生中最快樂的一天！",
+  "happiness_dialog_adopted_baby_3": "等不及要撫養你長大",
+
+  "happiness_did_not_want_baby": "遺棄了一小嬰兒",
+  "happiness_dialog_did_not_want_baby_0": "可惡!我還得引導一個孩子蹣跚學步..",
+  "happiness_dialog_did_not_want_baby_1": "不想一輩子照顧一個小孩",
+  "happiness_dialog_did_not_want_baby_2": "開什麼玩笑?為什麼還有孩子?",
+  "happiness_dialog_did_not_want_baby_3": "孩子?!快説這不是真的",
+
+  "happiness_okay_sex": "舒適一次",
+  "happiness_dialog_okay_sex_0": "還舒服，但沒完全感覺爽",
+  "happiness_dialog_okay_sex_1": "尚可接受，仍然美妙",
+  
+  "happiness_enjoyed_sex": "享受一次",
+  "happiness_dialog_enjoyed_sex_0": "真舒爽！還想再來一次",
+  "happiness_dialog_enjoyed_sex_1": "完美，這就是我想要的體驗",
+
+  "happiness_disliked_sex": "難哄一次",
+  "happiness_dialog_disliked_sex_0": "這次一點都不喜歡",
+  "happiness_dialog_disliked_sex_1": "太遭了，都後悔這麼做了",
+
+  "happiness_feels_lonely": "感到孤身一人",
+  "happiness_dialog_feels_lonely_0": "沒人愛我是我的錯嗎?",
+  "happiness_dialog_feels_lonely_1": "我想能感受到更多體驗..",
+  "happiness_dialog_feels_lonely_2": "我如此渴望肢體接觸..",
+  "happiness_dialog_feels_lonely_3": "沒有人要我嗎?",
+  
+  "happiness_cheated_on": "因出軌心痛",
+  "happiness_dialog_cheated_on_0": "為什麼這種事會發生在我身上..?",
+  "happiness_dialog_cheated_on_1": "是我的錯嗎?",
+  "happiness_dialog_cheated_on_2": "做錯了什麼我才遭此罪啊?",
+  "happiness_dialog_cheated_on_3": "到底哪一步出了問題?",
+
+  "happiness_broke_up": "和愛人分手",
+  "happiness_dialog_broke_up_0": "我還期待着白頭偕老..",
+  "happiness_dialog_broke_up_1": "至少沒遭遇出軌..",
+  "happiness_dialog_broke_up_2": "我如此愛着....",
+  "happiness_dialog_broke_up_3": "很抱歉，這場旅程沒能陪下去",
+  
+  "happiness_true_self": "發現自己性取向與眾不同",
+  "happiness_dialog_true_self_0": "認識到自己的感覺真好",
+  "happiness_dialog_true_self_1": "性取向是造就我的一重大要素，這就是我.",
+  "happiness_dialog_true_self_2": "我要把握自己，我不會再隱藏!",
+  "happiness_dialog_true_self_3": "我沒有別的辦法",
+
+  "happiness_orientation_fits": "性取向不該被批判",
+  "happiness_dialog_orientation_fits_0": "我可以談論我的性取向而不被斥責，這很好",
+  "happiness_dialog_orientation_fits_1": "我很高興能受到大眾認可",
+
+  "happiness_orientation_does_not_fit": "性取向被輕視",
+  "happiness_dialog_orientation_does_not_fit_0": "為什麼我生來如此?",
+  "happiness_dialog_orientation_does_not_fit_1": "為什麼我被憎恨?",
+
+  "happiness_insulted_for_orientation": "因性取向被侮辱",
+  "happiness_dialog_insulted_for_orientation_0": "他們為什麼要在乎我和誰做愛或者約會?!",
+  "happiness_dialog_insulted_for_orientation_1": "什麼鬼!他們到底什麼毛病",
+  
+  "task_insult_orientation": "辱罵性取向",
+  "task_invite_for_sex": "參加做愛",
+  "task_invite_for_reproduction": "參加生育",
+  "task_try_kiss": "嘗試親吻",
+  "task_have_sex_go": "去做愛",
+  "task_reproduce_preservation": "維繫繁殖",
+  "task_try_sexual_ivf": "嘗試試管受精",
+  "task_go_sexual_ivf": "進行試管受精",
+  "task_go_and_wait_sexual_ivf": "等待試管受精",
+  "task_action_sexual_ivf": "開始試管受精",
+  "task_wait_sexual_ivf": "等待試管受精",
+  "task_try_date": "嘗試約會",
+  "task_action_date": "約會",
+  "task_follow_action_date": "約會相伴",
+  "task_find_partner": "尋找配偶",
+
+  "not_same_island": "操作失敗!單位並不在同一個島上!",
+  "unit_selected": "選擇兩個單位讓其相愛",
+  "unit_selected_first": "已選好單位，現在選擇下一位",
+  "lover_selected": "選擇的單位已有愛人",
+  "no_lover": "此單位還沒有愛人!",
+  "unit_too_far": "操作失敗!單位必須足夠接近!",
+
+  "love_cancelled": "已取消強制戀愛!",
+  "love_successful": "愛神之箭已發射!除非你干預，否則不會分手",
+  "force_lover": "愛神之箭",
+  "force_lover_description": "強制讓單位與另一單位成為戀人",
+
+  "sex_cancelled": "已取向強制交配!",
+  "sex_successful": "即將開始交配!會將盡快嘗試，不過外力可能會打斷",
+  "force_sex": "強制交配",
+  "force_sex_description": "強制單位與另一單位交配",
+  
+  "breakup_successful": "成功然後一對戀人分手!",
+  "force_breakup": "愛神鉛箭",
+  "force_breakup_description": "強制一對戀人分手",
+
+  "kiss_cancelled": "已取消強制親吻!",
+  "kiss_successful": "即將開始親吻!會將盡快嘗試，不過外力可能會打斷",
+  "force_kiss": "強制親吻",
+  "force_kiss_description": "強制單位去親吻別人",
+
+  "sexualivf_successful": "試管受精即將開始!會將盡快嘗試，不過外力可能會打斷",
+  "sexualivf_invalid_unit": "操作取消!當前單位已有身孕或無家可歸",
+  "sexualivf_cancelled": "已取消試管受精!",
+  "sexualivf_incapable_reproduce": "他們不能一起繁殖!",
+  "force_sexual_i_v_f": "試管受精",
+  "force_sexual_i_v_f_description": "強制單位通過試管受精生育",
+
+  "date_cancelled": "已取向強制約會!",
+  "date_successful": "約會即將開始!會將盡快嘗試，不過外力可能會打斷",
+  "force_date": "強制約會",
+  "force_date_description": "強制單位發起約會",
+
+  "trait_intimacy_averse": "疏遠親密",
+  "trait_intimacy_averse_info": "親密不影響這個單位，因此不會分手或感到孤獨",
+  "trait_intimacy_averse_info_2": "獨自一人也不會介意",
+
+  "trait_faithful": "忠貞",
+  "trait_faithful_info": "絕不會背叛伴侶，即使戀愛取向不再匹配他們的伴侶的性別",
+  "trait_faithful_info_2": "只做對的事",
+
+  "trait_unfaithful": "放蕩",
+  "trait_unfaithful_info": "就算承諾關係，也只是口頭的",
+  "trait_unfaithful_info_2": "都很愛嘛",
+
+  "trait_abroromantic": "戀情",
+  "trait_abroromantic_info": "戀愛取向可能會隨時間推移而改變",
+  "trait_abroromantic_info_2": "這個承諾有點難",
+
+  "trait_abrosexual": "性情",
+  "trait_abrosexual_info": "性取向可能會隨時間推移而改變",
+  "trait_abrosexual_info_2": "大腦真複雜",
+
+  "trait_dislike_sex": "無慾",
+  "trait_dislike_sex_info": "不像大多數人那樣渴望交配",
+  "trait_dislike_sex_info_2": "交配真奇怪，費時費力還惹一身騷",
+
+  "trait_dislike_romance": "冷淡",
+  "trait_dislike_romance_info": "不像大多數人渴望愛情",
+  "trait_dislike_romance_info_2": "並不是因為沒有找到合適的人，只是有這種感覺",
+
+  "like_phallus_sexual": "勁霸麪包",
+  "like_phallus_sexual_info_2": "懟進去!",
+  "like_vulva_sexual": "甜甜圈",
+  "like_vulva_sexual_info_2": "把球杆對準洞",
+
+  "like_female_romantic": "戀愛取向：女性",
+  "like_female_romantic_info": "在感情方面更喜歡女性",
+  "like_female_romantic_info_2": "女孩會喜歡什麼呢?",
+  "like_female_sexual": "性取向：女性",
+  "like_female_sexual_info": "在交配方面更喜歡女性",
+  "like_female_sexual_info_2": "女人如水，所以他們渴望得到",
+
+  "like_male_romantic": "戀愛取向：男性",
+  "like_male_romantic_info": "在感情方面更喜歡男性",
+  "like_male_romantic_info_2": "嫁給我吧!",
+  "like_male_sexual": "性取向：男性",
+  "like_male_sexual_info": "在交配方面更喜歡男性",
+  "like_male_sexual_info_2": "來點男人",
+
+  "like_nonbinary_romantic": "戀愛取向：非二元",
+  "like_nonbinary_romantic_info": "在感情方面更喜歡非二元性別的",
+  "like_nonbinary_romantic_info_2": "二元性外還有其他",
+  "like_nonbinary_sexual": "性取向：非二元",
+  "like_nonbinary_sexual_info": "在交配方面更喜歡非二元性別的",
+  "like_nonbinary_sexual_info_2": "不會有其他辦法",
+
+  "like_feminine_romantic": "戀愛取向：女性化",
+  "like_feminine_romantic_info": "在感情方面更喜歡具備女性特徵的",
+  "like_feminine_romantic_info_2": "有趣、有同情心、善良",
+  "like_feminine_sexual": "性取向：女性化",
+  "like_feminine_sexual_info": "在交配方面更喜歡具備女性特徵的",
+  "like_feminine_sexual_info_2": "苗條、可愛、漂亮",
+
+  "like_masculine_romantic": "戀愛取向：男性化",
+  "like_masculine_romantic_info": "在感情方面更喜歡具備男性特徵的",
+  "like_masculine_romantic_info_2": "自信、大膽、有力",
+  "like_masculine_sexual": "性取向：男性化",
+  "like_masculine_sexual_info_2": "在交配方面更喜歡具備男性特徵的",
+  "like_masculine_sexual_info_2": "大、強勢、強壯",
+  
+  "trait_unfluid": "固取向",
+  "trait_unfluid_info": "戀愛取向和性取向永遠不會改變",
+  "trait_unfluid_info_2": "有時候取向並不會流動",
+
+  "trait_group_dislikes": "性取向-厭惡",
+
+  "culture_trait_homophobic": "抗拒同性",
+  "culture_trait_homophobic_info": "同性恐懼症根深蒂固，經常歧視、騷擾和阻止那些喜歡同性的人蔘與政治、社會和軍事",
+  "culture_trait_homophobic_info_2": "呦，那些同性戀!",
+
+  "culture_trait_heterophobic": "抗拒異性",
+  "culture_trait_heterophobic_info": "異性恐懼症根深蒂固，經常歧視、騷擾和阻止那些喜歡不同性別的人蔘與政治、社會和軍事",
+  "culture_trait_heterophobic_info_2": "你為什麼要和異性約會?",
+
+  "culture_trait_incest": "近親結婚",
+  "culture_trait_incest_info": "有血緣關係的成員可能墜入愛河並交配",
+  "culture_trait_incest_info_2": "令人尷尬!",
+
+  "culture_trait_orientationless": "生育至上",
+  "culture_trait_orientationless_info": "性取向的概念不存在。只需要找到可以繁殖的愛人",
+  "culture_trait_orientationless_info_2": "為什麼在意性取向，奇怪的思維!",
+
+  "culture_trait_committed": "忠貞不渝",
+  "culture_trait_committed_info": "致力於維持關係，永遠不會出軌或分手，無論事情變得多麼糟糕",
+  "culture_trait_committed_info_2": "忠於感情最重要!",
+
+  "culture_trait_mature_dating": "同齡約會",
+  "culture_trait_mature_dating_info": "只與其他同齡人約會",
+  "culture_trait_mature_dating_info_2": "不再有老牛吃嫩草!",
+
+  "culture_trait_sexual_expectations": "性的期望",
+  "culture_trait_sexual_expectations_info": "可以和任何人解決性慾，不會有任何後果",
+  "culture_trait_sexual_expectations_info_2": "性可以表達!",
+
+  "culture_trait_scar_of_incest": "近親之痕",
+  "culture_trait_scar_of_incest_info": "文明認為近親結婚是他們文化的重要組成部分，永遠不會消除它",
+  "culture_trait_scar_of_incest_info_2": "維持血脈純度!",
+
+  "subspecies_trait_preservation": "維繫繁殖",
+  "subspecies_trait_preservation_info": "只要亞種單位數低於最大值,，就會開始尋找可以繁殖的單位，無視文明和取向",
+  "subspecies_trait_preservation_info_2": "事情已經很嚴峻了，不得不保留火種",
+
+  "subspecies_trait_reproduction_same_sex": "同性繁殖",
+  "subspecies_trait_reproduction_same_sex_info": "兩個同性的生物之間可以進行繁殖",
+  "subspecies_trait_reproduction_same_sex_info_2": "兩個變成更多",
+  
+  "world_law_fluid_sexuality_title": "變化的性取向",
+  "world_law_fluid_sexuality_description": "單位的性取向可能隨時間推移而改變",
+  "world_law_fluid_sexuality_description_2": "性可以流動!",
+  
+  "lesbian": "女同性取向",
+  "gay": "男同性取向",
+  "straight": "傳統異性取向",
+  "bisexual": "雙性性取向",
+  "pansexual": "泛性性取向",
+  "heterosexual": "異性性取向",
+  "homosexual": "同性性取向",
+  "asexual": "無性取向",
+  "lesbian_romantic": "女同性戀愛取向",
+  "gay_romantic": "男同性戀愛取向",
+  "straight_romantic": "傳統異性戀愛取向",
+  "bisexual_romantic": "雙性戀愛取向",
+  "pansexual_romantic": "泛性戀愛取向",
+  "heterosexual_romantic": "異性戀愛取向",
+  "homosexual_romantic": "同性戀愛取向",
+  "asexual_romantic": "無性戀者取向",
+  
+  "statistics_lesbian_description": "據統計，她們比異性戀男人更能吸引女人",
+  "statistics_gay_description": "據統計，他們吸引的男人比異性戀女人多",
+  "statistics_straight_description": "統計起來如此單調",
+  "statistics_bisexual_description": "只欣賞美",
+  "statistics_pansexual_description": "但可能不喜歡簡單藍調",
+  "statistics_heterosexual_description": "喜歡不同性別",
+  "statistics_homosexual_description": "喜歡同性的",
+  "statistics_asexual_description": "浪漫的親密對其不起作用",
+
+  "statistics_lesbian_romantic_description": "據統計，她們比異性戀男人更能吸引女人",
+  "statistics_gay_romantic_description": "據統計，他們吸引的男人比異性戀女人多",
+  "statistics_straight_romantic_description": "統計起來如此單調",
+  "statistics_bisexual_romantic_description": "只欣賞美",
+  "statistics_pansexual_romantic_description": "但可能不喜歡平底鍋",
+  "statistics_heterosexual_romantic_description": "喜歡不同性別",
+  "statistics_homosexual_romantic_description": "喜歡同性的",
+  "statistics_asexual_romantic_description": "浪漫的親密對其不起作用",
+
+  "lonely_units": "單身",
+  "statistics_lonely": "單身",
+  "statistics_lonely_description": "只是想有人關心:(",
+
+  "statistics_broke_up": "分手數",
+  "statistics_broke_up_description": "那麼多承諾被時間遺忘",
+
+  "statistics_cheated_on": "出軌數",
+  "statistics_cheated_on_description": "心愛的回憶，現在粉碎在地板上",
+
+  "statistics_adopted_baby": "收養嬰兒",
+  "statistics_adopted_baby_description": "這麼多!",
+  
+  "main_orientation": "主要取向",
+  "founder_orientation": "創立者取向",
+  
+  "opinion_homosexual": "同性戀",
+  "opinion_heterosexual": "異性戀",
+  "opinion_king_lovers": "一對恩愛國王",
+  
+  "intimacy_happiness": "親密度",
+  "stats_icon_intimacy_happiness": "親密度",
+  "romantic_orientation": "戀愛取向",
+  "sexual_orientation": "性取向",
+
+  "intimacy": "親密度",
+  
+  "sexual": "性",
+  "romantic": "戀愛",
+  "like_group": "分組",
+  "intimate": "親密型",
+  "identities": "性別",
+  "expressions": "表現",
+  "genitals": "生殖",
+  
+  "tab_title_tol": "愛的主旋律",
+  "tab_desc_tol": "包含所有性和戀愛取向!",
+  "tab_mind_likes": "取向",
+  "tab_mind_likes_description": "看看他們的戀愛取向和性慾……想和誰上床?",
+  
+  "mind_likes_regenerate_orientation": "再造取向",
+  "mind_likes_regenerate_orientation_description": "根據單位的活躍取向重新變更對應標識",
+  "mind_likes_regenerate_orientation_description_2": "讓單位自己選擇!",
+
+  "Graphs": "模組圖表",
+  "ModGraphs": "統計",
+  "ModGraphs Description": "將此模組的圖形統計添加到遊戲中，如果你在使用圖表時遇到了暫停情況，關閉此選項並重啓遊戲",
+  
+  "Misc": "開發設置",
+  "SlowOnLog": "調試慢速",
+  "SlowOnLog Description": "當特定的調試信息輸出時，自動減慢遊戲速度\n輸入框內容為空時禁用",
+
+  "StackTrace": "堆棧跟蹤",
+  "StackTrace Description": "當特定調試信息輸出時，打印出堆棧跟蹤\n輸入框內容為空時禁用",
+
+  "Debug": "調試日誌",
+  "Debug Description": "啓用調試日誌",
+  
+  "Ignore": "忽略名單",
+  "Ignore Description": "忽略下列關鍵詞的日誌"
+ }
