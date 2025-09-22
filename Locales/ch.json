@@ -1,4 +1,5 @@
 {
+  //ch
   "Topic of Love_ch": "愛的主旋律",
   "A mod that allows units to have intimacy and fall in love for more than just their ability to reproduce!_ch": "一個允許單位有親密度和戀愛的模組！",
   
@@ -90,9 +91,9 @@
   "happiness_dialog_insulted_for_orientation_0": "他們為什麼要在乎我和誰做愛或者約會?!",
   "happiness_dialog_insulted_for_orientation_1": "什麼鬼!他們到底什麼毛病",
   
-  "task_insult_orientation": "辱罵性取向",
-  "task_invite_for_sex": "參加做愛",
-  "task_invite_for_reproduction": "參加生育",
+  "task_insult_orientation": "取向受冒犯",
+  "task_invite_for_sex": "請求做愛",
+  "task_invite_for_reproduction": "請求生育",
   "task_try_kiss": "嘗試親吻",
   "task_have_sex_go": "去做愛",
   "task_reproduce_preservation": "維繫繁殖",
@@ -149,7 +150,7 @@
   "trait_intimacy_averse_info_2": "獨自一人也不會介意",
 
   "trait_faithful": "忠貞",
-  "trait_faithful_info": "絕不會背叛伴侶，即使戀愛取向不再匹配他們的伴侶的性別",
+  "trait_faithful_info": "絕不會背叛伴侶，即使戀愛取向不再匹配伴侶的性別",
   "trait_faithful_info_2": "只做對的事",
 
   "trait_unfaithful": "放蕩",
@@ -177,17 +178,17 @@
   "like_vulva_sexual": "甜甜圈",
   "like_vulva_sexual_info_2": "把球杆對準洞",
 
-  "like_female_romantic": "戀愛取向：女性",
+  "like_female_romantic": "戀愛取向：女化",
   "like_female_romantic_info": "在感情方面更喜歡女性",
   "like_female_romantic_info_2": "女孩會喜歡什麼呢?",
-  "like_female_sexual": "性取向：女性",
+  "like_female_sexual": "性取向：女化",
   "like_female_sexual_info": "在交配方面更喜歡女性",
-  "like_female_sexual_info_2": "女人如水，所以他們渴望得到",
+  "like_female_sexual_info_2": "女人如水，所以渴望得到",
 
-  "like_male_romantic": "戀愛取向：男性",
+  "like_male_romantic": "戀愛取向：男化",
   "like_male_romantic_info": "在感情方面更喜歡男性",
-  "like_male_romantic_info_2": "嫁給我吧!",
-  "like_male_sexual": "性取向：男性",
+  "like_male_romantic_info_2": "與我結婚吧!",
+  "like_male_sexual": "性取向：男化",
   "like_male_sexual_info": "在交配方面更喜歡男性",
   "like_male_sexual_info_2": "來點男人",
 
@@ -198,17 +199,17 @@
   "like_nonbinary_sexual_info": "在交配方面更喜歡非二元性別的",
   "like_nonbinary_sexual_info_2": "不會有其他辦法",
 
-  "like_feminine_romantic": "戀愛取向：女性化",
+  "like_feminine_romantic": "戀愛取向：陰柔",
   "like_feminine_romantic_info": "在感情方面更喜歡具備女性特徵的",
   "like_feminine_romantic_info_2": "有趣、有同情心、善良",
-  "like_feminine_sexual": "性取向：女性化",
+  "like_feminine_sexual": "性取向：陰柔",
   "like_feminine_sexual_info": "在交配方面更喜歡具備女性特徵的",
   "like_feminine_sexual_info_2": "苗條、可愛、漂亮",
 
-  "like_masculine_romantic": "戀愛取向：男性化",
+  "like_masculine_romantic": "戀愛取向：陽剛",
   "like_masculine_romantic_info": "在感情方面更喜歡具備男性特徵的",
   "like_masculine_romantic_info_2": "自信、大膽、有力",
-  "like_masculine_sexual": "性取向：男性化",
+  "like_masculine_sexual": "性取向：陽剛",
   "like_masculine_sexual_info_2": "在交配方面更喜歡具備男性特徵的",
   "like_masculine_sexual_info_2": "大、強勢、強壯",
   
@@ -245,14 +246,18 @@
   "culture_trait_sexual_expectations": "性的期望",
   "culture_trait_sexual_expectations_info": "可以和任何人解決性慾，不會有任何後果",
   "culture_trait_sexual_expectations_info_2": "性可以表達!",
+  
+  "culture_trait_sex_for_reproduction": "生命維繫",
+  "culture_trait_sex_for_reproduction_info": "性生活從來不需要欺瞞!",
+  "culture_trait_sex_for_reproduction_info_2": "和任何人生育都可以",
+  
+    "culture_trait_sex_for_reproduction_only": "神聖交配",
+  "culture_trait_sex_for_reproduction_only_info": "只是為了繁殖而交配",
+  "culture_trait_sex_for_reproduction_only_info_2": "交配很珍貴，怎麼敢的！",
 
   "culture_trait_scar_of_incest": "近親之痕",
-  "culture_trait_scar_of_incest_info": "文明認為近親結婚是他們文化的重要組成部分，永遠不會消除它",
+  "culture_trait_scar_of_incest_info": "認為近親結婚是文化的重要組成部分，永遠不會消除它",
   "culture_trait_scar_of_incest_info_2": "維持血脈純度!",
-
-  "subspecies_trait_preservation": "維繫繁殖",
-  "subspecies_trait_preservation_info": "只要亞種單位數低於最大值,，就會開始尋找可以繁殖的單位，無視文明和取向",
-  "subspecies_trait_preservation_info_2": "事情已經很嚴峻了，不得不保留火種",
 
   "subspecies_trait_reproduction_same_sex": "同性繁殖",
   "subspecies_trait_reproduction_same_sex_info": "兩個同性的生物之間可以進行繁殖",
@@ -335,7 +340,7 @@
   "tab_title_tol": "愛的主旋律",
   "tab_desc_tol": "包含所有性和戀愛取向!",
   "tab_mind_likes": "取向",
-  "tab_mind_likes_description": "看看他們的戀愛取向和性慾……想和誰上床?",
+  "tab_mind_likes_description": "看看單位的戀愛取向和性慾……想和誰上床?",
   
   "mind_likes_regenerate_orientation": "再造取向",
   "mind_likes_regenerate_orientation_description": "根據單位的活躍取向重新變更對應標識",

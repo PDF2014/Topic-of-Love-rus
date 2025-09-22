@@ -1,4 +1,5 @@
 ﻿{
+  //cz
   "Topic of Love_cz": "爱的主旋律",
   "A mod that allows units to have intimacy and fall in love for more than just their ability to reproduce!_cz": "一个允许单位有亲密度和恋爱的模组！",
   
@@ -90,9 +91,9 @@
   "happiness_dialog_insulted_for_orientation_0": "他们为什么要在乎我和谁做爱或者约会?!",
   "happiness_dialog_insulted_for_orientation_1": "什么鬼!他们到底什么毛病",
   
-  "task_insult_orientation": "辱骂性取向",
-  "task_invite_for_sex": "参加做爱",
-  "task_invite_for_reproduction": "参加生育",
+  "task_insult_orientation": "取向受冒犯",
+  "task_invite_for_sex": "请求做爱",
+  "task_invite_for_reproduction": "请求生育",
   "task_try_kiss": "尝试亲吻",
   "task_have_sex_go": "去做爱",
   "task_reproduce_preservation": "维系繁殖",
@@ -149,7 +150,7 @@
   "trait_intimacy_averse_info_2": "独自一人也不会介意",
 
   "trait_faithful": "忠贞",
-  "trait_faithful_info": "绝不会背叛伴侣，即使恋爱取向不再匹配他们的伴侣的性别",
+  "trait_faithful_info": "绝不会背叛伴侣，即使恋爱取向不再匹配伴侣的性别",
   "trait_faithful_info_2": "只做对的事",
 
   "trait_unfaithful": "放荡",
@@ -177,17 +178,17 @@
   "like_vulva_sexual": "甜甜圈",
   "like_vulva_sexual_info_2": "把球杆对准洞",
 
-  "like_female_romantic": "恋爱取向：女性",
+  "like_female_romantic": "恋爱取向：女化",
   "like_female_romantic_info": "在感情方面更喜欢女性",
   "like_female_romantic_info_2": "女孩会喜欢什么呢?",
-  "like_female_sexual": "性取向：女性",
+  "like_female_sexual": "性取向：女化",
   "like_female_sexual_info": "在交配方面更喜欢女性",
-  "like_female_sexual_info_2": "女人如水，所以他们渴望得到",
+  "like_female_sexual_info_2": "女人如水，所以渴望得到",
 
-  "like_male_romantic": "恋爱取向：男性",
+  "like_male_romantic": "恋爱取向：男化",
   "like_male_romantic_info": "在感情方面更喜欢男性",
-  "like_male_romantic_info_2": "嫁给我吧!",
-  "like_male_sexual": "性取向：男性",
+  "like_male_romantic_info_2": "与我结婚吧!",
+  "like_male_sexual": "性取向：男化",
   "like_male_sexual_info": "在交配方面更喜欢男性",
   "like_male_sexual_info_2": "来点男人",
 
@@ -198,17 +199,17 @@
   "like_nonbinary_sexual_info": "在交配方面更喜欢非二元性别的",
   "like_nonbinary_sexual_info_2": "不会有其他办法",
 
-  "like_feminine_romantic": "恋爱取向：女性化",
+  "like_feminine_romantic": "恋爱取向：阴柔",
   "like_feminine_romantic_info": "在感情方面更喜欢具备女性特征的",
   "like_feminine_romantic_info_2": "有趣、有同情心、善良",
-  "like_feminine_sexual": "性取向：女性化",
+  "like_feminine_sexual": "性取向：阴柔",
   "like_feminine_sexual_info": "在交配方面更喜欢具备女性特征的",
   "like_feminine_sexual_info_2": "苗条、可爱、漂亮",
 
-  "like_masculine_romantic": "恋爱取向：男性化",
+  "like_masculine_romantic": "恋爱取向：阳刚",
   "like_masculine_romantic_info": "在感情方面更喜欢具备男性特征的",
   "like_masculine_romantic_info_2": "自信、大胆、有力",
-  "like_masculine_sexual": "性取向：男性化",
+  "like_masculine_sexual": "性取向：阳刚",
   "like_masculine_sexual_info_2": "在交配方面更喜欢具备男性特征的",
   "like_masculine_sexual_info_2": "大、强势、强壮",
   
@@ -245,14 +246,18 @@
   "culture_trait_sexual_expectations": "性的期望",
   "culture_trait_sexual_expectations_info": "可以和任何人解决性欲，不会有任何后果",
   "culture_trait_sexual_expectations_info_2": "性可以表达!",
+  
+  "culture_trait_sex_for_reproduction": "生命维系",
+  "culture_trait_sex_for_reproduction_info": "性生活从来不需要欺瞒!",
+  "culture_trait_sex_for_reproduction_info_2": "和任何人生育都可以",
+  
+    "culture_trait_sex_for_reproduction_only": "神圣交配",
+  "culture_trait_sex_for_reproduction_only_info": "只是为了繁殖而交配",
+  "culture_trait_sex_for_reproduction_only_info_2": "交配很珍贵，怎么敢的！",
 
   "culture_trait_scar_of_incest": "近亲之痕",
-  "culture_trait_scar_of_incest_info": "文明认为近亲结婚是他们文化的重要组成部分，永远不会消除它",
+  "culture_trait_scar_of_incest_info": "认为近亲结婚是文化的重要组成部分，永远不会消除它",
   "culture_trait_scar_of_incest_info_2": "维持血脉纯度!",
-
-  "subspecies_trait_preservation": "维系繁殖",
-  "subspecies_trait_preservation_info": "只要亚种单位数低于最大值,，就会开始寻找可以繁殖的单位，无视文明和取向",
-  "subspecies_trait_preservation_info_2": "事情已经很严峻了，不得不保留火种",
 
   "subspecies_trait_reproduction_same_sex": "同性繁殖",
   "subspecies_trait_reproduction_same_sex_info": "两个同性的生物之间可以进行繁殖",
@@ -335,7 +340,7 @@
   "tab_title_tol": "爱的主旋律",
   "tab_desc_tol": "包含所有性和恋爱取向!",
   "tab_mind_likes": "取向",
-  "tab_mind_likes_description": "看看他们的恋爱取向和性欲……想和谁上床?",
+  "tab_mind_likes_description": "看看单位的恋爱取向和性欲……想和谁上床?",
   
   "mind_likes_regenerate_orientation": "再造取向",
   "mind_likes_regenerate_orientation_description": "根据单位的活跃取向重新变更对应标识",
