@@ -8,9 +8,9 @@ The mod is not technically **finished** or **complete** yet according to my road
 
 Make sure to have NML installed! Their instructions can be found [here](https://github.com/WorldBoxOpenMods/ModLoader/blob/master/README.md).
 
-If downloading through GitHub or GameBanana, download the latest release and extract the contents into a folder in "worldbox/Mods"
+If downloading through GitHub, download via pressing the green "Code" button, press "Download Zip" and extract the contents into a folder in "worldbox/Mods"
 
-~~If downloading through Steam, subscribe to the mod and you're good to go!~~
+If downloading through Steam, subscribe to the mod and you're good to go!
 
 When enabling or disabling the mod, restarting the game is a must otherwise you will run into issues extremely quickly.
 
