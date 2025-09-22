@@ -51,8 +51,9 @@ public class Decisions
             action_check_launch = actor => actor.CapableOfLove()
                                            // && !actor.isIntimacyHappinessEnough(100f)
                                            && actor.IsOrientationSystemEnabled()
+                                           && actor.HasAnyLikesFor("identity", LoveType.Romantic)
                                            && !actor.hasStatus("went_on_date"),
-            weight_calculate_custom = actor => !actor.hasLover() ? 1f : actor.isIntimacyHappinessEnough( 75f) ? 0.05f: 
+            weight_calculate_custom = actor => !actor.hasLover() ? 2f : actor.isIntimacyHappinessEnough( 75f) ? 0.05f: 
                 actor.isIntimacyHappinessEnough( 50f) ? 0.1f : actor.isIntimacyHappinessEnough( 0) ? .12f : 
                 actor.isIntimacyHappinessEnough( -50) ? 0.2f : actor.isIntimacyHappinessEnough( -100f) ? 0.35f : 0.5f,
             only_safe = true,
@@ -65,10 +66,10 @@ public class Decisions
             id = "invite_for_sex",
             priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/status/enjoyed_sex",
-            cooldown = 25,
+            cooldown = 15,
             action_check_launch = actor => actor.CapableOfLove()
                                            && !actor.hasCultureTrait("sex_for_reproduction_only")
-                                           && !actor.HasAnyLikesFor("identity", LoveType.Sexual)
+                                           && actor.HasAnyLikesFor("identity", LoveType.Sexual)
                                            && !actor.isIntimacyHappinessEnough( 100f)
                                            && actor.IsOrientationSystemEnabled(),
             weight_calculate_custom = actor =>
@@ -128,11 +129,17 @@ public class Decisions
             only_safe = true,
             only_adult = true
         });
+        
+        
         Finish();
 
         SubspeciesTraits.AddDecisions("advanced_hippocampus", new []{"find_lover", "insult_orientation_try"});
         SubspeciesTraits.RemoveDecisions("reproduction_hermaphroditic", new []{"find_lover"});
         SubspeciesTraits.RemoveDecisions("reproduction_sexual", new []{"find_lover"});
+
+        var find_lover = AssetManager.decisions_library.get("find_lover");
+        find_lover.priority = NeuroLayer.Layer_1_Low;
+        find_lover.weight = 0.5f;
         
         AssetManager.decisions_library.get("sexual_reproduction_try").action_check_launch = 
             (pActor =>

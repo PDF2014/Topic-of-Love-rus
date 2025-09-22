@@ -38,28 +38,42 @@ public class BehFindAPartner : BehaviourActionActor
         if (_customCheck != null && !_customCheck(pActor))
             return BehResult.Stop;
         
-        TolUtil.Debug(pActor.getName() + " is attempting to locate lover for romance!");
+        if(pActor.isSapient()) TolUtil.Debug(pActor.getName() + " is attempting to locate lover for romance!");
 
         Actor target = null;
-
-        if (_partnerType.Equals(PartnerType.Lover) || _partnerType.Equals(PartnerType.BothLoverAndFriend))
+        
+        if (_partnerType.Equals(PartnerType.Lover))
         {
             if (pActor.hasLover() && IsTargetValid(pActor, pActor.lover))
                 target = pActor.lover;
-        } else if (_partnerType.Equals(PartnerType.Friend) || _partnerType.Equals(PartnerType.BothLoverAndFriend))
+        }
+        else if (_partnerType.Equals(PartnerType.BothLoverAndFriend))
+        {
+            if (pActor.hasLover() && IsTargetValid(pActor, pActor.lover))
+                target = pActor.lover;
+            else if(pActor.hasBestFriend()
+                    && IsTargetValid(pActor, pActor.getBestFriend()))
+                target = pActor.getBestFriend();
+        }
+        else if (_partnerType.Equals(PartnerType.Friend))
         {
             if(pActor.hasBestFriend()
                && IsTargetValid(pActor, pActor.getBestFriend()))
                 target = pActor.getBestFriend();
         } else if (_partnerType.Equals(PartnerType.Any))
         {
-            target = GetClosestPossibleMatchingActor(pActor);
+            if (pActor.hasLover() && IsTargetValid(pActor, pActor.lover))
+                target = pActor.lover;
+            else if(pActor.hasBestFriend()
+                    && IsTargetValid(pActor, pActor.getBestFriend()))
+                target = pActor.getBestFriend();
+            else target = GetClosestPossibleMatchingActor(pActor);
         }
 
         if (target == null || !pActor.WillDoIntimacy(target, _sexReason, true))
             return BehResult.Stop;
 
-        TolUtil.Debug("Lover found!");
+        if(pActor.isSapient()) TolUtil.Debug("Lover found!");
         
         pActor.beh_actor_target = target;
         target.makeWait(_distance / 2);
@@ -95,8 +109,7 @@ public class BehFindAPartner : BehaviourActionActor
                        && target.WillDoIntimacy(pActor, _sexReason);
 
             return target.WillDoIntimacy(pActor, _sexReason) &&
-                   ((_mustMatchPreference && LikesManager.LikeMatches(pActor, target, true)) ||
-                    !_mustMatchPreference);
+                   (!_mustMatchPreference || (_mustMatchPreference && LikesManager.LikeMatches(pActor, target, true)));
         }
         
         if (_mustMatchPreference && !LikesManager.LikeMatches(pActor, target, false))
@@ -108,7 +121,7 @@ public class BehFindAPartner : BehaviourActionActor
     }
     private Actor GetClosestPossibleMatchingActor(Actor pActor)
     {
-        var chunkRadius = IsForReproduction() ? 2 : 1;
+        var chunkRadius = IsForReproduction() ? 4 : 3;
         var isRandom = !IsForReproduction();
 
         Actor toReturn = null;

@@ -231,9 +231,9 @@ public static class Extensions
             
             pActor.data.get("intimacy_happiness", out float d);
             if (isInit)
-               TolUtil.Debug(pActor.getName() + " is requesting to do intimacy. Sexual happiness: "+d + ". With lover: "+withLover);
+                if(pActor.isSapient()) TolUtil.Debug(pActor.getName() + " is requesting to do intimacy. Sexual happiness: "+d + ". With lover: "+withLover);
             else
-                TolUtil.Debug(pActor.getName() + " is being requested to do intimacy. Sexual happiness: "+d + ". With lover: "+withLover);
+            if(pActor.isSapient()) TolUtil.Debug(pActor.getName() + " is being requested to do intimacy. Sexual happiness: "+d + ". With lover: "+withLover);
             TolUtil.Debug("\n"+sexReason);
 
             if (!sexReason.Equals(SexType.Reproduction) && (pActor.hasCultureTrait("sex_for_reproduction_only") ||
@@ -250,7 +250,7 @@ public static class Extensions
                 if(pActor.hasTask() && !(pActor.ai.task.cancellable_by_reproduction ||
                                          pActor.ai.task.cancellable_by_socialize))
                 {
-                    TolUtil.Debug("Unable to do intimacy from this actor due to an uncancellable task");
+                    if(pActor.isSapient()) TolUtil.Debug("Unable to do intimacy from this actor due to an uncancellable task");
                     return false;
                 }
             }
@@ -273,13 +273,13 @@ public static class Extensions
             if(!allowedToHaveIntimacy
                && Randy.randomChance(Math.Max(0, (pActor.hasTrait("unfaithful") ? 0.6f : .99f) + reduceChances)))
             {
-                TolUtil.Debug("Not allowed to do intimacy because of lover and not low enough happiness");
+                if(pActor.isSapient()) TolUtil.Debug("Not allowed to do intimacy because of lover and not low enough happiness");
                 return false;
             }
 
             if (!allowedToHaveIntimacy && IsFaithful(pActor))
             {
-                TolUtil.Debug("Not allowed to do intimacy because of lover and is faithful");
+                if(pActor.isSapient()) TolUtil.Debug("Not allowed to do intimacy because of lover and is faithful");
                 return false;
             }
             
@@ -293,12 +293,12 @@ public static class Extensions
             var doIntimacy = Randy.randomChance(Math.Max(0.05f, 1f - reduceChances));
             if (!doIntimacy && !sexReason.Equals(SexType.Reproduction))
             {
-                TolUtil.Debug("Will not do intimacy since they are deemed to be happy enough");
+                if(pActor.isSapient()) TolUtil.Debug("Will not do intimacy since they are deemed to be happy enough");
                 return false;
             }   
 
             if(!allowedToHaveIntimacy)
-                TolUtil.Debug(pActor.getName() + " is cheating!");
+                if(pActor.isSapient()) TolUtil.Debug(pActor.getName() + " is cheating!");
             return true;
         }
     public static bool IsFaithful(this Actor pActor)

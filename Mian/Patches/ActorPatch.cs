@@ -209,6 +209,8 @@ public class ActorPatch
         // falling in love is fucking amazing cherish it mate
         pTarget.changeIntimacyHappinessBy(100);
         __instance.changeIntimacyHappinessBy(100);
+        
+        World.world.families.newFamily(__instance, pTarget.current_tile, pTarget);
     }
         
     // This is where we handle the beef of our code for having cross species and non-same reproduction method ppl fall in love
