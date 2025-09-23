@@ -283,10 +283,10 @@
 
   "lonely_units": "Einsame Einheiten",
   "statistics_lonely": "Einsame Einheiten",
-  "statistics_lonely_description": "Sie wollen einfach, dass sich jemand kümmert :(",
+  "statistics_lonely_description": "Sie wollen einfach, dass sich jemand um siekümmert :(",
 
   "statistics_broke_up": "Getrennte Paare",
-  "statistics_broke_up_description": "So viele Versprechen, die der Zeit verloren gingen",
+  "statistics_broke_up_description": "So viele Versprechen, die mit der Zeit verloren gingen",
 
   "statistics_cheated_on": "Betrogen",
   "statistics_cheated_on_description": "Geliebte Erinnerungen, jetzt am Boden zerstört",
@@ -299,7 +299,7 @@
   
   "opinion_homosexual": "Meinungen über Homosexualität",
   "opinion_heterosexual": "Meinungen über Heterosexualität",
-  "opinion_king_lovers": "Könige sind Liebhaber",
+  "opinion_king_lovers": "Könige sind auch Liebhaber",
   
   "intimacy_happiness": "Intimität",
   "stats_icon_intimacy_happiness": "Intimität",
