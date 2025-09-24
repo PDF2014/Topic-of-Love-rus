@@ -1,4 +1,4 @@
-﻿{
+{
   "status_title_went_on_date": "Ging auf ein Date",
   "status_description_went_on_date": "Eine Welt für zwei",
   
@@ -187,6 +187,10 @@
 
   "like_masculine_romantic_info_2": "Selbstbewusst, mutig und stark.",
   "like_masculine_sexual_info_2": "Groß, dominant und stark.",
+
+  "like_phallus_sexual": "Phallus",
+  "like_vulva_sexual": "Vulva",
+  "like_masculine_sexual_info": "In sexueller Hinsicht bevorzugt sie/er maskuline Merkmale",
   
   "trait_unfluid": "Unveränderlich",
   "trait_unfluid_info": "Ihre romantischen und sexuellen Präferenzen werden sich niemals ändern",
@@ -246,22 +250,22 @@
   "world_law_fluid_sexuality_description": "Vorlieben von Einheiten können sich mit der Zeit ändern, selbst wenn sie bereits festgelegt wurden",
   "world_law_fluid_sexuality_description_2": "Sexualität kann auch fließend sein!",
   
-  "lesbian": "Lesbisch",
-  "gay": "Schwul",
-  "straight": "Hetero",
-  "bisexual": "Bisexuell",
-  "pansexual": "Pansexuell",
-  "heterosexual": "Heterosexuell",
-  "homosexual": "Homosexuell",
-  "asexual": "Asexuell",
-  "lesbian_romantic": "Lesbisch romantisch",
-  "gay_romantic": "Schwul romantisch",
-  "straight_romantic": "Hetero romantisch",
-  "bisexual_romantic": "Bisexuell romantisch",
-  "pansexual_romantic": "Pansexuell romantisch",
-  "heterosexual_romantic": "Heterosexuell romantisch",
-  "homosexual_romantic": "Homosexuell romantisch",
-  "asexual_romantic": "Asexuell romantisch",
+  "orientations_lesbian": "Lesbisch",
+  "orientations_gay": "Schwul",
+  "orientations_straight": "Hetero",
+  "orientations_bisexual": "Bisexuell",
+  "orientations_pansexual": "Pansexuell",
+  "orientations_heterosexual": "Heterosexuell",
+  "orientations_homosexual": "Homosexuell",
+  "orientations_asexual": "Asexuell",
+  "orientations_lesbian_romantic": "Lesbisch romantisch",
+  "orientations_gay_romantic": "Schwul romantisch",
+  "orientations_straight_romantic": "Hetero romantisch",
+  "orientations_bisexual_romantic": "Bisexuell romantisch",
+  "orientations_pansexual_romantic": "Pansexuell romantisch",
+  "orientations_heterosexual_romantic": "Heterosexuell romantisch",
+  "orientations_homosexual_romantic": "Homosexuell romantisch",
+  "orientations_asexual_romantic": "Asexuell romantisch",
   
   "statistics_lesbian_description": "Sie ziehen statistisch mehr Frauen an als heterosexuelle Männer jemals könnten. Experten sind sich darüber noch nicht ganz einig.",
   "statistics_gay_description": "Sie ziehen statistisch mehr Männer an als heterosexuelle Frauen jemals könnten. Experten sind sich darüber noch nicht ganz einig.",
@@ -274,7 +278,7 @@
 
   "statistics_lesbian_romantic_description": "Sie ziehen statistisch mehr Frauen an als heterosexuelle Männer jemals könnten. Experten sind sich darüber noch nicht ganz einig.",
   "statistics_gay_romantic_description": "Sie ziehen statistisch mehr Männer an als heterosexuelle Frauen jemals könnten. Experten sind sich darüber noch nicht ganz einig.",
-  "statistics_straight_romantic_description": "Sie sind einfacg stinklangweilig",
+  "statistics_straight_romantic_description": "Sie sind einfach stinklangweilig",
   "statistics_bisexual_romantic_description": "Sie schwingen gerne mal hin und her",
   "statistics_pansexual_romantic_description": "Nein, sie stehen tatsächlich nicht auf Pfannen, Dummkopf",
   "statistics_heterosexual_romantic_description": "Sie mögen ein anderes Geschlecht als ihr eigenes",
