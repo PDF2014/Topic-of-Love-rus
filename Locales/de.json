@@ -316,9 +316,9 @@
   "romantic": "Romantisch",
   "like_group": "Gruppe",
   "intimate": "Intimitätstyp",
-  "identities": "Identitäten",
-  "expressions": "Ausdrücke",
-  "genitals": "Genitalien",
+  "like_group_identity": "Identitäten",
+  "like_group_expression": "Ausdrücke",
+  "like_group_genital": "Genitalien",
   
   "tab_title_tol": "Topic of Love - Thema Liebe",
   "tab_desc_tol": "Für all deine romantischen und sexuellen Bedürfnisse!",
